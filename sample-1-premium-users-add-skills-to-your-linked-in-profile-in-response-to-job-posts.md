@@ -14,9 +14,9 @@ This way, users can enhance their profiles to better reflect their qualification
   
 **Prerequisites**
 
-*  You have a LinkedIn Premium subscription to access the Qualifications section of job advertisements. 
+*  You have a **LinkedIn Premium** subscription to access the **Qualifications** section of job advertisements. 
 
-   This section is unique to LinkedIn Premium and provides valuable insights into the skills associated with the job post and additional skills among applicants.
+   This section is unique to **LinkedIn Premium** and provides valuable insights into the skills associated with the job post and additional skills among applicants.
 
 
 **Steps**
@@ -31,10 +31,8 @@ This way, users can enhance their profiles to better reflect their qualification
 
    This action opens the **Qualification details** dialog. A green tick appears beside each skill that is already listed on your profile.
 
-1. **Add Missing Skills** (Conditional): If you possess a skill that isn't ticked green, click the '+ Add' button beside that skill.
+1. **Add Missing Skills**: If you possess a skill that isn't ticked green, click the **+ Add** button beside that skill.
 
 1. **Showcase Your Skill**: Respond to the **Show us where you used this skill** prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click **Save**.
 
-1. **Add More Skills or Exit**: You can continue to add more skills or choose 'No thanks' to exit.
-
-
+1. **Add More Skills or Exit**: You can continue to add more skills or click the **No thanks** button to exit.
