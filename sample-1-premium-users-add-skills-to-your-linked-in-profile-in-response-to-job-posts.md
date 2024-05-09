@@ -1,5 +1,7 @@
 # (Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts
 
+> [Back to Home Page](index.md)
+
 With a **LinkedIn Premium** subscription, users can effectively tailor their profiles to align with the skills sought by employers in job posts. 
 
 The **Qualifications** section allows Premium users to:
@@ -36,3 +38,5 @@ This way, users can enhance their profiles to better reflect their qualification
 1. **Showcase Your Skill**: Respond to the **Show us where you used this skill** prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click **Save**.
 
 1. **Add More Skills or Exit**: You can continue to add more skills or click the **No thanks** button to exit.
+
+> [Back to Home Page](index.md)
