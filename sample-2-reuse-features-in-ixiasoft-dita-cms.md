@@ -1,10 +1,10 @@
-# Reuse Features in Ixiasoft DITA CMS
+# Reuse Features in MadCap IXIACCMS
 
 > [Back to Home Page](README.md)
 
 Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.
 
-[**Ixiasoft DITA CMS**](https://www.ixiasoft.com/) provides the following features designed to streamline this process.
+[**MadCap IXIACCMS**](https://www.ixiasoft.com/) provides the following features designed to streamline this process.
 
 - [Content References (Conref)](#content-references-conref): Create segments of content that can be referenced across multiple topics.
 - [Key References (Keyref)](#key-references-keyref): Create a placeholder for content that can be replaced with the actual content at the time of publishing.
@@ -25,7 +25,7 @@ Content References, or `Conref`, allow you to create segments of content that ca
 
 ### More Information
 
-- [Ixiasoft DITA CMS Conref Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/lar1396892881040.html)
+- [MadCap IXIACCMS Conref Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/lar1396892881040.html)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Snippet](https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets)
 
 ## Key References (Keyref)
@@ -38,7 +38,7 @@ Key References, or `Keyref`, allow you to create a placeholder for content that 
 
 ### More Information
 
-- [Ixiasoft DITA CMS Keyref Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/5.0/User_Guides_Advanced_User_DRM/per1389986050420_7.html)
+- [MadCap IXIACCMS Keyref Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/5.0/User_Guides_Advanced_User_DRM/per1389986050420_7.html)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Variable](https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets)
 
 ## Conditional Processing (Profiling)
@@ -51,12 +51,12 @@ Conditional Processing allows you to mark specific sections within a topic for i
 
 ### More Information
 
-- [Ixiasoft DITA CMS Profiling Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986186479.html)
+- [MadCap IXIACCMS Profiling Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986186479.html)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Conditional Tags](https://www.madcapsoftware.com/blog/tips-and-tricks-using-conditions-in-madcap-flare/)
 
 ## Topic Reuse
 
-Topic Reuse in Ixiasoft DITA CMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.
+Topic Reuse in MadCap IXIACCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.
 
 ### Example
 
@@ -64,7 +64,7 @@ Topic Reuse in Ixiasoft DITA CMS allows you to use the same topic in multiple ma
 
 ### More Information
 
-- [Ixiasoft DITA CMS Topic Reuse Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.3/User_Guides_Contributors_Standard/en/cab1556029603998.html)
+- [MadCap IXIACCMS Topic Reuse Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.3/User_Guides_Contributors_Standard/en/cab1556029603998.html)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Topic Reuse](https://forums.madcapsoftware.com/viewtopic.php?t=28997)
 
 > [Back to Home Page](README.md)
