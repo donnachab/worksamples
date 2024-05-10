@@ -1,6 +1,6 @@
 # (Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts
 
-> [Back to Home Page](index.md)
+> [Back to Home Page](README.md)
 
 With a **LinkedIn Premium** subscription, users can effectively tailor their profiles to align with the skills sought by employers in job posts. 
 
@@ -39,4 +39,4 @@ This way, users can enhance their profiles to better reflect their qualification
 
 1. **Add More Skills or Exit**: You can continue to add more skills or click the **No thanks** button to exit.
 
-> [Back to Home Page](index.md)
+> [Back to Home Page](README.md)
