@@ -1,10 +1,13 @@
 # Reuse Features in Ixiasoft DITA CMS
 
-[toc]
-
 Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.
 
-[**Ixiasoft DITA CMS**](https://www.ixiasoft.com/) provides a suite of features designed to streamline this process.
+[**Ixiasoft DITA CMS**](https://www.ixiasoft.com/) provides the following features designed to streamline this process.
+
+- [Content References (Conref)](#content-references-conref)
+- [Key References (Keyref)](#key-references-keyref)
+- [Conditional Processing (Profiling)](#conditional-processing-profiling)
+- [Topic Reuse](#topic-reuse)
 
 > **_Note_**
 >
