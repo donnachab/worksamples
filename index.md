@@ -6,6 +6,6 @@ Documents authored for SAP and Ericsson are firewall-protected. However, I can p
 
   This example complies with the Task Template defined by the Darwin Information Typing Architecture (DITA) standard.
 
-- [Sample 2: Reuse Features in Ixiasoft DITA CMS](reuse-features-in-ixiasoft-dita-cms.md)
+- [Sample 2: Reuse Features in Ixiasoft DITA CMS](sample-2-reuse-features-in-ixiasoft-dita-cms.md)
 
   This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.
