@@ -1,6 +1,6 @@
 # Reuse Features in Ixiasoft DITA CMS
 
-> [Back to Home Page](index.md)
+> [Back to Home Page](README.md)
 
 Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.
 
@@ -67,4 +67,4 @@ Topic Reuse in Ixiasoft DITA CMS allows you to use the same topic in multiple ma
 - [Ixiasoft DITA CMS Topic Reuse Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.3/User_Guides_Contributors_Standard/en/cab1556029603998.html"%20\t%20"_blank)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Topic Reuse](https://forums.madcapsoftware.com/viewtopic.php?t=28997"%20\t%20"_blank)
 
-> [Back to Home Page](index.md)
+> [Back to Home Page](README.md)
