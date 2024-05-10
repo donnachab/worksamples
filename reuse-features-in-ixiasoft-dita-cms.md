@@ -1,5 +1,7 @@
 # Reuse Features in Ixiasoft DITA CMS
 
+> [Back to Home Page](index.md)
+
 Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.
 
 [**Ixiasoft DITA CMS**](https://www.ixiasoft.com/) provides the following features designed to streamline this process.
@@ -59,6 +61,8 @@ Topic Reuse in Ixiasoft DITA CMS allows you to use the same topic in multiple ma
 ### Example
 
 **SupplyChain Solutions** uses a topic on **Inventory Management** that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.
+
+> [Back to Home Page](index.md)
 
 ### More Information
 
