@@ -1,4 +1,0 @@
-@startuml
-actor Developer
-Developer --> (Write Code)
-@enduml
