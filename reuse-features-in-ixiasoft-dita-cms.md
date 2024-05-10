@@ -19,7 +19,7 @@ Content References, or `Conref`, allow you to create segments of content that ca
 
 ### Example
 
-**SupplyChain Solutions** created a standard shipping policy in one location. This policy was inserted it into multiple topics using a `Conref`. These topics were included in various maps based on the needs of different clients.
+**SupplyChain Solutions** created a standard shipping policy as a `ReferableContent` topic in one location. This policy was inserted it into multiple topics using a `Conref`. These topics were included in various maps based on the needs of different clients.
 
 ### More Information
 
