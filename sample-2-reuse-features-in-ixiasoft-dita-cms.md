@@ -25,7 +25,7 @@ Content References, or `Conref`, allow you to create segments of content that ca
 
 ### More Information
 
-- [MadCap IXIACCMS Conref Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/lar1396892881040.html)
+- [Creating and using conrefs](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/lar1396892881040.html)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Snippet](https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets)
 
 ## Key References (Keyref)
@@ -38,7 +38,7 @@ Key References, or `Keyref`, allow you to create a placeholder for content that 
 
 ### More Information
 
-- [MadCap IXIACCMS Keyref Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/5.0/User_Guides_Advanced_User_DRM/per1389986050420_7.html)
+- [keyrefs and keydefs](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986050420.html)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Variable](https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets)
 
 ## Conditional Processing (Profiling)
@@ -51,7 +51,7 @@ Conditional Processing allows you to mark specific sections within a topic for i
 
 ### More Information
 
-- [MadCap IXIACCMS Profiling Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986186479.html)
+- [Applying conditions (profiling and conditional processing)](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986186479.html)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Conditional Tags](https://www.madcapsoftware.com/blog/tips-and-tricks-using-conditions-in-madcap-flare/)
 
 ## Topic Reuse
@@ -64,7 +64,7 @@ Topic Reuse in MadCap IXIACCMS allows you to use the same topic in multiple maps
 
 ### More Information
 
-- [MadCap IXIACCMS Topic Reuse Guide](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.3/User_Guides_Contributors_Standard/en/cab1556029603998.html)
+- [Content reuse in IXIASOFT CCMS Web](https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.3/User_Guides_Contributors_Standard/en/cab1556029603998.html)
 - Comparable feature in **MadCap Flare**: [MadCap Flare: Topic Reuse](https://forums.madcapsoftware.com/viewtopic.php?t=28997)
 
 > [Back to Home Page](README.md)
