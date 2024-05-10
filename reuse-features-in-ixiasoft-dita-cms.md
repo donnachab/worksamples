@@ -6,10 +6,10 @@ Content reuse is a powerful tool in content creation, saving significant time an
 
 [**Ixiasoft DITA CMS**](https://www.ixiasoft.com/) provides the following features designed to streamline this process.
 
-- [Content References (Conref)](#content-references-conref)
-- [Key References (Keyref)](#key-references-keyref)
-- [Conditional Processing (Profiling)](#conditional-processing-profiling)
-- [Topic Reuse](#topic-reuse)
+- [Content References (Conref)](#content-references-conref): Create segments of content that can be referenced across multiple topics.
+- [Key References (Keyref)](#key-references-keyref): Create a placeholder for content that can be replaced with the actual content at the time of publishing.
+- [Conditional Processing (Profiling)](#conditional-processing-profiling): Mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions.
+- [Topic Reuse](#topic-reuse): Use the same topic in multiple maps.
 
 > **_Note_**
 >
