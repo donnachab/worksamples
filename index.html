@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donnacha Bushe - Interactive CV (Two-Column)</title>
+    <title>Donnacha Bushe - Senior Technical Writer (Spring Theme)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <script>
         // Define Spring color palette
         const springPalette = {
@@ -39,48 +39,69 @@
         /* Base styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0fdf4;
-            color: #166534;
+            background-color: #f0fdf4; /* Base BG */
+            color: #166534; /* Medium Green default text */
         }
         h1, h2, h3, h4, .font-heading {
             font-family: 'Poppins', sans-serif;
         }
+        /* Sidebar specific text color */
+        aside {
+             color: #166534; /* Medium Green */
+        }
+        aside h2, aside h3, aside .text-cv-text-light { /* Use dark text on light sidebar */
+             color: #14532d;
+        }
+        aside a {
+             color: #14532d; /* Dark text for links */
+        }
+         aside a:hover {
+             color: #22c55e; /* Green accent on hover */
+         }
+
         /* Tab Styles */
+         .tab-buttons-container {
+            border-bottom: 1px solid #86efac; /* cv-border */
+        }
         .tab-button {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             cursor: pointer;
-            border-bottom: 3px solid transparent;
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-bottom: -1px;
             transition: all 0.2s ease-in-out;
-            color: #15803d;
+            color: #15803d; /* Dimmer Green */
             font-weight: 500;
             line-height: 1.3;
             text-align: center;
             flex-shrink: 0;
+            border-radius: 0.375rem 0.375rem 0 0;
         }
         .tab-button:hover {
-             background-color: #ffffff;
-             color: #14532d;
+             background-color: #dcfce7; /* Sidebar color */
+             color: #14532d; /* Dark Green */
+             border-color: #86efac #86efac transparent #86efac;
         }
         .tab-button.active {
-            border-bottom-color: #22c55e;
-            color: #14532d;
+            border-color: #86efac #86efac #ffffff #86efac; /* Connected border */
+            color: #14532d; /* Dark Green */
             font-weight: 600;
-            background-color: #ffffff;
+            background-color: #ffffff; /* White */
         }
         .tab-button span { display: block; }
         .tab-button small {
             display: block;
             font-size: 0.75rem;
-            color: #15803d;
+            color: #15803d; /* Dimmer Green */
             font-weight: 400;
             margin-top: 0.1rem;
         }
-        .tab-button.active small { color: #166534; }
+        .tab-button.active small { color: #166534; } /* Medium Green */
 
         .tab-content {
             display: none;
             padding: 1.5rem;
-            border: 1px solid #86efac;
+            border: 1px solid #86efac; /* Light Green Border */
             border-top: none;
             border-radius: 0 0 0.5rem 0.5rem;
             background-color: #ffffff;
@@ -89,20 +110,26 @@
 
         /* Focus styles */
         *:focus-visible {
-            outline: 2px solid #22c55e;
+            outline: 2px solid #22c55e; /* Green Accent */
             outline-offset: 2px;
             border-radius: 2px;
         }
         /* List marker color */
          .marker\:text-cv-accent ul li::marker,
          .marker\:text-cv-accent li::marker {
-             color: #22c55e;
+             color: #22c55e; /* Green Accent */
         }
         .badge {
-            background-color: #bbf7d0;
-            border-color: #86efac;
-            color: #14532d;
+            background-color: #bbf7d0; /* Tailwind Green 200 */
+            border-color: #86efac; /* Border color */
+            color: #14532d; /* Dark Green text */
         }
+        /* Sidebar badge */
+         aside .badge {
+             background-color: #ffffff; /* White bg */
+             border-color: #86efac; /* Border color */
+             color: #14532d; /* Dark Green text */
+         }
 
         /* Print Styles */
         @media print {
@@ -113,19 +140,19 @@
                 print-color-adjust: exact !important;
                 font-size: 10pt;
             }
-            #print-button, video, a[href^="http"]::after { /* Hide print button, video, and external link icons */
+            #print-button, video, a[href^="http"]::after {
                 display: none !important;
             }
-             a[href^="http"] { /* Remove underline from external links */
+             a[href^="http"] {
                  text-decoration: none !important;
-                 color: inherit !important; /* Inherit text color */
+                 color: inherit !important;
              }
             .tab-buttons-container {
                 border-bottom: none !important;
                 margin-bottom: 0 !important;
                 display: none !important;
             }
-            .tab-button {
+            .print-only-tab-heading {
                 display: block !important;
                 padding: 0 !important;
                 margin-bottom: 0.5rem !important;
@@ -134,14 +161,14 @@
                 background-color: transparent !important;
                 page-break-after: avoid !important;
             }
-            .tab-button span {
+            .print-only-tab-heading span {
                 font-family: 'Poppins', sans-serif !important;
                 font-size: 12pt !important;
                 font-weight: 600 !important;
                 color: #000000 !important;
                 display: inline !important;
             }
-            .tab-button small {
+            .print-only-tab-heading small {
                  font-size: 10pt !important;
                  color: #555555 !important;
                  font-weight: normal !important;
@@ -176,7 +203,13 @@
                 order: 2 !important;
                 padding-top: 1rem !important;
                 page-break-before: auto !important;
+                 background-color: transparent !important;
+                 color: #000 !important;
             }
+             aside h2, aside h3, aside a, aside .text-cv-text-light, aside .text-cv-text-med, aside .text-cv-text-dark {
+                 color: #000 !important;
+             }
+
             .max-w-6xl {
                 box-shadow: none !important;
                 border: none !important;
@@ -214,9 +247,6 @@
             .text-cv-text-dark, .text-cv-text-med, .text-cv-text-dim, .text-cv-accent, .text-cv-accent-hover {
                  color: #000000 !important;
             }
-             .bg-cv-bg-sidebar {
-                 background-color: transparent !important;
-             }
              .badge {
                  background-color: #eee !important;
                  border-color: #ccc !important;
@@ -237,7 +267,7 @@
 </head>
 <body class="min-h-screen p-4 md:p-6 lg:p-8">
 
-    <div class="max-w-6xl mx-auto bg-cv-bg-main shadow-lg rounded-lg overflow-hidden md:flex print:block">
+    <div class="max-w-6xl mx-auto bg-cv-bg-main shadow-xl rounded-lg overflow-hidden md:flex print:block">
 
         <main class="w-full md:w-2/3 lg:w-3/4 bg-cv-bg-main p-6 md:p-8 md:order-2">
              <header class="mb-6">
@@ -276,7 +306,7 @@
 
                 <div class="tab-content-container">
                     <div id="tab-intive" class="tab-content active" role="tabpanel" aria-labelledby="btn-intive">
-                         <div class="tab-button print-only" style="display: none;">
+                         <div class="print-only-tab-heading" style="display: none;">
                             <span>intive</span> <small>2017-Present</small>
                          </div>
                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Technical Writer</h3>
@@ -295,7 +325,7 @@
                          </ul>
                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: DT One</h4>
                          <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
-                            <li>Designed, edited, and significantly reworked content for the <a href="https://dtone-poc.readme.io/docs/about-dt-one-products-and-services" target="_blank" rel="noopener noreferrer" class="text-cv-accent hover:underline">DT One developer portal</a>, focusing on interactivity and clarity, including API documentation editing.</li>
+                            <li>Designed, edited, and significantly reworked content for the <a href="https://dtone-poc.readme.io/reference/overview" target="_blank" rel="noopener noreferrer" class="text-cv-accent hover:underline">DT One developer portal</a>, focusing on interactivity and clarity, including API documentation editing.</li>
                          </ul>
                          <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: Ericsson</h4>
                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
@@ -308,7 +338,7 @@
                     </div>
 
                     <div id="tab-sap" class="tab-content" role="tabpanel" aria-labelledby="btn-sap" hidden>
-                        <div class="tab-button print-only" style="display: none;">
+                        <div class="print-only-tab-heading" style="display: none;">
                             <span>SAP</span> <small>2005-2015</small>
                         </div>
                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Information Developer</h3>
@@ -323,7 +353,7 @@
                     </div>
 
                     <div id="tab-skillsoft" class="tab-content" role="tabpanel" aria-labelledby="btn-skillsoft" hidden>
-                        <div class="tab-button print-only" style="display: none;">
+                        <div class="print-only-tab-heading" style="display: none;">
                              <span>Skillsoft</span> <small>2001-2005</small>
                          </div>
                          <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Technical Writer</h3>
@@ -335,7 +365,7 @@
                     </div>
 
                     <div id="tab-aviva" class="tab-content" role="tabpanel" aria-labelledby="btn-aviva" hidden>
-                         <div class="tab-button print-only" style="display: none;">
+                         <div class="print-only-tab-heading" style="display: none;">
                              <span>Aviva</span> <small>1997-2001</small>
                          </div>
                          <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Programmer</h3>
@@ -353,7 +383,7 @@
             <div class="mb-6 text-center">
                 <img src="profile-pic.jpg"
                      alt="Profile Picture"
-                     class="w-32 h-32 rounded-full mx-auto border-4 border-cv-border object-cover shadow-md">
+                     class="w-32 h-32 rounded-full mx-auto border-4 border-cv-accent object-cover shadow-md">
             </div>
 
             <section class="mb-6">
