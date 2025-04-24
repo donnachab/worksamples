@@ -111,38 +111,39 @@
                 color: #000000 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                font-size: 10pt; /* Adjust base font size for print */
+                font-size: 10pt;
             }
-            /* Hide buttons */
             .tab-buttons-container,
             #print-button {
                 display: none !important;
             }
-            /* Show all tab content, remove specific styling */
             .tab-content {
                 display: block !important;
                 border: none !important;
                 padding: 0 !important;
-                margin-bottom: 1rem; /* Reduced space between job sections */
+                margin-bottom: 1rem;
                 background-color: transparent !important;
                 border-radius: 0 !important;
-                page-break-inside: avoid !important; /* Try to keep job details together */
+                page-break-inside: avoid !important;
             }
-            /* Reset layout for print - Stacks main THEN aside */
+            /* Container for tab contents */
+            .tab-content-container {
+                 page-break-before: avoid !important; /* Try not to break before the first tab content */
+            }
             .print\:block { display: block !important; }
             main {
-                display: block !important; /* Ensure main is block */
+                display: block !important;
                 width: 100% !important;
-                order: 1 !important; /* Ensure main comes first */
-                page-break-before: avoid !important; /* Prevent breaking before main */
+                order: 1 !important;
+                page-break-before: avoid !important;
             }
             aside {
-                display: block !important; /* Ensure aside is block */
+                display: block !important;
                 width: 100% !important;
                 border: none !important;
-                order: 2 !important; /* Ensure aside comes second */
+                order: 2 !important;
                 padding-top: 1rem !important;
-                page-break-before: auto !important; /* Allow break before sidebar if needed */
+                page-break-before: auto !important;
             }
 
             .max-w-6xl {
@@ -151,36 +152,36 @@
                 max-width: 100% !important;
             }
             body.p-4, body.md\:p-6, body.lg\:p-8 {
-                padding: 1cm !important; /* Standard print margins */
+                padding: 1cm !important;
             }
             header, .p-6, .md\:p-8 {
                  padding: 0 !important;
             }
-             /* Adjust header layout for print */
             header {
                 border-bottom: 1px solid #ccc !important;
                 margin-bottom: 1rem !important;
                 padding-bottom: 0.5rem !important;
-                display: block !important; /* Stack header elements */
-                page-break-inside: avoid !important; /* Try to keep header together */
-                page-break-after: avoid !important; /* Avoid breaking right after header */
+                display: block !important;
+                page-break-inside: avoid !important;
+                page-break-after: avoid !important;
             }
-             header > div:first-child { /* Name/Title block */
+             header > div:first-child {
                  text-align: left !important;
                  margin-bottom: 0.5rem;
              }
              header > div:first-child img {
-                 display: none !important; /* Hide image in print header */
+                 display: none !important;
              }
             header address { text-align: left !important; margin-top: 0.5rem !important; }
 
-            /* Adjust summary section */
-            main > section:first-of-type { /* Target summary section */
+            main > section:first-of-type { /* Summary */
                  page-break-inside: avoid !important;
                  margin-bottom: 1rem !important;
             }
+             main section:last-of-type h2 { /* Experience Heading */
+                 page-break-after: avoid !important; /* Try not to break after the Experience heading */
+             }
 
-            /* Ensure text colors are dark for print */
             .text-cv-text-dark, .text-cv-text-med, .text-cv-text-dim, .text-cv-accent, .text-cv-accent-hover {
                  color: #000000 !important;
             }
@@ -191,8 +192,8 @@
                  background-color: #eee !important;
                  border-color: #ccc !important;
                  color: #000 !important;
-                 padding: 1px 4px !important; /* Adjust badge padding slightly */
-                 font-size: 8pt !important; /* Smaller badge text */
+                 padding: 1px 4px !important;
+                 font-size: 8pt !important;
              }
              .grid { display: block !important; }
              .grid > div { margin-bottom: 1rem !important; }
@@ -218,7 +219,7 @@
             <section class="mb-8">
                  <h2 class="text-2xl font-semibold font-heading text-cv-accent mb-3 sr-only">Profile Summary</h2>
                  <p class="text-cv-text-med leading-relaxed text-base border-t border-cv-border pt-4">
-                    19 years’ experience in producing quality documentation across multiple teams and companies. My expertise extends beyond the fundamentals of grammar and structure: I drive documentation solutions, master the technologies that I write about, publish guidelines and ways-of-working, train developers to write well, and advocate for topic reuse. These efforts are specifically focused on git/markdown and DITA CMS environments. Using my communication skills and technical expertise, I oversee written content across multiple channels such as user interfaces, developer guides, and error logs. All content is meticulously tailored to its audience.
+                    Over 22 years’ experience in producing quality documentation across multiple teams and companies. My expertise extends beyond the fundamentals of grammar and structure: I drive documentation solutions, master the technologies that I write about, publish guidelines and ways-of-working, train developers to write well, and advocate for topic reuse. These efforts are specifically focused on git/markdown and DITA CMS environments. Using my communication skills and technical expertise, I oversee written content across multiple channels such as user interfaces, developer guides, and error logs. All content is meticulously tailored to its audience.
                  </p>
             </section>
 
@@ -244,7 +245,7 @@
                     </button>
                 </div>
 
-                <div>
+                <div class="tab-content-container">
                     <div id="tab-intive" class="tab-content active" role="tabpanel" aria-labelledby="btn-intive">
                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Technical Writer</h3>
                         <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Athlone, Ireland and Remote | July 2017 – Present</p>
@@ -259,20 +260,12 @@
                          </ul>
                          <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: Ericsson</h4>
                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
-                            <li>Led user-centric overhaul of a pipeline orchestrator's doc site (DITA standards), boosting usability.</li>
-                            <li>Trained dev teams on simplified DITA guidelines, improving quality and reducing review friction.</li>
+                            <li>Led user-centric overhaul of a pipeline orchestrator's doc site (DITA standards), boosting usability and driving documentation solutions in collaboration with stakeholders.</li>
+                            <li>Trained dev teams on simplified DITA guidelines, improving quality, reducing review friction, and tailoring guides for diverse audiences.</li>
                             <li>Integrated docs-as-code using Backstage and pioneered topic reuse in Git/Markdown and DITA.</li>
                             <li>Streamlined API docs: Direct codebase editing and Swagger publishing, eliminating IXIASOFT copy/paste.</li>
-                            <li>Drive doc solutions for major telecom client; leverage AI for technical info gathering (with anonymization).</li>
-                            <li>Deep expertise gained in CI/CD orchestration tools and associated services.</li>
-                        </ul>
-                        <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Ongoing Tasks and Responsibilities (Ericsson):</h4>
-                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
-                             <li>Drive the implementation of documentation solutions in collaboration with stakeholders and customers.</li>
-                             <li>Provide training and support.</li>
-                             <li>Tailor guides to various audiences.</li>
-                             <li>Regularly engage with advanced AI systems to gather, verify, and understand complex technical information. This includes anonymizing sensitive data to ensure privacy and confidentiality.</li>
-                         </ul>
+                            <li>Leveraged AI for technical info gathering (with anonymization) and gained deep expertise in CI/CD orchestration tools.</li>
+                            </ul>
                     </div>
 
                     <div id="tab-sap" class="tab-content" role="tabpanel" aria-labelledby="btn-sap" hidden>
