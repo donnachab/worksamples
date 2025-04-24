@@ -47,7 +47,7 @@
         }
         /* Tab Styles */
         .tab-button {
-            padding: 0.5rem 1rem; /* Adjusted padding */
+            padding: 0.5rem 1rem;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.2s ease-in-out;
@@ -55,10 +55,10 @@
             font-weight: 500;
             line-height: 1.3;
             text-align: center;
-            flex-shrink: 0; /* Prevent shrinking on smaller screens */
+            flex-shrink: 0;
         }
         .tab-button:hover {
-             background-color: #ffffff; /* White hover on sidebar */
+             background-color: #ffffff;
              color: #14532d;
         }
         .tab-button.active {
@@ -95,7 +95,7 @@
         }
         /* List marker color */
          .marker\:text-cv-accent ul li::marker,
-         .marker\:text-cv-accent li::marker { /* Added direct li marker */
+         .marker\:text-cv-accent li::marker {
              color: #22c55e;
         }
         .badge {
@@ -111,6 +111,7 @@
                 color: #000000 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+                font-size: 10pt; /* Adjust base font size for print */
             }
             /* Hide buttons */
             .tab-buttons-container,
@@ -122,31 +123,64 @@
                 display: block !important;
                 border: none !important;
                 padding: 0 !important;
-                margin-bottom: 1.5rem;
+                margin-bottom: 1rem; /* Reduced space between job sections */
                 background-color: transparent !important;
                 border-radius: 0 !important;
+                page-break-inside: avoid !important; /* Try to keep job details together */
             }
-            /* Reset layout for print */
-            .md\:flex { display: block !important; } /* Stack columns */
-            aside, main { width: 100% !important; border: none !important; }
-            aside { padding-bottom: 1rem !important; }
+            /* Reset layout for print - Stacks main THEN aside */
+            .print\:block { display: block !important; }
+            main {
+                display: block !important; /* Ensure main is block */
+                width: 100% !important;
+                order: 1 !important; /* Ensure main comes first */
+                page-break-before: avoid !important; /* Prevent breaking before main */
+            }
+            aside {
+                display: block !important; /* Ensure aside is block */
+                width: 100% !important;
+                border: none !important;
+                order: 2 !important; /* Ensure aside comes second */
+                padding-top: 1rem !important;
+                page-break-before: auto !important; /* Allow break before sidebar if needed */
+            }
+
             .max-w-6xl {
                 box-shadow: none !important;
                 border: none !important;
+                max-width: 100% !important;
             }
             body.p-4, body.md\:p-6, body.lg\:p-8 {
-                padding: 1cm !important;
+                padding: 1cm !important; /* Standard print margins */
             }
             header, .p-6, .md\:p-8 {
                  padding: 0 !important;
             }
+             /* Adjust header layout for print */
             header {
                 border-bottom: 1px solid #ccc !important;
                 margin-bottom: 1rem !important;
                 padding-bottom: 0.5rem !important;
-                display: block !important; /* Ensure header stacks */
+                display: block !important; /* Stack header elements */
+                page-break-inside: avoid !important; /* Try to keep header together */
+                page-break-after: avoid !important; /* Avoid breaking right after header */
             }
-            header > div:last-child { text-align: left !important; margin-top: 1rem !important; } /* Adjust address block */
+             header > div:first-child { /* Name/Title block */
+                 text-align: left !important;
+                 margin-bottom: 0.5rem;
+             }
+             header > div:first-child img {
+                 display: none !important; /* Hide image in print header */
+             }
+            header address { text-align: left !important; margin-top: 0.5rem !important; }
+
+            /* Adjust summary section */
+            main > section:first-of-type { /* Target summary section */
+                 page-break-inside: avoid !important;
+                 margin-bottom: 1rem !important;
+            }
+
+            /* Ensure text colors are dark for print */
             .text-cv-text-dark, .text-cv-text-med, .text-cv-text-dim, .text-cv-accent, .text-cv-accent-hover {
                  color: #000000 !important;
             }
@@ -157,20 +191,124 @@
                  background-color: #eee !important;
                  border-color: #ccc !important;
                  color: #000 !important;
+                 padding: 1px 4px !important; /* Adjust badge padding slightly */
+                 font-size: 8pt !important; /* Smaller badge text */
              }
-             header img {
-                 border-color: #ccc !important;
-             }
-             .grid { display: block !important; } /* Stack grid items */
+             .grid { display: block !important; }
              .grid > div { margin-bottom: 1rem !important; }
+             h2 { font-size: 14pt !important; margin-bottom: 0.5rem !important; }
+             h3 { font-size: 12pt !important; margin-bottom: 0.25rem !important; }
+             h4 { font-size: 10pt !important; font-weight: bold !important; margin-bottom: 0.1rem !important; }
+             ul { margin-left: 1rem !important; }
+             li { margin-bottom: 0.2rem !important; }
+             p { margin-bottom: 0.5rem !important; }
         }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-6 lg:p-8">
 
-    <div class="max-w-6xl mx-auto bg-cv-bg-main shadow-lg rounded-lg overflow-hidden md:flex">
+    <div class="max-w-6xl mx-auto bg-cv-bg-main shadow-lg rounded-lg overflow-hidden md:flex print:block">
 
-        <aside class="w-full md:w-1/3 lg:w-1/4 bg-cv-bg-sidebar p-6 text-cv-text-med border-r border-cv-border">
+        <main class="w-full md:w-2/3 lg:w-3/4 bg-cv-bg-main p-6 md:p-8 md:order-2">
+             <header class="mb-6">
+                 <h1 class="text-4xl md:text-5xl font-bold font-heading text-cv-text-dark tracking-tight">DONNACHA BUSHE</h1>
+                <p class="text-xl font-heading text-cv-accent mt-1">Senior Technical Writer | Doc Architect | Developer Advocate</p>
+            </header>
+
+            <section class="mb-8">
+                 <h2 class="text-2xl font-semibold font-heading text-cv-accent mb-3 sr-only">Profile Summary</h2>
+                 <p class="text-cv-text-med leading-relaxed text-base border-t border-cv-border pt-4">
+                    19 years’ experience in producing quality documentation across multiple teams and companies. My expertise extends beyond the fundamentals of grammar and structure: I drive documentation solutions, master the technologies that I write about, publish guidelines and ways-of-working, train developers to write well, and advocate for topic reuse. These efforts are specifically focused on git/markdown and DITA CMS environments. Using my communication skills and technical expertise, I oversee written content across multiple channels such as user interfaces, developer guides, and error logs. All content is meticulously tailored to its audience.
+                 </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold font-heading text-cv-accent mb-4">Experience</h2>
+
+                <div class="tab-buttons-container mb-0 border-b border-cv-border flex flex-wrap -mb-px" role="tablist" aria-label="Job Experience Tabs">
+                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-intive" id="btn-intive">
+                        <span>intive</span>
+                        <small>2017-Present</small>
+                    </button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-sap" id="btn-sap" tabindex="-1">
+                        <span>SAP</span>
+                        <small>2005-2015</small>
+                    </button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-skillsoft" id="btn-skillsoft" tabindex="-1">
+                        <span>Skillsoft</span>
+                        <small>2001-2005</small>
+                    </button>
+                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-aviva" id="btn-aviva" tabindex="-1">
+                        <span>Aviva</span>
+                        <small>1997-2001</small>
+                    </button>
+                </div>
+
+                <div>
+                    <div id="tab-intive" class="tab-content active" role="tabpanel" aria-labelledby="btn-intive">
+                        <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Technical Writer</h3>
+                        <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Athlone, Ireland and Remote | July 2017 – Present</p>
+
+                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-4 mb-2">Internal: New Business POC</h4>
+                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
+                             <li>Designed Figma graphics illustrating Irish legislative workflow for a proof-of-concept.</li>
+                         </ul>
+                        <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: DT One</h4>
+                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
+                            <li>Designed developer portal structure and API documentation strategy.</li>
+                         </ul>
+                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: Ericsson</h4>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
+                            <li>Led user-centric overhaul of a pipeline orchestrator's doc site (DITA standards), boosting usability.</li>
+                            <li>Trained dev teams on simplified DITA guidelines, improving quality and reducing review friction.</li>
+                            <li>Integrated docs-as-code using Backstage and pioneered topic reuse in Git/Markdown and DITA.</li>
+                            <li>Streamlined API docs: Direct codebase editing and Swagger publishing, eliminating IXIASOFT copy/paste.</li>
+                            <li>Drive doc solutions for major telecom client; leverage AI for technical info gathering (with anonymization).</li>
+                            <li>Deep expertise gained in CI/CD orchestration tools and associated services.</li>
+                        </ul>
+                        <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Ongoing Tasks and Responsibilities (Ericsson):</h4>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
+                             <li>Drive the implementation of documentation solutions in collaboration with stakeholders and customers.</li>
+                             <li>Provide training and support.</li>
+                             <li>Tailor guides to various audiences.</li>
+                             <li>Regularly engage with advanced AI systems to gather, verify, and understand complex technical information. This includes anonymizing sensitive data to ensure privacy and confidentiality.</li>
+                         </ul>
+                    </div>
+
+                    <div id="tab-sap" class="tab-content" role="tabpanel" aria-labelledby="btn-sap" hidden>
+                        <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Information Developer</h3>
+                        <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Galway, Ireland | March 2005 – July 2015</p>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
+                           <li>In four years, progressed from Information Developer to Information Developer Specialist, to Senior Information Developer.</li>
+                           <li>Visited customers on-site in Kentucky and ensured that their feedback was heeded in a redesign of the Help Portal.</li>
+                           <li>Delivered accurate and helpful documentation, e-learning tutorials, and user-assistance texts on time.</li>
+                           <li>Cultivated an in-depth expertise in the subject matter I documented, with a particular focus on IT System and Application Management and Master Data Governance, thereby enhancing the accuracy and relevance of the produced documentation.</li>
+                           <li>Mentored colleagues across the globe, coordinated tool support, created templates and stylesheets, and produced awesome graphics.</li>
+                        </ul>
+                    </div>
+
+                    <div id="tab-skillsoft" class="tab-content" role="tabpanel" aria-labelledby="btn-skillsoft" hidden>
+                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Technical Writer</h3>
+                         <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Dublin, Ireland | March 2001 – March 2005</p>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
+                            <li>Designed, developed, and delivered training. Courses consisted of articles, demonstrations, simulations, and assessments.</li>
+                            <li>Led planning meetings with graphic designers, and subject matter experts.</li>
+                        </ul>
+                    </div>
+
+                    <div id="tab-aviva" class="tab-content" role="tabpanel" aria-labelledby="btn-aviva" hidden>
+                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Programmer</h3>
+                         <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Dublin, Ireland | Sept 1997 – Feb 2001</p>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
+                           <li>This multifaceted role included coding, user support, and daily system maintenance.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <aside class="w-full md:w-1/3 lg:w-1/4 bg-cv-bg-sidebar p-6 text-cv-text-med border-r border-cv-border md:order-1">
             <div class="mb-6 text-center">
                 <img src="profile-pic.jpg"
                      alt="Profile Picture"
@@ -263,103 +401,9 @@
             </section>
         </aside>
 
-        <main class="w-full md:w-2/3 lg:w-3/4 bg-cv-bg-main p-6 md:p-8">
-             <header class="mb-6">
-                 <h1 class="text-4xl md:text-5xl font-bold font-heading text-cv-text-dark tracking-tight">DONNACHA BUSHE</h1>
-                <p class="text-xl font-heading text-cv-accent mt-1">Senior Technical Writer | Doc Architect | Developer Advocate</p>
-            </header>
+    </div>
 
-            <section class="mb-8">
-                 <h2 class="text-2xl font-semibold font-heading text-cv-accent mb-3 sr-only">Profile Summary</h2> <p class="text-cv-text-med leading-relaxed text-base border-t border-cv-border pt-4">
-                    19 years’ experience in producing quality documentation across multiple teams and companies. My expertise extends beyond the fundamentals of grammar and structure: I drive documentation solutions, master the technologies that I write about, publish guidelines and ways-of-working, train developers to write well, and advocate for topic reuse. These efforts are specifically focused on git/markdown and DITA CMS environments. Using my communication skills and technical expertise, I oversee written content across multiple channels such as user interfaces, developer guides, and error logs. All content is meticulously tailored to its audience.
-                 </p>
-            </section>
-
-            <section>
-                <h2 class="text-2xl font-semibold font-heading text-cv-accent mb-4">Experience</h2>
-
-                <div class="tab-buttons-container mb-0 border-b border-cv-border flex flex-wrap -mb-px" role="tablist" aria-label="Job Experience Tabs">
-                    <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-intive" id="btn-intive">
-                        <span>intive</span>
-                        <small>2017-Present</small>
-                    </button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-sap" id="btn-sap" tabindex="-1">
-                        <span>SAP</span>
-                        <small>2005-2015</small>
-                    </button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-skillsoft" id="btn-skillsoft" tabindex="-1">
-                        <span>Skillsoft</span>
-                        <small>2001-2005</small>
-                    </button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-aviva" id="btn-aviva" tabindex="-1">
-                        <span>Aviva</span>
-                        <small>1997-2001</small>
-                    </button>
-                </div>
-
-                <div>
-                    <div id="tab-intive" class="tab-content active" role="tabpanel" aria-labelledby="btn-intive">
-                        <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Technical Writer</h3>
-                        <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Athlone, Ireland and Remote | July 2017 – Present</p>
-
-                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-4 mb-2">Internal: New Business POC</h4>
-                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
-                             <li>Designed Figma graphics illustrating Irish legislative workflow for a proof-of-concept.</li>
-                         </ul>
-                        <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: DT One</h4>
-                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
-                            <li>Designed developer portal structure and API documentation strategy.</li>
-                         </ul>
-                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: Ericsson</h4>
-                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
-                            <li>Led user-centric overhaul of a pipeline orchestrator's doc site (DITA standards), boosting usability.</li>
-                            <li>Trained dev teams on simplified DITA guidelines, improving quality and reducing review friction.</li>
-                            <li>Integrated docs-as-code using Backstage and pioneered topic reuse in Git/Markdown and DITA.</li>
-                            <li>Streamlined API docs: Direct codebase editing and Swagger publishing, eliminating IXIASOFT copy/paste.</li>
-                            <li>Drive doc solutions for major telecom client; leverage AI for technical info gathering (with anonymization).</li>
-                            <li>Deep expertise gained in CI/CD orchestration tools and associated services.</li>
-                        </ul>
-                        <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Ongoing Tasks and Responsibilities (Ericsson):</h4>
-                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
-                             <li>Drive the implementation of documentation solutions in collaboration with stakeholders and customers.</li>
-                             <li>Provide training and support.</li>
-                             <li>Tailor guides to various audiences.</li>
-                             <li>Regularly engage with advanced AI systems to gather, verify, and understand complex technical information. This includes anonymizing sensitive data to ensure privacy and confidentiality.</li>
-                         </ul>
-                    </div>
-
-                    <div id="tab-sap" class="tab-content" role="tabpanel" aria-labelledby="btn-sap" hidden>
-                        <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Information Developer</h3>
-                        <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Galway, Ireland | March 2005 – July 2015</p>
-                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
-                           <li>In four years, progressed from Information Developer to Information Developer Specialist, to Senior Information Developer.</li>
-                           <li>Visited customers on-site in Kentucky and ensured that their feedback was heeded in a redesign of the Help Portal.</li>
-                           <li>Delivered accurate and helpful documentation, e-learning tutorials, and user-assistance texts on time.</li>
-                           <li>Cultivated an in-depth expertise in the subject matter I documented, with a particular focus on IT System and Application Management and Master Data Governance, thereby enhancing the accuracy and relevance of the produced documentation.</li>
-                           <li>Mentored colleagues across the globe, coordinated tool support, created templates and stylesheets, and produced awesome graphics.</li>
-                        </ul>
-                    </div>
-
-                    <div id="tab-skillsoft" class="tab-content" role="tabpanel" aria-labelledby="btn-skillsoft" hidden>
-                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Technical Writer</h3>
-                         <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Dublin, Ireland | March 2001 – March 2005</p>
-                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
-                            <li>Designed, developed, and delivered training. Courses consisted of articles, demonstrations, simulations, and assessments.</li>
-                            <li>Led planning meetings with graphic designers, and subject matter experts.</li>
-                        </ul>
-                    </div>
-
-                    <div id="tab-aviva" class="tab-content" role="tabpanel" aria-labelledby="btn-aviva" hidden>
-                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Programmer</h3>
-                         <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Dublin, Ireland | Sept 1997 – Feb 2001</p>
-                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
-                           <li>This multifaceted role included coding, user support, and daily system maintenance.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-        </main> </div> <script>
+    <script>
         // JavaScript for Tab Functionality
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
