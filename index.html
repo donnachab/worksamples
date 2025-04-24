@@ -3,35 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donnacha Bushe - CV (Autumn Theme)</title>
+    <title>Donnacha Bushe - CV (Spring Theme)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <script>
-        // Define Autumn color palette
-        const autumnPalette = {
-            'cv-bg-base': '#fdf6e3',     // Creamy Base (like parchment)
-            'cv-bg-main': '#fffaf0',     // Floral White Main Area
-            'cv-bg-sidebar': '#d2b48c',    // Tan Sidebar
-            'cv-text-dark': '#5a3d2b',   // Dark Brown Text
-            'cv-text-med': '#8b4513',   // Saddle Brown Text
-            'cv-text-dim': '#a0522d',   // Sienna Dim Text
-            'cv-accent': '#e85d04',     // Burnt Orange Accent
-            'cv-accent-alt': '#faa307', // Gold/Amber Accent Alt
-            'cv-border': '#cd853f',   // Peru/Brown Border
-            'cv-shadow': 'rgba(232, 93, 4, 0.15)' // Shadow color based on accent
+        // Define Spring color palette
+        const springPalette = {
+            'cv-bg-base': '#f0fdf4',     // Very Light Mint/Green Base
+            'cv-bg-main': '#ffffff',     // White Main Area
+            'cv-bg-sidebar': '#dcfce7',    // Light Green Sidebar (Tailwind Green 100)
+            'cv-text-dark': '#14532d',   // Dark Green Text (Tailwind Green 900)
+            'cv-text-med': '#166534',   // Medium Green Text (Tailwind Green 800)
+            'cv-text-dim': '#15803d',   // Dimmer Green Text (Tailwind Green 700)
+            'cv-accent': '#22c55e',     // Bright Green Accent (Tailwind Green 500)
+            'cv-accent-hover': '#16a34a', // Darker Green Accent (Tailwind Green 600)
+            'cv-border': '#86efac',   // Light Green Border (Tailwind Green 300)
+            'cv-shadow': 'rgba(34, 197, 94, 0.15)' // Shadow color based on accent
         };
 
         tailwind.config = {
-             // No dark mode needed for single theme
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         poppins: ['Poppins', 'sans-serif'],
                     },
-                    colors: autumnPalette // Apply the autumn palette directly
+                    colors: springPalette // Apply the spring palette directly
                 }
             }
         }
@@ -39,73 +38,37 @@
     <style>
         /* Scrollbar styling */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #d2b48c; } /* Sidebar color */
-        ::-webkit-scrollbar-thumb { background: #a0522d; border-radius: 4px; } /* Sienna */
-        ::-webkit-scrollbar-thumb:hover { background: #8b4513; } /* Saddle Brown */
+        ::-webkit-scrollbar-track { background: #dcfce7; } /* Sidebar color */
+        ::-webkit-scrollbar-thumb { background: #86efac; border-radius: 4px; } /* Border color */
+        ::-webkit-scrollbar-thumb:hover { background: #4ade80; } /* Lighter Green */
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #fdf6e3; /* Creamy base */
-            color: #5a3d2b; /* Dark Brown default text */
+            background-color: #f0fdf4; /* Base BG */
+            color: #166534; /* Medium Green default text */
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Starfield Background - Using Autumn Colors */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
-            z-index: -2;
-            background-color: #fdf6e3; /* Match body */
-        }
-         body::after {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            /* Star colors updated to autumn leaf tones */
-            background-image:
-                radial-gradient(1px 1px at 20px 30px, #facc15, transparent),  /* Yellow-Gold */
-                radial-gradient(1px 1px at 40px 70px, #fbbf24, transparent),  /* Amber */
-                radial-gradient(1px 1px at 50px 160px, #fb923c, transparent), /* Orange */
-                radial-gradient(1px 1px at 90px 40px, #fcd34d, transparent),  /* Lighter Gold */
-                radial-gradient(1.5px 1.5px at 130px 80px, #f59e0b, transparent),/* Amber/Orange */
-                radial-gradient(1px 1px at 160px 120px, #fdba74, transparent),/* Peach/Orange */
-                radial-gradient(1px 1px at 55% 10%, #facc15, transparent),
-                radial-gradient(1px 1px at 60% 40%, #fbbf24, transparent),
-                radial-gradient(1.5px 1.5px at 75% 60%, #f59e0b, transparent),
-                radial-gradient(1px 1px at 80% 90%, #fb923c, transparent),
-                radial-gradient(1px 1px at 15% 85%, #fcd34d, transparent);
-            background-size: 120px 120px;
-            animation: starsAnim 120s linear infinite;
-            opacity: 0.5; /* Adjust opacity for desired subtlety */
-        }
-
-        @keyframes starsAnim {
-            from { background-position: 0 0; }
-            to { background-position: -10000px 5000px; }
-        }
+        /* Removed Starfield Background Styles */
 
         h1, h2, h3, .font-heading {
             font-family: 'Poppins', sans-serif;
         }
-        .marker\:text-cv-accent::marker { color: #e85d04; } /* Burnt Orange */
+        .marker\:text-cv-accent::marker { color: #22c55e; } /* Bright Green */
 
         /* Custom focus ring color */
         *:focus-visible {
-            outline: 2px solid #e85d04;
+            outline: 2px solid #22c55e;
             outline-offset: 2px;
         }
         .container-flourish {
-             border-top: 4px solid #e85d04; /* Burnt Orange top border */
+             border-top: 4px solid #22c55e; /* Bright Green top border */
         }
         .badge {
-            background-color: #f4a26120; /* Light orange/tan transparent */
-            border-color: #cd853f; /* Peru border */
-            color: #5a3d2b; /* Dark brown text */
+            background-color: #bbf7d0; /* Tailwind Green 200 */
+            border-color: #86efac; /* Border color */
+            color: #14532d; /* Dark Green text */
         }
 
     </style>
@@ -116,7 +79,7 @@
 
         <aside class="w-full md:w-1/3 bg-cv-bg-sidebar p-6 md:p-8 text-cv-text-med border-r border-cv-border">
             <div class="mb-8 text-center">
-                <img src="profile-pic.jpg"
+                 <img src="https://placehold.co/150x150/dcfce7/14532d?text=Profile\nPic"
                      alt="Profile Picture"
                      class="w-36 h-36 rounded-full mx-auto border-4 border-cv-border object-cover shadow-lg">
             </div>
@@ -134,14 +97,14 @@
                         <svg class="w-4 h-4 mr-3 text-cv-accent flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                         </svg>
-                        <a href="tel:+353857071293" class="hover:text-cv-accent-alt transition-colors duration-200">+353-85-7071293</a>
+                        <a href="tel:+353857071293" class="hover:text-cv-accent-hover transition-colors duration-200">+353-85-7071293</a>
                     </div>
                     <div class="flex items-center">
                          <svg class="w-4 h-4 mr-3 text-cv-accent flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                         </svg>
-                        <a href="mailto:donnachab@gmail.com" class="hover:text-cv-accent-alt transition-colors duration-200">donnachab@gmail.com</a>
+                        <a href="mailto:donnachab@gmail.com" class="hover:text-cv-accent-hover transition-colors duration-200">donnachab@gmail.com</a>
                     </div>
                 </div>
             </section>
@@ -210,7 +173,7 @@
         <main class="w-full md:w-2/3 bg-cv-bg-main p-6 md:p-8">
              <header class="mb-10 border-b-2 border-cv-border pb-4">
                  <h1 class="text-4xl md:text-5xl font-bold font-heading text-cv-text-dark tracking-tight">DONNACHA BUSHE</h1>
-                <p class="text-xl font-heading text-cv-accent-alt mt-1">Senior Technical Writer | Doc Architect | Developer Advocate</p>
+                <p class="text-xl font-heading text-cv-accent mt-1">Senior Technical Writer | Doc Architect | Developer Advocate</p>
             </header>
 
             <section class="mb-10">
