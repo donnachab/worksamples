@@ -11,13 +11,13 @@
     <script>
         // Define Spring color palette
         const springPalette = {
-            'cv-bg-base': '#f0fdf4',     // Very Light Mint/Green Base
-            'cv-bg-main': '#ffffff',     // White Main Area
+            'cv-bg-base': '#f0fdf4',       // Very Light Mint/Green Base
+            'cv-bg-main': '#ffffff',       // White Main Area
             'cv-bg-sidebar': '#dcfce7',    // Light Green Sidebar (Tailwind Green 100)
             'cv-text-dark': '#14532d',   // Dark Green Text (Tailwind Green 900)
             'cv-text-med': '#166534',   // Medium Green Text (Tailwind Green 800)
             'cv-text-dim': '#15803d',   // Dimmer Green Text (Tailwind Green 700)
-            'cv-accent': '#22c55e',     // Bright Green Accent (Tailwind Green 500)
+            'cv-accent': '#22c55e',      // Bright Green Accent (Tailwind Green 500)
             'cv-accent-hover': '#16a34a', // Darker Green Accent (Tailwind Green 600)
             'cv-border': '#86efac',   // Light Green Border (Tailwind Green 300)
             'cv-shadow': 'rgba(34, 197, 94, 0.15)' // Shadow color based on accent
@@ -57,11 +57,11 @@
         }
          aside a:hover {
              color: #22c55e; /* Green accent on hover */
-         }
+        }
 
         /* Tab Styles */
          .tab-buttons-container {
-            border-bottom: 1px solid #86efac; /* cv-border */
+             border-bottom: 1px solid #86efac; /* cv-border */
         }
         .tab-button {
             padding: 0.75rem 1rem;
@@ -78,9 +78,9 @@
             border-radius: 0.375rem 0.375rem 0 0;
         }
         .tab-button:hover {
-             background-color: #dcfce7; /* Sidebar color */
-             color: #14532d; /* Dark Green */
-             border-color: #86efac #86efac transparent #86efac;
+            background-color: #dcfce7; /* Sidebar color */
+            color: #14532d; /* Dark Green */
+            border-color: #86efac #86efac transparent #86efac;
         }
         .tab-button.active {
             border-color: #86efac #86efac #ffffff #86efac; /* Connected border */
@@ -117,7 +117,7 @@
         /* List marker color */
          .marker\:text-cv-accent ul li::marker,
          .marker\:text-cv-accent li::marker {
-             color: #22c55e; /* Green Accent */
+              color: #22c55e; /* Green Accent */
         }
         .badge {
             background-color: #bbf7d0; /* Tailwind Green 200 */
@@ -129,7 +129,7 @@
              background-color: #ffffff; /* White bg */
              border-color: #86efac; /* Border color */
              color: #14532d; /* Dark Green text */
-         }
+        }
 
         /* Print Styles */
         @media print {
@@ -140,13 +140,21 @@
                 print-color-adjust: exact !important;
                 font-size: 10pt;
             }
-            #print-button, video, a[href^="http"]::after {
+            #print-button, video, #work-samples-button, a[href^="http"]::after { /* Hide buttons, video, external link indicators */
                 display: none !important;
             }
              a[href^="http"] {
                  text-decoration: none !important;
                  color: inherit !important;
              }
+             /* Adjust link appearance if needed for internal links like worksamples */
+             a[href="worksamples.html"] {
+                 /* Optionally style internal links differently for print if desired */
+                 /* Example: text-decoration: underline !important; color: blue !important; */
+                 color: inherit !important; /* Keep black for now */
+                 text-decoration: none !important;
+             }
+
             .tab-buttons-container {
                 border-bottom: none !important;
                 margin-bottom: 0 !important;
@@ -225,15 +233,15 @@
                 border-bottom: 1px solid #ccc !important;
                 margin-bottom: 1rem !important;
                 padding-bottom: 0.5rem !important;
-                display: block !important;
+                display: block !important; /* Changed from flex to block */
                 page-break-inside: avoid !important;
                 page-break-after: avoid !important;
             }
-             header > div:first-child {
+             header > div:first-child { /* Target the div holding H1 and P */
                  text-align: left !important;
                  margin-bottom: 0.5rem;
              }
-             header > div:first-child img {
+             header > div:first-child img { /* Hide profile image in header if any */
                  display: none !important;
              }
             header address { text-align: left !important; margin-top: 0.5rem !important; }
@@ -270,16 +278,26 @@
     <div class="max-w-6xl mx-auto bg-cv-bg-main shadow-xl rounded-lg overflow-hidden md:flex print:block">
 
         <main class="w-full md:w-2/3 lg:w-3/4 bg-cv-bg-main p-6 md:p-8 md:order-2">
-             <header class="mb-6">
-                 <h1 class="text-4xl md:text-5xl font-bold font-heading text-cv-text-dark tracking-tight">DONNACHA BUSHE</h1>
-                <p class="text-xl font-heading text-cv-accent mt-1">Senior Technical Writer | Doc Architect | Developer Advocate</p>
-            </header>
+             <header class="mb-6 flex flex-wrap justify-between items-start">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-bold font-heading text-cv-text-dark tracking-tight">DONNACHA BUSHE</h1>
+                    <p class="text-xl font-heading text-cv-accent mt-1">Senior Technical Writer | Doc Architect | Developer Advocate</p>
+                </div>
+                <div class="mt-2 md:mt-0 md:ml-4 print:hidden">
+                    <a href="worksamples.html" id="work-samples-button" class="inline-flex items-center px-4 py-2 border border-cv-accent text-sm font-medium rounded-md text-cv-accent bg-white hover:bg-cv-accent hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-accent transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+                        </svg>
+                        Work Samples
+                    </a>
+                </div>
+             </header>
 
             <section class="mb-8">
-                 <h2 class="text-2xl font-semibold font-heading text-cv-accent mb-3 sr-only">Profile Summary</h2>
-                 <p class="text-cv-text-med leading-relaxed text-base border-t border-cv-border pt-4">
+                <h2 class="text-2xl font-semibold font-heading text-cv-accent mb-3 sr-only">Profile Summary</h2>
+                <p class="text-cv-text-med leading-relaxed text-base border-t border-cv-border pt-4">
                     Over 22 years’ experience in producing quality documentation across multiple teams and companies. My expertise extends beyond the fundamentals of grammar and structure: I drive documentation solutions, master the technologies that I write about, publish guidelines and ways-of-working, train developers to write well, and advocate for topic reuse. These efforts are specifically focused on git/markdown and DITA CMS environments. Using my communication skills and technical expertise, I oversee written content across multiple channels such as user interfaces, developer guides, and error logs. All content is meticulously tailored to its audience.
-                 </p>
+                </p>
             </section>
 
             <section>
@@ -306,28 +324,28 @@
 
                 <div class="tab-content-container">
                     <div id="tab-intive" class="tab-content active" role="tabpanel" aria-labelledby="btn-intive">
-                         <div class="print-only-tab-heading" style="display: none;">
+                        <div class="print-only-tab-heading" style="display: none;">
                             <span>intive</span> <small>2017-Present</small>
-                         </div>
+                        </div>
                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Technical Writer</h3>
                         <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Athlone, Ireland and Remote | July 2017 – Present</p>
 
-                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-4 mb-2">Internal: New Business POC</h4>
-                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
-                             <li>Designed Figma graphics illustrating Irish legislative workflow for a proof-of-concept.
-                                 <div class="mt-2">
-                                     <video controls width="320" preload="metadata" class="rounded shadow">
-                                         <source src="your-video-filename.mp4" type="video/mp4">
-                                         Your browser does not support the video tag. Consider linking to the video instead.
-                                         </video>
-                                 </div>
-                             </li>
-                         </ul>
+                        <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-4 mb-2">Internal: New Business POC</h4>
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
+                            <li>Designed Figma graphics illustrating Irish legislative workflow for a proof-of-concept.
+                                <div class="mt-2">
+                                    <video controls width="320" preload="metadata" class="rounded shadow">
+                                        <source src="your-video-filename.mp4" type="video/mp4">
+                                        Your browser does not support the video tag. Consider linking to the video instead.
+                                        </video>
+                                </div>
+                            </li>
+                        </ul>
                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: DT One</h4>
-                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
+                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
                             <li>Designed, edited, and significantly reworked content for the <a href="https://dtone-poc.readme.io/reference/overview" target="_blank" rel="noopener noreferrer" class="text-cv-accent hover:underline">DT One developer portal</a>, focusing on interactivity and clarity, including API documentation editing.</li>
-                         </ul>
-                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: Ericsson</h4>
+                        </ul>
+                        <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Client: Ericsson</h4>
                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
                             <li>Led user-centric overhaul of a pipeline orchestrator's doc site (DITA standards), boosting usability and driving documentation solutions in collaboration with stakeholders.</li>
                             <li>Trained dev teams on simplified DITA guidelines, improving quality, reducing review friction, and tailoring guides for diverse audiences.</li>
@@ -344,34 +362,34 @@
                         <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Senior Information Developer</h3>
                         <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Galway, Ireland | March 2005 – July 2015</p>
                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
-                           <li>In four years, progressed from Information Developer to Information Developer Specialist, to Senior Information Developer.</li>
-                           <li>Visited customers on-site in Kentucky and ensured that their feedback was heeded in a redesign of the Help Portal.</li>
-                           <li>Delivered accurate and helpful documentation, e-learning tutorials, and user-assistance texts on time.</li>
-                           <li>Cultivated an in-depth expertise in the subject matter I documented, with a particular focus on IT System and Application Management and Master Data Governance, thereby enhancing the accuracy and relevance of the produced documentation.</li>
-                           <li>Mentored colleagues across the globe, coordinated tool support, created templates and stylesheets, and produced awesome graphics.</li>
+                            <li>In four years, progressed from Information Developer to Information Developer Specialist, to Senior Information Developer.</li>
+                            <li>Visited customers on-site in Kentucky and ensured that their feedback was heeded in a redesign of the Help Portal.</li>
+                            <li>Delivered accurate and helpful documentation, e-learning tutorials, and user-assistance texts on time.</li>
+                            <li>Cultivated an in-depth expertise in the subject matter I documented, with a particular focus on IT System and Application Management and Master Data Governance, thereby enhancing the accuracy and relevance of the produced documentation.</li>
+                            <li>Mentored colleagues across the globe, coordinated tool support, created templates and stylesheets, and produced awesome graphics.</li>
                         </ul>
                     </div>
 
                     <div id="tab-skillsoft" class="tab-content" role="tabpanel" aria-labelledby="btn-skillsoft" hidden>
                         <div class="print-only-tab-heading" style="display: none;">
                              <span>Skillsoft</span> <small>2001-2005</small>
-                         </div>
+                        </div>
                          <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Technical Writer</h3>
                          <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Dublin, Ireland | March 2001 – March 2005</p>
                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
-                            <li>Designed, developed, and delivered training. Courses consisted of articles, demonstrations, simulations, and assessments.</li>
-                            <li>Led planning meetings with graphic designers, and subject matter experts.</li>
+                             <li>Designed, developed, and delivered training. Courses consisted of articles, demonstrations, simulations, and assessments.</li>
+                             <li>Led planning meetings with graphic designers, and subject matter experts.</li>
                         </ul>
                     </div>
 
                     <div id="tab-aviva" class="tab-content" role="tabpanel" aria-labelledby="btn-aviva" hidden>
-                         <div class="print-only-tab-heading" style="display: none;">
+                        <div class="print-only-tab-heading" style="display: none;">
                              <span>Aviva</span> <small>1997-2001</small>
-                         </div>
+                        </div>
                          <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Programmer</h3>
                          <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Dublin, Ireland | Sept 1997 – Feb 2001</p>
                         <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent">
-                           <li>This multifaceted role included coding, user support, and daily system maintenance.</li>
+                            <li>This multifaceted role included coding, user support, and daily system maintenance.</li>
                         </ul>
                     </div>
                 </div>
@@ -436,7 +454,7 @@
                     <span class="badge border px-2 py-0.5 rounded">TOML</span>
                     <span class="badge border px-2 py-0.5 rounded">Captivate</span>
                     <span class="badge border px-2 py-0.5 rounded">AI Prompting</span>
-                 </div>
+                </div>
             </section>
 
             <section class="mb-6">
@@ -456,18 +474,18 @@
             <section class="mb-6">
                 <h2 class="font-poppins text-lg font-semibold text-cv-accent uppercase tracking-wider mb-3">Certifications</h2>
                  <ul class="space-y-1 text-sm list-inside text-cv-text-dark marker:text-cv-accent">
-                     <li>Train the Trainer | SAP</li>
-                     <li>Interview Skills | intive</li>
-                     <li>Scrum Master Certified</li>
+                       <li>Train the Trainer | SAP</li>
+                       <li>Interview Skills | intive</li>
+                       <li>Scrum Master Certified</li>
                  </ul>
             </section>
 
             <section>
                 <h2 class="font-poppins text-lg font-semibold text-cv-accent uppercase tracking-wider mb-3">Interests & Activities</h2>
                  <ul class="space-y-1 text-sm list-inside text-cv-text-dark marker:text-cv-accent">
-                     <li>Completed the Camino de Santiago (French Way)</li>
-                     <li>Playwright (produced at Town Hall Theatre, Galway)</li>
-                     <li>Regular singer with the Galway Jam Circle</li>
+                       <li>Completed the Camino de Santiago (French Way)</li>
+                       <li>Playwright (produced at Town Hall Theatre, Galway)</li>
+                       <li>Regular singer with the Galway Jam Circle</li>
                  </ul>
             </section>
         </aside>
@@ -523,6 +541,8 @@
 
                 if (newIndex !== undefined) {
                     tabButtons[newIndex].focus();
+                     // Optionally trigger click to change content on arrow navigation
+                     // tabButtons[newIndex].click();
                 }
             });
         });
