@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donnacha's Work Samples</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- COLOR SCHEME --- */
+        :root {
+            --cv-bg-base: #f0fdf4; --cv-bg-main: #ffffff; --cv-bg-sidebar: #dcfce7;
+            --cv-text-dark: #14532d; --cv-text-med: #166534; --cv-text-dim: #15803d;
+            --cv-accent: #22c55e; --cv-accent-hover: #16a34a; --cv-border: #86efac;
+            --cv-shadow: rgba(34, 197, 94, 0.15); --cv-code-bg: #ecfdf5; --cv-code-border: #d1fae5;
+            --cv-note-bg: #FFFACD; --cv-note-border: #F0E68C;
+            --tab-button-inactive-bg: #e7f8ee; --tab-button-inactive-border: var(--cv-border);
+            --tab-button-active-bg: var(--cv-accent); --tab-button-active-text: var(--cv-bg-main);
+            --tab-button-hover-bg: #bbf7d0;
+            --subtab-button-inactive-bg: #f0fdf4; --subtab-button-inactive-border: var(--cv-border);
+            --subtab-button-active-bg: var(--cv-bg-main); --subtab-button-active-text: var(--cv-accent);
+            --subtab-button-hover-bg: #e7f8ee;
+            --feature-title-inactive-bg: var(--cv-bg-sidebar); --feature-title-inactive-border: transparent;
+            --feature-title-active-bg: var(--cv-accent); --feature-title-active-text: var(--cv-bg-main);
+            --feature-title-hover-bg: #bbf7d0;
+        }
+
+        /* --- BASE & LAYOUT --- */
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.55; /* Adjusted base line height */ margin: 0; padding: 0; background-color: var(--cv-bg-base); color: var(--cv-text-med); font-size: 13px; /* Reduced base font size */ }
+        .body-padding-wrapper { padding: 1rem; }
+        @media (min-width: 768px) { .body-padding-wrapper { padding: 1.5rem; } }
+        @media (min-width: 1024px) { .body-padding-wrapper { padding: 2rem; } }
+        .container { max-width: 1152px; margin: 0 auto; background-color: var(--cv-bg-main); box-shadow: 0 10px 15px -3px var(--cv-shadow), 0 4px 6px -4px var(--cv-shadow); border-radius: 0.5rem; overflow: hidden; }
+        main { padding: 1.5rem 2rem; }
+        footer { text-align: center; margin-top: 0; padding: 1rem 2rem 1.5rem; border-top: 1px solid var(--cv-border); font-size: 0.9em; color: var(--cv-text-dim); }
+        footer a { color: var(--cv-accent); } footer a:hover { color: var(--cv-accent-hover); }
+        *:focus-visible { outline: 2px solid var(--cv-accent); outline-offset: 2px; border-radius: 2px; }
+
+        /* --- HEADER --- */
+        header { color: var(--cv-text-dark); padding: 1.5rem 2rem; border-bottom: 1px solid var(--cv-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        header h1 { margin: 0; font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--cv-text-dark); font-size: 1.9rem; /* Adjust H1 size */ line-height: 2.1rem; letter-spacing: -0.025em; }
+        .header-cv-button a { display: inline-block; padding: 0.4rem 0.8rem; border: 1px solid var(--cv-accent); border-radius: 0.375rem; background-color: var(--cv-bg-main); color: var(--cv-accent); font-weight: 600; font-size: 0.875rem; text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease; cursor: pointer; margin-left: 1rem; }
+        .header-cv-button a::before { content: "📄 "; margin-right: 0.4em; }
+        .header-cv-button a:hover { background-color: var(--cv-accent); color: var(--cv-bg-main); }
+
+        /* --- TYPOGRAPHY & GENERAL CONTENT --- */
+        p, li { font-size: 1rem; /* Inherits 13px from body */ color: var(--cv-text-med); }
+        p { margin-bottom: 0.8rem; /* Reduced paragraph margin */ line-height: 1.45; /* Adjusted line height */ }
+        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; color: var(--cv-text-dark); font-weight: 600; }
+        h2 { font-size: 1.3rem; /* Adjust H2 size */ line-height: 1.7rem; margin: 0 0 0.8rem 0; /* Reduced margin */ padding-bottom: 0.4rem; border-bottom: 1px solid var(--cv-border); color: var(--cv-accent); scroll-margin-top: 1rem; }
+        h3 { font-size: 1.15rem; /* Adjust H3 size */ line-height: 1.5rem; margin: 1.8rem 0 0.8rem 0; /* Reduced margin */ color: var(--cv-text-dark); font-weight: 600; scroll-margin-top: 1rem; }
+        h4 { font-size: 1rem; /* Keep H4 at base size relative now */ font-weight: 600; margin: 1.2rem 0 0.4rem 0; /* Reduced margin */ color: var(--cv-text-med); }
+        h2 + p, h3 + p, h3 + ul, h4 + p, h4 + ul { margin-top: 0; }
+        strong { font-weight: 600; color: var(--cv-text-dark); }
+        em { font-style: italic; }
+        code { font-family: monospace; font-size: 0.9em; color: var(--cv-text-dim); background-color: var(--cv-code-bg); padding: 0.15em 0.4em; border-radius: 4px; border: 1px solid var(--cv-code-border); white-space: nowrap; }
+        .dita-compliance { font-style: italic; color: var(--cv-text-dim); margin-bottom: 0.8em; /* Reduced margin */ font-size: 1rem; }
+
+        /* --- LISTS --- */
+        ul, ol { padding-left: 1.25rem; margin: 0.4rem 0 0.8rem 0; /* Reduced margin */ list-style-position: outside; }
+        li { margin-bottom: 0.3rem; /* Reduced spacing */ padding-left: 0.25rem; }
+        li > p { margin: 0.15rem 0; /* Reduced spacing */ padding-left: 0; line-height: 1.4; /* Adjusted line height */ }
+        li > p:last-child { margin-bottom: 0; }
+        ul li::marker, ol li::marker { color: var(--cv-accent); font-weight: 600; }
+        .more-info-list ul { margin-top: 0.2rem; }
+        .more-info-list li { font-size: 1rem; margin-bottom: 0.15rem; }
+        .more-info-list { margin-top: 0; } /* Keep h4 aligned top */
+
+        /* --- TABS --- */
+        .tab-container { margin-bottom: 1.5rem; } /* Reduced margin */
+        .tab-buttons { display: flex; border-bottom: 2px solid var(--cv-border); margin-bottom: 1rem; /* Reduced margin */ flex-wrap: wrap; gap: 0.25rem; }
+        .tab-button { padding: 0.7rem 1.1rem; /* Adjusted padding */ cursor: pointer; background-color: var(--tab-button-inactive-bg); border: 1px solid var(--tab-button-inactive-border); border-bottom: none; margin-bottom: -2px; border-radius: 6px 6px 0 0; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--cv-text-med); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; position: relative; z-index: 1; }
+        .tab-button:hover { background-color: var(--tab-button-hover-bg); color: var(--cv-text-dark); }
+        .tab-button.active { background-color: var(--cv-bg-main); color: var(--cv-accent); border-color: var(--cv-border); border-bottom: 2px solid var(--cv-bg-main); z-index: 2; }
+        .tab-content { }
+        .tab-panel { display: none; padding-top: 0.5rem; animation: fadeIn 0.5s ease-in-out; }
+        .tab-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- SUB-TABS --- */
+        .sub-tab-container { margin-top: 0.8rem; } /* Reduced margin */
+        .sub-tab-container > p:first-child { margin-top: 0.2rem; margin-bottom: 0.8rem; } /* Reduced spacing */
+        .sub-tab-buttons { display: flex; border-bottom: 1px solid var(--cv-border); margin-bottom: 0.8rem; /* Reduced margin */ flex-wrap: wrap; gap: 0.25rem; }
+        .sub-tab-button { padding: 0.4rem 0.9rem; /* Adjusted padding */ cursor: pointer; background-color: var(--subtab-button-inactive-bg); border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; border-radius: 4px 4px 0 0; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; color: var(--cv-text-med); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+        .sub-tab-button:hover { background-color: var(--subtab-button-hover-bg); color: var(--cv-text-dark); }
+        .sub-tab-button.active { background-color: var(--subtab-button-active-bg); color: var(--subtab-button-active-text); border-color: var(--cv-border); border-bottom: 1px solid var(--subtab-button-active-bg); font-weight: 600; }
+        .sub-tab-content { }
+        .sub-tab-panel { display: none; padding-top: 0.8rem; /* Reduced padding */ animation: fadeIn 0.5s ease-in-out; }
+        #subtab-concept { padding-top: 0.5rem; }
+        .sub-tab-panel.active { display: block; }
+
+        /* --- BLOCKS (Note, Example) --- */
+        .note-block { background-color: var(--cv-note-bg); border-left: 4px solid var(--cv-note-border); padding: 0.8rem 1rem 0.8rem 1.2rem; /* Adjusted padding */ margin: 1rem 0; /* Adjusted margin */ color: #575735; border-radius: 0 4px 4px 0; }
+        .note-block p { font-size: 1rem; color: #575735; line-height: 1.4; /* Adjusted line height */ margin-bottom: 0.15rem; }
+        .note-block p:first-of-type::before { content: "📝 "; font-weight: 600; color: #575735; margin-right: 0.3em; display: inline-block; vertical-align: text-top; }
+        .note-block p:first-of-type { font-weight: 600; font-style: normal; margin-bottom: 0.15rem; }
+        .note-block p:not(:first-of-type) { font-style: normal; }
+        .note-block strong { color: #444422; }
+        .note-block > *:first-child { margin-top: 0; }
+        .note-block > *:last-child { margin-bottom: 0; }
+
+        .example-block { background-color: var(--cv-bg-sidebar); border-left: 4px solid var(--cv-accent); padding: 0.8rem 1rem 0.8rem 1.2rem; /* Adjusted padding */ margin: 1rem 0; /* Adjusted margin */ border-radius: 0 4px 4px 0; color: var(--cv-text-med); }
+        .example-block h4 { font-size: 1rem; font-weight: 600; margin: 0 0 0.5rem 0; /* Reduced margin */ color: var(--cv-text-dark); }
+        .example-block h4::before { content: "💡 "; display: inline-block; margin-right: 0.25em; }
+        .example-block p { font-size: 1rem; margin-bottom: 0.3rem; line-height: 1.4; /* Adjusted line height */ }
+        .example-block strong { color: var(--cv-text-dark); }
+        .example-block code { color: var(--cv-text-dim); background-color: var(--cv-code-bg); border: 1px solid var(--cv-code-border); }
+        .example-block > *:first-child { margin-top: 0; }
+        .example-block > *:last-child { margin-bottom: 0; }
+
+        /* --- TASK TOPIC SPECIFIC STYLES (adjusted spacing) --- */
+        #subtab-task h2 { margin-bottom: 0.8rem; }
+        #subtab-task h3 { margin-top: 1.2rem; margin-bottom: 0.6rem; }
+        #subtab-task p { margin-bottom: 0.6rem; line-height: 1.45; }
+        #subtab-task li { margin-bottom: 0.4rem; }
+        #subtab-task li > p { line-height: 1.45; margin: 0.2rem 0; }
+        .prerequisites, .steps { margin-top: 1.2em; }
+        .steps > h3 + ol { margin-top: 0.4rem; }
+
+        /* --- CONCEPT TOPIC SPECIFIC STYLES (adjusted spacing) --- */
+        #subtab-concept h2 { margin-bottom: 0.6rem; }
+        #subtab-concept h4 { margin-top: 0.8rem; margin-bottom: 0.2rem; }
+        #subtab-concept p { margin-bottom: 0.5rem; line-height: 1.4; }
+        #subtab-concept ul, #subtab-concept ol { margin-bottom: 0.5rem; }
+        #subtab-concept li { margin-bottom: 0.15rem; }
+        #subtab-concept li > p { line-height: 1.4; margin: 0.15rem 0; }
+        #subtab-concept .dita-compliance { margin-bottom: 0.4rem; }
+        #subtab-concept .note-block { margin: 0.8rem 0; padding: 0.6rem 0.9rem 0.6rem 1.1rem; }
+        #subtab-concept .example-block { margin: 0.6rem 0; padding: 0.6rem 0.9rem 0.6rem 1.1rem; }
+        #subtab-concept .example-block h4 { margin-bottom: 0.3rem; }
+        #subtab-concept .example-block p { margin-bottom: 0.3rem; }
+
+        /* Feature Selector Container */
+        .feature-selector-container { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; } /* Reduced gap/margin */
+         @media (min-width: 768px) {
+             .feature-selector-container { flex-direction: row; margin-top: 0.8rem; }
+         }
+        .feature-titles { display: flex; flex-direction: column; gap: 0.4rem; /* Reduced gap */ flex-shrink: 0; width: 100%; }
+         @media (min-width: 768px) { .feature-titles { width: 250px; } } /* Keep width */
+        .feature-title-button { display: block; width: 100%; padding: 0.5rem 0.9rem; /* Adjusted padding */ cursor: pointer; text-align: left; background-color: var(--feature-title-inactive-bg); border: 1px solid var(--cv-border); border-radius: 4px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--cv-text-dark); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+        .feature-title-button:hover { background-color: var(--feature-title-hover-bg); }
+        .feature-title-button.active { background-color: var(--feature-title-active-bg); color: var(--feature-title-active-text); border-color: var(--feature-title-active-bg); font-weight: 600; }
+
+        /* Feature Content Pane */
+        .feature-content-pane { border: 1px solid var(--cv-border); border-radius: 4px; padding: 0.8rem 1rem; /* Reduced padding */ min-height: 150px; background-color: #fafdfc; flex-grow: 1; width: 100%; }
+        .feature-content-pane h4 { margin-top: 0; margin-bottom: 0.4rem; } /* Reduced margin */
+        .feature-content-pane > div > *:first-child { margin-top: 0; }
+        .feature-content-pane > div > *:last-child { margin-bottom: 0; }
+
+        /* Columns *inside* the Feature Content Pane */
+        .feature-detail-columns { display: flex; flex-direction: column; gap: 0.8rem; /* Reduced gap */ }
+        .feature-main-col { order: 1; }
+        .feature-info-col { order: 2; }
+        .feature-info-col .more-info-list { margin-top: 0; }
+        @media (min-width: 768px) {
+            .feature-detail-columns { flex-direction: row; gap: 1.2rem; /* Adjusted gap */ align-items: flex-start; }
+            .feature-main-col { flex: 2; order: 1; }
+            .feature-info-col { flex: 1; order: 2; }
+        }
+
+
+         /* --- Project Link Button Styles --- */
+        .project-link-buttons { margin-top: 1rem; margin-bottom: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap; } /* Reduced spacing */
+        .project-button { display: inline-flex; align-items: center; gap: 0.4em; padding: 0.5rem 1rem; /* Adjusted padding */ border: 1px solid var(--cv-accent); border-radius: 0.375rem; background-color: var(--cv-bg-main); color: var(--cv-accent); font-weight: 600; font-size: 0.9em; text-decoration: none; transition: all 0.2s ease; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .project-button:hover { background-color: var(--cv-accent); color: var(--cv-bg-main); transform: translateY(-2px); box-shadow: 0 4px 8px var(--cv-shadow); }
+        .project-button .icon { font-size: 1.1em; }
+
+        /* --- Responsive Adjustments --- */
+         @media (max-width: 767px) {
+             /* Adjust heading sizes further for mobile */
+             h1 { font-size: 1.7rem; line-height: 2rem;}
+             h2 { font-size: 1.2rem; line-height: 1.6rem; }
+             h3 { font-size: 1.1rem; line-height: 1.4rem; }
+
+             /* Main tabs */
+             .tab-buttons { border-bottom: none; gap: 0.4rem; }
+             .tab-button { width: 100%; margin-right: 0; margin-bottom: 0; border-radius: 4px; border: 1px solid var(--tab-button-inactive-border); }
+             .tab-button.active { border-color: var(--cv-accent); background-color: var(--tab-button-hover-bg); color: var(--cv-text-dark); border-bottom: 1px solid var(--cv-accent); }
+             .tab-content { margin-top: 0.8rem; }
+             /* Sub tabs */
+             .sub-tab-buttons { gap: 0.4rem; border-bottom: none;}
+              .sub-tab-button { width: 100%; margin-bottom: 0; border-radius: 4px; border: 1px solid var(--subtab-button-inactive-border); }
+              .sub-tab-button.active { border-color: var(--cv-accent); background-color: var(--subtab-button-hover-bg); }
+             .sub-tab-content { margin-top: 0.8rem; }
+
+             header, main, footer { padding-left: 0.8rem; padding-right: 0.8rem; } /* Reduced padding */
+             .prominent-sample { margin-top: 0; padding-top: 1rem; }
+             .project-link-buttons { justify-content: center; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="body-padding-wrapper">
+        <div class="container">
+            <div id="page-top"></div>
+
+            <div class="main-content-area">
+                <header>
+                    <h1>Donnacha's Work Samples</h1>
+                    <div class="header-cv-button">
+                         <a href="index.html" title="View Donnacha Bushe's CV">View CV</a>
+                    </div>
+                </header>
+
+                <main>
+                    <div class="tab-container">
+                        <div class="tab-buttons" role="tablist">
+                            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-client" data-tab-target="#tab-client">
+                                Client Project Highlight
+                            </button>
+                            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-independent" data-tab-target="#tab-independent">
+                                Independent DITA Examples
+                            </button>
+                        </div><div class="tab-content">
+                            <div id="tab-client" class="tab-panel active" role="tabpanel">
+                                <section class="work-sample prominent-sample">
+                                    <h2 id="project-dtone">DT One Developer Portal</h2>
+                                    <p>
+                                        This section showcases live, public-facing documentation work. I played a key role in designing the structure and heavily reworking raw technical material to produce clear, user-focused guides and API documentation for the <a href="https://dtone.readme.io/" target="_blank" rel="noopener noreferrer">DT One Developer Portal</a>.
+                                    </p>
+                                     <div class="project-link-buttons">
+                                         <a href="https://dtone.readme.io/docs/about-dt-one-products-and-services" target="_blank" rel="noopener noreferrer" class="project-button">
+                                             <span class="icon">📖</span> Guides
+                                         </a>
+                                          <a href="https://dtone.readme.io/reference/overview" target="_blank" rel="noopener noreferrer" class="project-button">
+                                             <span class="icon">↔️</span> API Reference
+                                         </a>
+                                     </div>
+                                    <div class="note-block">
+                                        <p>Work samples for other clients like SAP and Ericsson involved significant documentation strategy and execution but are hosted behind company firewalls and cannot be shared directly.</p>
+                                    </div>
+                                </section>
+                            </div><div id="tab-independent" class="tab-panel" role="tabpanel">
+                                <div class="sub-tab-container">
+                                     <p>These independent samples were created to demonstrate proficiency in specific DITA structures and technical writing concepts.</p>
+                                     <div class="sub-tab-buttons" role="tablist">
+                                        <button class="sub-tab-button active" role="tab" aria-selected="true" aria-controls="subtab-task" data-subtab-target="#subtab-task">
+                                            Task Topic Example
+                                        </button>
+                                         <button class="sub-tab-button" role="tab" aria-selected="false" aria-controls="subtab-concept" data-subtab-target="#subtab-concept">
+                                            Concept Topic Example
+                                        </button>
+                                     </div><div class="sub-tab-content">
+                                         <div id="subtab-task" class="sub-tab-panel active" role="tabpanel">
+                                             <section id="sample1" class="work-sample">
+                                                <h2 id="sample1-title">(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</h2>
+                                                <p class="dita-compliance">This example complies with the Task Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
+                                                <p>With a <strong>LinkedIn Premium</strong> subscription, users can effectively tailor their profiles to align with the skills sought by employers in job posts.&nbsp;</p>
+                                                <p>The <strong>Qualifications</strong> section allows Premium users to:</p>
+                                                <ul> <li>Identify the proportion of desired skills they already have listed on their profiles, providing an indication of how well they match the job post.</li> <li>Directly add any missing skills they possess to their profiles, improving their match with the job post.</li> <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li> </ul>
+                                                <p>This way, users can enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
+
+                                                <div class="prerequisites">
+                                                    <h3 id="sample1-prerequisites">Prerequisites</h3>
+                                                    <ul>
+                                                        <li>You have a <strong>LinkedIn Premium</strong> subscription to access the <strong>Qualifications</strong> section of job advertisements.&nbsp;
+                                                            <p>This section is unique to <strong>LinkedIn Premium</strong> and provides valuable insights into the skills associated with the job post and additional skills among applicants.</p>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="steps">
+                                                    <h3 id="sample1-steps">Steps</h3>
+                                                    <ol class="steps-list">
+                                                        <li><strong>Navigate to the Job Advertisement:</strong> Open the job advertisement on LinkedIn.</li>
+                                                        <li><strong>Access the Qualifications Section:</strong> Scroll down to the <strong>Qualifications</strong> section, which is exclusive to <strong>LinkedIn Premium</strong> users.
+                                                            <p>This section provides a list of skills associated with the job post and additional skills common among applicants. It also displays the count of desired skills you already possess.</p>
+                                                        </li>
+                                                        <li><strong>Add Skills:</strong> Click on <strong>Add Skills</strong> located in the tip box below the list of skills.
+                                                            <p>This action opens the <strong>Qualification details</strong> dialog. A green tick appears beside each skill that is already listed on your profile.</p>
+                                                        </li>
+                                                        <li><strong>Add Missing Skills:</strong> If you possess a skill that isn't ticked green, click the <strong>+ Add</strong> button beside that skill.</li>
+                                                        <li><strong>Showcase Your Skill:</strong> Respond to the <strong>Show us where you used this skill</strong> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <strong>Save</strong>.</li>
+                                                        <li><strong>Add More Skills or Exit:</strong> You can continue to add more skills or click the <strong>No thanks</strong> button to exit.</li>
+                                                    </ol>
+                                                </div>
+                                            </section>
+                                         </div><div id="subtab-concept" class="sub-tab-panel" role="tabpanel">
+                                             <section id="sample2" class="work-sample">
+                                                 <h2 id="sample2-title">Reuse Features in IXIASOFT CCMS</h2>
+                                                 <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
+                                                 <p>Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
+                                                 <p><a href="https://www.ixiasoft.com/" target="_blank" rel="noopener noreferrer"><strong>IXIASOFT CCMS</strong></a> provides the following features designed to streamline this process. Click on a feature below to see details.</p>
+                                                 <div class="note-block">
+                                                    <p><strong>Note</strong></p>
+                                                    <p><em>Examples provided on this page are based on a <strong>SupplyChain Solutions</strong> company, that manages supply chain operations for various clients and often needs to create variant documents.</em></p>
+                                                </div>
+
+                                                 <div class="feature-selector-container">
+                                                      <div class="feature-titles">
+                                                          <button class="feature-title-button active" data-feature-target="#content-conref">Content References (Conref)</button>
+                                                          <button class="feature-title-button" data-feature-target="#content-keyref">Key References (Keyref)</button>
+                                                          <button class="feature-title-button" data-feature-target="#content-profiling">Conditional Processing (Profiling)</button>
+                                                          <button class="feature-title-button" data-feature-target="#content-topicreuse">Topic Reuse</button>
+                                                      </div>
+                                                      <div class="feature-content-pane"></div> </div>
+                                                 <div style="display: none;">
+                                                     <div id="content-conref">
+                                                        <h4>Content References (Conref)</h4>
+                                                        <div class="feature-detail-columns">
+                                                            <div class="feature-main-col">
+                                                                <p>Content References, or <code>Conref</code>, allow you to create segments of content that can be referenced across multiple topics in DITA. These segments, often created as <code>ReferableContent</code> topic types, become a part of the topics into which they are inserted. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
+                                                                <div class="example-block">
+                                                                    <h4>Example</h4>
+                                                                    <p><strong>SupplyChain Solutions</strong> created a standard shipping policy as a <code>ReferableContent</code> topic in one location. This policy was inserted it into multiple topics using a <code>Conref</code>. These topics were included in various maps based on the needs of different clients.</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="feature-info-col">
+                                                                <h4 class="more-info-list">More Information</h4>
+                                                                <ul>
+                                                                    <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/lar1396892881040.html" target="_blank" rel="noopener noreferrer">Creating and using conrefs</a></li>
+                                                                    <li>Comparable feature in <strong>MadCap Flare</strong>: <a href="https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets" target="_blank" rel="noopener noreferrer">MadCap Flare: Snippet</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                     <div id="content-keyref">
+                                                        <h4>Key References (Keyref)</h4>
+                                                        <div class="feature-detail-columns">
+                                                            <div class="feature-main-col">
+                                                                <p>Key References, or <code>Keyref</code>, allow you to create a placeholder for content that can be replaced with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
+                                                                <div class="example-block">
+                                                                    <h4>Example</h4>
+                                                                    <p><strong>SupplyChain Solutions</strong> uses a <code>Keyref</code> for the client’s company name, ensuring the correct name is inserted into each client’s documents at the time of publishing.</p>
+                                                                </div>
+                                                             </div>
+                                                            <div class="feature-info-col">
+                                                                <h4 class="more-info-list">More Information</h4>
+                                                                <ul>
+                                                                    <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986050420.html" target="_blank" rel="noopener noreferrer">keyrefs and keydefs</a></li>
+                                                                    <li>Comparable feature in <strong>MadCap Flare</strong>: <a href="https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets" target="_blank" rel="noopener noreferrer">MadCap Flare: Variable</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                     </div>
+                                                     <div id="content-profiling">
+                                                        <h4>Conditional Processing (Profiling)</h4>
+                                                         <div class="feature-detail-columns">
+                                                            <div class="feature-main-col">
+                                                                <p>Conditional Processing allows you to mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions. These conditions, which can be things like product versions, audience types, or geographic locations, can be applied to specific sections within individual topics. This allows for greater flexibility and precision in content customization.</p>
+                                                                <div class="example-block">
+                                                                    <h4>Example</h4>
+                                                                    <p><strong>SupplyChain Solutions</strong> uses Conditional Processing to include specific sections such as <strong>Return Policies</strong> or <strong>Warranty Information</strong> in a topic for one client, and exclude them for another client who does not require these details.</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="feature-info-col">
+                                                                <h4 class="more-info-list">More Information</h4>
+                                                                <ul>
+                                                                    <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986186479.html" target="_blank" rel="noopener noreferrer">Applying conditions (profiling and conditional processing)</a></li>
+                                                                    <li>Comparable feature in <strong>MadCap Flare</strong>: <a href="https://www.madcapsoftware.com/blog/tips-and-tricks-using-conditions-in-madcap-flare/" target="_blank" rel="noopener noreferrer">MadCap Flare: Conditional Tags</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                     </div>
+                                                     <div id="content-topicreuse">
+                                                        <h4>Topic Reuse</h4>
+                                                        <div class="feature-detail-columns">
+                                                            <div class="feature-main-col">
+                                                                <p>Topic Reuse in IXIASOFT CCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.</p>
+                                                                <div class="example-block">
+                                                                    <h4>Example</h4>
+                                                                    <p><strong>SupplyChain Solutions</strong> uses a topic on <strong>Inventory Management</strong> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="feature-info-col">
+                                                                <h4 class="more-info-list">More Information</h4>
+                                                                <ul>
+                                                                    <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.3/User_Guides_Contributors_Standard/en/cab1556029603998.html" target="_blank" rel="noopener noreferrer">Content reuse in IXIASOFT CCMS Web</a></li>
+                                                                    <li>Comparable feature in <strong>MadCap Flare</strong>: <a href="https://forums.madcapsoftware.com/viewtopic.php?t=28997" target="_blank" rel="noopener noreferrer">MadCap Flare: Topic Reuse</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                     </div>
+                                                 </div>
+                                             </section>
+                                         </div></div> </div> </div></div> </div> </main>
+
+                <footer>
+                    <p><a href="#page-top">Back to Top</a></p>
+                </footer>
+            </div> </div> </div> <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Main Tab Logic ---
+             const mainTabButtons = document.querySelectorAll('.tab-buttons > .tab-button');
+             const mainTabPanels = document.querySelectorAll('.tab-content > .tab-panel');
+              if (mainTabButtons.length > 0 && mainTabPanels.length > 0) {
+                mainTabButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const targetPanelId = button.getAttribute('data-tab-target');
+                        mainTabButtons.forEach(btn => { btn.classList.remove('active'); btn.setAttribute('aria-selected', 'false'); });
+                        mainTabPanels.forEach(panel => { panel.classList.remove('active'); panel.style.display = 'none'; });
+                        button.classList.add('active'); button.setAttribute('aria-selected', 'true');
+                        const targetPanel = document.querySelector(targetPanelId);
+                        if (targetPanel) {
+                            targetPanel.style.display = 'block';
+                            targetPanel.offsetHeight; // Force reflow
+                            requestAnimationFrame(() => { targetPanel.classList.add('active'); });
+                            if (targetPanel.id === 'tab-independent') {
+                                 const firstSubTabButton = targetPanel.querySelector('.sub-tab-button');
+                                 const initialActiveSubPanel = targetPanel.querySelector('.sub-tab-panel.active');
+                                 if(firstSubTabButton && !initialActiveSubPanel) {
+                                     firstSubTabButton.click(); // Activate first sub-tab if none active
+                                 } else if (initialActiveSubPanel && initialActiveSubPanel.id === 'subtab-concept') {
+                                      // If Concept subtab is active, ensure feature pane is loaded
+                                      const firstFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
+                                      const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
+                                      if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) { // Load only if empty
+                                           loadFeatureContent(firstFeatureButton, contentPane);
+                                       }
+                                 }
+                            }
+                        }
+                    });
+                });
+                 // Ensure initial active main tab is displayed
+                 const initialActiveMainPanel = document.querySelector('.tab-content > .tab-panel.active');
+                 if (initialActiveMainPanel) { initialActiveMainPanel.style.display = 'block'; }
+                 // Trigger initial load for concept tab feature pane if it's the initially active tab
+                 if (initialActiveMainPanel && initialActiveMainPanel.id === 'tab-independent') {
+                     const initialActiveSubPanel = initialActiveMainPanel.querySelector('.sub-tab-panel.active');
+                     if (initialActiveSubPanel && initialActiveSubPanel.id === 'subtab-concept') {
+                         const firstFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
+                         const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
+                         if(firstFeatureButton && contentPane) { loadFeatureContent(firstFeatureButton, contentPane); }
+                     }
+                 }
+
+            }
+
+            // --- Sub-Tab Logic ---
+            const independentTab = document.querySelector('#tab-independent');
+            if (independentTab) {
+                const subTabButtons = independentTab.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
+                const subTabPanels = independentTab.querySelectorAll('.sub-tab-content > .sub-tab-panel');
+                 if (subTabButtons.length > 0 && subTabPanels.length > 0) {
+                     subTabButtons.forEach(button => {
+                         button.addEventListener('click', (e) => {
+                             const targetPanelId = button.getAttribute('data-subtab-target');
+                             subTabButtons.forEach(btn => { btn.classList.remove('active'); btn.setAttribute('aria-selected', 'false'); });
+                             subTabPanels.forEach(panel => { panel.classList.remove('active'); panel.style.display = 'none'; });
+                             button.classList.add('active'); button.setAttribute('aria-selected', 'true');
+                             const targetPanel = independentTab.querySelector(targetPanelId);
+                             if (targetPanel) {
+                                 targetPanel.style.display = 'block';
+                                 targetPanel.offsetHeight; // Force reflow
+                                 requestAnimationFrame(() => { targetPanel.classList.add('active'); });
+                                 // If Concept subtab is activated, load its initial feature content
+                                 if (targetPanel.id === 'subtab-concept') {
+                                     const firstFeatureButton = targetPanel.querySelector('.feature-title-button.active') || targetPanel.querySelector('.feature-title-button');
+                                     const contentPane = targetPanel.querySelector('.feature-content-pane');
+                                     if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) { // Load only if empty
+                                         loadFeatureContent(firstFeatureButton, contentPane);
+                                     }
+                                 }
+                             }
+                         });
+                     });
+                     // Activate and display the initial active sub-tab or the first one
+                     const initialActiveSubPanel = independentTab.querySelector('.sub-tab-panel.active');
+                     if (initialActiveSubPanel) {
+                         initialActiveSubPanel.style.display = 'block';
+                         // If initial active is Concept, load its content
+                         if (initialActiveSubPanel.id === 'subtab-concept') {
+                             const initialFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
+                             const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
+                             if(initialFeatureButton && contentPane) { loadFeatureContent(initialFeatureButton, contentPane); }
+                         }
+                     } else {
+                         const firstSubTabButton = independentTab.querySelector('.sub-tab-button');
+                          if(firstSubTabButton) { firstSubTabButton.click(); } // Click first sub-tab if none are active
+                     }
+                 }
+            }
+
+
+             // --- Feature Selector Logic (Concept Tab) ---
+             const conceptSubTab = document.querySelector('#subtab-concept');
+             if (conceptSubTab) {
+                 const featureTitleButtons = conceptSubTab.querySelectorAll('.feature-selector-container .feature-title-button');
+                 const featureContentPane = conceptSubTab.querySelector('.feature-selector-container .feature-content-pane');
+
+                 if (featureTitleButtons.length > 0 && featureContentPane) {
+                     featureTitleButtons.forEach(button => {
+                         button.addEventListener('click', (e) => {
+                             loadFeatureContent(button, featureContentPane);
+                         });
+                     });
+                     // Initial load handled by tab activation logic
+                 }
+             }
+
+             // --- Collapsible Section Logic (REMOVED for Task Tab) ---
+
+        }); // End DOMContentLoaded
+
+        // --- Helper function for Feature Selector ---
+        function loadFeatureContent(button, contentPane) {
+             const targetContentId = button.getAttribute('data-feature-target');
+             const featureTitlesContainer = button.closest('.feature-titles');
+             if (!featureTitlesContainer) return;
+             const featureTitleButtons = featureTitlesContainer.querySelectorAll('.feature-title-button');
+
+             featureTitleButtons.forEach(btn => btn.classList.remove('active'));
+             button.classList.add('active');
+
+             const sourceContentDiv = document.querySelector(targetContentId);
+
+             if (sourceContentDiv && contentPane) {
+                 contentPane.innerHTML = '';
+                 const clonedContent = sourceContentDiv.cloneNode(true);
+                 contentPane.appendChild(clonedContent);
+             } else if (contentPane) {
+                 contentPane.innerHTML = '<p>Content not found.</p>';
+             }
+        }
+    </script>
+
+</body>
+</html>
