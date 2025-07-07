@@ -65,7 +65,7 @@
         li > p:last-child { margin-bottom: 0; }
         ul li::marker, ol li::marker { color: var(--cv-accent); font-weight: 600; }
         .more-info-list ul { margin-top: 0.2rem; }
-        .more-info-list li { font-size: 1.0em; margin-bottom: 0.15rem; } /* Adjusted from 1rem to 1.0em for consistency */
+        .more-info-list li { font-size: 1rem; margin-bottom: 0.15rem; }
         .more-info-list { margin-top: 0; } /* Keep h4 aligned top */
 
         /* --- TABS --- */
@@ -74,9 +74,9 @@
         .tab-button { padding: 0.7rem 1.1rem; /* Adjusted padding */ cursor: pointer; background-color: var(--tab-button-inactive-bg); border: 1px solid var(--tab-button-inactive-border); border-bottom: none; margin-bottom: -2px; border-radius: 6px 6px 0 0; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--cv-text-med); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; position: relative; z-index: 1; }
         .tab-button:hover { background-color: var(--tab-button-hover-bg); color: var(--cv-text-dark); }
         .tab-button.active { background-color: var(--cv-bg-main); color: var(--cv-accent); border-color: var(--cv-border); border-bottom: 2px solid var(--cv-bg-main); z-index: 2; }
-        .tab-content { display: none; padding-top: 0.5rem; animation: fadeIn 0.5s ease-in-out; }
-        .tab-panel { display: none; padding-top: 0.5rem; animation: fadeIn 0.5s ease-in-out; } /* Added tab-panel class */
-        .tab-panel.active, .tab-content.active { display: block; } /* Unified active state display */
+        .tab-content { }
+        .tab-panel { display: none; padding-top: 0.5rem; animation: fadeIn 0.5s ease-in-out; }
+        .tab-panel.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* --- SUB-TABS --- */
@@ -86,9 +86,10 @@
         .sub-tab-button { padding: 0.4rem 0.9rem; /* Adjusted padding */ cursor: pointer; background-color: var(--subtab-button-inactive-bg); border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; border-radius: 4px 4px 0 0; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; color: var(--cv-text-med); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
         .sub-tab-button:hover { background-color: var(--subtab-button-hover-bg); color: var(--cv-text-dark); }
         .sub-tab-button.active { background-color: var(--subtab-button-active-bg); color: var(--subtab-button-active-text); border-color: var(--cv-border); border-bottom: 1px solid var(--subtab-button-active-bg); font-weight: 600; }
-        .sub-tab-content { display: none; padding-top: 0.8rem; /* Reduced padding */ animation: fadeIn 0.5s ease-in-out; }
+        .sub-tab-content { }
+        .sub-tab-panel { display: none; padding-top: 0.8rem; /* Reduced padding */ animation: fadeIn 0.5s ease-in-out; }
         #subtab-concept { padding-top: 0.5rem; }
-        .sub-tab-content.active { display: block; } /* Unified active state display */
+        .sub-tab-panel.active { display: block; }
 
         /* --- BLOCKS (Note, Example) --- */
         .note-block { background-color: var(--cv-note-bg); border-left: 4px solid var(--cv-note-border); padding: 0.8rem 1rem 0.8rem 1.2rem; /* Adjusted padding */ margin: 1rem 0; /* Adjusted margin */ color: #575735; border-radius: 0 4px 4px 0; }
@@ -188,6 +189,7 @@
             .prominent-sample { margin-top: 0; padding-top: 1rem; }
             .project-link-buttons { justify-content: center; }
         }
+
     </style>
 </head>
 <body>
@@ -206,13 +208,13 @@
                 <main>
                     <div class="tab-container">
                         <div class="tab-buttons" role="tablist">
-                            <button class="tab-button active" data-tab-id="tab-client">
+                            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-client" data-tab-target="#tab-client">
                                 Client Project Highlight
                             </button>
-                            <button class="tab-button" data-tab-id="tab-independent">
+                            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-independent" data-tab-target="#tab-independent">
                                 Independent DITA Examples
                             </button>
-                            <button class="tab-button" data-tab-id="tab-seai">
+                            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-seai" data-tab-target="#tab-seai">
                                 SEAI Grant Guide & Checkers
                             </button>
                         </div>
@@ -240,10 +242,10 @@
                                 <div class="sub-tab-container">
                                     <p>These independent samples were created to demonstrate proficiency in specific DITA structures and technical writing concepts.</p>
                                     <div class="sub-tab-buttons" role="tablist">
-                                        <button class="sub-tab-button active" data-subtab-id="subtab-task" data-parent-tab-id="tab-independent">
+                                        <button class="sub-tab-button active" role="tab" aria-selected="true" aria-controls="subtab-task" data-subtab-target="#subtab-task">
                                             Task Topic Example
                                         </button>
-                                        <button class="sub-tab-button" data-subtab-id="subtab-concept" data-parent-tab-id="tab-independent">
+                                        <button class="sub-tab-button" role="tab" aria-selected="false" aria-controls="subtab-concept" data-subtab-target="#subtab-concept">
                                             Concept Topic Example
                                         </button>
                                     </div>
@@ -427,158 +429,155 @@
             // --- Main Tab Logic ---
             const mainTabButtons = document.querySelectorAll('.tab-buttons > .tab-button');
             const mainTabPanels = document.querySelectorAll('.tab-content > .tab-panel');
+            if (mainTabButtons.length > 0 && mainTabPanels.length > 0) {
+                // Set the first tab as active by default if none are active
+                let initialActiveMainButton = document.querySelector('.tab-buttons > .tab-button.active');
+                if (!initialActiveMainButton) {
+                    initialActiveMainButton = mainTabButtons[0];
+                    initialActiveMainButton.classList.add('active');
+                    initialActiveMainButton.setAttribute('aria-selected', 'true');
+                }
+                const initialActiveMainPanel = document.querySelector(initialActiveMainButton.getAttribute('data-tab-target'));
+                if (initialActiveMainPanel) {
+                    initialActiveMainPanel.style.display = 'block';
+                    initialActiveMainPanel.classList.add('active'); // Ensure active class is added for transitions
+                }
 
-            // Function to activate a main tab
-            function activateMainTab(tabId) {
-                // Deactivate all main tab buttons and hide all main tab content panels
+
                 mainTabButtons.forEach(button => {
-                    button.classList.remove('active');
-                    button.setAttribute('aria-selected', 'false');
-                });
-                mainTabPanels.forEach(panel => {
-                    panel.classList.remove('active');
-                    panel.style.display = 'none';
-                });
+                    button.addEventListener('click', (e) => {
+                        const targetPanelId = button.getAttribute('data-tab-target');
 
-                // Activate the selected main tab button and show its content panel
-                const selectedButton = document.querySelector(`.tab-buttons > .tab-button[data-tab-id="${tabId}"]`);
-                if (selectedButton) {
-                    selectedButton.classList.add('active');
-                    selectedButton.setAttribute('aria-selected', 'true');
-                }
-                const selectedPanel = document.getElementById(tabId);
-                if (selectedPanel) {
-                    selectedPanel.style.display = 'block';
-                    selectedPanel.offsetHeight; // Force reflow for animation
-                    requestAnimationFrame(() => { selectedPanel.classList.add('active'); });
+                        // Deactivate all main tabs and hide their content
+                        mainTabButtons.forEach(btn => { 
+                            btn.classList.remove('active'); 
+                            btn.setAttribute('aria-selected', 'false'); 
+                        });
+                        mainTabPanels.forEach(panel => { 
+                            panel.classList.remove('active'); 
+                            panel.style.display = 'none'; 
+                        });
 
-                    // Handle specific sub-tab initialization for 'Independent DITA Examples' tab
-                    if (tabId === 'tab-independent') {
-                        const subTabButtons = selectedPanel.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
-                        if (subTabButtons.length > 0) {
-                            let activeSubTabButton = selectedPanel.querySelector('.sub-tab-buttons > .sub-tab-button.active');
-                            if (!activeSubTabButton) {
-                                activeSubTabButton = subTabButtons[0];
-                                activeSubTabButton.classList.add('active');
+                        // Activate the clicked tab and show its content
+                        button.classList.add('active'); 
+                        button.setAttribute('aria-selected', 'true');
+                        const targetPanel = document.querySelector(targetPanelId);
+                        if (targetPanel) {
+                            targetPanel.style.display = 'block';
+                            targetPanel.offsetHeight; // Force reflow for animation
+                            requestAnimationFrame(() => { targetPanel.classList.add('active'); });
+
+                            // Handle specific sub-tab logic if the independent tab is activated
+                            if (targetPanel.id === 'tab-independent') {
+                                const subTabButtons = targetPanel.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
+                                const subTabPanels = targetPanel.querySelectorAll('.sub-tab-content > .sub-tab-panel');
+                                
+                                let initialActiveSubButton = targetPanel.querySelector('.sub-tab-buttons > .sub-tab-button.active');
+                                if (!initialActiveSubButton && subTabButtons.length > 0) {
+                                    initialActiveSubButton = subTabButtons[0];
+                                    initialActiveSubButton.classList.add('active');
+                                    initialActiveSubButton.setAttribute('aria-selected', 'true');
+                                }
+                                if (initialActiveSubButton) {
+                                    const initialActiveSubPanel = targetPanel.querySelector(initialActiveSubButton.getAttribute('data-subtab-target'));
+                                    if (initialActiveSubPanel) {
+                                        initialActiveSubPanel.style.display = 'block';
+                                        initialActiveSubPanel.classList.add('active');
+
+                                        if (initialActiveSubPanel.id === 'subtab-concept') {
+                                            const firstFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
+                                            const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
+                                            if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) {
+                                                loadFeatureContent(firstFeatureButton, contentPane);
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            const targetSubTabId = activeSubTabButton.getAttribute('data-subtab-id');
-                            activateSubTab(targetSubTabId, 'tab-independent');
                         }
-                    }
-                }
+                    });
+                });
             }
 
-            // Attach event listeners to main tab buttons
-            mainTabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabId = button.getAttribute('data-tab-id');
-                    activateMainTab(tabId);
-                });
-            });
+            // --- Sub-Tab Logic (for Independent DITA Examples) ---
+            const independentTab = document.querySelector('#tab-independent');
+            if (independentTab) {
+                const subTabButtons = independentTab.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
+                const subTabPanels = independentTab.querySelectorAll('.sub-tab-content > .sub-tab-panel');
 
-            // Initial load: Activate the first tab by default, or one specified by hash
-            const initialTabId = window.location.hash ? window.location.hash.substring(1).split('/')[0] : 'tab-client';
-            activateMainTab(initialTabId);
-
-
-            // --- Sub-Tab Logic ---
-            // Function to activate a sub-tab
-            function activateSubTab(subTabId, parentTabId) {
-                const parentElement = document.getElementById(parentTabId);
-                if (!parentElement) return;
-
-                const subTabButtons = parentElement.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
-                const subTabContents = parentElement.querySelectorAll('.sub-tab-content > .sub-tab-panel');
-
-                // Deactivate all sub-tab buttons and hide all sub-tab content panels
-                subTabButtons.forEach(button => {
-                    button.classList.remove('active');
-                    button.setAttribute('aria-selected', 'false');
-                });
-                subTabContents.forEach(content => {
-                    content.classList.remove('active');
-                    content.style.display = 'none';
-                });
-
-                // Activate the selected sub-tab button and show its content
-                const selectedButton = parentElement.querySelector(`.sub-tab-button[data-subtab-id="${subTabId}"]`);
-                if (selectedButton) {
-                    selectedButton.classList.add('active');
-                    selectedButton.setAttribute('aria-selected', 'true');
-                }
-                const selectedContent = document.getElementById(subTabId);
-                if (selectedContent) {
-                    selectedContent.style.display = 'block';
-                    selectedContent.offsetHeight; // Force reflow for animation
-                    requestAnimationFrame(() => { selectedContent.classList.add('active'); });
-
-                    // If 'subtab-concept' is activated, load its initial feature content
-                    if (subTabId === 'subtab-concept') {
-                        const firstFeatureButton = selectedContent.querySelector('.feature-title-button.active') || selectedContent.querySelector('.feature-title-button');
-                        const contentPane = selectedContent.querySelector('.feature-content-pane');
-                        if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) {
-                            loadFeatureContent(firstFeatureButton, contentPane);
-                        }
-                    }
+                if (subTabButtons.length > 0 && subTabPanels.length > 0) {
+                    // This block will be executed if the 'Independent DITA Examples' tab is initially active
+                    // Or when it becomes active. The logic is handled by the mainTabButtons listener now.
+                    // Keep this event listener for when sub-tabs are clicked *after* the main tab is active.
+                    subTabButtons.forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const targetPanelId = button.getAttribute('data-subtab-target');
+                            subTabButtons.forEach(btn => { 
+                                btn.classList.remove('active'); 
+                                btn.setAttribute('aria-selected', 'false'); 
+                            });
+                            subTabPanels.forEach(panel => { 
+                                panel.classList.remove('active'); 
+                                panel.style.display = 'none'; 
+                            });
+                            button.classList.add('active'); 
+                            button.setAttribute('aria-selected', 'true');
+                            const targetPanel = independentTab.querySelector(targetPanelId);
+                            if (targetPanel) {
+                                targetPanel.style.display = 'block';
+                                targetPanel.offsetHeight; // Force reflow for animation
+                                requestAnimationFrame(() => { targetPanel.classList.add('active'); });
+                                if (targetPanel.id === 'subtab-concept') {
+                                    const firstFeatureButton = targetPanel.querySelector('.feature-title-button.active') || targetPanel.querySelector('.feature-title-button');
+                                    const contentPane = targetPanel.querySelector('.feature-content-pane');
+                                    if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) {
+                                        loadFeatureContent(firstFeatureButton, contentPane);
+                                    }
+                                }
+                            }
+                        });
+                    });
                 }
             }
-
-            // Attach event listeners to sub-tab buttons
-            document.querySelectorAll('.sub-tab-buttons > .sub-tab-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const subTabId = button.getAttribute('data-subtab-id');
-                    const parentTabId = button.getAttribute('data-parent-tab-id');
-                    activateSubTab(subTabId, parentTabId);
-                });
-            });
 
 
             // --- Feature Selector Logic (Concept Tab) ---
-            function loadFeatureContent(button, contentPane) {
-                const targetContentId = button.getAttribute('data-feature-target');
-                const featureTitlesContainer = button.closest('.feature-titles');
-                if (!featureTitlesContainer) return;
-                const featureTitleButtons = featureTitlesContainer.querySelectorAll('.feature-title-button');
+            const conceptSubTab = document.querySelector('#subtab-concept');
+            if (conceptSubTab) {
+                const featureTitleButtons = conceptSubTab.querySelectorAll('.feature-selector-container .feature-title-button');
+                const featureContentPane = conceptSubTab.querySelector('.feature-selector-container .feature-content-pane');
 
-                featureTitleButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                const sourceContentDiv = document.querySelector(targetContentId);
-
-                if (sourceContentDiv && contentPane) {
-                    contentPane.innerHTML = '';
-                    const clonedContent = sourceContentDiv.cloneNode(true);
-                    contentPane.appendChild(clonedContent);
-                } else if (contentPane) {
-                    contentPane.innerHTML = '<p>Content not found.</p>';
+                if (featureTitleButtons.length > 0 && featureContentPane) {
+                    featureTitleButtons.forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            loadFeatureContent(button, featureContentPane);
+                        });
+                    });
                 }
             }
 
-            // Attach event listeners for feature selector buttons (within the Concept tab)
-            document.querySelectorAll('#subtab-concept .feature-title-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const contentPane = button.closest('.feature-selector-container').querySelector('.feature-content-pane');
-                    loadFeatureContent(button, contentPane);
-                });
-            });
-
-            // --- Tooltip Logic ---
-            document.body.addEventListener('focusin', (event) => {
-                const trigger = event.target.closest('.tooltip-trigger, .tooltip-container');
-                if (trigger) {
-                    const tooltipText = trigger.querySelector('.tooltip-text');
-                    if (tooltipText) tooltipText.style.visibility = 'visible';
-                }
-            });
-            document.body.addEventListener('focusout', (event) => {
-                const trigger = event.target.closest('.tooltip-trigger, .tooltip-container');
-                if (trigger) {
-                    const tooltipText = trigger.querySelector('.tooltip-text');
-                    if (tooltipText) tooltipText.style.visibility = 'hidden';
-                }
-            });
-
         }); // End DOMContentLoaded
+
+        // --- Helper function for Feature Selector ---
+        function loadFeatureContent(button, contentPane) {
+            const targetContentId = button.getAttribute('data-feature-target');
+            const featureTitlesContainer = button.closest('.feature-titles');
+            if (!featureTitlesContainer) return;
+            const featureTitleButtons = featureTitlesContainer.querySelectorAll('.feature-title-button');
+
+            featureTitleButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const sourceContentDiv = document.querySelector(targetContentId);
+
+            if (sourceContentDiv && contentPane) {
+                contentPane.innerHTML = '';
+                const clonedContent = sourceContentDiv.cloneNode(true);
+                contentPane.appendChild(clonedContent);
+            } else if (contentPane) {
+                contentPane.innerHTML = '<p>Content not found.</p>';
+            }
+        }
     </script>
 
 </body>
