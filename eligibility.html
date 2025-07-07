@@ -6,6 +6,7 @@
     <title>Comprehensive Grant Guide & Checkers | WarmHomeHub.ie</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         /* --- Color Palette (WarmHomeHub Orange Theme - AAA Contrast Considered) --- */
         :root {
@@ -278,7 +279,7 @@
 
         /* Checklist styling (Copied from vacant-property...) */
         .checklist { list-style-type: none; padding-left: 0; margin-top: 1rem; }
-        .checklist li { position: relative; padding-left: 1.85rem; margin-bottom: 0.8rem; line-height: 1.55; font-size: 0.95rem; }
+        .checklist li { position: relative; padding-left: 1.85rem; margin-bottom: 0.8rem; line-height: 1.55; font-size: 0.95em; }
         .checklist li::before { /* Checkbox icon */
             content: "☐"; position: absolute; left: 0; top: 0.15em; font-size: 1.3rem; color: #60A5FA; /* Blue checkbox */
         }
@@ -323,140 +324,139 @@
             text-decoration: underline;
         }
 
-
         /* Print Styles */
         @media print {
-    /* Hide everything by default when body.body-is-printing is active */
-    body.body-is-printing > *:not(.container),
-    body.body-is-printing .container > *:not(.tab-content.active),
-    body.body-is-printing .result-display > *:not(.result-box), /* Allow result box to print */
-    body.body-is-printing .result-box .action-button-group, /* Hide action buttons in print result box */
-    body.body-is-printing .result-box .tooltip-container, /* Hide screen tooltips in print result box */
-    body.body-is-printing .tab-nav, /* Hide main tabs */
-    body.body-is-printing .grant-type-tabs, /* Hide sub tabs (grant types) */
-    body.body-is-printing .property-type-subtabs, /* Hide property sub tabs */
-    body.body-is-printing .disclaimer:not(.prominent-disclaimer), /* Hide regular disclaimer unless it's the prominent one which might be needed for print context */
-    body.body-is-printing .intro-text:has(+ form), /* Hide intro text before forms */
-    body.body-is-printing form, /* Hide the form itself */
-    body.body-is-printing .tab-content > h2 /* Hide main titles of checker tabs */
-     {
-        display: none !important;
-        visibility: hidden !important;
-    }
+            /* Hide everything by default when body.body-is-printing is active */
+            body.body-is-printing > *:not(.container),
+            body.body-is-printing .container > *:not(.tab-content.active),
+            body.body-is-printing .result-display > *:not(.result-box), /* Allow result box to print */
+            body.body-is-printing .result-box .action-button-group, /* Hide action buttons in print result box */
+            body.body-is-printing .result-box .tooltip-container, /* Hide screen tooltips in print result box */
+            body.body-is-printing .tab-nav, /* Hide main tabs */
+            body.body-is-printing .grant-type-tabs, /* Hide sub tabs (grant types) */
+            body.body-is-printing .property-type-subtabs, /* Hide property sub tabs */
+            body.body-is-printing .disclaimer:not(.prominent-disclaimer), /* Hide regular disclaimer unless it's the prominent one which might be needed for print context */
+            body.body-is-printing .intro-text:has(+ form), /* Hide intro text before forms */
+            body.body-is-printing form, /* Hide the form itself */
+            body.body-is-printing .tab-content > h2 /* Hide main titles of checker tabs */
+             {
+                display: none !important;
+                visibility: hidden !important;
+            }
 
-    /* Ensure the prominent disclaimer is always visible in print */
-    body.body-is-printing .prominent-disclaimer {
-        display: block !important;
-        visibility: visible !important;
-        background-color: #fff !important; /* White background for print */
-        color: #000 !important;
-        border-color: #ccc !important;
-        box-shadow: none !important;
-        margin-top: 0 !important;
-        margin-bottom: 15px !important;
-    }
-    body.body-is-printing .prominent-disclaimer p,
-    body.body-is-printing .prominent-disclaimer b,
-    body.body-is-printing .prominent-disclaimer a {
-        color: #000 !important;
-    }
-    body.body-is-printing .prominent-disclaimer a {
-        text-decoration: underline !important;
-    }
+            /* Ensure the prominent disclaimer is always visible in print */
+            body.body-is-printing .prominent-disclaimer {
+                display: block !important;
+                visibility: visible !important;
+                background-color: #fff !important; /* White background for print */
+                color: #000 !important;
+                border-color: #ccc !important;
+                box-shadow: none !important;
+                margin-top: 0 !important;
+                margin-bottom: 15px !important;
+            }
+            body.body-is-printing .prominent-disclaimer p,
+            body.body-is-printing .prominent-disclaimer b,
+            body.body-is-printing .prominent-disclaimer a {
+                color: #000 !important;
+            }
+            body.body-is-printing .prominent-disclaimer a {
+                text-decoration: underline !important;
+            }
 
-    /* Ensure the path to the content to be printed is visible and styled */
-    body.body-is-printing,
-    body.body-is-printing .container,
-    body.body-is-printing .tab-content.active,
-    body.body-is-printing .result-display,
-    body.body-is-printing .result-box,
-    body.body-is-printing .result-box *, /* All children of result-box */
-    body.body-is-printing .qa-summary-for-print-only, /* The temporarily appended summary */
-    body.body-is-printing .qa-summary-for-print-only * /* All children of the summary */
-    {
-        display: block !important;
-        visibility: visible !important;
-        background: white !important;
-        color: black !important;
-        box-shadow: none !important;
-        border-color: #ccc !important;
-        font-size: 10pt !important;
-        line-height: 1.4 !important;
-        margin: 0;
-        padding: 0;
-    }
-    /* Specific overrides for list items */
-    body.body-is-printing .result-box ul li,
-    body.body-is-printing .qa-summary-for-print-only ul li {
-        display: list-item !important; /* Ensures <li> behave as list items */
-        margin-left: 20px; /* Indent list items for clarity */
-    }
-
-
-    /* Basic styling for the printed result box */
-    body.body-is-printing .result-box {
-        border: 1px solid #ccc !important;
-        padding: 20px !important; /* More padding for print */
-        margin-bottom: 20px !important;
-    }
-    body.body-is-printing .result-box.eligible { border-left: 5px solid #4CAF50 !important; }
-    body.body-is-printing .result-box.not-eligible { border-left: 5px solid #F44336 !important; }
-    body.body-is-printing .result-box.provisional { border-left: 5px solid #FFC107 !important; }
-
-    body.body-is-printing .result-box p:first-child { /* Title */
-        font-size: 14pt !important;
-        font-weight: bold !important;
-        margin-top: 0 !important;
-        margin-bottom: 12px !important;
-    }
-    body.body-is-printing .result-box p { margin-bottom: 10px !important; }
-    body.body-is-printing .result-box a { text-decoration: underline !important; }
-    body.body-is-printing .result-box a[href]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #444; word-break: break-all; }
-
-    body.body-is-printing .checklist { list-style-type: none !important; padding-left: 0 !important; margin-top: 10px !important;}
-    body.body-is-printing .checklist li {
-        margin-bottom: 8px !important;
-        padding-left: 1.8em !important;  /* Space for CSS checkbox */
-        position: relative !important;
-        line-height: 1.5 !important;
-    }
-    body.body-is-printing .checklist li::before { /* CSS checkbox */
-        content: "☐";
-        position: absolute !important;
-        left: 0 !important;
-        top: 0.05em !important;
-        font-size: 1.1em !important; /* Or 1em to match text */
-    }
+            /* Ensure the path to the content to be printed is visible and styled */
+            body.body-is-printing,
+            body.body-is-printing .container,
+            body.body-is-printing .tab-content.active,
+            body.body-is-printing .result-display,
+            body.body-is-printing .result-box,
+            body.body-is-printing .result-box *, /* All children of result-box */
+            body.body-is-printing .qa-summary-for-print-only, /* The temporarily appended summary */
+            body.body-is-printing .qa-summary-for-print-only * /* All children of the summary */
+            {
+                display: block !important;
+                visibility: visible !important;
+                background: white !important;
+                color: black !important;
+                box-shadow: none !important;
+                border-color: #ccc !important;
+                font-size: 10pt !important;
+                line-height: 1.4 !important;
+                margin: 0;
+                padding: 0;
+            }
+            /* Specific overrides for list items */
+            body.body-is-printing .result-box ul li,
+            body.body-is-printing .qa-summary-for-print-only ul li {
+                display: list-item !important; /* Ensures <li> behave as list items */
+                margin-left: 20px; /* Indent list items for clarity */
+            }
 
 
-    /* Styling for the temporarily appended Q&A summary for print */
-    body.body-is-printing .qa-summary-for-print-only {
-        margin-top: 20px !important;
-        padding: 15px !important;
-        border: 1px solid #ddd !important;
-        background-color: #f9f9f9 !important;
-    }
-    body.body-is-printing .qa-summary-for-print-only .print-qa-header { /* Class used in createQASummaryHTMLForPrint */
-        font-size: 12pt !important; font-weight: bold !important; margin-bottom: 10px !important;
-        border-bottom: 1px solid #ccc !important; padding-bottom: 5px !important;
-    }
-    body.body-is-printing .qa-summary-for-print-only .print-qa-item { /* Class used in createQASummaryHTMLForPrint */
-        font-size: 9pt !important; margin-bottom: 8px !important;
-    }
-    body.body-is-printing .qa-summary-for-print-only .print-qa-item .print-qa-q,
-    body.body-is-printing .qa-summary-for-print-only .print-qa-item .print-qa-a {
-        font-weight: bold !important;
-    }
+            /* Basic styling for the printed result box */
+            body.body-is-printing .result-box {
+                border: 1px solid #ccc !important;
+                padding: 20px !important; /* More padding for print */
+                margin-bottom: 20px !important;
+            }
+            body.body-is-printing .result-box.eligible { border-left: 5px solid #4CAF50 !important; }
+            body.body-is-printing .result-box.not-eligible { border-left: 5px solid #F44336 !important; }
+            body.body-is-printing .result-box.provisional { border-left: 5px solid #FFC107 !important; }
 
-    html, body.body-is-printing {
-        height: auto !important;
-        width: auto !important;
-        overflow: visible !important;
-        background: white !important; /* Ensure no page background color interferes */
-    }
+            body.body-is-printing .result-box p:first-child { /* Title */
+                font-size: 14pt !important;
+                font-weight: bold !important;
+                margin-top: 0 !important;
+                margin-bottom: 12px !important;
+            }
+            body.body-is-printing .result-box p { margin-bottom: 10px !important; }
+            body.body-is-printing .result-box a { text-decoration: underline !important; }
+            body.body-is-printing .result-box a[href]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #444; word-break: break-all; }
 
-    @page { size: A4; margin: 20mm; }
-}
+            body.body-is-printing .checklist { list-style-type: none !important; padding-left: 0 !important; margin-top: 10px !important;}
+            body.body-is-printing .checklist li {
+                margin-bottom: 8px !important;
+                padding-left: 1.8em !important;  /* Space for CSS checkbox */
+                position: relative !important;
+                line-height: 1.5 !important;
+            }
+            body.body-is-printing .checklist li::before { /* CSS checkbox */
+                content: "☐";
+                position: absolute !important;
+                left: 0 !important;
+                top: 0.05em !important;
+                font-size: 1.1em !important; /* Or 1em to match text */
+            }
+
+
+            /* Styling for the temporarily appended Q&A summary for print */
+            body.body-is-printing .qa-summary-for-print-only {
+                margin-top: 20px !important;
+                padding: 15px !important;
+                border: 1px solid #ddd !important;
+                background-color: #f9f9f9 !important;
+            }
+            body.body-is-printing .qa-summary-for-print-only .print-qa-header { /* Class used in createQASummaryHTMLForPrint */
+                font-size: 12pt !important; font-weight: bold !important; margin-bottom: 10px !important;
+                border-bottom: 1px solid #ccc !important; padding-bottom: 5px !important;
+            }
+            body.body-is-printing .qa-summary-for-print-only .print-qa-item { /* Class used in createQASummaryHTMLForPrint */
+                font-size: 9pt !important; margin-bottom: 8px !important;
+            }
+            body.body-is-printing .qa-summary-for-print-only .print-qa-item .print-qa-q,
+            body.body-is-printing .qa-summary-for-print-only .print-qa-item .print-qa-a {
+                font-weight: bold !important;
+            }
+
+            html, body.body-is-printing {
+                height: auto !important;
+                width: auto !important;
+                overflow: visible !important;
+                background: white !important; /* Ensure no page background color interferes */
+            }
+
+            @page { size: A4; margin: 20mm; }
+        }
         /* ---- END OF ADDED/MODIFIED STYLES ---- */
 
         /* --- Responsive Adjustments (Original eligibility.html) --- */
@@ -501,31 +501,30 @@
         </div>
 
         <div class="tab-nav">
-             <button class="tab-button active" onclick="openTab(event, 'grantOptions')">
-                <span class="tab-title-main">Grant Options</span>
+             <button class="tab-button" data-tab-id="grantOptions"> <span class="tab-title-main">Grant Options</span>
                 <span class="tab-title-sub">SEAI Co-Funded Types</span>
             </button>
-            <button class="tab-button" onclick="openTab(event, 'warmerHomesChecker')">
+            <button class="tab-button" data-tab-id="warmerHomesChecker">
                 <span class="tab-title-main">Warmer Homes Scheme</span>
                 <span class="tab-title-sub">Free Upgrades Checker</span>
             </button>
-            <button class="tab-button" onclick="openTab(event, 'olderPeopleChecker')">
+            <button class="tab-button" data-tab-id="olderPeopleChecker">
                 <span class="tab-title-main">Housing Aid Grant</span>
                 <span class="tab-title-sub">Older People (Capped)</span>
             </button>
         </div>
 
-        <div id="grantOptions" class="tab-content active">
-             <h2>SEAI Co-Funded Grant Options: Understanding Your Choices & Indicative Amounts</h2>
+        <div id="grantOptions" class="tab-content">
+            <h2>SEAI Co-Funded Grant Options: Understanding Your Choices & Indicative Amounts</h2>
              <p class="intro-text">This section details the main SEAI <span class="tooltip-trigger">co-funded<span class="tooltip-text">Co-funded means the grant covers a portion of the upgrade costs, and the homeowner is responsible for paying the remaining balance.</span></span> grant routes and the Warm Home Hub Community Grant. Co-funded grants involve a homeowner contribution towards the upgrade costs. Explore below to find information and indicative grant amounts for each, broken down by property type where applicable.</p>
 
              <div class="grant-type-tabs">
-                <button class="grant-type-tab-button active" onclick="openGrantTypeTab(event, 'oneStopShopInfoAndAmounts', 'grantOptions')">SEAI One-Stop-Shop Service</button>
-                <button class="grant-type-tab-button" onclick="openGrantTypeTab(event, 'individualGrantsInfoAndAmounts', 'grantOptions')">SEAI Individual Energy Upgrade Grants</button>
-                <button class="grant-type-tab-button" onclick="openGrantTypeTab(event, 'communityGrantInfo', 'grantOptions')">Warm Home Hub Community Grant</button>
+                <button class="grant-type-tab-button" data-grant-type-id="oneStopShopInfoAndAmounts" data-parent-tab-id="grantOptions">SEAI One-Stop-Shop Service</button>
+                <button class="grant-type-tab-button" data-grant-type-id="individualGrantsInfoAndAmounts" data-parent-tab-id="grantOptions">SEAI Individual Energy Upgrade Grants</button>
+                <button class="grant-type-tab-button" data-grant-type-id="communityGrantInfo" data-parent-tab-id="grantOptions">Warm Home Hub Community Grant</button>
             </div>
 
-            <div id="oneStopShopInfoAndAmounts" class="grant-type-tab-content active">
+            <div id="oneStopShopInfoAndAmounts" class="grant-type-tab-content">
                 <h3>About the SEAI One-Stop-Shop Service</h3>
                 <div class="section-info">
                     <p>A One-Stop-Shop offers a fully managed, end-to-end service for homeowners undertaking a significant home energy upgrade (often called a <span class="tooltip-trigger">deep retrofit<span class="tooltip-text">A deep retrofit is a significant home energy upgrade involving multiple measures at once, aiming to bring a home to a high energy efficiency standard (typically B2 BER or better).</span></span>). They handle everything from the initial assessment, grant application, contractor management, to quality assurance. Your home's existing <span class="tooltip-trigger">BER<span class="tooltip-text">BER stands for Building Energy Rating. It's like an energy label for your home (A-G), showing its energy efficiency. A-rated is most efficient.</span></span> must be B3 or lower. This is a <b>partially funded</b> scheme; SEAI provides grants towards the total cost, and the homeowner covers the remaining balance. Generally for homes built and occupied before 2011.</p>
@@ -549,13 +548,12 @@
                 </div>
                 <h4>Indicative Grant Amounts (One-Stop-Shop)</h4>
                 <div class="property-type-subtabs" id="ossPropertyTabs">
-                    <button class="property-subtab-button active" onclick="openPropertySubTab(event, 'ossGrantDetached', 'oneStopShopInfoAndAmounts')">Detached</button>
-                    <button class="property-subtab-button" onclick="openPropertySubTab(event, 'ossGrantSemi', 'oneStopShopInfoAndAmounts')">Semi-Detached / End-Terrace</button>
-                    <button class="property-subtab-button" onclick="openPropertySubTab(event, 'ossGrantMidTerrace', 'oneStopShopInfoAndAmounts')">Mid-Terrace</button>
-                    <button class="property-subtab-button" onclick="openPropertySubTab(event, 'ossGrantApartment', 'oneStopShopInfoAndAmounts')">Apartment</button>
+                    <button class="property-subtab-button" data-property-subtab-id="ossGrantDetached" data-parent-grant-type-id="oneStopShopInfoAndAmounts">Detached</button>
+                    <button class="property-subtab-button" data-property-subtab-id="ossGrantSemi" data-parent-grant-type-id="oneStopShopInfoAndAmounts">Semi-Detached / End-Terrace</button>
+                    <button class="property-subtab-button" data-property-subtab-id="ossGrantMidTerrace" data-parent-grant-type-id="oneStopShopInfoAndAmounts">Mid-Terrace</button>
+                    <button class="property-subtab-button" data-property-subtab-id="ossGrantApartment" data-parent-grant-type-id="oneStopShopInfoAndAmounts">Apartment</button>
                 </div>
-                <div id="ossGrantDetached" class="property-subtab-content active">
-                    <h5>Grant Amounts for Detached Houses</h5>
+                <div id="ossGrantDetached" class="property-subtab-content"> <h5>Grant Amounts for Detached Houses</h5>
                     <table class="grant-amounts-table">
                         <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
                         <tbody>
@@ -579,8 +577,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="ossGrantSemi" class="property-subtab-content">
-                    <h5>Grant Amounts for Semi-Detached / End-Terrace</h5>
+                <div id="ossGrantSemi" class="property-subtab-content"> <h5>Grant Amounts for Semi-Detached / End-Terrace</h5>
                     <table class="grant-amounts-table">
                         <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
                         <tbody>
@@ -604,13 +601,11 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="ossGrantMidTerrace" class="property-subtab-content">
-                    <h5>Grant Amounts for Mid-Terrace Houses</h5>
+                <div id="ossGrantMidTerrace" class="property-subtab-content"> <h5>Grant Amounts for Mid-Terrace Houses</h5>
                     <table class="grant-amounts-table">
                         <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
                         <tbody>
                             <tr><td>Attic Insulation</td><td class="grant-value-col">€1,200</td></tr>
-                            <tr><td>Rafter Insulation</td><td class="grant-value-col">€2,000</td></tr>
                             <tr><td>Cavity Wall Insulation</td><td class="grant-value-col">€800</td></tr>
                             <tr><td>Internal Insulation (Dry Lining)</td><td class="grant-value-col">€2,000</td></tr>
                             <tr><td>External Wall Insulation (Wrap)</td><td class="grant-value-col">€3,500</td></tr>
@@ -629,8 +624,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="ossGrantApartment" class="property-subtab-content">
-                    <h5>Grant Amounts for Apartments</h5>
+                <div id="ossGrantApartment" class="property-subtab-content"> <h5>Grant Amounts for Apartments</h5>
                     <table class="grant-amounts-table">
                         <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
                         <tbody>
@@ -657,8 +651,7 @@
                 <p class="notes-col"><i>One-Stop-Shop Build year: Property must be built and occupied before 2011.</i></p>
             </div>
 
-            <div id="individualGrantsInfoAndAmounts" class="grant-type-tab-content">
-                <h3>About <span class="tooltip-trigger">SEAI<span class="tooltip-text">Sustainable Energy Authority of Ireland.</span></span> Individual Energy Upgrade Grants</h3>
+            <div id="individualGrantsInfoAndAmounts" class="grant-type-tab-content"> <h3>About <span class="tooltip-trigger">SEAI<span class="tooltip-text">Sustainable Energy Authority of Ireland.</span></span> Individual Energy Upgrade Grants</h3>
                 <div class="section-info">
                     <p>This route allows you to apply for grants for specific, individual energy upgrades (e.g., attic insulation, <span class="tooltip-trigger">solar PV<span class="tooltip-text">Solar PV (Photovoltaic) panels convert sunlight directly into electricity for your home.</span></span>). You manage the project yourself, including choosing registered contractors and applying for grants for each measure. These are <b>partial grants</b>. Build year cutoffs apply (e.g., pre-2011 for insulation, pre-2021 for renewables).</p>
                     <div class="pros-cons-container">
@@ -680,13 +673,12 @@
                 </div>
                 <h4>Indicative Grant Amounts (Individual Grants)</h4>
                 <div class="property-type-subtabs" id="indPropertyTabs">
-                    <button class="property-subtab-button active" onclick="openPropertySubTab(event, 'indGrantDetached2', 'individualGrantsInfoAndAmounts')">Detached</button>
-                    <button class="property-subtab-button" onclick="openPropertySubTab(event, 'indGrantSemi2', 'individualGrantsInfoAndAmounts')">Semi-Detached / End-Terrace</button>
-                    <button class="property-subtab-button" onclick="openPropertySubTab(event, 'indGrantMidTerrace2', 'individualGrantsInfoAndAmounts')">Mid-Terrace</button>
-                    <button class="property-subtab-button" onclick="openPropertySubTab(event, 'indGrantApartment2', 'individualGrantsInfoAndAmounts')">Apartment</button>
+                    <button class="property-subtab-button" data-property-subtab-id="indGrantDetached2" data-parent-grant-type-id="individualGrantsInfoAndAmounts">Detached</button>
+                    <button class="property-subtab-button" data-property-subtab-id="indGrantSemi2" data-parent-grant-type-id="individualGrantsInfoAndAmounts">Semi-Detached / End-Terrace</button>
+                    <button class="property-subtab-button" data-property-subtab-id="indGrantMidTerrace2" data-parent-grant-type-id="individualGrantsInfoAndAmounts">Mid-Terrace</button>
+                    <button class="property-subtab-button" data-property-subtab-id="indGrantApartment2" data-parent-grant-type-id="individualGrantsInfoAndAmounts">Apartment</button>
                 </div>
-                <div id="indGrantDetached2" class="property-subtab-content active">
-                    <h5>Grant Amounts for Detached Houses</h5>
+                <div id="indGrantDetached2" class="property-subtab-content"> <h5>Grant Amounts for Detached Houses</h5>
                     <table class="grant-amounts-table">
                         <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
                         <tbody>
@@ -701,8 +693,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="indGrantSemi2" class="property-subtab-content">
-                    <h5>Grant Amounts for Semi-Detached / End-Terrace</h5>
+                <div id="indGrantSemi2" class="property-subtab-content"> <h5>Grant Amounts for Semi-Detached / End-Terrace</h5>
                     <table class="grant-amounts-table">
                         <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
                         <tbody>
@@ -717,8 +708,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="indGrantMidTerrace2" class="property-subtab-content">
-                    <h5>Grant Amounts for Mid-Terrace Houses</h5>
+                <div id="indGrantMidTerrace2" class="property-subtab-content"> <h5>Grant Amounts for Mid-Terrace Houses</h5>
                     <table class="grant-amounts-table">
                         <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
                         <tbody>
@@ -733,8 +723,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="indGrantApartment2" class="property-subtab-content">
-                    <h5>Grant Amounts for Apartments</h5>
+                <div id="indGrantApartment2" class="property-subtab-content"> <h5>Grant Amounts for Apartments</h5>
                     <table class="grant-amounts-table">
                         <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
                         <tbody>
@@ -742,10 +731,18 @@
                             <tr><td>Cavity Wall Insulation</td><td class="grant-value-col">€700</td></tr>
                             <tr><td>Internal Insulation (Dry Lining)</td><td class="grant-value-col">€1,500</td></tr>
                             <tr><td>External Wall Insulation (Wrap)</td><td class="grant-value-col">€3,000</td></tr>
-                            <tr><td>Heat Pump Systems (Air to Water etc.)</td><td class="grant-value-col">€4,500</td></tr>
+                            <tr><td>Floor Insulation (ground-floor only)</td><td class="grant-value-col">€3,500</td></tr>
+                            <tr><td>Windows (Complete Upgrade)</td><td class="grant-value-col">€1,500</td></tr>
+                            <tr><td>External Doors (max. 2)</td><td class="grant-value-col">€800 per door</td></tr>
+                            <tr><td>Heat Pump Systems</td><td class="grant-value-col">€4,500</td></tr>
+                            <tr><td>Central Heating System for Heat Pump</td><td class="grant-value-col">€1,000</td></tr>
                             <tr><td>Heating Controls</td><td class="grant-value-col">€700</td></tr>
                             <tr><td>Solar PV (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
                             <tr><td>Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                            <tr><td>Mechanical Ventilation</td><td class="grant-value-col">€1,500</td></tr>
+                            <tr><td>Air Tightness</td><td class="grant-value-col">€1,000</td></tr>
+                            <tr><td>Home Energy Assessment</td><td class="grant-value-col">€350</td></tr>
+                            <tr><td>Project Management</td><td class="grant-value-col">€800</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -757,50 +754,39 @@
                 <div class="section-info">
                     <h4>What is it?</h4>
                     <p>Warm Home Hub facilitates group applications for <span class="tooltip-trigger">SEAI<span class="tooltip-text">Sustainable Energy Authority of Ireland.</span></span> grants through our Community Grant Initiative, partnering with an approved <span class="tooltip-trigger">SEAI<span class="tooltip-text">Sustainable Energy Authority of Ireland.</span></span> One-Stop-Shop. This allows a collective of homeowners to undertake significant energy upgrades together, leveraging the comprehensive One-Stop-Shop model for a fully managed retrofit process.</p>
-
                     <h4>How it Works & Key Benefits:</h4>
                     <div class="guidance-cards-container">
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></span>
                                 <p class="card-question">Utilises <span class="tooltip-trigger">SEAI<span class="tooltip-text">Sustainable Energy Authority of Ireland.</span></span> One-Stop-Shop Framework</p>
                             </div>
                             <p class="card-explanation">Aims for B2 <span class="tooltip-trigger">BER<span class="tooltip-text">BER stands for Building Energy Rating. It's like an energy label for your home (A-G), showing its energy efficiency. A-rated is most efficient.</span></span> or higher, with the required <span class="tooltip-trigger">100 kWh/m²/year energy uplift<span class="tooltip-text">This 100 kWh/m²/year uplift means your home must use at least 100 kilowatt-hours less energy per square meter of floor space annually after upgrades – a big efficiency gain!</span></span>, and covers a wide range of measures (insulation, <span class="tooltip-trigger">heat pumps<span class="tooltip-text">A heat pump is a device that transfers heat from a source (like air or ground) into your home for heating and hot water. It's a highly efficient alternative to traditional boilers.</span></span>, windows, <span class="tooltip-trigger">solar PV<span class="tooltip-text">Solar PV (Photovoltaic) panels convert sunlight directly into electricity for your home.</span></span> etc.), all managed by a dedicated One-Stop-Shop provider.</p>
                         </div>
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></span>
                                 <p class="card-question">Warm Home Hub Support</p>
                             </div>
                             <p class="card-explanation">We provide coordination, guidance, and dedicated support to the community group throughout the entire process, helping navigate the complexities.</p>
                         </div>
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></span>
                                 <p class="card-question">Potential Economies of Scale</p>
                             </div>
                             <p class="card-explanation">Grouping multiple home upgrade projects in a community can sometimes lead to more competitive pricing from contractors for materials and labour, potentially reducing overall costs for everyone involved.</p>
                         </div>
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>
                                 <p class="card-question">Shared Learning & Peer Support</p>
                             </div>
                             <p class="card-explanation">Benefit from the experiences, motivation, and support of others in your community who are also improving their homes.</p>
                         </div>
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 14c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-7c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7 5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm0 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm0 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm10-7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm0-7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm0 14c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 14c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-7c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7 5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm0 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm0 7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm10-7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm0-7c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm0 14c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z"/></svg></span>
                                 <p class="card-question">Streamlined Approach</p>
                             </div>
                             <p class="card-explanation">While individual homeowner eligibility still applies, a community approach can streamline some aspects of project planning, contractor engagement, and communication.</p>
@@ -814,45 +800,35 @@
                            <a href="#contact-warmhomehub" class="button">Contact Warm Home Hub About Community Grants</a>
                     </div>
                 </div>
-
                 <p style="margin-top: 20px;"><i>Note: The co-funded grants detailed above may potentially be combined with other schemes like the Vacant Property Refurbishment Grant if specific criteria are met. Always check with <span class="tooltip-trigger">SEAI<span class="tooltip-text">Sustainable Energy Authority of Ireland.</span></span> and your Local Authority for the most accurate information on combining grants.</i></p>
-
                 <h3>Which Path is Right for You? (One-Stop-Shop vs. Individual)</h3>
                 <div class="guidance-section">
                      <p style="text-align:center; font-weight:600; color: var(--whh-text-color-headings);">Consider these key questions to help you decide:</p>
                      <div class="guidance-cards-container">
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
                                 <p class="card-question">What is the scale of your planned upgrade?</p>
                             </div>
                             <p class="card-explanation">Are you looking for a complete home transformation (multiple measures, aiming for B2 with significant energy uplift) or just one or two specific improvements?<br><i>(Major <span class="tooltip-trigger">deep retrofit<span class="tooltip-text">A deep retrofit is a significant home energy upgrade involving multiple measures at once, aiming to bring a home to a high energy efficiency standard (typically B2 BER or better).</span></span>, especially with <span class="tooltip-trigger">heat pumps<span class="tooltip-text">A heat pump is a device that transfers heat from a source (like air or ground) into your home for heating and hot water. It's a highly efficient alternative to traditional boilers.</span></span>, windows/doors, or solid wall insulation, often suits One-Stop-Shop; specific upgrades suit Individual Grants)</i></p>
                         </div>
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></span>
                                 <p class="card-question">How much time and effort are you willing to put into managing the project?</p>
                             </div>
                             <p class="card-explanation">Are you comfortable coordinating contractors, timelines, and grant paperwork yourself, or would you prefer a managed service?<br><i>(Low effort points to One-Stop-Shop; comfortable managing points to Individual Grants)</i></p>
                         </div>
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 14H6V8l6 3.75L18 8v10zM12 11L4 6h16l-8 5z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 14H6V8l6 3.75L18 8v10zM12 11L4 6h16l-8 5z"/></svg></span>
                                 <p class="card-question">Is a single point of contact a priority?</p>
                             </div>
                             <p class="card-explanation">Do you prefer one company to manage all aspects, or are you happy to liaise with multiple contractors and <span class="tooltip-trigger">SEAI<span class="tooltip-text">Sustainable Energy Authority of Ireland.</span></span> directly?<br><i>(Single contact points to One-Stop-Shop)</i></p>
                         </div>
                         <div class="guidance-card">
                             <div class="card-header">
-                                <span class="card-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.23.09.49 0 .61.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-                                </span>
+                                <span class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.23.09.49 0 .61.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg></span>
                                 <p class="card-question">How much control do you want over choices?</p>
                             </div>
                             <p class="card-explanation">Do you want full control over choosing specific contractors and materials for each upgrade?<br><i>(More control points to Individual Grants)</i></p>
@@ -866,719 +842,643 @@
                     <a href="https://www.seai.ie/grants/home-energy-grants/individual-energy-upgrade-grants/" target="_blank" rel="noopener noreferrer" class="button">Learn about Individual Grants</a>
                 </div>
             </div>
-            <div id="warmerHomesChecker" class="tab-content">
-                 <h2>SEAI Warmer Homes Scheme - Eligibility Checker</h2>
-                 <p class="intro-text">Answer the questions below to get an indication of your potential eligibility for the SEAI Warmer Homes Scheme. This scheme provides <b>free</b> energy upgrades to eligible homeowners at <b>no cost</b> to them.</p>
+        </div>
 
-                <form id="eligibilityFormWarmerHomes">
-                    <div class="question-group">
-                        <label for="wh_q_year_built">1. In what year was the property built?
-                                <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">Eligibility requires the home to have been constructed AND occupied before 2006.</span></span>
-                        </label>
-                        <input type="number" id="wh_q_year_built" name="whYearBuilt" placeholder="e.g., 1985" min="1800" max="2025" required>
-                        <p class="explanation">Must have been built AND occupied before 2006.</p>
-                    </div>
+        <div id="warmerHomesChecker" class="tab-content">
+             <h2>SEAI Warmer Homes Scheme - Eligibility Checker</h2>
+             <p class="intro-text">Answer the questions below to get an indication of your potential eligibility for the SEAI Warmer Homes Scheme. This scheme provides <b>free</b> energy upgrades to eligible homeowners at <b>no cost</b> to them.</p>
 
-                    <div class="question-group">
-                             <label>2. Has the property been vacant for the past 2 years or more?
-                                    <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">The Warmer Homes scheme is for owner-occupied homes. Vacant properties might qualify for the Vacant Property Refurbishment Grant instead.</span></span>
-                             </label>
-                             <div class="radio-option-group">
-                                 <div class="radio-option"><input type="radio" id="wh_q_vacant_yes" name="whVacant" value="yes" required> <label for="wh_q_vacant_yes">Yes</label></div>
-                                 <div class="radio-option"><input type="radio" id="wh_q_vacant_no" name="whVacant" value="no"> <label for="wh_q_vacant_no">No</label></div>
-                             </div>
-                    </div>
+            <form id="eligibilityFormWarmerHomes" novalidate>
+                <div class="question-group">
+                    <label for="wh_q_year_built">1. In what year was the property built?
+                        <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">Eligibility requires the home to have been constructed AND occupied before 2006.</span></span>
+                    </label>
+                    <input type="number" id="wh_q_year_built" name="whYearBuilt" placeholder="e.g., 1985" min="1800" max="2025" required>
+                    <p class="explanation">Must have been built AND occupied before 2006.</p>
+                </div>
 
-                    <div class="question-group">
-                        <label for="wh_q1_yes">3. Do you own and currently live in the home you wish to upgrade?
-                                <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">You must be the owner-occupier of the property to qualify for the Warmer Homes Scheme.</span></span>
-                        </label>
-                        <div class="radio-option-group">
-                            <div class="radio-option"><input type="radio" id="wh_q1_yes" name="whHomeOwnership" value="yes" required> <label for="wh_q1_yes">Yes</label></div>
-                            <div class="radio-option"><input type="radio" id="wh_q1_no" name="whHomeOwnership" value="no"> <label for="wh_q1_no">No</label></div>
-                        </div>
-                    </div>
-
-                    <div class="question-group">
-                             <label for="wh_q3_yes">4. Are you currently in receipt of a qualifying Social Welfare payment?
-                                    <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">Check the official SEAI website for the full, up-to-date list of qualifying payments (e.g., Fuel Allowance, Jobseeker's Allowance for over 6 months with a child under 7, Working Family Payment, Domiciliary Care Allowance, Carer's Allowance etc.).</span></span>
-                             </label>
-                        <p class="explanation">This includes payments like Fuel Allowance, Working Family Payment, Domiciliary Care Allowance, and others. Please refer to the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI website</a> for the complete list.</p>
-                             <div class="radio-option-group">
-                                 <div class="radio-option"><input type="radio" id="wh_q3_yes" name="whWelfarePayment" value="yes" required> <label for="wh_q3_yes">Yes</label></div>
-                                 <div class="radio-option"><input type="radio" id="wh_q3_no" name="whWelfarePayment" value="no"> <label for="wh_q3_no">No</label></div>
-                             </div>
-                    </div>
-
-                    <div class="question-group">
-                        <label for="wh_q4_ber">5. What is your home's current Building Energy Rating (BER)?
-                                <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">BER indicates your home's energy efficiency (A-G). The scheme prioritises less efficient homes (C, D, E, F, G). If you don't have one, SEAI will arrange an assessment if you meet other criteria.</span></span>
-                        </label>
-                        <select id="wh_q4_ber" name="whBerStatus" required>
-                            <option value="">-- Please select --</option>
-                            <option value="cdefg">BER is C, D, E, F or G</option> <option value="ab">BER is A or B</option>
-                            <option value="no_ber">I don't have a BER / I don't know my BER</option>
-                        </select>
-                    </div>
-
-                    <button type="button" class="checker-button" onclick="checkEligibilityWarmerHomes()">Check Warmer Homes Eligibility</button>
-                </form>
-
-                <div id="resultWarmerHomes" class="result-display hidden">
-                     </div>
-                 <div id="qaSummaryWarmerHomes" class="qa-summary-print"></div>
-            </div> <div id="olderPeopleChecker" class="tab-content">
-                 <h2>Housing Aid for Older People Grant - Eligibility Checker</h2>
-                 <p class="intro-text">This checker helps you understand if you might be eligible for the Housing Aid for Older People grant... partially funded, <span class="tooltip-trigger">means-tested<span class="tooltip-text">Means-tested means your eligibility and grant amount depend on an assessment of your household's financial income and resources.</span></span> grant...</p>
-
-                 <form id="eligibilityFormOlderPeople">
-                     <div class="question-group">
-                             <label for="op_q_year_built">1. In what year was the property built?
-                                 <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">There's no strict build year cutoff, but the grant is for essential repairs typically needed in older homes. Very new homes might face more scrutiny on the 'essential repairs' aspect.</span></span>
-                             </label>
-                         <input type="number" id="op_q_year_built" name="opYearBuilt" placeholder="e.g., 1975" min="1800" max="2025" required>
-                     </div>
-
-                      <div class="question-group">
+                <div class="question-group">
                          <label>2. Has the property been vacant for the past 2 years or more?
-                                 <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">This grant generally requires the older person to be living in the home. Vacant properties might be eligible for the Vacant Property Refurbishment Grant.</span></span>
+                            <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">The Warmer Homes scheme is for owner-occupied homes. Vacant properties might qualify for the Vacant Property Refurbishment Grant instead.</span></span>
                          </label>
                          <div class="radio-option-group">
-                             <div class="radio-option"><input type="radio" id="op_q_vacant_yes" name="opVacant" value="yes" required> <label for="op_q_vacant_yes">Yes</label></div>
-                             <div class="radio-option"><input type="radio" id="op_q_vacant_no" name="opVacant" value="no"> <label for="op_q_vacant_no">No</label></div>
+                             <div class="radio-option"><input type="radio" id="wh_q_vacant_yes" name="whVacant" value="yes" required> <label for="wh_q_vacant_yes">Yes</label></div>
+                             <div class="radio-option"><input type="radio" id="wh_q_vacant_no" name="whVacant" value="no"> <label for="wh_q_vacant_no">No</label></div>
                          </div>
-                     </div>
+                </div>
 
-                     <div class="question-group">
-                         <label for="op_q1_yes">3. Is the person for whom the grant is intended 66 years of age or older?
-                                 <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">The primary applicant must usually be 66+. Local Authorities have discretion to consider younger applicants in exceptional hardship cases. Contact them directly if this applies.</span></span>
+                <div class="question-group">
+                    <label>3. Do you own and currently live in the home you wish to upgrade?
+                            <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">You must be the owner-occupier of the property to qualify for the Warmer Homes Scheme.</span></span>
+                    </label>
+                    <div class="radio-option-group">
+                        <div class="radio-option"><input type="radio" id="wh_q1_yes" name="whHomeOwnership" value="yes" required> <label for="wh_q1_yes">Yes</label></div>
+                        <div class="radio-option"><input type="radio" id="wh_q1_no" name="whHomeOwnership" value="no"> <label for="wh_q1_no">No</label></div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                         <label>4. Are you currently in receipt of a qualifying Social Welfare payment?
+                                <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">Check the official SEAI website for the full, up-to-date list of qualifying payments (e.g., Fuel Allowance, Jobseeker's Allowance for over 6 months with a child under 7, Working Family Payment, Domiciliary Care Allowance, Carer's Allowance etc.).</span></span>
                          </label>
-                         <p class="explanation">The grant is primarily for those aged 66+. In exceptional cases of hardship, those under 66 may be considered by the Local Authority.</p>
+                    <p class="explanation">This includes payments like Fuel Allowance, Working Family Payment, Domiciliary Care Allowance, and others. Please refer to the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI website</a> for the complete list.</p>
                          <div class="radio-option-group">
-                             <div class="radio-option"><input type="radio" id="op_q1_yes" name="opPersonAge" value="yes" required> <label for="op_q1_yes">Yes</label></div>
-                             <div class="radio-option"><input type="radio" id="op_q1_no" name="opPersonAge" value="no"> <label for="op_q1_no">No</label></div>
+                             <div class="radio-option"><input type="radio" id="wh_q3_yes" name="whWelfarePayment" value="yes" required> <label for="wh_q3_yes">Yes</label></div>
+                             <div class="radio-option"><input type="radio" id="wh_q3_no" name="whWelfarePayment" value="no"> <label for="wh_q3_no">No</label></div>
                          </div>
-                     </div>
+                </div>
 
-                     <div class="question-group">
-                         <label for="op_q2_yes">4. Is the home in poor condition and in need of essential repairs or improvements to make it safe and habitable?
-                                 <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">The grant focuses on necessary works like structural repairs, re-wiring, roof repairs, essential heating (not upgrades), window/door replacement for safety/security. Cosmetic work is generally not covered.</span></span>
+                <div class="question-group">
+                    <label for="wh_q4_ber">5. What is your home's current Building Energy Rating (BER)?
+                            <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">BER indicates your home's energy efficiency (A-G). The scheme prioritises less efficient homes (C, D, E, F, G). If you don't have one, SEAI will arrange an assessment if you meet other criteria.</span></span>
+                    </label>
+                    <select id="wh_q4_ber" name="whBerStatus" required>
+                        <option value="">-- Please select --</option>
+                        <option value="cdefg">BER is C, D, E, F or G</option>
+                        <option value="ab">BER is A or B</option>
+                        <option value="no_ber">I don't have a BER / I don't know my BER</option>
+                    </select>
+                </div>
+
+                <button type="button" class="checker-button" data-checker-id="WarmerHomes">Check Warmer Homes Eligibility</button>
+            </form>
+
+            <div id="resultWarmerHomes" class="result-display hidden"></div>
+            <div id="qaSummaryWarmerHomes" class="qa-summary-print"></div>
+        </div>
+        
+        <div id="olderPeopleChecker" class="tab-content">
+             <h2>Housing Aid for Older People Grant - Eligibility Checker</h2>
+             <p class="intro-text">This checker helps you understand if you might be eligible for the Housing Aid for Older People grant. This is a Local Authority administered, partially funded, <span class="tooltip-trigger">means-tested<span class="tooltip-text">Means-tested means your eligibility and grant amount depend on an assessment of your household's financial income and resources.</span></span> grant for essential repairs.</p>
+
+             <form id="eligibilityFormOlderPeople" novalidate>
+                 <div class="question-group">
+                         <label for="op_q_year_built">1. In what year was the property built?
+                             <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">There's no strict build year cutoff, but the grant is for essential repairs typically needed in older homes. Very new homes might face more scrutiny on the 'essential repairs' aspect.</span></span>
                          </label>
-                         <div class="radio-option-group">
-                             <div class="radio-option"><input type="radio" id="op_q2_yes" name="opHousingCondition" value="yes" required> <label for="op_q2_yes">Yes</label></div>
-                             <div class="radio-option"><input type="radio" id="op_q2_no" name="opHousingCondition" value="no"> <label for="op_q2_no">No</label></div>
-                         </div>
-                     </div>
+                     <input type="number" id="op_q_year_built" name="opYearBuilt" placeholder="e.g., 1975" min="1800" max="2025" required>
+                 </div>
 
-                     <div class="question-group">
-                         <label for="op_q3_yes">5. Is the home privately owned, AND does the person for whom the grant is intended either own the home or have a legal right of residence there?
-                                 <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">The property cannot be a local authority rented house. The applicant needs proof of ownership or a formal right to reside (e.g., under a will).</span></span>
+                  <div class="question-group">
+                     <label>2. Has the property been vacant for the past 2 years or more?
+                             <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">This grant generally requires the older person to be living in the home. Vacant properties might be eligible for the Vacant Property Refurbishment Grant.</span></span>
+                     </label>
+                     <div class="radio-option-group">
+                         <div class="radio-option"><input type="radio" id="op_q_vacant_yes" name="opVacant" value="yes" required> <label for="op_q_vacant_yes">Yes</label></div>
+                         <div class="radio-option"><input type="radio" id="op_q_vacant_no" name="opVacant" value="no"> <label for="op_q_vacant_no">No</label></div>
+                     </div>
+                 </div>
+
+                 <div class="question-group">
+                     <label>3. Is the person for whom the grant is intended 66 years of age or older?
+                             <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">The primary applicant must usually be 66+. Local Authorities have discretion to consider younger applicants in exceptional hardship cases. Contact them directly if this applies.</span></span>
+                     </label>
+                     <p class="explanation">The grant is primarily for those aged 66+. In exceptional cases of hardship, those under 66 may be considered by the Local Authority.</p>
+                     <div class="radio-option-group">
+                         <div class="radio-option"><input type="radio" id="op_q1_yes" name="opPersonAge" value="yes" required> <label for="op_q1_yes">Yes</label></div>
+                         <div class="radio-option"><input type="radio" id="op_q1_no" name="opPersonAge" value="no"> <label for="op_q1_no">No</label></div>
+                     </div>
+                 </div>
+
+                 <div class="question-group">
+                     <label>4. Is the home in poor condition and in need of essential repairs or improvements to make it safe and habitable?
+                             <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">The grant focuses on necessary works like structural repairs, re-wiring, roof repairs, essential heating (not upgrades), window/door replacement for safety/security. Cosmetic work is generally not covered.</span></span>
+                     </label>
+                     <div class="radio-option-group">
+                         <div class="radio-option"><input type="radio" id="op_q2_yes" name="opHousingCondition" value="yes" required> <label for="op_q2_yes">Yes</label></div>
+                         <div class="radio-option"><input type="radio" id="op_q2_no" name="opHousingCondition" value="no"> <label for="op_q2_no">No</label></div>
+                     </div>
+                 </div>
+
+                 <div class="question-group">
+                     <label>5. Is the home privately owned, AND does the person for whom the grant is intended either own the home or have a legal right of residence there?
+                             <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">The property cannot be a local authority rented house. The applicant needs proof of ownership or a formal right to reside (e.g., under a will).</span></span>
+                     </label>
+                     <div class="radio-option-group">
+                         <div class="radio-option"><input type="radio" id="op_q3_yes" name="opPropertyStatus" value="yes" required> <label for="op_q3_yes">Yes</label></div>
+                         <div class="radio-option"><input type="radio" id="op_q3_no" name="opPropertyStatus" value="no"> <label for="op_q3_no">No</label></div>
+                     </div>
+                 </div>
+
+                 <div class="question-group">
+                         <label for="op_q4_income">6. What is the estimated annual gross household income from the previous tax year?
+                                <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">Gross income (before tax/deductions) of the applicant and their spouse/partner is assessed. Income of other adults may also be considered. Check your Local Authority's specific rules & income thresholds, as these determine the grant percentage.</span></span>
                          </label>
-                         <div class="radio-option-group">
-                             <div class="radio-option"><input type="radio" id="op_q3_yes" name="opPropertyStatus" value="yes" required> <label for="op_q3_yes">Yes</label></div>
-                             <div class="radio-option"><input type="radio" id="op_q3_no" name="opPropertyStatus" value="no"> <label for="op_q3_no">No</label></div>
-                         </div>
-                     </div>
+                         <p class="explanation">The grant is means-tested. Local Authorities have specific rules and income thresholds that determine the percentage of costs covered.</p>
+                         <select id="op_q4_income" name="opHouseholdIncome" required>
+                             <option value="">-- Please select an income range --</option>
+                             <option value="low">Up to €37,500 (May qualify for up to 95-100% of costs, max grant applies)</option>
+                             <option value="medium_low">€37,501 - €50,000 (May qualify for a tapered percentage, e.g., 75-85%)</option>
+                             <option value="medium_high">€50,001 - €62,500 (May qualify for a lower tapered percentage, e.g., 50%)</option>
+                             <option value="high">€62,501 - €75,000 (May qualify for the lowest tapered percentage, e.g., 30%)</option>
+                             <option value="over_limit">Over €75,000 (Thresholds vary by LA - check locally)</option>
+                         </select>
+                 </div>
 
-                     <div class="question-group">
-                             <label for="op_q4_income">6. What is the estimated annual gross household income from the previous tax year?
-                                    <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">Gross income (before tax/deductions) of the applicant and their spouse/partner is assessed. Income of other adults may also be considered. Check your Local Authority's specific rules & income thresholds, as these determine the grant percentage.</span></span>
-                             </label>
-                             <p class="explanation">The grant is means-tested... Local Authorities have specific rules...</p>
-                             <select id="op_q4_income" name="opHouseholdIncome" required>
-                                 <option value="">-- Please select an income range --</option>
-                                 <option value="low">Up to €37,500 (May qualify for up to 95-100% of costs, max grant applies)</option>
-                                 <option value="medium_low">€37,501 - €50,000 (May qualify for a tapered percentage, e.g., 75-85%)</option>
-                                 <option value="medium_high">€50,001 - €62,500 (May qualify for a lower tapered percentage, e.g., 50%)</option>
-                                 <option value="high">€62,501 - €75,000 (May qualify for the lowest tapered percentage, e.g., 30%)</option>
-                                 <option value="over_limit">Over €75,000 (Thresholds vary by LA - check locally)</option>
-                             </select>
+                 <div class="question-group">
+                     <label>7. Are the intended works essential repairs or improvements?
+                             <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">Examples: Roof repair, rewiring, fixing/replacing unsafe windows/doors, providing basic heating (not system upgrades), dry-lining for dampness. Check with your Local Authority if unsure about specific works.</span></span>
+                     </label>
+                     <p class="explanation">Examples: roof repair/replacement, wiring upgrade, providing central heating. Non-essential or cosmetic works are not covered.</p>
+                     <div class="radio-option-group">
+                         <div class="radio-option"><input type="radio" id="op_q5_yes" name="opEssentialWorks" value="yes" required> <label for="op_q5_yes">Yes</label></div>
+                         <div class="radio-option"><input type="radio" id="op_q5_no" name="opEssentialWorks" value="no"> <label for="op_q5_no">No</label></div>
                      </div>
+                 </div>
+                 <button type="button" class="checker-button" data-checker-id="OlderPeople">Check Housing Aid Eligibility</button>
+             </form>
 
-                     <div class="question-group">
-                         <label for="op_q5_yes">7. Are the intended works essential repairs or improvements?
-                                 <span class="tooltip-container" tabindex="0"><span class="info-icon">i</span><span class="tooltip-text">Examples: Roof repair, rewiring, fixing/replacing unsafe windows/doors, providing basic heating (not upgrades), dry-lining for dampness. Check with your Local Authority if unsure about specific works.</span></span>
-                         </label>
-                         <p class="explanation">Examples: roof repair/replacement, wiring upgrade... Non-essential or cosmetic works are generally not covered.</p>
-                         <div class="radio-option-group">
-                             <div class="radio-option"><input type="radio" id="op_q5_yes" name="opEssentialWorks" value="yes" required> <label for="op_q5_yes">Yes</label></div>
-                             <div class="radio-option"><input type="radio" id="op_q5_no" name="opEssentialWorks" value="no"> <label for="op_q5_no">No</label></div>
-                         </div>
-                     </div>
-                     <button type="button" class="checker-button" onclick="checkEligibilityOlderPeople()">Check Housing Aid Eligibility</button>
-                 </form>
-
-                  <div id="resultOlderPeople" class="result-display hidden">
-                     </div>
-                 <div id="qaSummaryOlderPeople" class="qa-summary-print"></div>
-            </div> <div class="disclaimer">
-                     <p><b>Disclaimer:</b> The information and eligibility checkers on this page are for guidance only and are based on publicly available data at the time of creation. They are not legal, financial, or official energy advice. Always refer to the official <span class="tooltip-trigger">SEAI<span class="tooltip-text">Sustainable Energy Authority of Ireland.</span></span> website and contact your <a href="https://www.gov.ie/en/organisation/department-of-housing-local-government-and-heritage/#local-authorities" target="_blank" rel="noopener noreferrer">Local Authority</a> for the most accurate, up-to-date, and definitive information regarding grant eligibility, application procedures, and terms and conditions. The creators are not liable for any actions taken based on this information.</p>
-            </div>
+              <div id="resultOlderPeople" class="result-display hidden"></div>
+             <div id="qaSummaryOlderPeople" class="qa-summary-print"></div>
+        </div>
+        
+        <div class="disclaimer">
+            <p><b>Disclaimer:</b> The information and eligibility checkers on this page are for guidance only and are based on publicly available data at the time of creation. They are not legal, financial, or official energy advice. Always refer to the official SEAI website and contact your <a href="https://www.gov.ie/en/organisation/department-of-housing-local-government-and-heritage/#local-authorities" target="_blank" rel="noopener noreferrer">Local Authority</a> for the most accurate, up-to-date, and definitive information regarding grant eligibility, application procedures, and terms and conditions. The creators are not liable for any actions taken based on this information.</p>
+        </div>
     </div>
+    
     <script>
-        // --- Tab Navigation Logic ---
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get all main tab buttons and content panels
-            const mainTabButtons = document.querySelectorAll('.tab-nav .tab-button');
-            const mainTabContents = document.querySelectorAll('.tab-content'); // These are the main panels
-
-            // Function to open a main tab
-            function openMainTab(tabId) {
-                // Deactivate all buttons and hide all content panels
-                mainTabButtons.forEach(button => {
-                    button.classList.remove('active');
-                    button.setAttribute('aria-selected', 'false');
-                });
-                mainTabContents.forEach(content => {
-                    content.classList.remove('active');
-                    content.style.display = 'none'; // Explicitly hide
-                });
-
-                // Activate the selected button and show its content panel
-                const selectedButton = document.querySelector(`.tab-button[onclick*="'${tabId}'"]`);
-                const selectedContent = document.getElementById(tabId);
-
-                if (selectedButton) {
-                    selectedButton.classList.add('active');
-                    selectedButton.setAttribute('aria-selected', 'true');
-                }
-                if (selectedContent) {
-                    selectedContent.style.display = 'block'; // Explicitly show
-                    selectedContent.classList.add('active'); // For animations/transitions
-
-                    // If 'grantOptions' tab is selected, ensure its sub-tabs are also initialized
-                    if (tabId === 'grantOptions') {
-                        const firstGrantTypeButton = selectedContent.querySelector('.grant-type-tab-button');
-                        if (firstGrantTypeButton) {
-                            // Find currently active grant type sub-tab, or click the first one if none
-                            let activeGrantTypeButton = selectedContent.querySelector('.grant-type-tab-button.active');
-                            if (!activeGrantTypeButton) {
-                                activeGrantTypeButton = firstGrantTypeButton;
-                                activeGrantTypeButton.classList.add('active'); // Add active class to the button
-                            }
-                            // Trigger the click function for the active/first grant type button to show its content
-                            const targetGrantTypeId = activeGrantTypeButton.getAttribute('onclick').match(/'([^']+)'/)[1];
-                            openGrantTypeTab(null, targetGrantTypeId, 'grantOptions');
-                        }
+        // --- Core Tab & UI Functions ---
+        function activateMainTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-nav .tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            const selectedButton = document.querySelector(`.tab-nav .tab-button[data-tab-id="${tabId}"]`);
+            if (selectedButton) {
+                selectedButton.classList.add('active');
+            }
+            const selectedContent = document.getElementById(tabId);
+            if (selectedContent) {
+                selectedContent.style.display = 'block';
+                selectedContent.classList.add('active');
+                if (tabId === 'grantOptions') {
+                    const firstGrantTypeButton = selectedContent.querySelector('.grant-type-tab-button');
+                    if (firstGrantTypeButton) {
+                        activateGrantTypeTab(firstGrantTypeButton.dataset.grantTypeId, 'grantOptions');
                     }
                 }
-                
-                // Clear checker results when switching tabs
-                clearResults('resultWarmerHomes');
-                clearResults('resultOlderPeople');
             }
+            clearResults('resultWarmerHomes');
+            clearResults('resultOlderPeople');
+        }
 
-            // Attach event listeners to main tab buttons
-            mainTabButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const tabId = button.getAttribute('onclick').match(/'([^']+)'/)[1]; // Extract tabId from onclick
-                    openMainTab(tabId);
-                });
+        function activateGrantTypeTab(tabId, parentTabId) {
+            const parentElement = document.getElementById(parentTabId);
+            if (!parentElement) return;
+            parentElement.querySelectorAll('.grant-type-tab-content').forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('active');
             });
-
-            // Initial load logic based on URL hash or default to 'grantOptions'
-            if (window.location.hash) {
-                const mainTargetTab = window.location.hash.substring(1).split('/')[0];
-                openMainTab(mainTargetTab);
-            } else {
-                openMainTab('grantOptions'); // Default to the first tab
+            parentElement.querySelectorAll('.grant-type-tabs .grant-type-tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            const selectedButton = parentElement.querySelector(`.grant-type-tab-button[data-grant-type-id="${tabId}"]`);
+            if (selectedButton) {
+                selectedButton.classList.add('active');
             }
-
-            // --- Nested Tab Logic (Grant Type Tabs) ---
-            // This function is called by inline onclick attributes
-            function openGrantTypeTab(evt, tabName, parentTabId) {
-                const parentElement = document.getElementById(parentTabId);
-                if (!parentElement) return;
-
-                const grantTypeTabContents = parentElement.getElementsByClassName("grant-type-tab-content");
-                const grantTypeTabButtons = parentElement.getElementsByClassName("grant-type-tab-button");
-
-                // Deactivate all grant type buttons and hide their content
-                Array.from(grantTypeTabContents).forEach(content => {
-                    content.style.display = "none";
-                    content.classList.remove("active");
-                });
-                Array.from(grantTypeTabButtons).forEach(button => {
-                    button.classList.remove("active");
-                });
-
-                // Activate the selected grant type button and show its content
-                const currentGrantTypeTabContent = document.getElementById(tabName);
-                if (currentGrantTypeTabContent) {
-                    currentGrantTypeTabContent.style.display = "block";
-                    currentGrantTypeTabContent.classList.add("active");
-                }
-                if (evt && evt.currentTarget) {
-                    evt.currentTarget.classList.add("active");
-                } else { // For programmatic calls (e.g., from openMainTab)
-                    const buttonToActivate = parentElement.querySelector(`.grant-type-tab-button[onclick*="'${tabName}'"]`);
-                    if (buttonToActivate) buttonToActivate.classList.add("active");
-                }
-
-                // If a grant type tab (not community grant) is active, ensure its property sub-tabs are also initialized
-                if (currentGrantTypeTabContent && tabName !== 'communityGrantInfo') {
-                    const firstPropertySubTabButton = currentGrantTypeTabContent.querySelector('.property-subtab-button');
+            const selectedContent = document.getElementById(tabId);
+            if (selectedContent) {
+                selectedContent.style.display = 'block';
+                selectedContent.classList.add('active');
+                if (tabId !== 'communityGrantInfo') {
+                    const firstPropertySubTabButton = selectedContent.querySelector('.property-subtab-button');
                     if (firstPropertySubTabButton) {
-                        let activePropertySubTabButton = currentGrantTypeTabContent.querySelector('.property-subtab-button.active');
-                        if(!activePropertySubTabButton){
-                            activePropertySubTabButton = firstPropertySubTabButton;
-                            activePropertySubTabButton.classList.add('active'); // Add active class to the button
-                        }
-                        const targetPropertySubTabId = activePropertySubTabButton.getAttribute('onclick').match(/'([^']+)'/)[1];
-                        openPropertySubTab(null, targetPropertySubTabId, tabName);
+                        activatePropertySubTab(firstPropertySubTabButton.dataset.propertySubtabId, tabId);
                     }
                 }
             }
-            window.openGrantTypeTab = openGrantTypeTab; // Make accessible globally for inline onclick
+        }
 
-
-            // --- Nested Tab Logic (Property Type Sub-Tabs) ---
-            // This function is called by inline onclick attributes
-            function openPropertySubTab(evt, subTabName, parentGrantTypeTabId) {
-                const parentElement = document.getElementById(parentGrantTypeTabId);
-                if (!parentElement) return;
-
-                const propertySubTabContents = parentElement.getElementsByClassName("property-subtab-content");
-                const propertySubTabButtons = parentElement.getElementsByClassName("property-subtab-button");
-
-                // Deactivate all property sub-tab buttons and hide their content
-                Array.from(propertySubTabContents).forEach(content => {
-                    content.style.display = "none";
-                    content.classList.remove("active");
-                });
-                Array.from(propertySubTabButtons).forEach(button => {
-                    button.classList.remove("active");
-                });
-
-                // Activate the selected property sub-tab button and show its content
-                const currentSubTab = document.getElementById(subTabName);
-                if (currentSubTab) {
-                    currentSubTab.style.display = "block";
-                    currentSubTab.classList.add("active");
-                }
-                if (evt && evt.currentTarget) {
-                    evt.currentTarget.classList.add("active");
-                } else { // For programmatic calls
-                    const buttonToActivate = parentElement.querySelector(`.property-subtab-button[onclick*="'${subTabName}'"]`);
-                    if (buttonToActivate) buttonToActivate.classList.add("active");
-                }
+        function activatePropertySubTab(subTabId, parentGrantTypeTabId) {
+            const parentElement = document.getElementById(parentGrantTypeTabId);
+            if (!parentElement) return;
+            parentElement.querySelectorAll('.property-subtab-content').forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('active');
+            });
+            parentElement.querySelectorAll('.property-type-subtabs .property-subtab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            const selectedButton = parentElement.querySelector(`.property-subtab-button[data-property-subtab-id="${subTabId}"]`);
+            if (selectedButton) {
+                selectedButton.classList.add('active');
             }
-            window.openPropertySubTab = openPropertySubTab; // Make accessible globally for inline onclick
+            const selectedContent = document.getElementById(subTabId);
+            if (selectedContent) {
+                selectedContent.style.display = 'block';
+                selectedContent.classList.add('active');
+            }
+        }
 
-            // --- Tooltip Logic ---
-            document.body.addEventListener('focusin', (event) => {
-                const trigger = event.target.closest('.tooltip-trigger, .tooltip-container');
-                if (trigger) {
-                    const tooltipText = trigger.querySelector('.tooltip-text');
-                    if (tooltipText) tooltipText.style.visibility = 'visible';
+        function clearResults(resultDivId) {
+            const resultDiv = document.getElementById(resultDivId);
+            if (resultDiv) {
+                resultDiv.innerHTML = '';
+                resultDiv.classList.add('hidden');
+            }
+        }
+
+        // --- Page Initialization and Event Listeners ---
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.tab-nav .tab-button').forEach(button => {
+                button.addEventListener('click', () => activateMainTab(button.dataset.tabId));
+            });
+            document.querySelectorAll('.grant-type-tabs .grant-type-tab-button').forEach(button => {
+                button.addEventListener('click', () => activateGrantTypeTab(button.dataset.grantTypeId, button.dataset.parentTabId));
+            });
+            document.querySelectorAll('.property-type-subtabs .property-subtab-button').forEach(button => {
+                button.addEventListener('click', () => activatePropertySubTab(button.dataset.propertySubtabId, button.dataset.parentGrantTypeId));
+            });
+            document.querySelectorAll('.checker-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (button.dataset.checkerId === 'WarmerHomes') checkEligibilityWarmerHomes();
+                    if (button.dataset.checkerId === 'OlderPeople') checkEligibilityOlderPeople();
+                });
+            });
+            document.querySelector('.container').addEventListener('click', function(event) {
+                const button = event.target.closest('.action-button');
+                if (button) {
+                    if (button.dataset.actionType === 'print') printSummaryAndChecklist_simplified();
+                    if (button.dataset.actionType === 'copy') copySummaryAndChecklistToClipboard();
+                    if (button.dataset.actionType === 'email') emailSummaryAndChecklist();
+                }
+                const link = event.target.closest('a.internal-tab-link');
+                if (link) {
+                    event.preventDefault();
+                    activateMainTab(link.dataset.tabId);
+                    document.getElementById(link.dataset.tabId)?.scrollIntoView({ behavior: 'smooth' });
                 }
             });
-            document.body.addEventListener('focusout', (event) => {
-                const trigger = event.target.closest('.tooltip-trigger, .tooltip-container');
-                if (trigger) {
-                    const tooltipText = trigger.querySelector('.tooltip-text');
-                    if (tooltipText) tooltipText.style.visibility = 'hidden';
-                }
-            });
-
-            // --- Checker Result Clearing ---
-            function clearResults(resultDivId) {
-                const resultDiv = document.getElementById(resultDivId);
-                if (resultDiv) {
-                    resultDiv.innerHTML = '';
-                    resultDiv.className = 'result-display hidden';
-                }
+            const firstMainTab = document.querySelector('.tab-nav .tab-button');
+            if (firstMainTab) {
+                activateMainTab(firstMainTab.dataset.tabId);
             }
-            window.clearResults = clearResults; // Make accessible globally
-
-            // --- Q&A Summary (for print/copy/email) ---
-            let currentQASummary = [];
-
-            const questionsMapWarmerHomes = {
-                whYearBuilt: "1. In what year was the property built?",
-                whVacant: "2. Has the property been vacant for the past 2 years or more?",
-                whHomeOwnership: "3. Do you own and currently live in the home?",
-                whWelfarePayment: "4. Are you in receipt of a qualifying Social Welfare payment?",
-                whBerStatus: "5. What is your home's current BER?"
-            };
-
-            const questionsMapOlderPeople = {
-                opYearBuilt: "1. In what year was the property built?",
-                opVacant: "2. Has the property been vacant for the past 2 years or more?",
-                opPersonAge: "3. Is the person for whom the grant is intended 66 years of age or older?",
-                opHousingCondition: "4. Is the home in poor condition and needing essential repairs?",
-                opPropertyStatus: "5. Is the home privately owned & applicant owns/has right of residence?",
-                opHouseholdIncome: "6. What is the estimated annual gross household income?",
-                opEssentialWorks: "7. Are the intended works essential repairs or improvements?"
-            };
-
-            function populateQASummary(formId, questionsMap) {
-                currentQASummary = [];
-                const form = document.getElementById(formId);
-                if (!form) return;
-                Object.keys(questionsMap).forEach(key => {
-                    let questionText = questionsMap[key];
-                    let answerText = "Not answered";
-                    
-                    const radioGroup = form.querySelectorAll(`input[name="${key}"]`);
-                    if (radioGroup.length > 0 && radioGroup[0].type === 'radio') {
-                        const checkedRadio = form.querySelector(`input[name="${key}"]:checked`);
-                        if (checkedRadio) {
-                            const radioLabel = checkedRadio.closest('.radio-option')?.querySelector('label');
-                            answerText = radioLabel ? radioLabel.innerText.trim() : checkedRadio.value;
-                        }
-                    } else {
-                        const formElement = form.elements[key];
-                        if (formElement) {
-                            if (formElement.tagName === 'SELECT') {
-                                const selectedOption = formElement.options[formElement.selectedIndex];
-                                if (selectedOption && selectedOption.value !== "") {
-                                    answerText = selectedOption.text.trim();
-                                } else {
-                                     answerText = "No selection";
-                                }
-                            } else if (formElement.value !== "") {
-                                     answerText = formElement.value.trim();
-                            }
-                        }
-                    }
-                    currentQASummary.push({ question: questionText, answer: answerText });
-                });
-            }
-            window.populateQASummary = populateQASummary; // Make accessible globally
-
-            function createQASummaryHTMLForPrint(qaArray) {
-                if (!qaArray || qaArray.length === 0) return "<p>No Q&A summary available.</p>";
-                let summaryHTML = `<div class="print-qa-header">Summary of Your Answers:</div>`;
-                qaArray.forEach(item => {
-                    const safeQuestion = item.question.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                    const safeAnswer = item.answer.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                    summaryHTML += `<div class="print-qa-item"><span class="print-qa-q">Q:</span> ${safeQuestion}<br><span class="print-qa-a">A:</span> ${safeAnswer}</div>`;
-                });
-                return summaryHTML;
-            }
-
-            function formatQASummaryForPlainText(qaArray) {
-                if (!qaArray || qaArray.length === 0) return "No questions were answered or summary is unavailable.\n";
-                let summaryText = "Summary of Your Answers:\n";
-                summaryText += "--------------------------------------\n";
-                qaArray.forEach(item => {
-                    const safeAnswer = item.answer.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                    summaryText += `Q: ${item.question}\nA: ${safeAnswer}\n\n`;
-                });
-                return summaryText;
-            }
-
-            function printSummaryAndChecklist_simplified() {
-                const activeCheckerTab = document.querySelector('.tab-content.active');
-                if (!activeCheckerTab || (!activeCheckerTab.id.includes('Checker'))) {
-                    alert("Please navigate to a checker tab and get results first.");
-                    return;
-                }
-                const resultDisplayArea = activeCheckerTab.querySelector('.result-display');
-                const currentResultBoxOnScreen = resultDisplayArea.querySelector('.result-box');
-
-                if (currentResultBoxOnScreen && !resultDisplayArea.classList.contains('hidden')) {
-                    const qaSummaryHTML = createQASummaryHTMLForPrint(currentQASummary);
-                    const tempPrintDiv = document.createElement('div');
-                    tempPrintDiv.className = 'qa-summary-for-print-only';
-                    tempPrintDiv.innerHTML = qaSummaryHTML;
-
-                    currentResultBoxOnScreen.appendChild(tempPrintDiv);
-                    document.body.classList.add('body-is-printing');
-
-                    setTimeout(() => {
-                        try {
-                            window.print();
-                        } catch (e) {
-                            console.error("Print error:", e);
-                            alert("Could not initiate print dialog.");
-                        } finally {
-                            if (tempPrintDiv.parentNode === currentResultBoxOnScreen) {
-                                currentResultBoxOnScreen.removeChild(tempPrintDiv);
-                            }
-                            document.body.classList.remove('body-is-printing');
-                        }
-                    }, 300);
-                } else {
-                    alert("Please check eligibility first to generate a summary to print.");
-                }
-            }
-            window.printSummaryAndChecklist_simplified = printSummaryAndChecklist_simplified; // Make accessible globally
-
-
-            function copySummaryAndChecklistToClipboard() {
-                const activeCheckerTab = document.querySelector('.tab-content.active');
-                if (!activeCheckerTab || (!activeCheckerTab.id.includes('Checker'))) {
-                    alert("Please navigate to a checker tab and get results first."); return;
-                }
-                const resultBox = activeCheckerTab.querySelector('.result-display .result-box');
-                if (!resultBox) { alert("Please check eligibility first to generate content to copy."); return; }
-
-                let textToCopy = "";
-                const titleElement = resultBox.querySelector('p:first-child');
-                const introParas = Array.from(resultBox.children).filter(child => child.tagName === 'P' && child !== titleElement && !child.closest('.action-button-group'));
-                const checklistElement = resultBox.querySelector('.checklist');
-                const resourceLinks = resultBox.querySelectorAll('ul:not(.checklist) a[target="_blank"]');
-
-                if (titleElement) textToCopy += titleElement.innerText.trim() + "\n\n";
-                introParas.forEach(p => { if(p.innerText.trim()) textToCopy += p.innerText.trim() + "\n"; });
-                if (introParas.some(p => p.innerText.trim())) textToCopy += "\n";
-
-
-                textToCopy += formatQASummaryForPlainText(currentQASummary);
-
-                if (checklistElement) {
-                    let checklistTitleText = "Checklist:";
-                    let prevSibling = checklistElement.previousElementSibling;
-                    if (prevSibling && prevSibling.tagName === 'P' && prevSibling.querySelector('b')) { // Changed to b for consistency
-                        checklistTitleText = prevSibling.innerText.trim();
-                    }
-                    textToCopy += "\n" + checklistTitleText + "\n--------------------------------------\n";
-                    const items = checklistElement.querySelectorAll('li');
-                    items.forEach(item => {
-                        let itemText = item.innerText.replace(/^☐\s*/, '').replace(/[\n\r]+|[\s]{2,}/g, ' ').trim();
-                        if (itemText) textToCopy += "- " + itemText + "\n";
-                    });
-                    textToCopy += "\n";
-                }
-
-                const resourceSectionElement = resultBox.querySelector('.official-resources');
-                let resourcesTitleForCopy = "Resources:";
-                if (resourceSectionElement) {
-                    const h3Title = resourceSectionElement.querySelector('h3');
-                    const pTitle = resourceSectionElement.querySelector('p:first-of-type');
-                    if (h3Title) resourcesTitleForCopy = h3Title.innerText.trim();
-                    else if (pTitle && pTitle.innerText.trim().toLowerCase().includes('resource')) resourcesTitleForCopy = pTitle.innerText.trim();
-                }
-
-                const actualResourceLinks = resourceSectionElement ? resourceSectionElement.querySelectorAll('a[target="_blank"]') : resourceLinks;
-
-                if (actualResourceLinks.length > 0) {
-                    textToCopy += (resourcesTitleForCopy) + "\n--------------------------------------\n";
-                    actualResourceLinks.forEach(link => { textToCopy += `- ${link.innerText.trim()}: ${link.href}\n`; });
-                    textToCopy += "\n";
-                }
-
-                navigator.clipboard.writeText(textToCopy.trim())
-                    .then(() => alert('Results summary copied to clipboard!'))
-                    .catch(err => { console.error('Failed to copy: ', err); alert('Failed to copy.'); });
-            }
-            window.copySummaryAndChecklistToClipboard = copySummaryAndChecklistToClipboard; // Make accessible globally
-
-
-            function emailSummaryAndChecklist() {
-                const activeCheckerTab = document.querySelector('.tab-content.active');
-                if (!activeCheckerTab || (!activeCheckerTab.id.includes('Checker'))) {
-                    alert("Please navigate to a checker tab and get results first."); return;
-                }
-                const resultBox = activeCheckerTab.querySelector('.result-display .result-box');
-                if (!resultBox) { alert("Please check eligibility first to generate content to email."); return; }
-
-                let emailBody = "";
-                const titleElement = resultBox.querySelector('p:first-child');
-                const introParagraphs = Array.from(resultBox.children)
-                    .filter(child => child.tagName === 'P' && child !== titleElement && !child.closest('.action-button-group'));
-                const checklistElement = resultBox.querySelector('.checklist');
-                const resourceLinks = resultBox.querySelectorAll('ul:not(.checklist) a[target="_blank"]');
-                let subject = "Home Energy Grant Eligibility Check Results";
-
-                if (titleElement) {
-                    emailBody += titleElement.innerText.trim() + "\n\n";
-                    if (titleElement.innerText.toLowerCase().includes('warmer homes')) {
-                        subject = "My SEAI Warmer Homes - Preliminary Eligibility Check";
-                    } else if (titleElement.innerText.toLowerCase().includes('housing aid')) {
-                         subject = "My Housing Aid for Older People - Preliminary Eligibility Check";
-                    }
-                }
-                introParagraphs.forEach(p => { if(p.innerText.trim()) emailBody += p.innerText.trim() + "\n"; });
-                if (introParagraphs.some(p => p.innerText.trim())) emailBody += "\n";
-
-
-                emailBody += formatQASummaryForPlainText(currentQASummary);
-
-                if (checklistElement) {
-                    let checklistTitleText = "Checklist:";
-                    let prevSibling = checklistElement.previousElementSibling;
-                    if (prevSibling && prevSibling.tagName === 'P' && prevSibling.querySelector('b')) { // Changed to b for consistency
-                        checklistTitleText = prevSibling.innerText.trim();
-                    }
-                    emailBody += "\n" + checklistTitleText + "\n--------------------------------------\n";
-                    const items = checklistElement.querySelectorAll('li');
-                    items.forEach(item => {
-                        let itemText = item.innerText.replace(/^☐\s*/, '').replace(/[\n\r]+|[\s]{2,}/g, ' ').trim();
-                        if(itemText) emailBody += "☐ " + itemText + "\n";
-                    });
-                    emailBody += "\n";
-                }
-
-                const resourceSectionElement = resultBox.querySelector('.official-resources');
-                let resourcesTitleForEmail = "Resources:";
-                if (resourceSectionElement) {
-                    const h3Title = resourceSectionElement.querySelector('h3');
-                    const pTitle = resourceSectionElement.querySelector('p:first-of-type');
-                    if (h3Title) resourcesTitleForEmail = h3Title.innerText.trim();
-                    else if (pTitle && pTitle.innerText.trim().toLowerCase().includes('resource')) resourcesTitleForEmail = pTitle.innerText.trim();
-                }
-                const actualResourceLinks = resourceSectionElement ? resourceSectionElement.querySelectorAll('a[target="_blank"]') : resourceLinks;
-
-                if (actualResourceLinks.length > 0) {
-                    emailBody += (resourcesTitleForEmail) + "\n--------------------------------------\n";
-                    actualResourceLinks.forEach(link => { emailBody += `- ${link.innerText.trim()}: ${link.href}\n`; });
-                    emailBody += "\n";
-                }
-
-                let mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody.trim())}`;
-
-                if (mailtoLink.length > 2000) {
-                    alert("The email content is too long to be opened directly. Please use the 'Copy Summary' button and paste it into your email manually.");
-                    return;
-                }
-                window.location.href = mailtoLink;
-            }
-            window.emailSummaryAndChecklist = emailSummaryAndChecklist; // Make accessible globally
-
-            function checkEligibilityWarmerHomes() {
-                const form = document.getElementById('eligibilityFormWarmerHomes');
-                const resultDiv = document.getElementById('resultWarmerHomes');
-                if (!form || !resultDiv) return;
-                resultDiv.innerHTML = '';
-                resultDiv.className = 'result-display hidden';
-
-                const yearBuiltField = form.elements['whYearBuilt'];
-                const whVacantRadio = form.querySelector('input[name="whVacant"]:checked');
-                const vacant = whVacantRadio ? whVacantRadio.value : null;
-                const whHomeOwnershipRadio = form.querySelector('input[name="whHomeOwnership"]:checked');
-                const ownHome = whHomeOwnershipRadio ? whHomeOwnershipRadio.value : null;
-                const whWelfarePaymentRadio = form.querySelector('input[name="whWelfarePayment"]:checked');
-                const welfarePayment = whWelfarePaymentRadio ? whWelfarePaymentRadio.value : null;
-                const berStatus = form.elements['whBerStatus']?.value;
-                const yearBuilt = parseInt(yearBuiltField?.value);
-
-                let allAnswered = true;
-                if (!yearBuiltField?.value || isNaN(yearBuilt) || yearBuiltField.value.length !== 4 || !vacant || !ownHome || !welfarePayment || !berStatus) {
-                    allAnswered = false;
-                }
-
-                populateQASummary('eligibilityFormWarmerHomes', questionsMapWarmerHomes);
-
-                let resultHTML = '';
-                let statusClass = '';
-                let messages = [];
-                const actionButtonsHTML = `
-                    <div class="action-button-group">
-                        <button type="button" class="action-button" onclick="printSummaryAndChecklist_simplified()">Print Summary & Checklist</button>
-                        <button type="button" class="action-button" onclick="copySummaryAndChecklistToClipboard()">Copy Summary & Checklist</button>
-                        <button type="button" class="action-button" onclick="emailSummaryAndChecklist()">Email Summary & Checklist</button>
-                    </div>`;
-
-                if (!allAnswered) {
-                    statusClass = 'provisional';
-                    resultHTML = `<div class="result-box ${statusClass}"><p><b>Action Needed</b></p><p>Please answer all questions fully and ensure the build year is a valid 4-digit number.</p>${actionButtonsHTML}</div>`;
-                } else {
-                    let potentiallyEligible = true;
-                    if (vacant === 'yes') { potentiallyEligible = false; messages.push("The Warmer Homes Scheme requires that you are currently living in the home."); }
-                    if (ownHome === 'no') { potentiallyEligible = false; messages.push("You must own and live in the property."); }
-                    if (yearBuilt >= 2006) { potentiallyEligible = false; messages.push(`Home built in ${yearBuilt} does not meet the pre-2006 requirement.`); }
-                    if (welfarePayment === 'no') { potentiallyEligible = false; messages.push("A qualifying social welfare payment is required."); }
-                    if (berStatus === 'ab') { potentiallyEligible = false; messages.push("Homes with BER A or B are generally not the primary target for this scheme."); }
-
-                    if (potentiallyEligible) {
-                        statusClass = 'eligible';
-                        resultHTML = `<div class="result-box ${statusClass}"> <p><b>Indication: Potentially Eligible for Warmer Homes Scheme!</b></p> <p>Based on your answers, you appear to meet the initial criteria for the SEAI Warmer Homes Scheme, which provides free energy upgrades.</p> ${berStatus === 'no_ber' ? '<p>Since you don\'t have a BER, SEAI will arrange an assessment if you meet other criteria.</p>' : ''} <p><b>Your Next Steps Checklist:</b></p> <ul class="checklist"> <li><b>Confirm Qualifying Payment:</b> Double-check your specific social welfare payment is on the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI list</a>.</li> <li><b>Visit SEAI Website:</b> Read the full details and application process on the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">Warmer Homes Scheme page</a>.</li> <li><b>Gather Documents:</b> Prepare proof of home ownership, proof of welfare payment, and your MPRN (from electricity bill).</li> <li><b>Apply Online:</b> Submit your application through the SEAI website.</li> <li><b>Await Contact:</b> SEAI or their appointed surveyor will contact you to arrange a home assessment if you meet the initial criteria.</li> </ul> <p style="margin-top: 1.5rem; font-style: italic; font-size: 0.9em;">Final eligibility is always determined by SEAI after assessment.</p> ${actionButtonsHTML} </div>`;
-                    } else {
-                        statusClass = 'not-eligible';
-                        resultHTML = `<div class="result-box ${statusClass}"> <p><b>Indication: Likely Not Eligible for Warmer Homes Scheme</b></p> <p>Based on your answers, you may not meet one or more key criteria. Areas to review:</p> <ul style="list-style: disc; padding-left: 20px; margin: 0.5rem 0 1rem 0; font-size: 0.95em;"> ${messages.map(msg => `<li>${msg}</li>`).join('')} ${vacant === 'yes' ? '<li>Vacant properties might suit the <a href="https://www.gov.ie/en/service/f8f1b-vacant-property-refurbishment-grant/" target="_blank" rel="noopener noreferrer">Vacant Property Refurbishment Grant</a>.</li>' : ''} </ul> <p><b>Recommendations:</b></p> <ul class="checklist"> <li><b>Verify Criteria:</b> Carefully re-read the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI Warmer Homes Scheme requirements</a>.</li> <li><b>Check Other Grants:</b> Explore eligibility for <a href="#grantOptions" onclick="openTab(event, 'grantOptions')">SEAI Individual Grants or One-Stop-Shop options</a> (these are co-funded).</li> <li><b>Contact SEAI:</b> If unsure, contact SEAI directly for clarification via their website or helpline.</li> </ul> ${actionButtonsHTML} </div>`;
-                    }
-                }
-                resultDiv.innerHTML = resultHTML;
-                resultDiv.classList.remove('hidden');
-                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-            }
-            window.checkEligibilityWarmerHomes = checkEligibilityWarmerHomes; // Make accessible globally
-
-
-            function checkEligibilityOlderPeople() {
-                const form = document.getElementById('eligibilityFormOlderPeople');
-                const resultDiv = document.getElementById('resultOlderPeople');
-                if (!form || !resultDiv) return;
-                resultDiv.innerHTML = '';
-                resultDiv.className = 'result-display hidden';
-
-                const yearBuiltField = form.elements['opYearBuilt'];
-                const opVacantRadio = form.querySelector('input[name="opVacant"]:checked');
-                const vacant = opVacantRadio ? opVacantRadio.value : null;
-                const opPersonAgeRadio = form.querySelector('input[name="opPersonAge"]:checked');
-                const personAge = opPersonAgeRadio ? opPersonAgeRadio.value : null;
-                const opHousingConditionRadio = form.querySelector('input[name="opHousingCondition"]:checked');
-                const housingCondition = opHousingConditionRadio ? opHousingConditionRadio.value : null;
-                const opPropertyStatusRadio = form.querySelector('input[name="opPropertyStatus"]:checked');
-                const propertyStatus = opPropertyStatusRadio ? opPropertyStatusRadio.value : null;
-                const opEssentialWorksRadio = form.querySelector('input[name="opEssentialWorks"]:checked');
-                const essentialWorks = opEssentialWorksRadio ? opEssentialWorksRadio.value : null;
-
-                const householdIncome = form.elements['opHouseholdIncome']?.value;
-                const yearBuilt = parseInt(yearBuiltField?.value);
-
-                let allAnswered = true;
-                if (!yearBuiltField?.value || isNaN(yearBuilt) || yearBuiltField.value.length !== 4 || !vacant || !personAge || !housingCondition || !propertyStatus || !householdIncome || !essentialWorks) {
-                    allAnswered = false;
-                }
-
-                populateQASummary('eligibilityFormOlderPeople', questionsMapOlderPeople);
-
-                let resultHTML = '';
-                let statusClass = '';
-                let messages = [];
-                let provisionalMessage = '';
-                const actionButtonsHTML = `
-                    <div class="action-button-group">
-                        <button type="button" class="action-button" onclick="printSummaryAndChecklist_simplified()">Print Summary & Checklist</button>
-                        <button type="button" class="action-button" onclick="copySummaryAndChecklistToClipboard()">Copy Summary & Checklist</button>
-                        <button type="button" class="action-button" onclick="emailSummaryAndChecklist()">Email Summary & Checklist</button>
-                    </div>`;
-
-                if (!allAnswered) {
-                    statusClass = 'provisional';
-                    resultHTML = `<div class="result-box ${statusClass}"><p><b>Action Needed</b></p><p>Please answer all questions fully and ensure the build year is a valid 4-digit number.</p>${actionButtonsHTML}</div>`;
-                } else {
-                    let potentiallyEligible = true;
-                    if (vacant === 'yes') { potentiallyEligible = false; messages.push("Grant usually requires the older person to be living in the home."); }
-                    if (housingCondition === 'no') { potentiallyEligible = false; messages.push("Home must be in poor condition needing essential repairs."); }
-                    if (propertyStatus === 'no') { potentiallyEligible = false; messages.push("Property must be privately owned & applicant must own or have right of residence."); }
-                    if (householdIncome === 'over_limit') { potentiallyEligible = false; messages.push("Stated household income may be above the threshold (check Local Authority)."); }
-                    if (essentialWorks === 'no') {
-                        potentiallyEligible = false;
-                        messages.push("Works must be essential repairs (not cosmetic).");
-                    }
-                    if (personAge === 'no') {
-                        potentiallyEligible = false;
-                        if (!statusClass) statusClass = 'provisional';
-                        provisionalMessage = "<p style=\"font-weight:500; margin-top:1rem;\">Important Note on Age: As the person is under 66, eligibility depends entirely on your Local Authority assessing it as a genuine hardship case. This is exceptional. <b>Contact them directly to discuss before proceeding further.</b></p>";
-                        messages.push("Applicant is under 66; eligibility requires exceptional hardship assessment by Local Authority.");
-                    }
-
-
-                    if (potentiallyEligible) {
-                        statusClass = 'eligible';
-                        let incomeGuidance = '';
-                        if (householdIncome === 'low') { incomeGuidance = 'With income up to €37,500, you might qualify for up to 95-100% of approved costs (max grant applies).'; }
-                        else if (householdIncome === 'medium_low') { incomeGuidance = 'With income €37,501 - €50,000, you might qualify for a significant tapered percentage (e.g., 75-85%).'; }
-                        else if (householdIncome === 'medium_high') { incomeGuidance = 'With income €50,001 - €62,500, you might qualify for a partial grant (e.g., ~50%).'; }
-                        else if (householdIncome === 'high') { incomeGuidance = 'With income €62,501 - €75,000, you might qualify for a smaller partial grant (e.g., ~30%).';}
-                        incomeGuidance += ' Check your Local Authority for exact income bands & maximum grant amounts.';
-                        resultHTML = `<div class="result-box ${statusClass}"> <p><b>Indication: Potentially Eligible for Housing Aid for Older People!</b></p> <p>Based on your answers, you appear to meet several key criteria for this grant.</p> <p><b>Income Level Guidance:</b> ${incomeGuidance}</p> ${yearBuilt > 2006 ? '<p style="font-size: 0.9em; font-style: italic;">Note: While eligible, a newer home ('+ yearBuilt +') might need strong justification for "essential repairs".</p>' : ''} <p><b>Your Next Steps Checklist:</b></p> <ul class="checklist"> <li><b>CRITICAL: Contact Local Authority:</b> Speak to the Housing Grants section of your council. They administer the grant and provide the definitive application form and income thresholds.</li> <li><b>Confirm Income Details:</b> Gather proof of all household income for the relevant tax year.</li> <li><b>Get Detailed Quotes:</b> Obtain quotes from qualified contractors for the specific essential works needed.</li> <li><b>Gather Documents:</b> Prepare proof of age, property ownership/residency, tax compliance (if required by LA).</li> <li><b>Complete Application Form:</b> Fill out the Local Authority's official form accurately.</li> <li><b>Await Formal Approval:</b> Do NOT start any work before receiving written grant approval from the Local Authority.</li> </ul> <p style="margin-top: 1.5rem; font-style: italic; font-size: 0.9em;">Final eligibility and grant amount are determined solely by your Local Authority after a full application and assessment.</p> ${actionButtonsHTML} </div>`;
-                    } else {
-                        statusClass = statusClass || 'not-eligible';
-                        resultHTML = `<div class="result-box ${statusClass}"> <p><b>Indication: ${statusClass === 'provisional' ? 'Further Consultation Needed' : 'Likely Not Eligible'}</b></p> <p>Based on your answers, you may not meet one or more key criteria. Areas to review:</p> <ul style="list-style: disc; padding-left: 20px; margin: 0.5rem 0 1rem 0; font-size: 0.95em;"> ${messages.map(msg => `<li>${msg}</li>`).join('')} ${vacant === 'yes' ? '<li>Vacant properties might suit the <a href="https://www.gov.ie/en/service/f8f1b-vacant-property-refurbishment-grant/" target="_blank" rel="noopener noreferrer">Vacant Property Refurbishment Grant</a>.</li>' : ''} </ul> ${provisionalMessage} <p><b>Recommendations:</b></p> <ul class="checklist"> <li><b>Contact Local Authority:</b> Discuss your specific situation directly with your council's Housing Grants section for definitive advice. This is essential, especially if age or income thresholds are borderline.</li> <li><b>Review Official Guidelines:</b> Check your Local Authority's website for their specific criteria, income bands, and eligible works for this grant.</li> <li><b>Verify Information:</b> Double-check your details against the official requirements.</li> </ul> ${actionButtonsHTML} </div>`;
-                    }
-                }
-                resultDiv.innerHTML = resultHTML;
-                resultDiv.classList.remove('hidden');
-                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-            }
-            window.checkEligibilityOlderPeople = checkEligibilityOlderPeople; // Make accessible globally
         });
+
+        // --- Q&A and Action Logic ---
+        let currentQASummary = [];
+        const questionsMapWarmerHomes = {
+            whYearBuilt: "1. In what year was the property built?",
+            whVacant: "2. Has the property been vacant for the past 2 years or more?",
+            whHomeOwnership: "3. Do you own and currently live in the home?",
+            whWelfarePayment: "4. Are you in receipt of a qualifying Social Welfare payment?",
+            whBerStatus: "5. What is your home's current BER?"
+        };
+        const questionsMapOlderPeople = {
+            opYearBuilt: "1. In what year was the property built?",
+            opVacant: "2. Has the property been vacant for the past 2 years or more?",
+            opPersonAge: "3. Is the person for whom the grant is intended 66 years of age or older?",
+            opHousingCondition: "4. Is the home in poor condition and needing essential repairs?",
+            opPropertyStatus: "5. Is the home privately owned & applicant owns/has right of residence?",
+            opHouseholdIncome: "6. What is the estimated annual gross household income?",
+            opEssentialWorks: "7. Are the intended works essential repairs or improvements?"
+        };
+        
+        function populateQASummary(formId, questionsMap) {
+            currentQASummary = [];
+            const form = document.getElementById(formId);
+            if (!form) return;
+            for (const key in questionsMap) {
+                let questionText = questionsMap[key];
+                let answerText = "Not answered";
+                const radioGroup = form.querySelectorAll(`input[name="${key}"]`);
+                if (radioGroup.length > 0 && radioGroup[0].type === 'radio') {
+                    const checkedRadio = form.querySelector(`input[name="${key}"]:checked`);
+                    if (checkedRadio) answerText = checkedRadio.labels[0]?.innerText.trim() || checkedRadio.value;
+                } else {
+                    const formElement = form.elements[key];
+                    if (formElement) {
+                        if (formElement.tagName === 'SELECT') {
+                            if (formElement.value) answerText = formElement.options[formElement.selectedIndex].text.trim();
+                        } else if (formElement.value) {
+                            answerText = formElement.value.trim();
+                        }
+                    }
+                }
+                currentQASummary.push({ question: questionText, answer: answerText });
+            }
+        }
+
+        function createQASummaryHTMLForPrint(qaArray) {
+            let summaryHTML = `<div class="print-qa-header">Summary of Your Answers:</div>`;
+            qaArray.forEach(item => {
+                summaryHTML += `<div class="print-qa-item"><span class="print-qa-q">Q:</span> ${item.question}<br><span class="print-qa-a">A:</span> ${item.answer}</div>`;
+            });
+            return summaryHTML;
+        }
+        
+        function formatQASummaryForPlainText(qaArray) {
+            if (!qaArray || qaArray.length === 0) return "No questions were answered or summary is unavailable.\n";
+            let summaryText = "Summary of Your Answers:\n";
+            summaryText += "--------------------------------------\n";
+            qaArray.forEach(item => {
+                const safeAnswer = item.answer.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                summaryText += `Q: ${item.question}\nA: ${safeAnswer}\n\n`;
+            });
+            return summaryText;
+        }
+
+        function printSummaryAndChecklist_simplified() {
+            const resultBox = document.querySelector('.tab-content.active .result-box');
+            if (!resultBox) { alert("Please check eligibility first to generate a summary to print."); return; }
+
+            const qaSummaryHTML = createQASummaryHTMLForPrint(currentQASummary);
+            const tempPrintDiv = document.createElement('div');
+            tempPrintDiv.className = 'qa-summary-for-print-only';
+            tempPrintDiv.innerHTML = qaSummaryHTML;
+            resultBox.appendChild(tempPrintDiv);
+            document.body.classList.add('body-is-printing');
+
+            setTimeout(() => {
+                window.print();
+                resultBox.removeChild(tempPrintDiv);
+                document.body.classList.remove('body-is-printing');
+            }, 300);
+        }
+
+        function copySummaryAndChecklistToClipboard() {
+            const activeCheckerTab = document.querySelector('.tab-content.active');
+            if (!activeCheckerTab || (!activeCheckerTab.id.includes('Checker'))) {
+                alert("Please navigate to a checker tab and get results first."); return;
+            }
+            const resultBox = activeCheckerTab.querySelector('.result-display .result-box');
+            if (!resultBox) { alert("Please check eligibility first to generate content to copy."); return; }
+
+            let textToCopy = "";
+            const titleElement = resultBox.querySelector('p:first-child');
+            const introParas = Array.from(resultBox.children).filter(child => child.tagName === 'P' && child !== titleElement && !child.closest('.action-button-group'));
+            const checklistElement = resultBox.querySelector('.checklist');
+            const resourceLinks = resultBox.querySelectorAll('ul:not(.checklist) a[target="_blank"]');
+
+            if (titleElement) textToCopy += titleElement.innerText.trim() + "\n\n";
+            introParas.forEach(p => { if(p.innerText.trim()) textToCopy += p.innerText.trim() + "\n"; });
+            if (introParas.some(p => p.innerText.trim())) textToCopy += "\n";
+
+            textToCopy += formatQASummaryForPlainText(currentQASummary);
+
+            if (checklistElement) {
+                let checklistTitleText = "Checklist:";
+                let prevSibling = checklistElement.previousElementSibling;
+                if (prevSibling && prevSibling.tagName === 'P' && prevSibling.querySelector('b')) {
+                    checklistTitleText = prevSibling.innerText.trim();
+                }
+                textToCopy += "\n" + checklistTitleText + "\n--------------------------------------\n";
+                const items = checklistElement.querySelectorAll('li');
+                items.forEach(item => {
+                    let itemText = item.innerText.replace(/^☐\s*/, '').replace(/[\n\r]+|[\s]{2,}/g, ' ').trim();
+                    if (itemText) textToCopy += "- " + itemText + "\n";
+                });
+                textToCopy += "\n";
+            }
+
+            const resourceSectionElement = resultBox.querySelector('.official-resources');
+            let resourcesTitleForCopy = "Resources:";
+            if (resourceSectionElement) {
+                const h3Title = resourceSectionElement.querySelector('h3');
+                const pTitle = resourceSectionElement.querySelector('p:first-of-type');
+                if (h3Title) resourcesTitleForCopy = h3Title.innerText.trim();
+                else if (pTitle && pTitle.innerText.trim().toLowerCase().includes('resource')) resourcesTitleForCopy = pTitle.innerText.trim();
+            }
+
+            const actualResourceLinks = resourceSectionElement ? resourceSectionElement.querySelectorAll('a[target="_blank"]') : resourceLinks;
+
+            if (actualResourceLinks.length > 0) {
+                textToCopy += (resourcesTitleForCopy) + "\n--------------------------------------\n";
+                actualResourceLinks.forEach(link => { textToCopy += `- ${link.innerText.trim()}: ${link.href}\n`; });
+                textToCopy += "\n";
+            }
+
+            navigator.clipboard.writeText(textToCopy.trim())
+                .then(() => alert('Results summary copied to clipboard!'))
+                .catch(err => { console.error('Failed to copy: ', err); alert('Failed to copy.'); });
+        };
+
+        function emailSummaryAndChecklist() {
+            const activeCheckerTab = document.querySelector('.tab-content.active');
+            if (!activeCheckerTab || (!activeCheckerTab.id.includes('Checker'))) {
+                alert("Please navigate to a checker tab and get results first."); return;
+            }
+            const resultBox = activeCheckerTab.querySelector('.result-display .result-box');
+            if (!resultBox) { alert("Please check eligibility first to generate content to email."); return; }
+
+            let emailBody = "";
+            const titleElement = resultBox.querySelector('p:first-child');
+            const introParagraphs = Array.from(resultBox.children)
+                .filter(child => child.tagName === 'P' && child !== titleElement && !child.closest('.action-button-group'));
+            const checklistElement = resultBox.querySelector('.checklist');
+            const resourceLinks = resultBox.querySelectorAll('ul:not(.checklist) a[target="_blank"]');
+            let subject = "Home Energy Grant Eligibility Check Results";
+
+            if (titleElement) {
+                emailBody += titleElement.innerText.trim() + "\n\n";
+                if (titleElement.innerText.toLowerCase().includes('warmer homes')) {
+                    subject = "My SEAI Warmer Homes - Preliminary Eligibility Check";
+                } else if (titleElement.innerText.toLowerCase().includes('housing aid')) {
+                     subject = "My Housing Aid for Older People - Preliminary Eligibility Check";
+                }
+            }
+            introParagraphs.forEach(p => { if(p.innerText.trim()) emailBody += p.innerText.trim() + "\n"; });
+            if (introParagraphs.some(p => p.innerText.trim())) emailBody += "\n";
+
+            emailBody += formatQASummaryForPlainText(currentQASummary);
+
+            if (checklistElement) {
+                let checklistTitleText = "Checklist:";
+                let prevSibling = checklistElement.previousElementSibling;
+                if (prevSibling && prevSibling.tagName === 'P' && prevSibling.querySelector('b')) {
+                    checklistTitleText = prevSibling.innerText.trim();
+                }
+                emailBody += "\n" + checklistTitleText + "\n--------------------------------------\n";
+                const items = checklistElement.querySelectorAll('li');
+                items.forEach(item => {
+                    let itemText = item.innerText.replace(/^☐\s*/, '').replace(/[\n\r]+|[\s]{2,}/g, ' ').trim();
+                    if(itemText) emailBody += "☐ " + itemText + "\n";
+                });
+                emailBody += "\n";
+            }
+
+            const resourceSectionElement = resultBox.querySelector('.official-resources');
+            let resourcesTitleForEmail = "Resources:";
+            if (resourceSectionElement) {
+                const h3Title = resourceSectionElement.querySelector('h3');
+                const pTitle = resourceSectionElement.querySelector('p:first-of-type');
+                if (h3Title) resourcesTitleForEmail = h3Title.innerText.trim();
+                else if (pTitle && pTitle.innerText.trim().toLowerCase().includes('resource')) resourcesTitleForEmail = pTitle.innerText.trim();
+            }
+            const actualResourceLinks = resourceSectionElement ? resourceSectionElement.querySelectorAll('a[target="_blank"]') : resourceLinks;
+
+            if (actualResourceLinks.length > 0) {
+                emailBody += (resourcesTitleForEmail) + "\n--------------------------------------\n";
+                actualResourceLinks.forEach(link => { emailBody += `- ${link.innerText.trim()}: ${link.href}\n`; });
+                emailBody += "\n";
+            }
+
+            let mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody.trim())}`;
+
+            if (mailtoLink.length > 2000) {
+                alert("The email content is too long to be opened directly. Please use the 'Copy Summary' button and paste it into your email manually.");
+                return;
+            }
+            window.location.href = mailtoLink;
+        };
+
+        // --- Checker Logic (Using Template Literals) ---
+        function checkEligibilityWarmerHomes() {
+            const form = document.getElementById('eligibilityFormWarmerHomes');
+            const resultDiv = document.getElementById('resultWarmerHomes');
+            if (!form || !resultDiv) return;
+            populateQASummary('eligibilityFormWarmerHomes', questionsMapWarmerHomes);
+            
+            const yearBuilt = parseInt(form.elements.whYearBuilt.value);
+            const vacant = form.whVacant.value;
+            const ownHome = form.whHomeOwnership.value;
+            const welfarePayment = form.whWelfarePayment.value;
+            const berStatus = form.whBerStatus.value;
+            
+            let resultHTML = '';
+            let messages = [];
+            const actionButtonsHTML = `<div class="action-button-group"><button type="button" class="action-button" data-action-type="print">Print</button><button type="button" class="action-button" data-action-type="copy">Copy</button><button type="button" class="action-button" data-action-type="email">Email</button></div>`;
+
+            if (!form.checkValidity()) {
+                resultHTML = `<div class="result-box provisional"><p><b>Action Needed</b></p><p>Please answer all questions fully.</p></div>`;
+            } else {
+                if (vacant === 'yes') messages.push("The scheme requires that you are currently living in the home.");
+                if (ownHome === 'no') messages.push("You must own and live in the property.");
+                if (yearBuilt >= 2006) messages.push(`Home built in ${yearBuilt} does not meet the pre-2006 requirement.`);
+                if (welfarePayment === 'no') messages.push("A qualifying social welfare payment is required.");
+                if (berStatus === 'ab') messages.push("Homes with BER A or B are generally not the primary target for this scheme.");
+
+                if (messages.length === 0) {
+                    resultHTML = `
+                        <div class="result-box eligible">
+                            <p><b>Indication: Potentially Eligible for Warmer Homes Scheme!</b></p>
+                            <p>Based on your answers, you appear to meet the initial criteria for the SEAI Warmer Homes Scheme, which provides free energy upgrades.</p>
+                            ${berStatus === 'no_ber' ? `<p>Since you don't have a BER, SEAI will arrange an assessment if you meet other criteria.</p>` : ''}
+                            <p><b>Your Next Steps Checklist:</b></p>
+                            <ul class="checklist">
+                                <li><b>Confirm Qualifying Payment:</b> Double-check your specific social welfare payment is on the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI list</a>.</li>
+                                <li><b>Visit SEAI Website:</b> Read the full details and application process on the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">Warmer Homes Scheme page</a>.</li>
+                                <li><b>Gather Documents:</b> Prepare proof of home ownership, proof of welfare payment, and your MPRN (from electricity bill).</li>
+                                <li><b>Apply Online:</b> Submit your application through the SEAI website.</li>
+                                <li><b>Await Contact:</b> SEAI or their appointed surveyor will contact you to arrange a home assessment if you meet the initial criteria.</li>
+                            </ul>
+                            <p style="margin-top: 1.5rem; font-style: italic; font-size: 0.9em;">Final eligibility is always determined by SEAI after assessment.</p>
+                            ${actionButtonsHTML}
+                        </div>`;
+                } else {
+                    resultHTML = `
+                        <div class="result-box not-eligible">
+                            <p><b>Indication: Likely Not Eligible for Warmer Homes Scheme</b></p>
+                            <p>Based on your answers, you may not meet one or more key criteria. Areas to review:</p>
+                            <ul style="list-style: disc; padding-left: 20px; margin: 0.5rem 0 1rem 0; font-size: 0.95em;">
+                                ${messages.map(msg => `<li>${msg}</li>`).join('')}
+                                ${vacant === 'yes' ? `<li>Vacant properties might suit the <a href="https://www.gov.ie/en/service/f8f1b-vacant-property-refurbishment-grant/" target="_blank" rel="noopener noreferrer">Vacant Property Refurbishment Grant</a>.</li>` : ''}
+                            </ul>
+                            <p><b>Recommendations:</b></p>
+                            <ul class="checklist">
+                                <li><b>Verify Criteria:</b> Carefully re-read the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI Warmer Homes Scheme requirements</a>.</li>
+                                <li><b>Check Other Grants:</b> Explore eligibility for <a href="#grantOptions" data-tab-id="grantOptions" class="internal-tab-link">SEAI Individual Grants or One-Stop-Shop options</a> (these are co-funded).</li>
+                                <li><b>Contact SEAI:</b> If unsure, contact SEAI directly for clarification via their website or helpline.</li>
+                            </ul>
+                            ${actionButtonsHTML}
+                        </div>`;
+                }
+            }
+            resultDiv.innerHTML = resultHTML;
+            resultDiv.classList.remove('hidden');
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+        }
+
+        function checkEligibilityOlderPeople() {
+            const form = document.getElementById('eligibilityFormOlderPeople');
+            const resultDiv = document.getElementById('resultOlderPeople');
+            if (!form || !resultDiv) return;
+            populateQASummary('eligibilityFormOlderPeople', questionsMapOlderPeople);
+            
+            const yearBuilt = parseInt(form.elements.opYearBuilt.value);
+            const vacant = form.opVacant.value;
+            const personAge = form.opPersonAge.value;
+            const housingCondition = form.opHousingCondition.value;
+            const propertyStatus = form.opPropertyStatus.value;
+            const householdIncome = form.opHouseholdIncome.value;
+            const essentialWorks = form.opEssentialWorks.value;
+
+            let resultHTML = '';
+            let messages = [];
+            let isProvisional = false;
+            let provisionalMessage = '';
+            const actionButtonsHTML = `<div class="action-button-group"><button type="button" class="action-button" data-action-type="print">Print</button><button type="button" class="action-button" data-action-type="copy">Copy</button><button type="button" class="action-button" data-action-type="email">Email</button></div>`;
+
+            if (!form.checkValidity()) {
+                resultHTML = `<div class="result-box provisional"><p><b>Action Needed</b></p><p>Please answer all questions fully.</p></div>`;
+            } else {
+                if (vacant === 'yes') messages.push("Grant usually requires the older person to be living in the home.");
+                if (housingCondition === 'no') messages.push("Home must be in poor condition and need essential repairs.");
+                if (propertyStatus === 'no') messages.push("Property must be privately owned & applicant must own or have right of residence.");
+                if (householdIncome === 'over_limit') messages.push("Stated household income may be above the threshold (check with your Local Authority).");
+                if (essentialWorks === 'no') messages.push("The intended works must be essential repairs or improvements, not cosmetic.");
+                if (personAge === 'no') {
+                    provisionalMessage = `<p style="font-weight:500; margin-top:1rem;"><b>Important Note on Age:</b> As the person is under 66, eligibility depends entirely on your Local Authority assessing it as a genuine hardship case. This is exceptional. <strong>Contact them directly to discuss before proceeding further.</strong></p>`;
+                    messages.push("Applicant is under 66; eligibility requires exceptional hardship assessment by the Local Authority.");
+                    isProvisional = true;
+                }
+
+                if (messages.length === 0) {
+                    let incomeGuidance = '';
+                    if (householdIncome === 'low') incomeGuidance = 'With income up to €37,500, you might qualify for up to 95-100% of approved costs (max grant applies).';
+                    else if (householdIncome === 'medium_low') incomeGuidance = 'With income from €37,501 - €50,000, you might qualify for a significant tapered percentage (e.g., 75-85%).';
+                    else if (householdIncome === 'medium_high') incomeGuidance = 'With income from €50,001 - €62,500, you might qualify for a partial grant (e.g., ~50%).';
+                    else if (householdIncome === 'high') incomeGuidance = 'With income from €62,501 - €75,000, you might qualify for a smaller partial grant (e.g., ~30%).';
+                    incomeGuidance += ' Always check with your Local Authority for their exact income bands & maximum grant amounts.';
+
+                    resultHTML = `
+                        <div class="result-box eligible">
+                            <p><b>Indication: Potentially Eligible for Housing Aid for Older People!</b></p>
+                            <p>Based on your answers, you appear to meet several key criteria for this grant.</p>
+                            <p><b>Income Level Guidance:</b> ${incomeGuidance}</p>
+                            ${yearBuilt > 2006 ? `<p style="font-size: 0.9em; font-style: italic;">Note: While eligible, a newer home (${yearBuilt}) might need strong justification for "essential repairs".</p>` : ''}
+                            <p><b>Your Next Steps Checklist:</b></p>
+                            <ul class="checklist">
+                                <li><b>CRITICAL: Contact Local Authority:</b> Speak to the Housing Grants section of your council. They administer the grant and provide the definitive application form and income thresholds.</li>
+                                <li><b>Confirm Income Details:</b> Gather proof of all household income for the relevant tax year.</li>
+                                <li><b>Get Detailed Quotes:</b> Obtain quotes from qualified contractors for the specific essential works needed.</li>
+                                <li><b>Gather Documents:</b> Prepare proof of age, property ownership/residency, and tax compliance (if required by your LA).</li>
+                                <li><b>Complete Application Form:</b> Fill out the Local Authority's official form accurately.</li>
+                                <li><b>Await Formal Approval:</b> Do NOT start any work before receiving written grant approval from the Local Authority.</li>
+                            </ul>
+                            <p style="margin-top: 1.5rem; font-style: italic; font-size: 0.9em;">Final eligibility and the grant amount are determined solely by your Local Authority after a full application and assessment.</p>
+                            ${actionButtonsHTML}
+                        </div>`;
+                } else {
+                    const statusClass = isProvisional ? 'provisional' : 'not-eligible';
+                    const title = isProvisional ? 'Further Consultation Needed' : 'Likely Not Eligible';
+                    resultHTML = `
+                        <div class="result-box ${statusClass}">
+                            <p><b>Indication: ${title}</b></p>
+                            <p>Based on your answers, you may not meet one or more key criteria. Areas to review:</p>
+                            <ul style="list-style: disc; padding-left: 20px; margin: 0.5rem 0 1rem 0; font-size: 0.95em;">
+                                ${messages.map(msg => `<li>${msg}</li>`).join('')}
+                                ${vacant === 'yes' ? `<li>Vacant properties might suit the <a href="https://www.gov.ie/en/service/f8f1b-vacant-property-refurbishment-grant/" target="_blank" rel="noopener noreferrer">Vacant Property Refurbishment Grant</a>.</li>` : ''}
+                            </ul>
+                            ${provisionalMessage}
+                            <p><b>Recommendations:</b></p>
+                            <ul class="checklist">
+                                <li><b>Contact Local Authority:</b> Discuss your specific situation directly with your council's Housing Grants section for definitive advice. This is essential, especially if age or income thresholds are borderline.</li>
+                                <li><b>Review Official Guidelines:</b> Check your Local Authority's website for their specific criteria, income bands, and eligible works for this grant.</li>
+                                <li><b>Verify Information:</b> Double-check your details against the official requirements.</li>
+                            </ul>
+                            ${actionButtonsHTML}
+                        </div>`;
+                }
+            }
+            resultDiv.innerHTML = resultHTML;
+            resultDiv.classList.remove('hidden');
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+        }
     </script>
 </body>
 </html>
