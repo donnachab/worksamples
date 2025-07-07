@@ -65,7 +65,7 @@
         li > p:last-child { margin-bottom: 0; }
         ul li::marker, ol li::marker { color: var(--cv-accent); font-weight: 600; }
         .more-info-list ul { margin-top: 0.2rem; }
-        .more-info-list li { font-size: 1rem; margin-bottom: 0.15rem; }
+        .more-info-list li { font-size: 1.0em; margin-bottom: 0.15rem; } /* Adjusted from 1rem to 1.0em for consistency */
         .more-info-list { margin-top: 0; } /* Keep h4 aligned top */
 
         /* --- TABS --- */
@@ -74,9 +74,9 @@
         .tab-button { padding: 0.7rem 1.1rem; /* Adjusted padding */ cursor: pointer; background-color: var(--tab-button-inactive-bg); border: 1px solid var(--tab-button-inactive-border); border-bottom: none; margin-bottom: -2px; border-radius: 6px 6px 0 0; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--cv-text-med); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; position: relative; z-index: 1; }
         .tab-button:hover { background-color: var(--tab-button-hover-bg); color: var(--cv-text-dark); }
         .tab-button.active { background-color: var(--cv-bg-main); color: var(--cv-accent); border-color: var(--cv-border); border-bottom: 2px solid var(--cv-bg-main); z-index: 2; }
-        .tab-content { }
-        .tab-panel { display: none; padding-top: 0.5rem; animation: fadeIn 0.5s ease-in-out; }
-        .tab-panel.active { display: block; }
+        .tab-content { display: none; padding-top: 0.5rem; animation: fadeIn 0.5s ease-in-out; }
+        .tab-panel { display: none; padding-top: 0.5rem; animation: fadeIn 0.5s ease-in-out; } /* Added tab-panel class */
+        .tab-panel.active, .tab-content.active { display: block; } /* Unified active state display */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* --- SUB-TABS --- */
@@ -86,10 +86,9 @@
         .sub-tab-button { padding: 0.4rem 0.9rem; /* Adjusted padding */ cursor: pointer; background-color: var(--subtab-button-inactive-bg); border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; border-radius: 4px 4px 0 0; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; color: var(--cv-text-med); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
         .sub-tab-button:hover { background-color: var(--subtab-button-hover-bg); color: var(--cv-text-dark); }
         .sub-tab-button.active { background-color: var(--subtab-button-active-bg); color: var(--subtab-button-active-text); border-color: var(--cv-border); border-bottom: 1px solid var(--subtab-button-active-bg); font-weight: 600; }
-        .sub-tab-content { }
-        .sub-tab-panel { display: none; padding-top: 0.8rem; /* Reduced padding */ animation: fadeIn 0.5s ease-in-out; }
+        .sub-tab-content { display: none; padding-top: 0.8rem; /* Reduced padding */ animation: fadeIn 0.5s ease-in-out; }
         #subtab-concept { padding-top: 0.5rem; }
-        .sub-tab-panel.active { display: block; }
+        .sub-tab-content.active { display: block; } /* Unified active state display */
 
         /* --- BLOCKS (Note, Example) --- */
         .note-block { background-color: var(--cv-note-bg); border-left: 4px solid var(--cv-note-border); padding: 0.8rem 1rem 0.8rem 1.2rem; /* Adjusted padding */ margin: 1rem 0; /* Adjusted margin */ color: #575735; border-radius: 0 4px 4px 0; }
@@ -134,11 +133,11 @@
 
         /* Feature Selector Container */
         .feature-selector-container { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; } /* Reduced gap/margin */
-         @media (min-width: 768px) {
-             .feature-selector-container { flex-direction: row; margin-top: 0.8rem; }
-         }
+        @media (min-width: 768px) {
+            .feature-selector-container { flex-direction: row; margin-top: 0.8rem; }
+        }
         .feature-titles { display: flex; flex-direction: column; gap: 0.4rem; /* Reduced gap */ flex-shrink: 0; width: 100%; }
-         @media (min-width: 768px) { .feature-titles { width: 250px; } } /* Keep width */
+        @media (min-width: 768px) { .feature-titles { width: 250px; } } /* Keep width */
         .feature-title-button { display: block; width: 100%; padding: 0.5rem 0.9rem; /* Adjusted padding */ cursor: pointer; text-align: left; background-color: var(--feature-title-inactive-bg); border: 1px solid var(--cv-border); border-radius: 4px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--cv-text-dark); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
         .feature-title-button:hover { background-color: var(--feature-title-hover-bg); }
         .feature-title-button.active { background-color: var(--feature-title-active-bg); color: var(--feature-title-active-text); border-color: var(--feature-title-active-bg); font-weight: 600; }
@@ -161,35 +160,34 @@
         }
 
 
-         /* --- Project Link Button Styles --- */
+        /* --- Project Link Button Styles --- */
         .project-link-buttons { margin-top: 1rem; margin-bottom: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap; } /* Reduced spacing */
         .project-button { display: inline-flex; align-items: center; gap: 0.4em; padding: 0.5rem 1rem; /* Adjusted padding */ border: 1px solid var(--cv-accent); border-radius: 0.375rem; background-color: var(--cv-bg-main); color: var(--cv-accent); font-weight: 600; font-size: 0.9em; text-decoration: none; transition: all 0.2s ease; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .project-button:hover { background-color: var(--cv-accent); color: var(--cv-bg-main); transform: translateY(-2px); box-shadow: 0 4px 8px var(--cv-shadow); }
         .project-button .icon { font-size: 1.1em; }
 
         /* --- Responsive Adjustments --- */
-         @media (max-width: 767px) {
-             /* Adjust heading sizes further for mobile */
-             h1 { font-size: 1.7rem; line-height: 2rem;}
-             h2 { font-size: 1.2rem; line-height: 1.6rem; }
-             h3 { font-size: 1.1rem; line-height: 1.4rem; }
+        @media (max-width: 767px) {
+            /* Adjust heading sizes further for mobile */
+            h1 { font-size: 1.7rem; line-height: 2rem;}
+            h2 { font-size: 1.2rem; line-height: 1.6rem; }
+            h3 { font-size: 1.1rem; line-height: 1.4rem; }
 
-             /* Main tabs */
-             .tab-buttons { border-bottom: none; gap: 0.4rem; }
-             .tab-button { width: 100%; margin-right: 0; margin-bottom: 0; border-radius: 4px; border: 1px solid var(--tab-button-inactive-border); }
-             .tab-button.active { border-color: var(--cv-accent); background-color: var(--tab-button-hover-bg); color: var(--cv-text-dark); border-bottom: 1px solid var(--cv-accent); }
-             .tab-content { margin-top: 0.8rem; }
-             /* Sub tabs */
-             .sub-tab-buttons { gap: 0.4rem; border-bottom: none;}
-              .sub-tab-button { width: 100%; margin-bottom: 0; border-radius: 4px; border: 1px solid var(--subtab-button-inactive-border); }
-              .sub-tab-button.active { border-color: var(--cv-accent); background-color: var(--subtab-button-hover-bg); }
-             .sub-tab-content { margin-top: 0.8rem; }
+            /* Main tabs */
+            .tab-buttons { border-bottom: none; gap: 0.4rem; }
+            .tab-button { width: 100%; margin-right: 0; margin-bottom: 0; border-radius: 4px; border: 1px solid var(--tab-button-inactive-border); }
+            .tab-button.active { border-color: var(--cv-accent); background-color: var(--tab-button-hover-bg); color: var(--cv-text-dark); border-bottom: 1px solid var(--cv-accent); }
+            .tab-content { margin-top: 0.8rem; }
+            /* Sub tabs */
+            .sub-tab-buttons { gap: 0.4rem; border-bottom: none;}
+             .sub-tab-button { width: 100%; margin-bottom: 0; border-radius: 4px; border: 1px solid var(--subtab-button-inactive-border); }
+             .sub-tab-button.active { border-color: var(--cv-accent); background-color: var(--subtab-button-hover-bg); }
+            .sub-tab-content { margin-top: 0.8rem; }
 
-             header, main, footer { padding-left: 0.8rem; padding-right: 0.8rem; } /* Reduced padding */
-             .prominent-sample { margin-top: 0; padding-top: 1rem; }
-             .project-link-buttons { justify-content: center; }
+            header, main, footer { padding-left: 0.8rem; padding-right: 0.8rem; } /* Reduced padding */
+            .prominent-sample { margin-top: 0; padding-top: 1rem; }
+            .project-link-buttons { justify-content: center; }
         }
-
     </style>
 </head>
 <body>
@@ -201,63 +199,69 @@
                 <header>
                     <h1>Donnacha's Work Samples</h1>
                     <div class="header-cv-button">
-                         <a href="index.html" title="View Donnacha Bushe's CV">View CV</a>
+                           <a href="index.html" title="View Donnacha Bushe's CV">View CV</a>
                     </div>
                 </header>
 
                 <main>
                     <div class="tab-container">
                         <div class="tab-buttons" role="tablist">
-                            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-client" data-tab-target="#tab-client">
+                            <button class="tab-button active" data-tab-id="tab-client">
                                 Client Project Highlight
                             </button>
-                            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-independent" data-tab-target="#tab-independent">
+                            <button class="tab-button" data-tab-id="tab-independent">
                                 Independent DITA Examples
                             </button>
-                        </div><div class="tab-content">
+                            <button class="tab-button" data-tab-id="tab-seai">
+                                SEAI Grant Guide & Checkers
+                            </button>
+                        </div>
+                        <div class="tab-content">
                             <div id="tab-client" class="tab-panel active" role="tabpanel">
                                 <section class="work-sample prominent-sample">
                                     <h2 id="project-dtone">DT One Developer Portal</h2>
                                     <p>
-                                        This section showcases live, public-facing documentation work. I played a key role in designing the structure and heavily reworking raw technical material to produce clear, user-focused guides and API documentation for the <a href="https://dtone.readme.io/" target="_blank" rel="noopener noreferrer">DT One Developer Portal</a>.
+                                        This section showcases live, public-facing documentation work. I played a key role in designing the structure and heavily reworking raw technical material to produce clear, user-focused guides and API documentation for the <a href="https://developers.dtone.com/" target="_blank" rel="noopener noreferrer">DT One Developer Portal</a>.
                                     </p>
-                                     <div class="project-link-buttons">
-                                         <a href="https://dtone.readme.io/docs/about-dt-one-products-and-services" target="_blank" rel="noopener noreferrer" class="project-button">
-                                             <span class="icon">📖</span> Guides
-                                         </a>
-                                          <a href="https://dtone.readme.io/reference/overview" target="_blank" rel="noopener noreferrer" class="project-button">
-                                             <span class="icon">↔️</span> API Reference
-                                         </a>
-                                     </div>
+                                    <div class="project-link-buttons">
+                                        <a href="https://developers.dtone.com/docs/about-dt-one-products-and-services" target="_blank" rel="noopener noreferrer" class="project-button">
+                                            <span class="icon">📖</span> Guides
+                                        </a>
+                                        <a href="https://developers.dtone.com/reference/overview" target="_blank" rel="noopener noreferrer" class="project-button">
+                                            <span class="icon">↔️</span> API Reference
+                                        </a>
+                                    </div>
                                     <div class="note-block">
                                         <p>Work samples for other clients like SAP and Ericsson involved significant documentation strategy and execution but are hosted behind company firewalls and cannot be shared directly.</p>
                                     </div>
                                 </section>
-                            </div><div id="tab-independent" class="tab-panel" role="tabpanel">
+                            </div>
+                            <div id="tab-independent" class="tab-panel" role="tabpanel">
                                 <div class="sub-tab-container">
-                                     <p>These independent samples were created to demonstrate proficiency in specific DITA structures and technical writing concepts.</p>
-                                     <div class="sub-tab-buttons" role="tablist">
-                                        <button class="sub-tab-button active" role="tab" aria-selected="true" aria-controls="subtab-task" data-subtab-target="#subtab-task">
+                                    <p>These independent samples were created to demonstrate proficiency in specific DITA structures and technical writing concepts.</p>
+                                    <div class="sub-tab-buttons" role="tablist">
+                                        <button class="sub-tab-button active" data-subtab-id="subtab-task" data-parent-tab-id="tab-independent">
                                             Task Topic Example
                                         </button>
-                                         <button class="sub-tab-button" role="tab" aria-selected="false" aria-controls="subtab-concept" data-subtab-target="#subtab-concept">
+                                        <button class="sub-tab-button" data-subtab-id="subtab-concept" data-parent-tab-id="tab-independent">
                                             Concept Topic Example
                                         </button>
-                                     </div><div class="sub-tab-content">
-                                         <div id="subtab-task" class="sub-tab-panel active" role="tabpanel">
-                                             <section id="sample1" class="work-sample">
+                                    </div>
+                                    <div class="sub-tab-content">
+                                        <div id="subtab-task" class="sub-tab-panel active" role="tabpanel">
+                                            <section id="sample1" class="work-sample">
                                                 <h2 id="sample1-title">(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</h2>
                                                 <p class="dita-compliance">This example complies with the Task Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
-                                                <p>With a <strong>LinkedIn Premium</strong> subscription, users can effectively tailor their profiles to align with the skills sought by employers in job posts.&nbsp;</p>
-                                                <p>The <strong>Qualifications</strong> section allows Premium users to:</p>
+                                                <p>With a <b>LinkedIn Premium</b> subscription, users can effectively tailor their profiles to align with the skills sought by employers in job posts.&nbsp;</p>
+                                                <p>The <b>Qualifications</b> section allows Premium users to:</p>
                                                 <ul> <li>Identify the proportion of desired skills they already have listed on their profiles, providing an indication of how well they match the job post.</li> <li>Directly add any missing skills they possess to their profiles, improving their match with the job post.</li> <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li> </ul>
                                                 <p>This way, users can enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
 
                                                 <div class="prerequisites">
                                                     <h3 id="sample1-prerequisites">Prerequisites</h3>
                                                     <ul>
-                                                        <li>You have a <strong>LinkedIn Premium</strong> subscription to access the <strong>Qualifications</strong> section of job advertisements.&nbsp;
-                                                            <p>This section is unique to <strong>LinkedIn Premium</strong> and provides valuable insights into the skills associated with the job post and additional skills among applicants.</p>
+                                                        <li>You have a <b>LinkedIn Premium</b> subscription to access the <b>Qualifications</b> section of job advertisements.&nbsp;
+                                                             <p>This section is unique to <b>LinkedIn Premium</b> and provides valuable insights into the skills associated with the job post and additional skills among applicants.</p>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -265,257 +269,316 @@
                                                 <div class="steps">
                                                     <h3 id="sample1-steps">Steps</h3>
                                                     <ol class="steps-list">
-                                                        <li><strong>Navigate to the Job Advertisement:</strong> Open the job advertisement on LinkedIn.</li>
-                                                        <li><strong>Access the Qualifications Section:</strong> Scroll down to the <strong>Qualifications</strong> section, which is exclusive to <strong>LinkedIn Premium</strong> users.
-                                                            <p>This section provides a list of skills associated with the job post and additional skills common among applicants. It also displays the count of desired skills you already possess.</p>
+                                                        <li><b>Navigate to the Job Advertisement:</b> Open the job advertisement on LinkedIn.</li>
+                                                        <li><b>Access the Qualifications Section:</b> Scroll down to the <b>Qualifications</b> section, which is exclusive to <b>LinkedIn Premium</b> users.
+                                                             <p>This section provides a list of skills associated with the job post and additional skills common among applicants.</p>
                                                         </li>
-                                                        <li><strong>Add Skills:</strong> Click on <strong>Add Skills</strong> located in the tip box below the list of skills.
-                                                            <p>This action opens the <strong>Qualification details</strong> dialog. A green tick appears beside each skill that is already listed on your profile.</p>
+                                                        <li><b>Add Skills:</b> Click on <b>Add Skills</b> located in the tip box below the list of skills.
+                                                             <p>This action opens the <b>Qualification details</b> dialog. A green tick appears beside each skill that is already listed on your profile.</p>
                                                         </li>
-                                                        <li><strong>Add Missing Skills:</strong> If you possess a skill that isn't ticked green, click the <strong>+ Add</strong> button beside that skill.</li>
-                                                        <li><strong>Showcase Your Skill:</strong> Respond to the <strong>Show us where you used this skill</strong> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <strong>Save</strong>.</li>
-                                                        <li><strong>Add More Skills or Exit:</strong> You can continue to add more skills or click the <strong>No thanks</strong> button to exit.</li>
+                                                        <li><b>Add Missing Skills:</b> If you possess a skill that isn't ticked green, click the <b>+ Add</b> button beside that skill.</li>
+                                                        <li><b>Showcase Your Skill:</b> Respond to the <b>Show us where you used this skill</b> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <b>Save</b>.</li>
+                                                        <li><b>Add More Skills or Exit:</b> You can continue to add more skills or click the <b>No thanks</b> button to exit.</li>
                                                     </ol>
                                                 </div>
                                             </section>
-                                         </div><div id="subtab-concept" class="sub-tab-panel" role="tabpanel">
-                                             <section id="sample2" class="work-sample">
-                                                 <h2 id="sample2-title">Reuse Features in IXIASOFT CCMS</h2>
-                                                 <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
-                                                 <p>Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
-                                                 <p><a href="https://www.ixiasoft.com/" target="_blank" rel="noopener noreferrer"><strong>IXIASOFT CCMS</strong></a> provides the following features designed to streamline this process. Click on a feature below to see details.</p>
-                                                 <div class="note-block">
-                                                    <p><strong>Note</strong></p>
-                                                    <p><em>Examples provided on this page are based on a <strong>SupplyChain Solutions</strong> company, that manages supply chain operations for various clients and often needs to create variant documents.</em></p>
+                                        </div>
+                                        <div id="subtab-concept" class="sub-tab-panel" role="tabpanel">
+                                            <section id="sample2" class="work-sample">
+                                                <h2 id="sample2-title">Reuse Features in IXIASOFT CCMS</h2>
+                                                <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
+                                                <p>Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
+                                                <p><a href="https://www.ixiasoft.com/" target="_blank" rel="noopener noreferrer"><b>IXIASOFT CCMS</b></a> provides the following features designed to streamline this process. Click on a feature below to see details.</p>
+                                                <div class="note-block">
+                                                    <p><b>Note</b></p>
+                                                    <p><i>Examples provided on this page are based on a <b>SupplyChain Solutions</b> company, that manages supply chain operations for various clients and often needs to create variant documents.</i></p>
                                                 </div>
 
-                                                 <div class="feature-selector-container">
-                                                      <div class="feature-titles">
-                                                          <button class="feature-title-button active" data-feature-target="#content-conref">Content References (Conref)</button>
-                                                          <button class="feature-title-button" data-feature-target="#content-keyref">Key References (Keyref)</button>
-                                                          <button class="feature-title-button" data-feature-target="#content-profiling">Conditional Processing (Profiling)</button>
-                                                          <button class="feature-title-button" data-feature-target="#content-topicreuse">Topic Reuse</button>
-                                                      </div>
-                                                      <div class="feature-content-pane"></div> </div>
-                                                 <div style="display: none;">
-                                                     <div id="content-conref">
+                                                <div class="feature-selector-container">
+                                                    <div class="feature-titles">
+                                                        <button class="feature-title-button active" data-feature-target="#content-conref">Content References (Conref)</button>
+                                                        <button class="feature-title-button" data-feature-target="#content-keyref">Key References (Keyref)</button>
+                                                        <button class="feature-title-button" data-feature-target="#content-profiling">Conditional Processing (Profiling)</button>
+                                                        <button class="feature-title-button" data-feature-target="#content-topicreuse">Topic Reuse</button>
+                                                    </div>
+                                                    <div class="feature-content-pane"></div>
+                                                </div>
+                                                <div style="display: none;">
+                                                    <div id="content-conref">
                                                         <h4>Content References (Conref)</h4>
                                                         <div class="feature-detail-columns">
                                                             <div class="feature-main-col">
                                                                 <p>Content References, or <code>Conref</code>, allow you to create segments of content that can be referenced across multiple topics in DITA. These segments, often created as <code>ReferableContent</code> topic types, become a part of the topics into which they are inserted. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
                                                                 <div class="example-block">
                                                                     <h4>Example</h4>
-                                                                    <p><strong>SupplyChain Solutions</strong> created a standard shipping policy as a <code>ReferableContent</code> topic in one location. This policy was inserted it into multiple topics using a <code>Conref</code>. These topics were included in various maps based on the needs of different clients.</p>
+                                                                    <p><b>SupplyChain Solutions</b> created a standard shipping policy as a <code>ReferableContent</code> topic in one location. This policy was inserted it into multiple topics using a <code>Conref</code>. These topics were included in various maps based on the needs of different clients.</p>
                                                                 </div>
                                                             </div>
                                                             <div class="feature-info-col">
                                                                 <h4 class="more-info-list">More Information</h4>
                                                                 <ul>
                                                                     <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/lar1396892881040.html" target="_blank" rel="noopener noreferrer">Creating and using conrefs</a></li>
-                                                                    <li>Comparable feature in <strong>MadCap Flare</strong>: <a href="https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets" target="_blank" rel="noopener noreferrer">MadCap Flare: Snippet</a></li>
+                                                                    <li>Comparable feature in <b>MadCap Flare</b>: <a href="https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets" target="_blank" rel="noopener noreferrer">MadCap Flare: Snippet</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                     <div id="content-keyref">
+                                                    <div id="content-keyref">
                                                         <h4>Key References (Keyref)</h4>
                                                         <div class="feature-detail-columns">
                                                             <div class="feature-main-col">
                                                                 <p>Key References, or <code>Keyref</code>, allow you to create a placeholder for content that can be replaced with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
                                                                 <div class="example-block">
                                                                     <h4>Example</h4>
-                                                                    <p><strong>SupplyChain Solutions</strong> uses a <code>Keyref</code> for the client’s company name, ensuring the correct name is inserted into each client’s documents at the time of publishing.</p>
+                                                                    <p><b>SupplyChain Solutions</b> uses a <code>Keyref</code> for the client’s company name, ensuring the correct name is inserted into each client’s documents at the time of publishing.</p>
                                                                 </div>
-                                                             </div>
+                                                            </div>
                                                             <div class="feature-info-col">
                                                                 <h4 class="more-info-list">More Information</h4>
                                                                 <ul>
                                                                     <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986050420.html" target="_blank" rel="noopener noreferrer">keyrefs and keydefs</a></li>
-                                                                    <li>Comparable feature in <strong>MadCap Flare</strong>: <a href="https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets" target="_blank" rel="noopener noreferrer">MadCap Flare: Variable</a></li>
+                                                                    <li>Comparable feature in <b>MadCap Flare</b>: <a href="https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets" target="_blank" rel="noopener noreferrer">MadCap Flare: Variable</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                     </div>
-                                                     <div id="content-profiling">
+                                                    </div>
+                                                    <div id="content-profiling">
                                                         <h4>Conditional Processing (Profiling)</h4>
-                                                         <div class="feature-detail-columns">
+                                                        <div class="feature-detail-columns">
                                                             <div class="feature-main-col">
                                                                 <p>Conditional Processing allows you to mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions. These conditions, which can be things like product versions, audience types, or geographic locations, can be applied to specific sections within individual topics. This allows for greater flexibility and precision in content customization.</p>
                                                                 <div class="example-block">
                                                                     <h4>Example</h4>
-                                                                    <p><strong>SupplyChain Solutions</strong> uses Conditional Processing to include specific sections such as <strong>Return Policies</strong> or <strong>Warranty Information</strong> in a topic for one client, and exclude them for another client who does not require these details.</p>
+                                                                    <p><b>SupplyChain Solutions</b> uses Conditional Processing to include specific sections such as <b>Return Policies</b> or <b>Warranty Information</b> in a topic for one client, and exclude them for another client who does not require these details.</p>
                                                                 </div>
                                                             </div>
                                                             <div class="feature-info-col">
                                                                 <h4 class="more-info-list">More Information</h4>
                                                                 <ul>
                                                                     <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986186479.html" target="_blank" rel="noopener noreferrer">Applying conditions (profiling and conditional processing)</a></li>
-                                                                    <li>Comparable feature in <strong>MadCap Flare</strong>: <a href="https://www.madcapsoftware.com/blog/tips-and-tricks-using-conditions-in-madcap-flare/" target="_blank" rel="noopener noreferrer">MadCap Flare: Conditional Tags</a></li>
+                                                                    <li>Comparable feature in <b>MadCap Flare</b>: <a href="https://www.madcapsoftware.com/blog/tips-and-tricks-using-conditions-in-madcap-flare/" target="_blank" rel="noopener noreferrer">MadCap Flare: Conditional Tags</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                     </div>
-                                                     <div id="content-topicreuse">
+                                                    </div>
+                                                    <div id="content-topicreuse">
                                                         <h4>Topic Reuse</h4>
                                                         <div class="feature-detail-columns">
                                                             <div class="feature-main-col">
                                                                 <p>Topic Reuse in IXIASOFT CCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.</p>
                                                                 <div class="example-block">
                                                                     <h4>Example</h4>
-                                                                    <p><strong>SupplyChain Solutions</strong> uses a topic on <strong>Inventory Management</strong> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p>
+                                                                    <p><b>SupplyChain Solutions</b> uses a topic on <b>Inventory Management</b> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p>
                                                                 </div>
                                                             </div>
                                                             <div class="feature-info-col">
                                                                 <h4 class="more-info-list">More Information</h4>
                                                                 <ul>
                                                                     <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.3/User_Guides_Contributors_Standard/en/cab1556029603998.html" target="_blank" rel="noopener noreferrer">Content reuse in IXIASOFT CCMS Web</a></li>
-                                                                    <li>Comparable feature in <strong>MadCap Flare</strong>: <a href="https://forums.madcapsoftware.com/viewtopic.php?t=28997" target="_blank" rel="noopener noreferrer">MadCap Flare: Topic Reuse</a></li>
+                                                                    <li>Comparable feature in <b>MadCap Flare</b>: <a href="https://forums.madcapsoftware.com/viewtopic.php?t=28997" target="_blank" rel="noopener noreferrer">MadCap Flare: Topic Reuse</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                     </div>
-                                                 </div>
-                                             </section>
-                                         </div></div> </div> </div></div> </div> </main>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-seai" class="tab-panel" role="tabpanel">
+                                <section class="work-sample prominent-sample">
+                                    <h2 id="project-seai-grants">SEAI Grant Guide & Checkers (Personal Project)</h2>
+                                    <p>
+                                        This project demonstrates my ability to take complex, publicly available information (Irish Sustainable Energy Authority of Ireland - SEAI - home energy grants) and transform it into clear, interactive, and user-friendly guides and eligibility checkers. While not "technical writing" in the traditional sense of software documentation, it showcases crucial skills applicable to any documentation role:
+                                    </p>
+                                    <ul>
+                                        <li><b>Information Architecture:</b> Structuring a large volume of diverse grant information into easily navigable tabs and sections.</li>
+                                        <li><b>Content Simplification:</b> Breaking down complex government criteria into digestible explanations and interactive questions.</li>
+                                        <li><b>User Experience (UX) Focus:</b> Designing intuitive interfaces (tabs, tooltips, clear result displays) to enhance user understanding and self-service.</li>
+                                        <li><b>AI Integration:</b> Leveraging AI assistance for content generation, structuring, and front-end development (HTML/CSS/JavaScript), demonstrating efficiency and modern tooling.</li>
+                                        <li><b>Accuracy & Referencing:</b> Ensuring all information points back to official sources, a core principle of reliable documentation.</li>
+                                    </ul>
+                                    <p>
+                                        This project was a personal initiative with a friend to explore innovative approaches to public information and did not involve any commercial engagement or payment from previous employers.
+                                    </p>
+                                    <div class="project-link-buttons">
+                                        <a href="https://donnachab.github.io/worksamples/eligibility.html" target="_blank" rel="noopener noreferrer" class="project-button">
+                                            <span class="icon">🏠</span> View Live Project
+                                        </a>
+                                        <a href="https://github.com/donnachab/worksamples/blob/main/eligibility.html" target="_blank" rel="noopener noreferrer" class="project-button">
+                                            <span class="icon">💻</span> View Code on GitHub
+                                        </a>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </main>
 
                 <footer>
                     <p><a href="#page-top">Back to Top</a></p>
                 </footer>
-            </div> </div> </div> <script>
+            </div>
+        </div>
+    </div>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Main Tab Logic ---
-             const mainTabButtons = document.querySelectorAll('.tab-buttons > .tab-button');
-             const mainTabPanels = document.querySelectorAll('.tab-content > .tab-panel');
-              if (mainTabButtons.length > 0 && mainTabPanels.length > 0) {
-                mainTabButtons.forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const targetPanelId = button.getAttribute('data-tab-target');
-                        mainTabButtons.forEach(btn => { btn.classList.remove('active'); btn.setAttribute('aria-selected', 'false'); });
-                        mainTabPanels.forEach(panel => { panel.classList.remove('active'); panel.style.display = 'none'; });
-                        button.classList.add('active'); button.setAttribute('aria-selected', 'true');
-                        const targetPanel = document.querySelector(targetPanelId);
-                        if (targetPanel) {
-                            targetPanel.style.display = 'block';
-                            targetPanel.offsetHeight; // Force reflow
-                            requestAnimationFrame(() => { targetPanel.classList.add('active'); });
-                            if (targetPanel.id === 'tab-independent') {
-                                 const firstSubTabButton = targetPanel.querySelector('.sub-tab-button');
-                                 const initialActiveSubPanel = targetPanel.querySelector('.sub-tab-panel.active');
-                                 if(firstSubTabButton && !initialActiveSubPanel) {
-                                     firstSubTabButton.click(); // Activate first sub-tab if none active
-                                 } else if (initialActiveSubPanel && initialActiveSubPanel.id === 'subtab-concept') {
-                                      // If Concept subtab is active, ensure feature pane is loaded
-                                      const firstFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
-                                      const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
-                                      if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) { // Load only if empty
-                                           loadFeatureContent(firstFeatureButton, contentPane);
-                                       }
-                                 }
-                            }
-                        }
-                    });
-                });
-                 // Ensure initial active main tab is displayed
-                 const initialActiveMainPanel = document.querySelector('.tab-content > .tab-panel.active');
-                 if (initialActiveMainPanel) { initialActiveMainPanel.style.display = 'block'; }
-                 // Trigger initial load for concept tab feature pane if it's the initially active tab
-                 if (initialActiveMainPanel && initialActiveMainPanel.id === 'tab-independent') {
-                     const initialActiveSubPanel = initialActiveMainPanel.querySelector('.sub-tab-panel.active');
-                     if (initialActiveSubPanel && initialActiveSubPanel.id === 'subtab-concept') {
-                         const firstFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
-                         const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
-                         if(firstFeatureButton && contentPane) { loadFeatureContent(firstFeatureButton, contentPane); }
-                     }
-                 }
+            const mainTabButtons = document.querySelectorAll('.tab-buttons > .tab-button');
+            const mainTabPanels = document.querySelectorAll('.tab-content > .tab-panel');
 
+            // Function to activate a main tab
+            function activateMainTab(tabId) {
+                // Deactivate all main tab buttons and hide all main tab content panels
+                mainTabButtons.forEach(button => {
+                    button.classList.remove('active');
+                    button.setAttribute('aria-selected', 'false');
+                });
+                mainTabPanels.forEach(panel => {
+                    panel.classList.remove('active');
+                    panel.style.display = 'none';
+                });
+
+                // Activate the selected main tab button and show its content panel
+                const selectedButton = document.querySelector(`.tab-buttons > .tab-button[data-tab-id="${tabId}"]`);
+                if (selectedButton) {
+                    selectedButton.classList.add('active');
+                    selectedButton.setAttribute('aria-selected', 'true');
+                }
+                const selectedPanel = document.getElementById(tabId);
+                if (selectedPanel) {
+                    selectedPanel.style.display = 'block';
+                    selectedPanel.offsetHeight; // Force reflow for animation
+                    requestAnimationFrame(() => { selectedPanel.classList.add('active'); });
+
+                    // Handle specific sub-tab initialization for 'Independent DITA Examples' tab
+                    if (tabId === 'tab-independent') {
+                        const subTabButtons = selectedPanel.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
+                        if (subTabButtons.length > 0) {
+                            let activeSubTabButton = selectedPanel.querySelector('.sub-tab-buttons > .sub-tab-button.active');
+                            if (!activeSubTabButton) {
+                                activeSubTabButton = subTabButtons[0];
+                                activeSubTabButton.classList.add('active');
+                            }
+                            const targetSubTabId = activeSubTabButton.getAttribute('data-subtab-id');
+                            activateSubTab(targetSubTabId, 'tab-independent');
+                        }
+                    }
+                }
             }
+
+            // Attach event listeners to main tab buttons
+            mainTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab-id');
+                    activateMainTab(tabId);
+                });
+            });
+
+            // Initial load: Activate the first tab by default, or one specified by hash
+            const initialTabId = window.location.hash ? window.location.hash.substring(1).split('/')[0] : 'tab-client';
+            activateMainTab(initialTabId);
+
 
             // --- Sub-Tab Logic ---
-            const independentTab = document.querySelector('#tab-independent');
-            if (independentTab) {
-                const subTabButtons = independentTab.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
-                const subTabPanels = independentTab.querySelectorAll('.sub-tab-content > .sub-tab-panel');
-                 if (subTabButtons.length > 0 && subTabPanels.length > 0) {
-                     subTabButtons.forEach(button => {
-                         button.addEventListener('click', (e) => {
-                             const targetPanelId = button.getAttribute('data-subtab-target');
-                             subTabButtons.forEach(btn => { btn.classList.remove('active'); btn.setAttribute('aria-selected', 'false'); });
-                             subTabPanels.forEach(panel => { panel.classList.remove('active'); panel.style.display = 'none'; });
-                             button.classList.add('active'); button.setAttribute('aria-selected', 'true');
-                             const targetPanel = independentTab.querySelector(targetPanelId);
-                             if (targetPanel) {
-                                 targetPanel.style.display = 'block';
-                                 targetPanel.offsetHeight; // Force reflow
-                                 requestAnimationFrame(() => { targetPanel.classList.add('active'); });
-                                 // If Concept subtab is activated, load its initial feature content
-                                 if (targetPanel.id === 'subtab-concept') {
-                                     const firstFeatureButton = targetPanel.querySelector('.feature-title-button.active') || targetPanel.querySelector('.feature-title-button');
-                                     const contentPane = targetPanel.querySelector('.feature-content-pane');
-                                     if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) { // Load only if empty
-                                         loadFeatureContent(firstFeatureButton, contentPane);
-                                     }
-                                 }
-                             }
-                         });
-                     });
-                     // Activate and display the initial active sub-tab or the first one
-                     const initialActiveSubPanel = independentTab.querySelector('.sub-tab-panel.active');
-                     if (initialActiveSubPanel) {
-                         initialActiveSubPanel.style.display = 'block';
-                         // If initial active is Concept, load its content
-                         if (initialActiveSubPanel.id === 'subtab-concept') {
-                             const initialFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
-                             const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
-                             if(initialFeatureButton && contentPane) { loadFeatureContent(initialFeatureButton, contentPane); }
-                         }
-                     } else {
-                         const firstSubTabButton = independentTab.querySelector('.sub-tab-button');
-                          if(firstSubTabButton) { firstSubTabButton.click(); } // Click first sub-tab if none are active
-                     }
-                 }
+            // Function to activate a sub-tab
+            function activateSubTab(subTabId, parentTabId) {
+                const parentElement = document.getElementById(parentTabId);
+                if (!parentElement) return;
+
+                const subTabButtons = parentElement.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
+                const subTabContents = parentElement.querySelectorAll('.sub-tab-content > .sub-tab-panel');
+
+                // Deactivate all sub-tab buttons and hide all sub-tab content panels
+                subTabButtons.forEach(button => {
+                    button.classList.remove('active');
+                    button.setAttribute('aria-selected', 'false');
+                });
+                subTabContents.forEach(content => {
+                    content.classList.remove('active');
+                    content.style.display = 'none';
+                });
+
+                // Activate the selected sub-tab button and show its content
+                const selectedButton = parentElement.querySelector(`.sub-tab-button[data-subtab-id="${subTabId}"]`);
+                if (selectedButton) {
+                    selectedButton.classList.add('active');
+                    selectedButton.setAttribute('aria-selected', 'true');
+                }
+                const selectedContent = document.getElementById(subTabId);
+                if (selectedContent) {
+                    selectedContent.style.display = 'block';
+                    selectedContent.offsetHeight; // Force reflow for animation
+                    requestAnimationFrame(() => { selectedContent.classList.add('active'); });
+
+                    // If 'subtab-concept' is activated, load its initial feature content
+                    if (subTabId === 'subtab-concept') {
+                        const firstFeatureButton = selectedContent.querySelector('.feature-title-button.active') || selectedContent.querySelector('.feature-title-button');
+                        const contentPane = selectedContent.querySelector('.feature-content-pane');
+                        if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) {
+                            loadFeatureContent(firstFeatureButton, contentPane);
+                        }
+                    }
+                }
             }
 
+            // Attach event listeners to sub-tab buttons
+            document.querySelectorAll('.sub-tab-buttons > .sub-tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const subTabId = button.getAttribute('data-subtab-id');
+                    const parentTabId = button.getAttribute('data-parent-tab-id');
+                    activateSubTab(subTabId, parentTabId);
+                });
+            });
 
-             // --- Feature Selector Logic (Concept Tab) ---
-             const conceptSubTab = document.querySelector('#subtab-concept');
-             if (conceptSubTab) {
-                 const featureTitleButtons = conceptSubTab.querySelectorAll('.feature-selector-container .feature-title-button');
-                 const featureContentPane = conceptSubTab.querySelector('.feature-selector-container .feature-content-pane');
 
-                 if (featureTitleButtons.length > 0 && featureContentPane) {
-                     featureTitleButtons.forEach(button => {
-                         button.addEventListener('click', (e) => {
-                             loadFeatureContent(button, featureContentPane);
-                         });
-                     });
-                     // Initial load handled by tab activation logic
-                 }
-             }
+            // --- Feature Selector Logic (Concept Tab) ---
+            function loadFeatureContent(button, contentPane) {
+                const targetContentId = button.getAttribute('data-feature-target');
+                const featureTitlesContainer = button.closest('.feature-titles');
+                if (!featureTitlesContainer) return;
+                const featureTitleButtons = featureTitlesContainer.querySelectorAll('.feature-title-button');
 
-             // --- Collapsible Section Logic (REMOVED for Task Tab) ---
+                featureTitleButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const sourceContentDiv = document.querySelector(targetContentId);
+
+                if (sourceContentDiv && contentPane) {
+                    contentPane.innerHTML = '';
+                    const clonedContent = sourceContentDiv.cloneNode(true);
+                    contentPane.appendChild(clonedContent);
+                } else if (contentPane) {
+                    contentPane.innerHTML = '<p>Content not found.</p>';
+                }
+            }
+
+            // Attach event listeners for feature selector buttons (within the Concept tab)
+            document.querySelectorAll('#subtab-concept .feature-title-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const contentPane = button.closest('.feature-selector-container').querySelector('.feature-content-pane');
+                    loadFeatureContent(button, contentPane);
+                });
+            });
+
+            // --- Tooltip Logic ---
+            document.body.addEventListener('focusin', (event) => {
+                const trigger = event.target.closest('.tooltip-trigger, .tooltip-container');
+                if (trigger) {
+                    const tooltipText = trigger.querySelector('.tooltip-text');
+                    if (tooltipText) tooltipText.style.visibility = 'visible';
+                }
+            });
+            document.body.addEventListener('focusout', (event) => {
+                const trigger = event.target.closest('.tooltip-trigger, .tooltip-container');
+                if (trigger) {
+                    const tooltipText = trigger.querySelector('.tooltip-text');
+                    if (tooltipText) tooltipText.style.visibility = 'hidden';
+                }
+            });
 
         }); // End DOMContentLoaded
-
-        // --- Helper function for Feature Selector ---
-        function loadFeatureContent(button, contentPane) {
-             const targetContentId = button.getAttribute('data-feature-target');
-             const featureTitlesContainer = button.closest('.feature-titles');
-             if (!featureTitlesContainer) return;
-             const featureTitleButtons = featureTitlesContainer.querySelectorAll('.feature-title-button');
-
-             featureTitleButtons.forEach(btn => btn.classList.remove('active'));
-             button.classList.add('active');
-
-             const sourceContentDiv = document.querySelector(targetContentId);
-
-             if (sourceContentDiv && contentPane) {
-                 contentPane.innerHTML = '';
-                 const clonedContent = sourceContentDiv.cloneNode(true);
-                 contentPane.appendChild(clonedContent);
-             } else if (contentPane) {
-                 contentPane.innerHTML = '<p>Content not found.</p>';
-             }
-        }
     </script>
 
 </body>
