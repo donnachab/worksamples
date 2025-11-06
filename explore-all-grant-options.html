@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore All Grant Options | WarmHomeHub.ie</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* --- Color Palette --- */
+        :root {
+            --whh-primary-color: #ff8310;
+            --whh-primary-darker: #e67300;
+            --whh-text-on-primary: #ffffff;
+            --whh-text-color-body: #4a4a4a;
+            --whh-text-color-headings: #2c3e50;
+            --whh-text-color-light: #5f5f5f;
+            --whh-link-color: var(--whh-primary-color);
+            --whh-background-color: #f8f9fa;
+            --whh-container-background: #ffffff;
+            --whh-border-color: #dce1e6;
+            --whh-pro-icon-color: #28a745;
+            --whh-con-icon-color: #dc3545;
+            --whh-grant-type-tab-inactive-bg: #e9ecef;
+            --whh-grant-type-tab-active-bg: var(--whh-text-color-headings);
+            --whh-grant-type-tab-active-text: #ffffff;
+            --whh-property-subtab-inactive-bg: #f1f1f1;
+            --whh-property-subtab-active-bg: #777777;
+            --whh-property-subtab-active-text: #ffffff;
+            --whh-property-subtab-inactive-text: var(--whh-text-color-body);
+            --whh-card-icon-color: var(--whh-primary-color);
+            --whh-font-size-base: 16px;
+            --whh-font-size-h1: 2.25rem;
+            --whh-font-size-h2: 1.75rem;
+            --whh-font-size-h3: 1.4rem;
+            --whh-font-size-button: 1.1rem;
+            --whh-font-size-small: 0.9rem;
+        }
+
+        /* --- Base Styles for Integration --- */
+        /* Body styles removed to allow parent page to control them */
+        .warmhomehub-grants-container {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400; 
+            line-height: 1.7; 
+            color: var(--whh-text-color-body);
+            font-size: var(--whh-font-size-base);
+            max-width: 1140px; /* Increased width */
+            width: 100%;
+            margin: 0 auto; /* Center the container */
+            padding: 20px 0; /* Vertical padding, horizontal handled by parent */
+        }
+        
+        .warmhomehub-grants-container h1, 
+        .warmhomehub-grants-container h2, 
+        .warmhomehub-grants-container h3, 
+        .warmhomehub-grants-container h4, 
+        .warmhomehub-grants-container h5, 
+        .warmhomehub-grants-container button, 
+        .warmhomehub-grants-container a.button { font-family: 'League Spartan', sans-serif; }
+        
+        .warmhomehub-grants-container h1 {
+            color: var(--whh-text-color-headings); text-align: center; font-size: var(--whh-font-size-h1);
+            font-weight: 700; margin-bottom: 25px;
+        }
+        .warmhomehub-grants-container h2 {
+            color: var(--whh-text-color-headings); text-align: center; font-size: var(--whh-font-size-h2);
+            font-weight: 600; margin-top: 0; margin-bottom: 25px;
+        }
+        .warmhomehub-grants-container h3 {
+            color: var(--whh-primary-color); font-size: var(--whh-font-size-h3); font-weight: 700;
+            margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid var(--whh-border-color); padding-bottom: 8px;
+        }
+         .warmhomehub-grants-container h4 {
+            font-size: 1.2em; color: var(--whh-text-color-headings); font-weight: 600;
+            margin-top: 20px; margin-bottom: 15px;
+        }
+        .warmhomehub-grants-container .accordion-subtitle {
+             font-size: 1.1em;
+             color: var(--whh-text-color-light);
+             border-bottom: 1px dashed var(--whh-border-color);
+             padding-bottom: 0.5rem;
+             margin-top: 0;
+             margin-bottom: 1rem;
+        }
+        .warmhomehub-grants-container .grant-type-tab-content h5, 
+        .warmhomehub-grants-container .property-subtab-content h5 {
+            font-size: 1.15em; color: var(--whh-text-color-headings); font-weight: 600;
+            margin-top: 15px; margin-bottom: 10px;
+        }
+        .warmhomehub-grants-container .intro-text {
+            text-align: center; margin-bottom: 30px; color: var(--whh-text-color-body); font-size: 1.05em;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Tab Styles --- */
+        .warmhomehub-grants-container .grant-type-tabs {
+            display: flex; flex-wrap: wrap; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid var(--whh-border-color);
+        }
+        .warmhomehub-grants-container .grant-type-tab-button {
+            padding: 12px 18px; cursor: pointer; background-color: var(--whh-grant-type-tab-inactive-bg); color: var(--whh-grant-type-tab-inactive-text);
+            border: none; font-size: 1em; font-weight: 600;
+            margin-right: 5px; margin-bottom: -1px; border-top-left-radius: 6px; border-top-right-radius: 6px;
+            transition: background-color 0.3s ease, color 0.3s ease; white-space: normal; line-height: 1.3; flex-grow: 1; text-align:center;
+        }
+        .warmhomehub-grants-container .grant-type-tab-button:hover { background-color: #d1d5db; }
+        .warmhomehub-grants-container .grant-type-tab-button.active { background-color: var(--whh-grant-type-tab-active-bg); color: var(--whh-grant-type-tab-active-text); border-bottom: 1px solid var(--whh-grant-type-tab-active-bg); }
+        .warmhomehub-grants-container .grant-type-tab-content { display: none; padding-top: 15px; animation: fadeIn 0.5s;}
+        .warmhomehub-grants-container .grant-type-tab-content.active { display: block; }
+        .warmhomehub-grants-container .property-type-subtabs {
+            display: flex; flex-wrap: wrap; margin-top: 10px; margin-bottom: 15px; background-color: #f9f9f9; padding: 5px; border-radius: 8px;
+        }
+        .warmhomehub-grants-container .property-subtab-button {
+            padding: 8px 12px; cursor: pointer; background-color: var(--whh-property-subtab-inactive-bg); color: var(--whh-property-subtab-inactive-text);
+            border: 1px solid var(--whh-border-color); border-radius: 4px; font-size: 0.9em; font-weight: 600;
+            margin: 3px; transition: background-color 0.3s, color 0.3s;
+        }
+        .warmhomehub-grants-container .property-subtab-button:hover { background-color: #d1d5db; }
+        .warmhomehub-grants-container .property-subtab-button.active { background-color: var(--whh-property-subtab-active-bg); color: var(--whh-property-subtab-active-text); border-color: var(--whh-property-subtab-active-bg); }
+        .warmhomehub-grants-container .property-subtab-content { display: none; padding-top: 10px; animation: fadeIn 0.5s;}
+        .warmhomehub-grants-container .property-subtab-content.active { display: block; }                
+
+        /* --- Accordion Styles --- */
+        .warmhomehub-grants-container .accordion-item {
+            border: 1px solid var(--whh-border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        .warmhomehub-grants-container .accordion-item:last-child { margin-bottom: 0; }
+        .warmhomehub-grants-container .accordion-button {
+            width: 100%;
+            background-color: #fdfdfd;
+            border: none;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--whh-text-color-headings);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .warmhomehub-grants-container .accordion-button:hover, 
+        .warmhomehub-grants-container .accordion-button.active {
+            background-color: var(--whh-grant-type-tab-inactive-bg);
+            color: var(--whh-primary-darker);
+        }
+        .warmhomehub-grants-container .accordion-icon {
+            transition: transform 0.3s ease;
+            width: 24px;
+            height: 24px;
+        }
+        .warmhomehub-grants-container .accordion-button.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .warmhomehub-grants-container .accordion-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background-color: #ffffff;
+            padding: 0 1.5rem;
+        }
+         .warmhomehub-grants-container .accordion-panel.active {
+            padding: 1.5rem;
+         }                
+
+        /* --- Other Component Styles --- */
+        .warmhomehub-grants-container .pros-cons-container { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 15px; }
+        @media (min-width: 600px) { .warmhomehub-grants-container .pros-cons-container { grid-template-columns: 1fr 1fr; } }
+        .warmhomehub-grants-container .pros-list, .warmhomehub-grants-container .cons-list { padding: 0; list-style: none; }
+        .warmhomehub-grants-container .pros-list li, .warmhomehub-grants-container .cons-list li { display: flex; align-items: flex-start; margin-bottom: 12px; font-size: 0.95em; }
+        .warmhomehub-grants-container .pros-list .icon, .warmhomehub-grants-container .cons-list .icon { flex-shrink: 0; width: 20px; height: 20px; margin-right: 10px; margin-top: 2px; }
+        .warmhomehub-grants-container .pros-list .icon { color: var(--whh-pro-icon-color); }
+        .warmhomehub-grants-container .cons-list .icon { color: var(--whh-con-icon-color); }
+        .warmhomehub-grants-container .grant-amounts-table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 20px; font-size: 0.9em; }
+        .warmhomehub-grants-container .grant-amounts-table th, .warmhomehub-grants-container .grant-amounts-table td { border: 1px solid var(--whh-border-color); padding: 8px; text-align: left; vertical-align: top; }
+        .warmhomehub-grants-container .grant-amounts-table th { background-color: var(--whh-primary-color); color: var(--whh-text-on-primary); font-weight: 600; }
+        .warmhomehub-grants-container .grant-amounts-table td:first-child { font-weight: 600; color: var(--whh-text-color-headings); }
+        .warmhomehub-grants-container .grant-amounts-table .measure-col { width: 40%; }
+        .warmhomehub-grants-container .grant-amounts-table .grant-value-col { width: 30%; text-align: right;}
+        .warmhomehub-grants-container .notes-col { font-size: 0.9em; color: var(--whh-text-color-light); }
+        .warmhomehub-grants-container .guidance-cards-container { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 10px; }
+        @media (min-width: 768px) { .warmhomehub-grants-container .guidance-cards-container { grid-template-columns: 1fr 1fr; } }
+        .warmhomehub-grants-container .guidance-card { background-color: #fdfdfd; border: 1px solid var(--whh-border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; }
+        .warmhomehub-grants-container .guidance-card .card-header { display: flex; align-items: center; margin-bottom: 10px; }
+        .warmhomehub-grants-container .guidance-card .card-icon { flex-shrink: 0; width: 30px; height: 30px; margin-right: 15px; color: var(--whh-card-icon-color); }
+        .warmhomehub-grants-container .guidance-card .card-question { font-weight: 600; color: var(--whh-text-color-headings); font-size: 1.1em; margin: 0; }
+        .warmhomehub-grants-container .guidance-card .card-explanation { font-size: 0.95em; color: var(--whh-text-color-body); margin-top: 5px; }
+        .warmhomehub-grants-container p { margin-bottom: 15px; }
+        .warmhomehub-grants-container ul { padding-left: 20px; margin-bottom: 15px; }
+        .warmhomehub-grants-container li { margin-bottom: 8px; }
+        .warmhomehub-grants-container strong { color: var(--whh-text-color-headings); font-weight: 600; }
+        .warmhomehub-grants-container .next-steps-buttons { display: flex; justify-content: space-around; margin-top: 30px; flex-wrap: wrap; }
+        .warmhomehub-grants-container .next-steps-buttons a.button { display: inline-block; padding: 12px 25px; background-color: var(--whh-primary-color); color: var(--whh-text-on-primary); border: none; border-radius: 8px; text-decoration: none; font-weight: 600; letter-spacing: 0.5px; transition: background-color 0.3s ease; margin: 10px; text-align: center; }
+        .warmhomehub-grants-container .next-steps-buttons a.button:hover { background-color: var(--whh-primary-darker); }
+        .warmhomehub-grants-container .disclaimer { font-size: var(--whh-font-size-small); color: var(--whh-text-color-light); margin-top: 40px; text-align: center; padding: 15px; border-top: 1px solid var(--whh-border-color); }
+        .warmhomehub-grants-container .disclaimer a { color: var(--whh-link-color); font-weight: 600; text-decoration: none; }
+        .warmhomehub-grants-container .disclaimer a:hover { text-decoration: underline; }
+        .warmhomehub-grants-container .tooltip-trigger { cursor: help; color: var(--whh-link-color); font-weight: 600; text-decoration: underline dotted; position: relative; display: inline-block; }
+        .warmhomehub-grants-container .tooltip-text {
+            visibility: hidden; width: 280px; background-color: #333; color: #fff; text-align: left;
+            font-family: 'Inter', sans-serif; font-weight: 400; font-size: var(--whh-font-size-small); line-height: 1.5; border-radius: 6px;
+            padding: 10px; position: absolute; z-index: 10; bottom: 125%;
+            left: 0; opacity: 0; transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .warmhomehub-grants-container .tooltip-trigger:hover .tooltip-text, .warmhomehub-grants-container .tooltip-trigger:focus .tooltip-text { visibility: visible; opacity: 1; }
+        .warmhomehub-grants-container .tooltip-text::after {
+             content: "";
+             position: absolute;
+             top: 100%;
+             left: 20px;
+            border-width: 5px;
+             border-style: solid;
+             border-color: #333 transparent transparent transparent;
+         }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 768px) {
+            .warmhomehub-grants-container { padding: 25px 20px; }
+            .warmhomehub-grants-container h1 { font-size: 2rem; }
+            .warmhomehub-grants-container h2 { font-size: 1.5rem; }
+            .warmhomehub-grants-container h3 { font-size: 1.25rem; }
+            .warmhomehub-grants-container .next-steps-buttons { flex-direction: column; align-items: center; }
+            .warmhomehub-grants-container .next-steps-buttons a.button { width: 80%; margin-bottom: 15px; }
+            .warmhomehub-grants-container .tooltip-text { width: 220px; margin-left: 0; }
+            .warmhomehub-grants-container .grant-type-tab-button {font-size: 0.9em;}
+        }
+        @media (max-width: 600px) {
+            .warmhomehub-grants-container { font-size: calc(var(--whh-font-size-base) * 0.95); padding: 20px 15px; }
+            .warmhomehub-grants-container h1 { font-size: 1.75rem; }
+            .warmhomehub-grants-container h2 { font-size: 1.3rem; }
+            .warmhomehub-grants-container h3 { font-size: 1.15rem; }
+            .warmhomehub-grants-container .accordion-button {
+                padding: 1rem 1.25rem;
+                font-size: 1.1rem;
+                line-height: 1.4;
+            }
+            .warmhomehub-grants-container .next-steps-buttons a.button { width: 90%; }
+            .warmhomehub-grants-container .pros-cons-container { grid-template-columns: 1fr; }
+            .warmhomehub-grants-container .grant-type-tabs { flex-direction: column; }
+            .warmhomehub-grants-container .grant-type-tab-button { width: 100%; margin-right: 0; margin-bottom: 2px; border-radius: 6px; }
+            .warmhomehub-grants-container .property-type-subtabs {
+                 flex-direction: column;
+                background-color: transparent;
+                padding: 0;
+            }
+            .warmhomehub-grants-container .property-subtab-button {
+                 width: 100%;
+                 margin: 0 0 2px 0;
+                 border-radius: 6px !important;
+                text-align: center;
+            }
+            .warmhomehub-grants-container .guidance-cards-container { grid-template-columns: 1fr; }
+
+            /* Responsive Table Styles */
+            .warmhomehub-grants-container .grant-amounts-table {
+                border: 0;
+            }
+            .warmhomehub-grants-container .grant-amounts-table thead {
+                display: none;
+            }
+            .warmhomehub-grants-container .grant-amounts-table tr {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.75rem;
+                border: 1px solid var(--whh-border-color);
+                border-radius: 8px;
+                padding: 0.8rem 1rem;
+            }
+            .warmhomehub-grants-container .grant-amounts-table td {
+                display: inline;
+                text-align: left;
+                border: none;
+                padding: 0;
+            }
+            .warmhomehub-grants-container .grant-amounts-table td::before {
+                display: none;
+            }
+            .warmhomehub-grants-container .grant-amounts-table td:first-child {
+                font-weight: 600;
+                color: var(--whh-text-color-headings);
+                padding-right: 1rem;
+            }
+            .warmhomehub-grants-container .grant-amounts-table td.grant-value-col {
+                font-size: 1.1em;
+                font-weight: 700;
+                color: var(--whh-primary-darker);
+                text-align: right;
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="warmhomehub-grants-container">
+        <h1>Explore All Grant Options</h1>
+        <p class="intro-text" style="background-color: #f0f3f5; padding: 1rem; border-radius: 8px;">
+            If you get certain social welfare payments or are on a lower income, start here first: <a href="do-i-qualify-for-a-free-grant.html" style="font-weight: 600;">Find Out If You Qualify for a Free Grant</a>.
+        </p>
+
+        <div id="grantOptions">
+            <p class="intro-text">This section details the main SEAI <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="tooltip-cofunded">co-funded<span class="tooltip-text" id="tooltip-cofunded">Co-funded means the grant covers a portion of the upgrade costs, and the homeowner is responsible for paying the remaining balance.</span></span> grant paths. Explore the two main paths below to find information and indicative grant amounts for each.</p>
+            <div class="grant-type-tabs">
+                <button class="grant-type-tab-button" data-grant-type-id="oneStopShopPath">One Stop Shop Path</button>
+                <button class="grant-type-tab-button" data-grant-type-id="diyPath">DIY Path</button>
+            </div>
+
+            <div id="oneStopShopPath" class="grant-type-tab-content">
+                 <div class="intro-text" style="background-color: #f0f3f5; padding: 1rem; border-radius: 8px; text-align: left;">
+                    <h4 style="margin-top:0;">The Fully Supported Journey</h4>
+                    <p style="font-size: 1em; margin-bottom: 0;">For large-scale projects, the One-Stop-Shop service provides end-to-end support. We manage everything from assessment and grant applications to contractor selection and quality assurance, ensuring a hassle-free journey to a warmer home.</p>
+                </div>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-button">
+                            <span>Is This Path Right For You?</span>
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="accordion-panel">
+                             <div class="accordion-panel-content">
+                                <div class="pros-cons-container">
+                                    <div> <h4>Pros:</h4> <ul class="pros-list">
+                                            <li><i class="icon" data-lucide="check-circle-2"></i><span><strong>Convenience:</strong> Single point of contact.</span></li>
+                                            <li><i class="icon" data-lucide="check-circle-2"></i><span><strong>Comprehensive Upgrades:</strong> Multiple upgrades together.</span></li>
+                                            <li><i class="icon" data-lucide="check-circle-2"></i><span><strong>Grant Management:</strong> Handled by provider.</span></li>
+                                            <li><i class="icon" data-lucide="check-circle-2"></i><span><strong>Upfront Grant Deduction:</strong> Often available.</span></li>
+                                        </ul>
+                                    </div>
+                                    <div> <h4>Cons:</h4> <ul class="cons-list">
+                                            <li><i class="icon" data-lucide="x-circle"></i><span><strong>Less Flexibility:</strong> On contractors/materials.</span></li>
+                                            <li><i class="icon" data-lucide="x-circle"></i><span><strong>Potentially Higher Cost:</strong> Due to management fees.</span></li>
+                                            <li><i class="icon" data-lucide="x-circle"></i><span><strong>Commitment:</strong> Best for large-scale retrofits.</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                 <div class="guidance-cards-container">
+                                    <div class="guidance-card">
+                                        <div class="card-header">
+                                            <i class="card-icon" data-lucide="home"></i>
+                                            <p class="card-question">What is the scale of your planned upgrade?</p>
+                                        </div>
+                                        <p class="card-explanation"><em>This path is ideal for large-scale, complex retrofits involving multiple measures at once (e.g., insulation, windows, and a heat pump).</em></p>
+                                    </div>
+                                    <div class="guidance-card">
+                                        <div class="card-header">
+                                             <i class="card-icon" data-lucide="clock"></i>
+                                            <p class="card-question">How much time and effort are you willing to put into managing the project?</p>
+                                        </div>
+                                        <p class="card-explanation"><em>Choose this path if you prefer a 'hands-off' approach where a single company manages all contractors, timelines, and paperwork for you.</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-button">
+                            <span>How It Works and Grant Amounts</span>
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="accordion-panel">
+                            <div class="accordion-panel-content">
+                                <h4 class="accordion-subtitle">About the One Stop Shop Path</h4>
+                                <p>A One-Stop-Shop offers a fully managed, end-to-end service. They handle everything from the initial assessment, grant application, contractor management, to quality assurance. Your home's existing <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="tooltip-ber">BER<span class="tooltip-text" id="tooltip-ber">BER stands for Building Energy Rating. It's like an energy label for your home (A-G), showing its energy efficiency. A-rated is most efficient.</span></span> must be B3 or lower. Generally for homes built and occupied before 2011.</p>
+                                                                <h4 class="accordion-subtitle">View Grant Amounts by Property Type</h4>
+                                                                <div class="property-type-subtabs" id="ossPropertyTabs">
+                                    <button class="property-subtab-button" data-property-subtab-id="ossGrantDetached">Detached</button>
+                                    <button class="property-subtab-button" data-property-subtab-id="ossGrantSemi">Semi-Detached / End-Terrace</button>
+                                    <button class="property-subtab-button" data-property-subtab-id="ossGrantMidTerrace">Mid-Terrace</button>
+                                    <button class="property-subtab-button" data-property-subtab-id="ossGrantApartment">Apartment</button>
+                                </div>
+                                <div id="ossGrantDetached" class="property-subtab-content">
+                                    <h5>Grant Amounts for Detached Houses</h5>
+                                    <table class="grant-amounts-table">
+                                        <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
+                                        <tbody>
+                                            <tr><td data-label="Measure">Attic Insulation</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">Rafter Insulation</td><td class="grant-value-col">€3,000</td></tr>
+                                            <tr><td data-label="Measure">Cavity Wall Insulation</td><td class="grant-value-col">€1,700</td></tr>
+                                            <tr><td data-label="Measure">Internal Insulation (Dry Lining)</td><td class="grant-value-col">€4,500</td></tr>
+                                            <tr><td data-label="Measure">External Wall Insulation (Wrap)</td><td class="grant-value-col">€8,000</td></tr>
+                                            <tr><td data-label="Measure">Floor Insulation</td><td class="grant-value-col">€3,500</td></tr>
+                                            <tr><td data-label="Measure">Windows (Complete Upgrade)</td><td class="grant-value-col">€4,000</td></tr>
+                                            <tr><td data-label="Measure">External Doors (max. 2)</td><td class="grant-value-col">€800 per door</td></tr>
+                                            <tr><td data-label="Measure">Heat Pump Systems</td><td class="grant-value-col">€6,500</td></tr>
+                                            <tr><td data-label="Measure">Central Heating System for Heat Pump</td><td class="grant-value-col">€2,000</td></tr>
+                                            <tr><td data-label="Measure">Heating Controls</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure"><span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="tooltip-solarpv">Solar PV<span class="tooltip-text" id="tooltip-solarpv">Solar PV (Photovoltaic) panels convert sunlight directly into electricity for your home.</span></span> (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
+                                            <tr><td data-label="Measure">Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                                            <tr><td data-label="Measure">Mechanical Ventilation</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">Air Tightness</td><td class="grant-value-col">€1,000</td></tr>
+                                            <tr><td data-label="Measure">Home Energy Assessment</td><td class="grant-value-col">€350</td></tr>
+                                            <tr><td data-label="Measure">Project Management</td><td class="grant-value-col">€2,000</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="ossGrantSemi" class="property-subtab-content">
+                                    <h5>Grant Amounts for Semi-Detached / End-Terrace</h5>
+                                     <table class="grant-amounts-table">
+                                        <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
+                                        <tbody>
+                                            <tr><td data-label="Measure">Attic Insulation</td><td class="grant-value-col">€1,300</td></tr>
+                                            <tr><td data-label="Measure">Rafter Insulation</td><td class="grant-value-col">€3,000</td></tr>
+                                            <tr><td data-label="Measure">Cavity Wall Insulation</td><td class="grant-value-col">€1,200</td></tr>
+                                            <tr><td data-label="Measure">Internal Insulation (Dry Lining)</td><td class="grant-value-col">€3,500</td></tr>
+                                            <tr><td data-label="Measure">External Wall Insulation (Wrap)</td><td class="grant-value-col">€6,000</td></tr>
+                                            <tr><td data-label="Measure">Floor Insulation</td><td class="grant-value-col">€3,500</td></tr>
+                                            <tr><td data-label="Measure">Windows (Complete Upgrade)</td><td class="grant-value-col">€3,000</td></tr>
+                                            <tr><td data-label="Measure">External Doors (max. 2)</td><td class="grant-value-col">€800 per door</td></tr>
+                                            <tr><td data-label="Measure">Heat Pump Systems</td><td class="grant-value-col">€6,500</td></tr>
+                                            <tr><td data-label="Measure">Central Heating System for Heat Pump</td><td class="grant-value-col">€2,000</td></tr>
+                                            <tr><td data-label="Measure">Heating Controls</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure">Solar PV (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
+                                            <tr><td data-label="Measure">Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                                            <tr><td data-label="Measure">Mechanical Ventilation</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">Air Tightness</td><td class="grant-value-col">€1,000</td></tr>
+                                            <tr><td data-label="Measure">Home Energy Assessment</td><td class="grant-value-col">€350</td></tr>
+                                            <tr><td data-label="Measure">Project Management</td><td class="grant-value-col">€1,600</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="ossGrantMidTerrace" class="property-subtab-content">
+                                    <h5>Grant Amounts for Mid-Terrace Houses</h5>
+                                    <table class="grant-amounts-table">
+                                        <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
+                                        <tbody>
+                                            <tr><td data-label="Measure">Attic Insulation</td><td class="grant-value-col">€1,200</td></tr>
+                                            <tr><td data-label="Measure">Rafter Insulation</td><td class="grant-value-col">€2,000</td></tr>
+                                            <tr><td data-label="Measure">Cavity Wall Insulation</td><td class="grant-value-col">€800</td></tr>
+                                            <tr><td data-label="Measure">Internal Insulation (Dry Lining)</td><td class="grant-value-col">€2,000</td></tr>
+                                            <tr><td data-label="Measure">External Wall Insulation (Wrap)</td><td class="grant-value-col">€3,500</td></tr>
+                                            <tr><td data-label="Measure">Floor Insulation</td><td class="grant-value-col">€3,500</td></tr>
+                                            <tr><td data-label="Measure">Windows (Complete Upgrade)</td><td class="grant-value-col">€1,800</td></tr>
+                                            <tr><td data-label="Measure">External Doors (max. 2)</td><td class="grant-value-col">€800 per door</td></tr>
+                                            <tr><td data-label="Measure">Heat Pump Systems</td><td class="grant-value-col">€6,500</td></tr>
+                                            <tr><td data-label="Measure">Central Heating System for Heat Pump</td><td class="grant-value-col">€2,000</td></tr>
+                                            <tr><td data-label="Measure">Heating Controls</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure">Solar PV (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
+                                            <tr><td data-label="Measure">Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                                            <tr><td data-label="Measure">Mechanical Ventilation</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">Air Tightness</td><td class="grant-value-col">€1,000</td></tr>
+                                            <tr><td data-label="Measure">Home Energy Assessment</td><td class="grant-value-col">€350</td></tr>
+                                            <tr><td data-label="Measure">Project Management</td><td class="grant-value-col">€1,200</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="ossGrantApartment" class="property-subtab-content">
+                                    <h5>Grant Amounts for Apartments</h5>
+                                    <table class="grant-amounts-table">
+                                        <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
+                                        <tbody>
+                                            <tr><td data-label="Measure">Attic Insulation (top-floor only)</td><td class="grant-value-col">€800</td></tr>
+                                            <tr><td data-label="Measure">Rafter Insulation (top-floor only)</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">Cavity Wall Insulation</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure">Internal Insulation (Dry Lining)</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">External Wall Insulation (Wrap)</td><td class="grant-value-col">€3,000</td></tr>
+                                            <tr><td data-label="Measure">Floor Insulation (ground-floor only)</td><td class="grant-value-col">€3,500</td></tr>
+                                            <tr><td data-label="Measure">Windows (Complete Upgrade)</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">External Doors (max. 2)</td><td class="grant-value-col">€800 per door</td></tr>
+                                            <tr><td data-label="Measure">Heat Pump Systems</td><td class="grant-value-col">€4,500</td></tr>
+                                            <tr><td data-label="Measure">Central Heating System for Heat Pump</td><td class="grant-value-col">€1,000</td></tr>
+                                            <tr><td data-label="Measure">Heating Controls</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure">Solar PV (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
+                                            <tr><td data-label="Measure">Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                                            <tr><td data-label="Measure">Mechanical Ventilation</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">Air Tightness</td><td class="grant-value-col">€1,000</td></tr>
+                                            <tr><td data-label="Measure">Home Energy Assessment</td><td class="grant-value-col">€350</td></tr>
+                                            <tr><td data-label="Measure">Project Management</td><td class="grant-value-col">€800</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                 <p class="notes-col"><em>One-Stop-Shop Build year: Property must be built and occupied before 2011.</em></p>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="accordion-item">
+                        <button class="accordion-button">
+                            <span>Group Up with Neighbours for Greater Savings</span>
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="accordion-panel">
+                             <div class="accordion-panel-content">
+                                <h4 class="accordion-subtitle">About the Community Grant Initiative</h4>
+                                <p>Warm Home Hub also facilitates group applications by partnering with an approved One-Stop-Shop. This allows a community of homeowners to undertake upgrades together, potentially leading to economies of scale and shared learning. It's the same fully managed process, but for a group.</p>
+                                 <div class="next-steps-buttons" style="justify-content: center; margin-top: 1rem;">
+                                     <a href="mailto:info@warmhomehub.ie?subject=Enquiry About Community Grants" class="button">Contact Us About Community Grants</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="diyPath" class="grant-type-tab-content">
+                 <div class="intro-text" style="background-color: #f0f3f5; padding: 1rem; border-radius: 8px; text-align: left;">
+                    <h4 style="margin-top:0;">The Self-Managed Journey</h4>
+                    <p style="font-size: 1em; margin-bottom: 0;">If you prefer to manage your own project or want to upgrade your home in stages, the individual grant path is for you. We provide the guidance and information you need to make informed decisions and find registered contractors.</p>
+                </div>
+                 <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-button">
+                            <span>Is This Path Right For You?</span>
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="accordion-panel">
+                            <div class="accordion-panel-content">
+                                 <div class="pros-cons-container">
+                                     <div> <h4>Pros:</h4> <ul class="pros-list">
+                                        <li><i class="icon" data-lucide="check-circle-2"></i><span><strong>Flexibility:</strong> Choose upgrades and timing.</span></li>
+                                        <li><i class="icon" data-lucide="check-circle-2"></i><span><strong>Control:</strong> Select your own contractors.</span></li>
+                                        <li><i class="icon" data-lucide="check-circle-2"></i><span><strong>Paced Investment:</strong> Spread cost over time.</span></li>
+                                     </ul></div>
+                                     <div> <h4>Cons:</h4> <ul class="cons-list">
+                                        <li><i class="icon" data-lucide="x-circle"></i><span><strong>More Effort:</strong> You manage the full project.</span></li>
+                                        <li><i class="icon" data-lucide="x-circle"></i><span><strong>Coordination:</strong> Can be complex.</span></li>
+                                        <li><i class="icon" data-lucide="x-circle"></i><span><strong>Grant Paid Post-Works:</strong> Pay upfront, then claim.</span></li>
+                                     </ul></div>
+                                 </div>
+                                 <div class="guidance-cards-container">
+                                    <div class="guidance-card">
+                                        <div class="card-header">
+                                            <i class="card-icon" data-lucide="home"></i>
+                                            <p class="card-question">What is the scale of your planned upgrade?</p>
+                                        </div>
+                                        <p class="card-explanation"><em>This path is perfect if you plan to tackle one or two specific upgrades at a time, or want to phase your upgrades over a longer period.</em></p>
+                                    </div>
+                                    <div class="guidance-card">
+                                        <div class="card-header">
+                                             <i class="card-icon" data-lucide="clock"></i>
+                                            <p class="card-question">How much time and effort are you willing to put into managing the project?</p>
+                                        </div>
+                                        <p class="card-explanation"><em>Choose this path if you are comfortable managing contractors, timelines, and grant applications yourself. It requires a more 'hands-on' approach.</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-button">
+                            <span>How It Works and Grant Amounts</span>
+                            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="accordion-panel">
+                             <div class="accordion-panel-content">
+                                <h4 class="accordion-subtitle">About the DIY Path</h4>
+                                 <p>This path allows you to apply for grants for specific, individual energy upgrades (e.g., attic insulation). You manage the project yourself, including choosing registered contractors and applying for grants for each measure. Build year cutoffs apply (e.g., pre-2011 for insulation, pre-2021 for renewables).</p>
+                                                                <h4 class="accordion-subtitle">View Grant Amounts by Property Type</h4>
+                                                                <div class="property-type-subtabs" id="indPropertyTabs">
+                                     <button class="property-subtab-button" data-property-subtab-id="indGrantDetached2">Detached</button>
+                                    <button class="property-subtab-button" data-property-subtab-id="indGrantSemi2">Semi-Detached / End-Terrace</button>
+                                    <button class="property-subtab-button" data-property-subtab-id="indGrantMidTerrace2">Mid-Terrace</button>
+                                    <button class="property-subtab-button" data-property-subtab-id="indGrantApartment2">Apartment</button>
+                                </div>
+                                 <div id="indGrantDetached2" class="property-subtab-content">
+                                    <h5>Grant Amounts for Detached Houses</h5>
+                                    <table class="grant-amounts-table">
+                                        <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
+                                        <tbody>
+                                            <tr><td data-label="Measure">Attic Insulation</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">Cavity Wall Insulation</td><td class="grant-value-col">€1,700</td></tr>
+                                            <tr><td data-label="Measure">Internal Insulation (Dry Lining)</td><td class="grant-value-col">€4,500</td></tr>
+                                            <tr><td data-label="Measure">External Wall Insulation (Wrap)</td><td class="grant-value-col">€8,000</td></tr>
+                                            <tr><td data-label="Measure"><span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="tooltip-heatpump2">Heat Pump<span class="tooltip-text" id="tooltip-heatpump2">A heat pump is a device that transfers heat from a source (like air or ground) into your home for heating and hot water. It's a highly efficient alternative to traditional boilers.</span></span> Systems (Air to Water etc.)</td><td class="grant-value-col">€6,500</td></tr>
+                                            <tr><td data-label="Measure">Heating Controls</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure"><span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="tooltip-solarpv3">Solar PV<span class="tooltip-text" id="tooltip-solarpv3">Solar PV (Photovoltaic) panels convert sunlight directly into electricity for your home.</span></span> (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
+                                            <tr><td data-label="Measure">Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="indGrantSemi2" class="property-subtab-content">
+                                    <h5>Grant Amounts for Semi-Detached / End-Terrace</h5>
+                                    <table class="grant-amounts-table">
+                                        <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
+                                        <tbody>
+                                            <tr><td data-label="Measure">Attic Insulation</td><td class="grant-value-col">€1,300</td></tr>
+                                            <tr><td data-label="Measure">Cavity Wall Insulation</td><td class="grant-value-col">€1,200</td></tr>
+                                            <tr><td data-label="Measure">Internal Insulation (Dry Lining)</td><td class="grant-value-col">€3,500</td></tr>
+                                             <tr><td data-label="Measure">External Wall Insulation (Wrap)</td><td class="grant-value-col">€6,000</td></tr>
+                                            <tr><td data-label="Measure"><span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="tooltip-heatpump3">Heat Pump<span class="tooltip-text" id="tooltip-heatpump3">A heat pump is a device that transfers heat from a source (like air or ground) into your home for heating and hot water. It's a highly efficient alternative to traditional boilers.</span></span> Systems (Air to Water etc.)</td><td class="grant-value-col">€6,500</td></tr>
+                                            <tr><td data-label="Measure">Heating Controls</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure">Solar PV (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
+                                            <tr><td data-label="Measure">Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="indGrantMidTerrace2" class="property-subtab-content">
+                                    <h5>Grant Amounts for Mid-Terrace Houses</h5>
+                                     <table class="grant-amounts-table">
+                                        <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
+                                        <tbody>
+                                            <tr><td data-label="Measure">Attic Insulation</td><td class="grant-value-col">€1,200</td></tr>
+                                            <tr><td data-label="Measure">Cavity Wall Insulation</td><td class="grant-value-col">€800</td></tr>
+                                            <tr><td data-label="Measure">Internal Insulation (Dry Lining)</td><td class="grant-value-col">€2,000</td></tr>
+                                            <tr><td data-label="Measure">External Wall Insulation (Wrap)</td><td class="grant-value-col">€3,500</td></tr>
+                                            <tr><td data-label="Measure"><span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="tooltip-heatpump4">Heat Pump<span class="tooltip-text" id="tooltip-heatpump4">A heat pump is a device that transfers heat from a source (like air or ground) into your home for heating and hot water. It's a highly efficient alternative to traditional boilers.</span></span> Systems (Air to Water etc.)</td><td class="grant-value-col">€6,500</td></tr>
+                                            <tr><td data-label="Measure">Heating Controls</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure">Solar PV (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
+                                            <tr><td data-label="Measure">Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="indGrantApartment2" class="property-subtab-content">
+                                    <h5>Grant Amounts for Apartments</h5>
+                                    <table class="grant-amounts-table">
+                                        <thead><tr><th class="measure-col">Measure</th><th class="grant-value-col">Grant Value (up to)</th></tr></thead>
+                                        <tbody>
+                                            <tr><td data-label="Measure">Attic Insulation (top-floor only)</td><td class="grant-value-col">€800</td></tr>
+                                            <tr><td data-label="Measure">Cavity Wall Insulation</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure">Internal Insulation (Dry Lining)</td><td class="grant-value-col">€1,500</td></tr>
+                                            <tr><td data-label="Measure">External Wall Insulation (Wrap)</td><td class="grant-value-col">€3,000</td></tr>
+                                            <tr><td data-label="Measure"><span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="tooltip-heatpump5">Heat Pump<span class="tooltip-text" id="tooltip-heatpump5">A heat pump is a device that transfers heat from a source (like air or ground) into your home for heating and hot water. It's a highly efficient alternative to traditional boilers.</span></span> Systems (Air to Water etc.)</td><td class="grant-value-col">€4,500</td></tr>
+                                            <tr><td data-label="Measure">Heating Controls</td><td class="grant-value-col">€700</td></tr>
+                                            <tr><td data-label="Measure">Solar PV (Photovoltaic)</td><td class="grant-value-col">€1,800 (max)</td></tr>
+                                            <tr><td data-label="Measure">Solar Water Heating</td><td class="grant-value-col">€1,200</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p class="notes-col"><em>Individual Grants Build year: For insulation and heating controls, pre-2011. For heat pumps and renewables, pre-2021. Windows and Doors grants are NOT typically available as individual grants.</em></p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <p><strong>Disclaimer:</strong> The information on this page is for guidance only. Grant details can change. Always refer to the official <a href="https://www.seai.ie/" target="_blank" rel="noopener noreferrer">SEAI website</a> and contact your <a href="https://www.gov.ie/en/organisation/department-of-housing-local-government-and-heritage/#local-authorities" target="_blank" rel="noopener noreferrer">Local Authority</a> directly for the most current information.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+
+            function activateGrantTypeTab(tabId) {
+                const parentElement = document.getElementById('grantOptions');
+                if (!parentElement) return;
+
+                parentElement.querySelectorAll('.grant-type-tab-content').forEach(content => content.classList.remove('active'));
+                parentElement.querySelectorAll('.grant-type-tabs .grant-type-tab-button').forEach(button => button.classList.remove('active'));
+
+                const selectedButton = parentElement.querySelector(`.grant-type-tab-button[data-grant-type-id="${tabId}"]`);
+                if (selectedButton) selectedButton.classList.add('active');
+                
+                const selectedContent = document.getElementById(tabId);
+                if (selectedContent) {
+                    selectedContent.classList.add('active');
+                    const firstPropertySubTabButton = selectedContent.querySelector('.property-subtab-button');
+                    if (firstPropertySubTabButton && !selectedContent.querySelector('.property-subtab-button.active')) {
+                        activatePropertySubTab(firstPropertySubTabButton.dataset.propertySubtabId, tabId);
+                    }
+                }
+            }
+
+            function activatePropertySubTab(subTabId, parentGrantTypeTabId) {
+                const parentElement = document.getElementById(parentGrantTypeTabId);
+                if (!parentElement) return;
+
+                parentElement.querySelectorAll('.property-subtab-content').forEach(content => content.classList.remove('active'));
+                parentElement.querySelectorAll('.property-type-subtabs .property-subtab-button').forEach(button => button.classList.remove('active'));
+
+                const selectedButton = parentElement.querySelector(`.property-subtab-button[data-property-subtab-id="${subTabId}"]`);
+                if (selectedButton) selectedButton.classList.add('active');
+
+                const selectedContent = document.getElementById(subTabId);
+                if (selectedContent) selectedContent.classList.add('active');
+            }
+            
+            function setupAccordions() {
+                document.querySelectorAll('.accordion').forEach(accordion => {
+                    const buttons = accordion.querySelectorAll('.accordion-button');
+                    buttons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            const panel = button.nextElementSibling;
+                            const wasActive = button.classList.contains('active');
+                                                        
+                            if (!wasActive) {
+                                button.classList.add('active');
+                                panel.classList.add('active');
+                                panel.style.maxHeight = panel.scrollHeight + "px";
+                            } else {
+                                button.classList.remove('active');
+                                panel.classList.remove('active');
+                                panel.style.maxHeight = null;
+                            }
+                        });
+                    });
+                });
+            }
+
+            // --- Initialization ---
+            document.querySelectorAll('.grant-type-tabs .grant-type-tab-button').forEach(button => {
+                button.addEventListener('click', () => activateGrantTypeTab(button.dataset.grantTypeId));
+            });
+
+            document.querySelectorAll('.property-type-subtabs .property-subtab-button').forEach(button => {
+                const parentGrantTypeId = button.closest('.grant-type-tab-content').id;
+                button.addEventListener('click', () => activatePropertySubTab(button.dataset.propertySubtabId, parentGrantTypeId));
+            });
+            
+            setupAccordions();
+
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash && (initialHash === 'oneStopShopPath' || initialHash === 'diyPath')) {
+                activateGrantTypeTab(initialHash);
+            } else {
+                const firstGrantTypeButton = document.querySelector('.grant-type-tab-button');
+                if(firstGrantTypeButton) {
+                    activateGrantTypeTab(firstGrantTypeButton.dataset.grantTypeId);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
