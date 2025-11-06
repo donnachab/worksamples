@@ -217,6 +217,9 @@
                             <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-seai" data-tab-target="#tab-seai">
                                 SEAI Grant Guide & Checkers
                             </button>
+                             <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-template" data-tab-target="#tab-template">
+                                Digital Guide Template
+                            </button>
                         </div>
                         <div class="tab-content">
                             <div id="tab-client" class="tab-panel active" role="tabpanel">
@@ -405,10 +408,10 @@
                                         This project was a personal initiative with a friend to explore innovative approaches to public information and did not involve any commercial engagement or payment from previous employers.
                                     </p>
                                     <div class="project-link-buttons">
-                                        <a href="https://donnachab.github.io/worksamples/find-out-if-you-qualify.html" target="_blank" rel="noopener noreferrer" class="project-button">
+                                        <a href="find-out-if-you-qualify.html" target="_blank" rel="noopener noreferrer" class="project-button">
                                             <span class="icon">✅</span> View Eligibility Checkers
                                         </a>
-                                        <a href="https://donnachab.github.io/worksamples/explore-all-grant-options.html" target="_blank" rel="noopener noreferrer" class="project-button">
+                                        <a href="explore-all-grant-options.html" target="_blank" rel="noopener noreferrer" class="project-button">
                                             <span class="icon">📖</span> View Grant Guide and Amounts
                                         </a>
                                         <a href="https://github.com/donnachab/worksamples/tree/main" target="_blank" rel="noopener noreferrer" class="project-button">
@@ -417,6 +420,32 @@
                                     </div>
                                 </section>
                             </div>
+                  <div id="tab-template" class="tab-panel" role="tabpanel">
+                    <section class="work-sample prominent-sample">
+                        <h2 id="project-template">DITA-Inspired Guide Template (Structured AI Architecture)</h2>
+                        <p>This template was engineered to enforce structure when leveraging large language models (LLMs). Its core feature is the embedded <strong>Master Prompt</strong>, which initiates the guide creation as a structured conversation, requiring the AI to define the <strong>Title</strong>, <strong>Audience</strong>, and <strong>Primary Goal</strong> of the guide before generating the DITA-compliant structure.</p>
+                        <p>The system's value lies in its <strong>predictable output</strong>: it transforms conceptual requirements into DITA-compliant content, ensuring reuse and accuracy across diverse topics.</p>
+                        <p><strong>Key Architectural & Design Features:</strong></p>
+                        <ul>
+                            <li><strong>AI Governance:</strong> The internal structure acts as a "Master Prompt," ensuring content is generated according to <strong>strict DITA topic types</strong> (Task, Concept, Reference).</li>
+                            <li><strong>Predictable Structure:</strong> Enforces mandatory IDs (<code>#chap-name</code>, <code>#task-name</code>) and DITA blocks (Prerequisites, Steps, Result) for consistent content modeling.</li>
+                            <li><strong>Machine Readability:</strong> Uses semantic tagging for high-quality ingestion by <abbr title="Artificial Intelligence">AI</abbr> training models or conversational interfaces.</li>
+                            <li><strong>Advanced Interactivity:</strong> Integrates Mermaid.js for rendering complex diagrams directly from text input.</li>
+                            <li><strong>Deployment:</strong> Single-file HTML design allows for portable and zero-friction viewing.</li>
+                        </ul>
+                        <div class="project-link-buttons">
+                            <a href="guide-ai-developer-mindset.html" target="_blank" rel="noopener noreferrer" class="project-button">
+                                <span class="icon">💻</span> View Guide: The AI-Amplified Content Developer: Fusing Strategy, UX, and Technical Skill
+                            </a>
+                            <a href="creating-a-studio.html" target="_blank" rel="noopener noreferrer" class="project-button">
+                                <span class="icon">🎥</span> View Guide: The Authority Studio: Pro Political Video on a Budget
+                            </a>
+                            <a href="book-template-future-tech-writing.html" target="_blank" rel="noopener noreferrer" class="project-button">
+                                <span class="icon">📜</span> View Template Source Code
+                            </a>
+                        </div>
+                    </section>
+                </div>
                         </div>
                     </div>
                 </main>
@@ -432,73 +461,69 @@
             // --- Main Tab Logic ---
             const mainTabButtons = document.querySelectorAll('.tab-buttons > .tab-button');
             const mainTabPanels = document.querySelectorAll('.tab-content > .tab-panel');
-            if (mainTabButtons.length > 0 && mainTabPanels.length > 0) {
-                // Set the first tab as active by default if none are active
-                let initialActiveMainButton = document.querySelector('.tab-buttons > .tab-button.active');
-                if (!initialActiveMainButton) {
-                    initialActiveMainButton = mainTabButtons[0];
-                    initialActiveMainButton.classList.add('active');
-                    initialActiveMainButton.setAttribute('aria-selected', 'true');
-                }
-                const initialActiveMainPanel = document.querySelector(initialActiveMainButton.getAttribute('data-tab-target'));
-                if (initialActiveMainPanel) {
-                    initialActiveMainPanel.style.display = 'block';
-                    initialActiveMainPanel.classList.add('active'); // Ensure active class is added for transitions
-                }
+            
+            // Function to handle tab activation logic
+            const activateTab = (button) => {
+                const targetPanelId = button.getAttribute('data-tab-target');
 
+                // Deactivate all main tabs and hide their content
+                mainTabButtons.forEach(btn => { 
+                    btn.classList.remove('active'); 
+                    btn.setAttribute('aria-selected', 'false'); 
+                });
+                mainTabPanels.forEach(panel => { 
+                    panel.classList.remove('active'); 
+                    panel.style.display = 'none'; 
+                });
 
-                mainTabButtons.forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const targetPanelId = button.getAttribute('data-tab-target');
+                // Activate the clicked tab and show its content
+                button.classList.add('active'); 
+                button.setAttribute('aria-selected', 'true');
+                const targetPanel = document.querySelector(targetPanelId);
+                if (targetPanel) {
+                    targetPanel.style.display = 'block';
+                    targetPanel.offsetHeight; // Force reflow for animation
+                    requestAnimationFrame(() => { targetPanel.classList.add('active'); });
 
-                        // Deactivate all main tabs and hide their content
-                        mainTabButtons.forEach(btn => { 
-                            btn.classList.remove('active'); 
-                            btn.setAttribute('aria-selected', 'false'); 
-                        });
-                        mainTabPanels.forEach(panel => { 
-                            panel.classList.remove('active'); 
-                            panel.style.display = 'none'; 
-                        });
+                    // Handle specific sub-tab logic if the independent tab is activated
+                    if (targetPanel.id === 'tab-independent') {
+                        const subTabButtons = targetPanel.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
+                        
+                        let initialActiveSubButton = targetPanel.querySelector('.sub-tab-buttons > .sub-tab-button.active');
+                        if (!initialActiveSubButton && subTabButtons.length > 0) {
+                            initialActiveSubButton = subTabButtons[0];
+                            initialActiveSubButton.classList.add('active');
+                            initialActiveSubButton.setAttribute('aria-selected', 'true');
+                        }
+                        if (initialActiveSubButton) {
+                            const initialActiveSubPanel = targetPanel.querySelector(initialActiveSubButton.getAttribute('data-subtab-target'));
+                            if (initialActiveSubPanel) {
+                                initialActiveSubPanel.style.display = 'block';
+                                initialActiveSubPanel.classList.add('active');
 
-                        // Activate the clicked tab and show its content
-                        button.classList.add('active'); 
-                        button.setAttribute('aria-selected', 'true');
-                        const targetPanel = document.querySelector(targetPanelId);
-                        if (targetPanel) {
-                            targetPanel.style.display = 'block';
-                            targetPanel.offsetHeight; // Force reflow for animation
-                            requestAnimationFrame(() => { targetPanel.classList.add('active'); });
-
-                            // Handle specific sub-tab logic if the independent tab is activated
-                            if (targetPanel.id === 'tab-independent') {
-                                const subTabButtons = targetPanel.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
-                                const subTabPanels = targetPanel.querySelectorAll('.sub-tab-content > .sub-tab-panel');
-                                
-                                let initialActiveSubButton = targetPanel.querySelector('.sub-tab-buttons > .sub-tab-button.active');
-                                if (!initialActiveSubButton && subTabButtons.length > 0) {
-                                    initialActiveSubButton = subTabButtons[0];
-                                    initialActiveSubButton.classList.add('active');
-                                    initialActiveSubButton.setAttribute('aria-selected', 'true');
-                                }
-                                if (initialActiveSubButton) {
-                                    const initialActiveSubPanel = targetPanel.querySelector(initialActiveSubButton.getAttribute('data-subtab-target'));
-                                    if (initialActiveSubPanel) {
-                                        initialActiveSubPanel.style.display = 'block';
-                                        initialActiveSubPanel.classList.add('active');
-
-                                        if (initialActiveSubPanel.id === 'subtab-concept') {
-                                            const firstFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
-                                            const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
-                                            if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) {
-                                                loadFeatureContent(firstFeatureButton, contentPane);
-                                            }
-                                        }
+                                if (initialActiveSubPanel.id === 'subtab-concept') {
+                                    const firstFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
+                                    const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
+                                    if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) {
+                                        loadFeatureContent(firstFeatureButton, contentPane);
                                     }
                                 }
                             }
                         }
-                    });
+                    }
+                }
+            };
+            
+            // Set initial active tab on page load
+            if (mainTabButtons.length > 0 && mainTabPanels.length > 0) {
+                let initialActiveMainButton = document.querySelector('.tab-buttons > .tab-button.active');
+                if (!initialActiveMainButton) {
+                    initialActiveMainButton = mainTabButtons[0];
+                }
+                activateTab(initialActiveMainButton);
+                
+                mainTabButtons.forEach(button => {
+                    button.addEventListener('click', () => activateTab(button));
                 });
             }
 
@@ -509,9 +534,6 @@
                 const subTabPanels = independentTab.querySelectorAll('.sub-tab-content > .sub-tab-panel');
 
                 if (subTabButtons.length > 0 && subTabPanels.length > 0) {
-                    // This block will be executed if the 'Independent DITA Examples' tab is initially active
-                    // Or when it becomes active. The logic is handled by the mainTabButtons listener now.
-                    // Keep this event listener for when sub-tabs are clicked *after* the main tab is active.
                     subTabButtons.forEach(button => {
                         button.addEventListener('click', (e) => {
                             const targetPanelId = button.getAttribute('data-subtab-target');
