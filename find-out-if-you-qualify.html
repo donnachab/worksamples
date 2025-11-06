@@ -171,25 +171,13 @@
         .disclaimer a { color: var(--whh-link-color); font-weight: 600; text-decoration: none; }
         .disclaimer a:hover { text-decoration: underline; }
         
-        /* Tooltip style correction */
-        .tooltip-trigger { 
-            cursor: help; 
-            color: var(--whh-link-color); 
-            font-weight: 600; 
-            text-decoration: underline dotted; 
-            position: relative; 
-            display: inline-block; 
-        }
+        .tooltip-trigger { cursor: help; color: var(--whh-link-color); font-weight: 600; text-decoration: underline dotted; position: relative; display: inline-block; }
         .tooltip-text {
             visibility: hidden; width: 280px; background-color: #333; color: #fff; text-align: left;
             font-family: 'Inter', sans-serif; font-weight: 400; font-size: var(--whh-font-size-small); line-height: 1.5; border-radius: 6px;
             padding: 10px; position: absolute; z-index: 10; bottom: 125%; left: 50%;
             margin-left: -140px; opacity: 0; transition: opacity 0.3s, visibility 0.3s;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            /* Prevent raw text from bleeding through */
-            white-space: normal; 
-            text-decoration: none; 
-            display: block; 
         }
         .tooltip-trigger:hover .tooltip-text, .tooltip-trigger:focus .tooltip-text { visibility: visible; opacity: 1; }
         .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
@@ -404,7 +392,8 @@
 
             document.querySelectorAll('.tab-nav .tab-button').forEach(button => {
                 // Attach click listener to each button
-                button.addEventListener('click', () => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault(); // Stop any default button action
                     const tabId = button.dataset.tabId;
                     openTab(tabId);
                     // Update URL hash without refreshing the page
@@ -526,7 +515,7 @@
 
             } else {
                    const statusClass = isProvisional ? 'provisional' : 'not-eligible';
-                   const title = isProvisional ? 'You Should Contact Your Local Authority' : 'Based on your answers, you probably don\\'t qualify.';
+                   const title = isProvisional ? 'You Should Contact Your Local Authority' : 'Based on your answers, you probably don\'t qualify.';
                    resultHTML = `
                         <div class="result-box ${statusClass}">
                             <p><b>${title}</b></p>
