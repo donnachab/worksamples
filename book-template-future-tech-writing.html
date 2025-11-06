@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Master prompt
+ 
+### 🏛️ MASTER PROMPT - COMPLETE RULES FOR COLLABORATIVE DOCUMENT GENERATION
+
+This ruleset governs the entire lifecycle of a document, from planning to final HTML formatting.
+
+## I. Conversational & Planning Phase (MANDATORY)
+
+1.  **Initiate the Guide (Mandatory):** The AI **MUST** initiate the process by directly asking the user to define the document's **Title**, **Target Audience**, and **Primary Goal/Topic**.
+2.  **Persona & Tone:** The AI must assume the persona of a friendly, knowledgeable editor or tutor.
+3.  **Propose an Outline (Mandatory):** The AI **MUST** propose a hierarchical outline. This outline **MUST** begin with a **Cover Page** (`#cover`), followed by the Chapters and Topics.
+
+---
+
+## II. Structural Constraints & Naming Rules (Strict)
+
+1.  **Section ID Naming (CRITICAL):**
+    * A mandatory **Cover Page** **MUST** use the ID `#cover`.
+    * Chapter Introduction pages **MUST** use the format `#chap-name`.
+    * Concept Topics **MUST** use the format `#concept-name`.
+    * Task Topics **MUST** use the format `#task-name`.
+    * Reference Topics **MUST** use the format `#ref-name`.
+2.  **No DITA Terminology in Titles (CRITICAL):** Page headings (`<h1>`, `<h2>`), Card Titles, and Navigation Links **MUST NOT** include DITA prefixes or structural terminology (e.g., **NEVER** use "Task 1:," "Concept A:," or "Reference:").
+3.  **Content Block Layout (DITA-Inspired):**
+    * **Concept Topics:** `<h1>` → Initial `<p>` (Short Description) → Logical `<h2>` subheadings.
+    * **Task Topics:** `<h1>` → Initial `<p>` (Short Description) → `<h2>Prerequisites</h2>` → `<h2>Steps</h2>` (`<ol>`) → `<h2>Result</h2>`.
+4.  **Navigation Rules:** The sub-topic `<ul>` **MUST NOT** contain a redundant link to its parent chapter-intro page.
+5.  **Title Matching:** Link text **MUST** exactly match the target `<h1>` title (or the `textContent` of the Cover Page's `<h1>`).
+
+---
+
+## III. Content & Formatting Rules (Semantic HTML)
+
+1.  **No Markdown in Content (CRITICAL):** Generated HTML content **MUST** be pure HTML. **NEVER** use Markdown characters (`**`, `*`, `#`, `>`).
+2.  **Semantic Tag Usage (Strict):**
+    * **Strong Importance/Warnings:** Use `<strong>...</strong>`.
+    * **Emphasis/Stress:** Use `<em>...</em>`.
+    * **UI Controls/Keywords:** Use `<b>...</b>`.
+    * **Code/Filepaths:** Use `<code>...</code>`.
+3.  **Style Constraints:** Standard text links (`<a>`) **MUST NOT** be aggressively bold or italic.
+4.  **Cross-Referencing & Modularity:** All external URLs **MUST** be formatted as proper HTML hyperlinks.
+5.  **Breadcrumb Navigation (CRITICAL):** All pages **MUST** begin with a functional, hierarchical, and clickable breadcrumb navigation, **with the exception of the `#cover` page**, which must have no breadcrumbs.
+    * **Example (Chapter Intro):**
+        `<div class="breadcrumbs"><a href="#cover">Cover Page</a> &gt; Chapter 1 Title</div>`
+    * **Example (Child Topic):**
+        `<div class="breadcrumbs"><a href="#cover">Cover Page</a> &gt; <a href="#chap-name">Chapter 1 Title</a> &gt; Current Topic Title</div>`
+
+---
+
+## IV. Iconography & Visual Rules (Conditional)
+
+1.  **Icon Library (CRITICAL):** All icons **MUST** use the **Font Awesome Free CDN** (`<i>` tags).
+    * The AI **MUST** verify that any icon used (e.g., `fa-solid fa-star`) is part of the Font Awesome **Free** set.
+    * Using "Pro" icons (e.g., `fa-microphone-lines`, `fa-lamp`) will result in a broken, blank image and is a critical failure.
+2.  **Judicious Use of Visuals:** Visual elements (Icons, Cards, Mermaid Diagrams) should only be used when they add **semantic clarity or illustrate a critical process**.
+3.  **Mermaid Diagrams:** Only use for processes that genuinely **fork or require decision points**. Simple linear flowcharts are **forbidden**.
+4.  **Mermaid Exception:** The only exception to the No Markdown rule is for formatting text **inside** a Mermaid node, using the syntax: `A["\`**Formatted Text**\`"]`.
+
+---
+
+## V. Guide Logic Adaptations (Mandatory)
+
+1.  **Cover Page Navigation (MANDATORY):** The left `<nav>` pane **MUST** begin with a link to the Cover Page, styled as an `<h3>` (e.g., `<h3><a href="#cover">Cover Page</a></h3>`). The `<ul>` following this link must be present but empty.
+2.  **Chapter Link Highlighting (CRITICAL):** In the left navigation pane (`<nav>`), the active page must **ALWAYS** be a single `<a>` tag. The system **MUST NOT** display two simultaneously active links.
+3.  **Chapter Structure as Topic (MANDATORY):** All Chapter Introduction links (targetting `#chap-name` IDs) must be included in the chronological list of pages, functioning as a regular content topic that introduces the subsequent sections.
+    * **CLARIFICATION:** In the left `<nav>` pane, the `<h3>` tag **MUST** contain the hyperlink to the chapter-intro page (e.g., `<h3><a href="#chap-name">Chapter Title</a></h3>`). The `<ul>` that follows it contains the links to the child topics *only*.
+4.  **Mini-TOC Requirement (Format Update):** Every Chapter Introduction page (`#chap-name`) **MUST** include a **Mini-TOC Card Grid**. This list MUST use the `<div class="card-grid chapter-links">` wrapper, containing individual cards (`<a href="..." class="comorbidity-card">`) for each direct child topic, each **MANDATORILY** styled with a relevant icon (`<i>`).
+5.  **Section Definition (CRITICAL):** Every ID in the entire navigation list MUST correspond to one, and only one, self-contained `<section id="...">...</section>` block in the `<main>` content.
+6.  **Mini-TOC Content Limit:** Content within a `#chap-name` section MUST be limited to the introductory paragraph, the Mini-TOC list (now the card grid), and the chapter's `<h1>` title/breadcrumbs. No subsequent task/concept content is allowed within this section.
+7.  **Icon Relevance (MANDATORY):** Icons used in the Mini-TOC Card Grid **MUST** be highly relevant to the **specific topic/action** described in the card title (e.g., use a `trash` icon for a disposal task, not a generic `clipboard` icon for a task).
+
+---
+
+## VI. Code Delivery & Workflow (CRITICAL)
+
+1.  **Deliver Full Collapsible Blocks (CRITICAL):** When providing generated HTML for the navigation pane or the content pane, the AI **MUST** deliver the *entire parent `div` block*.
+    * For navigation, deliver the complete `<div id="nav-content-wrapper">...</div>` block.
+    * For content, deliver the complete `<div id="content-pages-wrapper">...</div>` block.
+2.  **Reason (Do Not Repeat):** This is a critical workflow requirement, as it allows the user to collapse, select, and replace the entire block easily in a code editor like VS Code. **Do not** provide only the inner HTML.
+
+
+-->
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Standalone Digital Guide Title</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f4f6f8;
+            --border-color: #e1e4e8;
+            --text-color: #24292e;
+            --heading-color: #1a1a1a;
+            --link-color: #0366d6;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            font-style: normal;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .nav-pane {
+            width: 300px;
+            flex-shrink: 0;
+            background-color: var(--secondary-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        /* --- THIS IS THE CSS FROM AUTISM.HTML --- */
+        .nav-pane h3 {
+            font-size: 1.1rem;
+            color: var(--heading-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        /* THIS IS THE CRITICAL FIX FOR BLACK NAV LINKS */
+        .nav-pane h3 a {
+            text-decoration: none;
+            color: inherit; /* Makes the link black, not blue */
+            display: block;
+            padding: 0.4rem 0.8rem;
+            margin: 0 -0.8rem;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        
+        .nav-pane h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .nav-pane ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-bottom: 1rem; /* Space below each chapter list */
+            padding-bottom: 1rem; /* Space below each chapter list */
+            border-bottom: 1px solid var(--border-color); /* Separator */
+        }
+        
+        .nav-pane h3 + ul {
+             margin-top: -0.5rem; /* Pull list up to its heading */
+        }
+
+        .nav-pane li a {
+            display: block;
+            color: var(--text-color); /* This makes topic links grey */
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: normal;
+        }
+        
+        .nav-pane a:hover {
+            background-color: #e9ecef;
+        }
+
+        .nav-pane a.active {
+            background-color: var(--link-color);
+            color: white;
+            font-weight: 600;
+        }
+         /* --- END OF NAV PANE CSS --- */
+
+
+        .content-pane {
+            flex-grow: 1;
+            width: 100%; 
+            padding: 2rem 4rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content-pane section {
+            display: none; 
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        #cover {
+            border-bottom: none;
+            text-align: center;
+            padding-top: 5rem;
+        }
+        
+        .breadcrumbs {
+            font-size: 0.9rem;
+            color: #586069;
+            margin-bottom: 1rem;
+        }
+        
+        /* --- THIS IS THE CORRECTED TEXT STYLING --- */
+        .content-pane h1 {
+            font-size: 2.5rem;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        .content-pane h2 {
+            font-size: 1.75rem;
+            color: var(--heading-color);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .content-pane a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: normal; /* Links inside paragraphs aren't bold */
+        }
+        
+        .content-pane a:hover {
+            text-decoration: underline;
+        }
+        
+        .content-pane p,
+        .content-pane ul,
+        .content-pane ol,
+        .content-pane dl {
+            margin-bottom: 1.25rem;
+        }
+
+        .content-pane ul, .content-pane ol {
+            padding-left: 2rem;
+        }
+        
+        .content-pane li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-pane dl dt {
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+        
+        .content-pane dl dd {
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .content-pane blockquote {
+            margin-left: 0;
+            padding: 0.8rem 1.5rem;
+            border-left: 4px solid var(--border-color);
+            background-color: var(--secondary-bg);
+            color: #586069;
+        }
+        /* --- END OF TEXT STYLING --- */
+
+
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .page-nav a {
+            display: block;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            max-width: 45%;
+            text-decoration: none;
+        }
+        .page-nav a:hover {
+            background-color: var(--secondary-bg);
+            border-color: #cacaca;
+        }
+        .page-nav .nav-label {
+            font-size: 0.8rem;
+            color: #586069;
+            margin-bottom: 0.25rem;
+            font-weight: normal;
+        }
+        .page-nav .nav-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .page-nav .nav-next {
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .nav-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 2000;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        @media (max-width: 992px) {
+            .nav-pane {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 1000;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            }
+            .nav-pane.is-visible {
+                transform: translateX(0);
+            }
+            .nav-toggle {
+                display: block;
+            }
+            .content-pane {
+                padding: 2rem 1.5rem;
+                padding-top: 5rem;
+            }
+        }
+
+        /* Card styles (for Font Awesome) */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .comorbidity-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: var(--primary-bg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: block;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .comorbidity-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: var(--link-color);
+            text-decoration: none;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            color: var(--heading-color);
+            font-weight: 600;
+            font-style: normal;
+        }
+        
+        .card-icon {
+            color: var(--link-color);
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .comorbidity-card .card-body p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            line-height: 1.5;
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+        /* END CARD STYLING */
+
+    </style>
+</head>
+<body>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
+    <div class="container">
+        <nav class="nav-pane" id="navPane">
+
+            <!-- Start of navigation block -->
+
+            <div id="nav-content-wrapper">
+                
+                
+            </div>
+            <!-- End oof navigation block -->
+
+            </nav>
+        
+        <main class="content-pane" id="contentPane">
+
+            <!-- Start of content block -->
+
+            <div id="content-pages-wrapper">
+                </div>
+
+            <!-- End of content block -->
+
+            </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({ startOnLoad: false });
+            }
+
+            const navPane = document.getElementById('navPane');
+            const contentPane = document.getElementById('contentPane');
+            const navToggle = document.getElementById('navToggle');
+            
+            let navLinks = document.querySelectorAll('.nav-pane a');
+            let contentSections = document.querySelectorAll('.content-pane section');
+            let pageOrder = [];
+
+            function buildPageNav() {
+                contentSections = document.querySelectorAll('.content-pane section');
+                // CORRECTED: This now selects ALL links in order, including H3 links
+                pageOrder = Array.from(document.querySelectorAll('.nav-pane a')).map(link => link.getAttribute('href').substring(1));
+                
+                contentSections.forEach(section => {
+                    const existingNav = section.querySelector('.page-nav');
+                    if (existingNav) existingNav.remove();
+                    
+                    const currentId = section.id;
+                    const currentIndex = pageOrder.indexOf(currentId);
+                    
+                    let prevLinkHTML = '';
+                    if (currentIndex > 0) {
+                        const prevId = pageOrder[currentIndex - 1];
+                        const prevLinkElement = document.querySelector(`.nav-pane a[href="#${prevId}"]`);
+                        if (prevLinkElement) {
+                            prevLinkHTML = `<a href="#${prevId}" class="nav-prev"><div class="nav-label">Previous</div><div class="nav-title">${prevLinkElement.textContent}</div></a>`;
+                        }
+                    }
+
+                    let nextLinkHTML = '';
+                    if (currentIndex > -1 && currentIndex < pageOrder.length - 1) {
+                        const nextId = pageOrder[currentIndex + 1];
+                        const nextLinkElement = document.querySelector(`.nav-pane a[href="#${nextId}"]`);
+                        if(nextLinkElement) {
+                            nextLinkHTML = `<a href="#${nextId}" class="nav-next"><div class="nav-label">Next</div><div class="nav-title">${nextLinkElement.textContent}</div></a>`;
+                        }
+                    }
+
+                    if (prevLinkHTML || nextLinkHTML) {
+                        const footerNavHTML = `<div class="page-nav">${prevLinkHTML}${nextLinkHTML}</div>`;
+                        section.insertAdjacentHTML('beforeend', footerNavHTML);
+                    }
+                });
+            }
+
+            function showContent(hash) {
+                // Re-select all links to build page order correctly
+                navLinks = document.querySelectorAll('.nav-pane a');
+                pageOrder = Array.from(navLinks).map(link => link.getAttribute('href').substring(1));
+
+                // *** THIS IS THE CRITICAL FIX ***
+                // It now defaults to 'cover' instead of the first nav item
+                let targetId = hash ? hash.substring(1) : 'cover';
+                
+                let targetSection = document.getElementById(targetId);
+                
+                if (!targetSection && contentSections.length > 0) {
+                     // Fallback if 'cover' somehow fails
+                     targetSection = contentSections[0];
+                     if(targetSection) targetId = targetSection.id;
+                }
+
+                contentSections = document.querySelectorAll('.content-pane section');
+                contentSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    
+                    if (typeof mermaid !== 'undefined') {
+                        const diagrams = targetSection.querySelectorAll('pre.mermaid');
+                        if (diagrams.length > 0) {
+                            mermaid.run({ nodes: diagrams }).catch(e => {
+                                 console.error("Mermaid rendering error in section " + targetId + ":", e);
+                            });
+                        }
+                    }
+                
+                    contentPane.scrollTop = 0;
+                    window.scrollTo(0, 0);
+                }
+                
+                // CORRECTED: This logic correctly finds the one active link
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + targetId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                buildPageNav(); 
+            }
+
+            function initializeApp() {
+                navLinks = document.querySelectorAll('.nav-pane a');
+                contentSections = document.querySelectorAll('.content-pane section');
+                pageOrder = Array.from(document.querySelectorAll('.nav-pane a')).map(link => link.getAttribute('href').substring(1));
+                
+                buildPageNav();
+                
+                const clickHandler = function(e) {
+                    const link = e.target.closest('a[href^="#"]');
+                    if (link) {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        
+                        try {
+                            history.pushState(null, null, targetId);
+                        } catch (err) {
+                            window.location.hash = targetId;
+                        }
+                        
+                        showContent(targetId);
+
+                        if (window.innerWidth <= 992 && navPane.classList.contains('is-visible')) {
+                            navPane.classList.remove('is-visible');
+                        }
+                    }
+                };
+
+                navPane.addEventListener('click', clickHandler);
+                contentPane.addEventListener('click', clickHandler);
+                
+                navToggle.addEventListener('click', function() {
+                    navPane.classList.toggle('is-visible');
+                });
+                
+                window.addEventListener('popstate', function() {
+                    showContent(window.location.hash);
+                });
+
+                showContent(window.location.hash);
+            }
+
+            initializeApp();
+        });
+    </script>
+</body>
+</html>
