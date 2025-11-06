@@ -372,17 +372,21 @@
     <script>
         // --- Core Tab & UI Functions ---
         function openTab(tabName) {
+            // Hide all tab content elements explicitly
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
-                content.style.display = 'none'; /* Ensure display property is updated */
+                content.style.display = 'none'; 
             });
+            // Deactivate all tab buttons
             document.querySelectorAll('.tab-nav .tab-button').forEach(button => button.classList.remove('active'));
             
             const selectedContent = document.getElementById(tabName);
             if (selectedContent) {
-                 selectedContent.style.display = 'block'; /* Show content */
+                 // Explicitly show the selected tab content
+                 selectedContent.style.display = 'block'; 
                  selectedContent.classList.add('active');
             }
+            // Activate the corresponding button
             const selectedButton = document.querySelector(`.tab-button[data-tab-id="${tabName}"]`);
             if (selectedButton) selectedButton.classList.add('active');
         }
@@ -394,17 +398,18 @@
             if (hash && validHashes.includes(hash)) {
                 openTab(hash);
             } else {
+                // Set Warmer Homes as default if no hash is present
                 openTab('warmerHomesChecker');
             }
 
             document.querySelectorAll('.tab-nav .tab-button').forEach(button => {
-                if (button.tagName.toLowerCase() === 'button') {
-                    button.addEventListener('click', () => {
-                        const tabId = button.dataset.tabId;
-                        openTab(tabId);
-                        history.pushState(null, null, '#' + tabId);
-                    });
-                }
+                // Attach click listener to each button
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tabId;
+                    openTab(tabId);
+                    // Update URL hash without refreshing the page
+                    history.pushState(null, null, '#' + tabId);
+                });
             });
         });
         
