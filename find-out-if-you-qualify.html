@@ -40,27 +40,17 @@
         }
 
         /* ---- Main Styles for Integration ---- */
+        /* Body styles removed to allow parent page to control them */
         .warmhomehub-checker-container {
             font-family: 'Inter', sans-serif;
             font-weight: 400; 
             line-height: 1.7; 
             color: var(--whh-text-color-body);
             font-size: var(--whh-font-size-base);
-            max-width: 900px; /* Consistent with other layouts */
+            max-width: 1140px; /* Increased width */
             width: 100%;
-            margin: 20px auto;
-            padding: 30px 40px; 
-            background: var(--whh-container-background);
-            border-radius: 12px; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08); 
-        }
-        
-        body {
-             font-family: 'League Spartan', sans-serif;
-             font-weight: 400; line-height: 1.7; margin: 0; padding: 20px;
-             background-color: var(--whh-background-color); color: var(--whh-text-color-body);
-             display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
-             font-size: var(--whh-font-size-base);
+            margin: 0 auto; /* Center the container */
+            padding: 20px 0; /* Vertical padding, horizontal handled by parent */
         }
         
         .warmhomehub-checker-container h1, 
@@ -353,28 +343,17 @@
         </div>
 
         <div class="disclaimer">
-            <p><strong>Disclaimer:</strong> The information and eligibility checkers on this page are for guidance only and are based on publicly available data at the time of creation. They are not legal, financial, or official energy advice. Always refer to the official SEAI website and contact your <a href="https://www.gov.ie/en/organisation/department-of-housing-local-government-and-heritage/#local-authorities" target="_blank" rel="noopener noreferrer">Local Authority</a> directly for the most accurate, up-to-date, and definitive information regarding grant eligibility, application procedures, and terms and conditions. The creators are liable for any actions taken based on this information.</p>
+            <p><strong>Disclaimer:</strong> The information and eligibility checkers on this page are for guidance only and are based on publicly available data at the time of creation. They are not legal, financial, or official energy advice. Always refer to the official SEAI website and contact your <a href="https://www.gov.ie/en/organisation/department-of-housing-local-government-and-heritage/#local-authorities" target="_blank" rel="noopener noreferrer">Local Authority</a> directly for the most accurate, up-to-date, and definitive information regarding grant eligibility, application procedures, and terms and conditions. The creators are not liable for any actions taken based on this information.</p>
         </div>
     </div>
 
     <script>
         // --- Core Tab & UI Functions ---
         function openTab(tabName) {
-            // Hide all tab content elements explicitly
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-                content.style.display = 'none'; 
-            });
-            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.querySelectorAll('.tab-nav .tab-button').forEach(button => button.classList.remove('active'));
-            
             const selectedContent = document.getElementById(tabName);
-            if (selectedContent) {
-                 // Explicitly show the selected tab content
-                 selectedContent.style.display = 'block'; 
-                 selectedContent.classList.add('active');
-            }
-            // Activate the corresponding button
+            if (selectedContent) selectedContent.classList.add('active');
             const selectedButton = document.querySelector(`.tab-button[data-tab-id="${tabName}"]`);
             if (selectedButton) selectedButton.classList.add('active');
         }
@@ -386,19 +365,17 @@
             if (hash && validHashes.includes(hash)) {
                 openTab(hash);
             } else {
-                // Set Warmer Homes as default if no hash is present
                 openTab('warmerHomesChecker');
             }
 
             document.querySelectorAll('.tab-nav .tab-button').forEach(button => {
-                // Attach click listener to each button
-                button.addEventListener('click', (event) => {
-                    event.preventDefault(); // Stop any default button action
-                    const tabId = button.dataset.tabId;
-                    openTab(tabId);
-                    // Update URL hash without refreshing the page
-                    history.pushState(null, null, '#' + tabId);
-                });
+                if (button.tagName.toLowerCase() === 'button') {
+                    button.addEventListener('click', () => {
+                        const tabId = button.dataset.tabId;
+                        openTab(tabId);
+                        history.pushState(null, null, '#' + tabId);
+                    });
+                }
             });
         });
         
@@ -451,7 +428,7 @@
                             <p><b>What you can do next:</b></p>
                             <ul class="checklist">
                                 <li><b>Double-check the rules</b> on the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI Warmer Homes Scheme website</a>.</li>
-                                <li><b>Explore other options.</b> You might be able to get a grant through the <a href="explore-all-grant-options.html">co-funded grant paths</a> instead.</li>
+                                <li><b>Explore other options.</b> You might be able to get a grant through the <a href="grant-guide.html">co-funded grant paths</a> instead.</li>
                             </ul>
                         </div>`;
             }
@@ -491,7 +468,7 @@
                    let incomeGuidance = '';
                    switch (householdIncome) {
                         case 'low': incomeGuidance = 'With income up to €37,500, you may get up to 95-100% of the cost of the works covered (up to the maximum grant amount).'; break;
-                        case 'medium_low': incomeGuidance = 'With income from €37,501 - €50,000, you may get a large portion of the costs covered (e.g., 75-85%)'; break;
+                        case 'medium_low': incomeGuidance = 'With income from €37,501 - €50,000, you may get a large portion of the costs covered (e.g., 75-85%).'; break;
                         case 'medium_high': incomeGuidance = 'With income from €50,001 - €62,500, you may get a smaller portion of the costs covered (e.g., around 50%).'; break;
                         case 'high': incomeGuidance = 'With income from €62,501 - €75,000, you may get the smallest portion of the costs covered (e.g., around 30%).'; break;
                 }
