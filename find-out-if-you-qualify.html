@@ -1,0 +1,516 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do I Qualify for a Free Grant? | WarmHomeHub.ie</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* --- Color Palette --- */
+        :root {
+            --whh-primary-color: #ff8310;
+            --whh-primary-darker: #e67300;
+            --whh-text-on-primary: #ffffff;
+            --whh-text-color-body: #4a4a4a;
+            --whh-text-color-headings: #2c3e50;
+            --whh-text-color-light: #5f5f5f;
+            --whh-link-color: var(--whh-primary-color);
+            --whh-background-color: #f8f9fa;
+            --whh-container-background: #ffffff;
+            --whh-border-color: #dce1e6;
+            --whh-tab-inactive-bg: #F0F3F5;
+            --whh-tab-active-bg: var(--whh-primary-color);
+            --whh-tab-active-text: var(--whh-text-on-primary);
+            --whh-tab-inactive-text: var(--whh-primary-color);
+            --whh-success-bg: #ECFDF5;
+            --whh-success-border: #A7F3D0;
+            --whh-success-text: #065F46;
+            --whh-error-bg: #FEF2F2;
+            --whh-error-border: #FECACA;
+            --whh-error-text: #991B1B;
+            --whh-provisional-bg: #FFFBEB;
+            --whh-provisional-border: #FDE68A;
+            --whh-provisional-text: #92400E;
+            --whh-font-size-base: 16px;
+            --whh-font-size-h1: 2.25rem;
+            --whh-font-size-h2: 1.75rem;
+            --whh-font-size-label: 1.1rem;
+            --whh-font-size-button: 1.1rem;
+            --whh-font-size-small: 0.9rem;
+        }
+
+        /* ---- Main Styles for Integration ---- */
+        /* Body styles removed to allow parent page to control them */
+        .warmhomehub-checker-container {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400; 
+            line-height: 1.7; 
+            color: var(--whh-text-color-body);
+            font-size: var(--whh-font-size-base);
+            max-width: 1140px; /* Increased width */
+            width: 100%;
+            margin: 0 auto; /* Center the container */
+            padding: 20px 0; /* Vertical padding, horizontal handled by parent */
+        }
+        
+        .warmhomehub-checker-container h1, 
+        .warmhomehub-checker-container h2, 
+        .warmhomehub-checker-container button { font-family: 'League Spartan', sans-serif; }
+        
+        .warmhomehub-checker-container h1 {
+            color: var(--whh-text-color-headings); text-align: center; font-size: var(--whh-font-size-h1);
+            font-weight: 700; margin-bottom: 25px;
+        }
+        .scheme-notice {
+            background-color: var(--whh-provisional-bg);
+            border: 1px solid var(--whh-provisional-border);
+            color: var(--whh-provisional-text);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .tab-content h2 {
+            color: var(--whh-text-color-headings); text-align: center; font-size: var(--whh-font-size-h2);
+            font-weight: 600; margin-top: 0; margin-bottom: 25px;
+        }
+        .intro-text {
+            text-align: center; margin-bottom: 30px; color: var(--whh-text-color-body); font-size: 1.05em;
+        }
+        .tab-nav {
+            display: flex; flex-wrap: wrap; margin-bottom: 25px; border-bottom: 2px solid var(--whh-border-color);
+        }
+        .tab-button {
+            padding: 10px 15px; cursor: pointer; background-color: var(--whh-tab-inactive-bg);
+            color: var(--whh-tab-inactive-text); border: none; border-top-left-radius: 8px; border-top-right-radius: 8px;
+            font-weight: 600; margin-right: 3px; margin-bottom: -2px;
+            transition: background-color 0.3s ease, color 0.3s ease; position: relative; text-align: center;
+            flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50px;
+            text-decoration: none;
+        }
+        .tab-button .tab-title-main { font-size: 1.25em; display: block; }
+        .tab-button .tab-title-sub { font-size: 1.1em; font-weight: 400; color: var(--whh-text-color-light); display: block; margin-top: 4px; }
+        .tab-button.active .tab-title-sub { color: rgba(255,255,255,0.85); }
+        .tab-button:hover { background-color: #fdf0e6; }
+        .tab-button.active { background-color: var(--whh-tab-active-bg); color: var(--whh-tab-active-text); border-bottom: 2px solid var(--whh-tab-active-bg); }
+        
+        .tab-content { display: none; padding-top: 20px; animation: fadeIn 0.5s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .question-group { margin-bottom: 25px; padding: 20px; border: 1px solid var(--whh-border-color); border-radius: 8px; background-color: #fdfdfd; transition: border-color 0.3s ease;}
+        .question-group > label:first-of-type { display: block; margin-bottom: 12px; font-weight: 600; color: var(--whh-text-color-headings); font-size: var(--whh-font-size-label); font-family: 'League Spartan', sans-serif;}
+        .question-group .explanation { font-size: var(--whh-font-size-small); color: var(--whh-text-color-light); margin-top: -5px; margin-bottom: 15px; }
+        .question-group .explanation a { color: var(--whh-link-color); text-decoration: none; font-weight: 600; }
+        .question-group .explanation a:hover { text-decoration: underline; }
+        .radio-option-group { display: flex; flex-direction: column; }
+        .radio-option { display: flex; align-items: center; margin-bottom: 10px; cursor: pointer; }
+        .radio-option input[type="radio"] { margin-right: 10px; transform: scale(1.2); cursor: pointer;}
+        .radio-option label { font-weight: 400; color: var(--whh-text-color-body); font-size: 1em; margin-bottom: 0; cursor: pointer; }
+        select, input[type="number"] {
+            width: 100%; padding: 12px; border: 1px solid var(--whh-border-color);
+            border-radius: 6px; background-color: white; font-family: 'Inter', sans-serif;
+            font-size: 1rem; color: var(--whh-text-color-body); box-sizing: border-box; transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%23555555%22/%3E%3C/svg%3E');
+            background-repeat: no-repeat; background-position: right 15px center; background-size: 18px;
+        }
+        select:focus, input[type="number"]:focus {
+            outline: none; border-color: var(--whh-primary-color);
+            box-shadow: 0 0 0 2px rgba(255, 131, 16, 0.2);
+        }
+        .checker-button {
+            display: block; width: 100%; padding: 15px; background-color: var(--whh-primary-color);
+            color: var(--whh-text-on-primary); border: none; border-radius: 8px; cursor: pointer;
+            font-size: var(--whh-font-size-button);
+            font-weight: 700; letter-spacing: 0.5px; transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-top: 20px;
+        }
+        .checker-button:hover { background-color: var(--whh-primary-darker); }
+        .checker-button:active { transform: translateY(1px); }
+
+        .result-display { margin-top: 35px; }
+        .result-box {
+            padding: 1.5rem; border-radius: 8px; 
+            border: 1px solid transparent;
+        }
+        .result-box p:first-child { font-weight: 700; font-size: 1.2em; margin-bottom: 0.8rem; font-family: 'League Spartan', sans-serif;}
+        .result-box p { margin-bottom: 0.7rem; line-height: 1.6; }
+        .result-box ul:not(.checklist) { padding-left: 20px; margin-top: 10px; list-style: disc; }
+        .result-box ul:not(.checklist) li { margin-bottom: 8px; }
+        .result-box a { color: #2563EB; font-weight: 500; text-decoration: underline; }
+        .result-box a:hover { color: #1D4ED8; }
+        .result-box strong { font-weight: 600; }
+        .result-box.eligible { background-color: var(--whh-success-bg); border-color: var(--whh-success-border); color: var(--whh-success-text); }
+        .result-box.eligible p:first-child { color: #047857; }
+        .result-box.not-eligible { background-color: var(--whh-error-bg); border-color: var(--whh-error-border); color: var(--whh-error-text); }
+        .result-box.not-eligible p:first-child { color: #B91C1C; }
+        .result-box.provisional { background-color: var(--whh-provisional-bg); border-color: var(--whh-provisional-border); color: var(--whh-provisional-text); }
+        .result-box.provisional p:first-child { color: #B45309; }
+        .checklist { list-style-type: none; padding-left: 0; margin-top: 1rem; }
+        .checklist li { position: relative; padding-left: 1.85rem; margin-bottom: 0.8rem; line-height: 1.55; font-size: 0.95em; }
+        .checklist li::before {
+            content: "☐"; position: absolute; left: 0; top: 0.15em; font-size: 1.3rem; color: #60A5FA;
+        }
+        .checklist strong { font-weight: 600; color: #1F2937;}
+        
+        .disclaimer { font-size: var(--whh-font-size-small); color: var(--whh-text-color-light); margin-top: 40px; text-align: center; padding: 15px; border-top: 1px solid var(--whh-border-color); }
+        .disclaimer a { color: var(--whh-link-color); font-weight: 600; text-decoration: none; }
+        .disclaimer a:hover { text-decoration: underline; }
+        
+        .tooltip-trigger { cursor: help; color: var(--whh-link-color); font-weight: 600; text-decoration: underline dotted; position: relative; display: inline-block; }
+        .tooltip-text {
+            visibility: hidden; width: 280px; background-color: #333; color: #fff; text-align: left;
+            font-family: 'Inter', sans-serif; font-weight: 400; font-size: var(--whh-font-size-small); line-height: 1.5; border-radius: 6px;
+            padding: 10px; position: absolute; z-index: 10; bottom: 125%; left: 50%;
+            margin-left: -140px; opacity: 0; transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .tooltip-trigger:hover .tooltip-text, .tooltip-trigger:focus .tooltip-text { visibility: visible; opacity: 1; }
+        .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
+
+        @media (max-width: 768px) {
+            .warmhomehub-checker-container h1 { font-size: 2rem; }
+            .tab-content h2 { font-size: 1.5rem; }
+            .tab-button { padding: 8px 10px; }
+            .tab-button .tab-title-main { font-size: 1.15em;}
+            .tab-button .tab-title-sub { font-size: 1.0em;}
+            .tooltip-text { width: 220px; margin-left: -110px; }
+        }
+        @media (max-width: 600px) {
+            .warmhomehub-checker-container { font-size: calc(var(--whh-font-size-base) * 0.95); }
+            h1 { font-size: 1.75rem; }
+            .tab-content h2 { font-size: 1.3rem; }
+            .tab-nav { flex-direction: column; }
+            .tab-button { width: 100%; margin-right: 0; margin-bottom: 2px; border-radius: 6px; bottom: 0; padding: 10px 8px; }
+            .tab-button.active { border-bottom-color: var(--whh-tab-active-bg); }
+            .question-group { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="warmhomehub-checker-container">
+        <h1>Do I Qualify for a Free Grant?</h1>
+        
+        <p class="scheme-notice">
+            ℹ️ These grant checkers are for homeowners who get certain social welfare payments or have a lower household income.
+        </p>
+        
+        <p class="intro-text" style="background-color: #f0f3f5; padding: 1rem; border-radius: 8px;">
+            Looking for other grant amounts and details? <a href="grant-guide.html" style="font-weight: 600;">Click here to view the Full Grants Guide</a>.
+        </p>
+
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab-id="warmerHomesChecker">
+                <span class="tab-title-main">Warmer Homes Scheme</span>
+                <span class="tab-title-sub">Free Upgrades Checker</span>
+            </button>
+            <button class="tab-button" data-tab-id="olderPeopleChecker">
+                <span class="tab-title-main">Housing Aid Grant</span>
+                <span class="tab-title-sub">For Older People</span>
+            </button>
+        </div>
+
+        <div id="warmerHomesChecker" class="tab-content active">
+            <h2>SEAI Warmer Homes Scheme</h2>
+            <p class="intro-text">Answer the questions below to see if you might qualify for the SEAI Warmer Homes Scheme. This scheme provides <strong>free</strong> energy upgrades to eligible homeowners.</p>
+
+            <form id="eligibilityFormWarmerHomes" novalidate="">
+                <div class="question-group">
+                    <label for="wh_q_year_built">1. In what year was your home built?
+                        <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="wh-tooltip-year">
+                            i
+                            <span class="tooltip-text" id="wh-tooltip-year">To qualify, your home must have been built and occupied before 2006.</span>
+                        </span>
+                    </label>
+                    <input type="number" id="wh_q_year_built" name="whYearBuilt" placeholder="e.g., 1985" min="1800" max="2025" required="">
+                </div>
+
+                <div class="question-group">
+                    <label>2. Do you own and live in this home?
+                        <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="wh-tooltip-owner">
+                            i
+                            <span class="tooltip-text" id="wh-tooltip-owner">You must be the owner-occupier of the property to qualify for this scheme.</span>
+                        </span>
+                    </label>
+                    <div class="radio-option-group">
+                        <div class="radio-option"><input type="radio" id="wh_q1_yes" name="whHomeOwnership" value="yes" required=""> <label for="wh_q1_yes">Yes</label></div>
+                        <div class="radio-option"><input type="radio" id="wh_q1_no" name="whHomeOwnership" value="no"> <label for="wh_q1_no">No</label></div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label>3. Do you get a qualifying Social Welfare payment?
+                        <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="wh-tooltip-welfare">
+                            i
+                            <span class="tooltip-text" id="wh-tooltip-welfare">Qualifying payments include Fuel Allowance, Jobseeker's Allowance (for over 6 months with a child under 7), Working Family Payment, Domiciliary Care Allowance, Carer's Allowance, and others.</span>
+                        </span>
+                    </label>
+                    <p class="explanation">Please refer to the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI website</a> for the complete list.</p>
+                    <div class="radio-option-group">
+                        <div class="radio-option"><input type="radio" id="wh_q3_yes" name="whWelfarePayment" value="yes" required=""> <label for="wh_q3_yes">Yes</label></div>
+                        <div class="radio-option"><input type="radio" id="wh_q3_no" name="whWelfarePayment" value="no"> <label for="wh_q3_no">No</label></div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label for="wh_q4_ber">4. What is your home's current Building Energy Rating (BER)?
+                        <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="wh-tooltip-ber">
+                            i
+                           <span class="tooltip-text" id="wh-tooltip-ber">The scheme prioritises homes with a low energy rating (C, D, E, F, G). If you don't have a BER, SEAI will arrange an assessment if you meet the other criteria.</span>
+                        </span>
+                    </label>
+                    <select id="wh_q4_ber" name="whBerStatus" required="">
+                        <option value="">-- Please select --</option>
+                        <option value="cdefg">BER is C, D, E, F or G</option>
+                        <option value="ab">BER is A or B</option>
+                        <option value="no_ber">I don't have a BER / I don't know</option>
+                    </select>
+                </div>
+                <button type="button" class="checker-button" onclick="checkEligibilityWarmerHomes()">Check if I Qualify</button>
+            </form>
+            <div id="resultWarmerHomes" class="result-display" role="alert" aria-live="assertive"></div>
+        </div>
+
+        <div id="olderPeopleChecker" class="tab-content">
+            <h2>Housing Aid for Older People Grant</h2>
+            <p class="intro-text">Answer the questions below to see if you might qualify for this grant for essential home repairs. It is managed by your Local Authority and is <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="op-tooltip-means">means-tested<span class="tooltip-text" id="op-tooltip-means">Means-tested means your eligibility and grant amount depend on an assessment of your household's financial income.</span></span>.</p>
+            <form id="eligibilityFormOlderPeople" novalidate="">
+                <div class="question-group">
+                    <label>1. Is the person applying for the grant 66 or older?
+                         <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="op-tooltip-age">
+                            i
+                            <span class="tooltip-text" id="op-tooltip-age">The primary applicant must usually be 66+. In exceptional cases of hardship, younger applicants may be considered by the Local Authority.</span>
+                        </span>
+                    </label>
+                    <p class="explanation">The grant is mainly for people aged 66 and over.</p>
+                    <div class="radio-option-group">
+                        <div class="radio-option"><input type="radio" id="op_q1_yes" name="opPersonAge" value="yes" required=""> <label for="op_q1_yes">Yes</label></div>
+                        <div class="radio-option"><input type="radio" id="op_q1_no" name="opPersonAge" value="no"> <label for="op_q1_no">No</label></div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label>2. Is the home privately owned?
+                        <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="op-tooltip-owner">
+                            i
+                            <span class="tooltip-text" id="op-tooltip-owner">The property cannot be a council house. The applicant needs to be the owner or have a legal right to live there permanently (e.g., under a will).</span>
+                        </span>
+                    </label>
+                    <div class="radio-option-group">
+                        <div class="radio-option"><input type="radio" id="op_q3_yes" name="opPropertyStatus" value="yes" required=""> <label for="op_q3_yes">Yes</label></div>
+                        <div class="radio-option"><input type="radio" id="op_q3_no" name="opPropertyStatus" value="no"> <label for="op_q3_no">No</label></div>
+                    </div>
+                </div>
+                
+                <div class="question-group">
+                    <label for="op_q4_income">3. What is your estimated annual gross household income?
+                        <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="op-tooltip-income">
+                            i
+                            <span class="tooltip-text" id="op-tooltip-income">This is the total income from everyone in the house, before tax. The grant amount you get depends on this figure. Check with your Local Authority for their specific rules.</span>
+                        </span>
+                    </label>
+                    <p class="explanation">Your grant is means-tested, meaning the amount depends on your household income.</p>
+                    <select id="op_q4_income" name="opHouseholdIncome" required="">
+                        <option value="">-- Please select an income range --</option>
+                        <option value="low">Up to €37,500 (May qualify for up to 95-100% of costs, max grant applies)</option>
+                        <option value="medium_low">€37,501 - €50,000 (May qualify for a tapered percentage, e.g., 75-85%)</option>
+                        <option value="medium_high">€50,001 - €62,500 (May qualify for a lower tapered percentage, e.g., 50%)</option>
+                        <option value="high">€62,501 - €75,000 (May qualify for the lowest tapered percentage, e.g., 30%)</option>
+                        <option value="over_limit">Over €75,000 (Check with Local Authority)</option>
+                    </select>
+                </div>
+
+                <div class="question-group">
+                    <label>4. Are the planned works essential repairs?
+                        <span class="tooltip-trigger" tabindex="0" role="button" aria-describedby="op-tooltip-works">
+                           i
+                           <span class="tooltip-text" id="op-tooltip-works">This can include roof repair, rewiring, fixing unsafe windows/doors, or providing basic heating. Cosmetic work is not covered.</span>
+                        </span>
+                    </label>
+                    <p class="explanation">For example: fixing the roof, upgrading wiring, or installing central heating. General decoration is not covered.</p>
+                    <div class="radio-option-group">
+                        <div class="radio-option"><input type="radio" id="op_q5_yes" name="opEssentialWorks" value="yes" required=""> <label for="op_q5_yes">Yes</label></div>
+                        <div class="radio-option"><input type="radio" id="op_q5_no" name="opEssentialWorks" value="no"> <label for="op_q5_no">No</label></div>
+                    </div>
+                </div>
+                <button type="button" class="checker-button" onclick="checkEligibilityOlderPeople()">Check if I Qualify</button>
+            </form>
+            <div id="resultOlderPeople" class="result-display" role="alert" aria-live="assertive"></div>
+        </div>
+
+        <div class="disclaimer">
+            <p><strong>Disclaimer:</strong> The information and eligibility checkers on this page are for guidance only and are based on publicly available data at the time of creation. They are not legal, financial, or official energy advice. Always refer to the official SEAI website and contact your <a href="https://www.gov.ie/en/organisation/department-of-housing-local-government-and-heritage/#local-authorities" target="_blank" rel="noopener noreferrer">Local Authority</a> directly for the most accurate, up-to-date, and definitive information regarding grant eligibility, application procedures, and terms and conditions. The creators are not liable for any actions taken based on this information.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Core Tab & UI Functions ---
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-nav .tab-button').forEach(button => button.classList.remove('active'));
+            const selectedContent = document.getElementById(tabName);
+            if (selectedContent) selectedContent.classList.add('active');
+            const selectedButton = document.querySelector(`.tab-button[data-tab-id="${tabName}"]`);
+            if (selectedButton) selectedButton.classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.substring(1);
+            const validHashes = ['warmerHomesChecker', 'olderPeopleChecker'];
+            
+            if (hash && validHashes.includes(hash)) {
+                openTab(hash);
+            } else {
+                openTab('warmerHomesChecker');
+            }
+
+            document.querySelectorAll('.tab-nav .tab-button').forEach(button => {
+                if (button.tagName.toLowerCase() === 'button') {
+                    button.addEventListener('click', () => {
+                        const tabId = button.dataset.tabId;
+                        openTab(tabId);
+                        history.pushState(null, null, '#' + tabId);
+                    });
+                }
+            });
+        });
+        
+        // --- Checker Logic (Using Template Literals) ---
+        function checkEligibilityWarmerHomes() {
+            const form = document.getElementById('eligibilityFormWarmerHomes');
+            const resultDiv = document.getElementById('resultWarmerHomes');
+            
+            if (!form.checkValidity()) {
+                resultDiv.innerHTML = `<div class="result-box provisional"><p><b>Please answer all questions.</b></p><p>You need to answer all the questions before we can check if you qualify.</p></div>`;
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            
+            const yearBuilt = parseInt(form.elements['whYearBuilt'].value);
+            const ownHome = form.elements['whHomeOwnership'].value;
+            const welfarePayment = form.elements['whWelfarePayment'].value;
+            const berStatus = form.elements['whBerStatus'].value;
+            let messages = [];
+            
+            if (ownHome === 'no') messages.push("You must own and live in the property.");
+            if (yearBuilt >= 2006) messages.push(`Your home was built in ${yearBuilt}. It must have been built before 2006 to qualify.`);
+            if (welfarePayment === 'no') messages.push("You need to be getting a qualifying social welfare payment.");
+            if (berStatus === 'ab') messages.push("Homes that already have a high energy rating (A or B) are usually not eligible.");
+
+            let resultHTML = '';
+            if (messages.length === 0) {
+                   resultHTML = `
+                        <div class="result-box eligible">
+                            <p><b>Good news! You might qualify for the Warmer Homes Scheme.</b></p>
+                            <p>Based on your answers, you seem to meet the main requirements for free home energy upgrades.</p>
+                            ${berStatus === 'no_ber' ? `<p>Because you don't know your home's BER, SEAI will arrange an assessment if you meet the other criteria.</p>` : ''}
+                            <p><b>Your Next Steps:</b></p>
+                            <ul class="checklist">
+                                <li><b>Confirm your Social Welfare payment</b> is on the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI list</a>.</li>
+                                <li><b>Read the full details</b> on the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">Warmer Homes Scheme page</a>.</li>
+                                <li><b>Get your documents ready,</b> like proof you own your home, proof of your welfare payment, and your MPRN (from your electricity bill).</li>
+                                <li><b>Apply online</b> through the official SEAI website.</li>
+                            </ul>
+                            <p style="margin-top: 1.5rem; font-style: italic; font-size: 0.9em;">Please note: SEAI will make the final decision after they assess your home.</p>
+                        </div>`;
+            } else {
+                   resultHTML = `
+                        <div class="result-box not-eligible">
+                            <p><b>Based on your answers, you probably don't qualify.</b></p>
+                            <p>It looks like you don't meet one or more of the main rules for this grant. Here are the reasons why:</p>
+                            <ul style="list-style: disc; padding-left: 20px; margin: 0.5rem 0 1rem 0; font-size: 0.95em;">
+                                ${messages.map(msg => `<li>${msg}</li>`).join('')}
+                            </ul>
+                            <p><b>What you can do next:</b></p>
+                            <ul class="checklist">
+                                <li><b>Double-check the rules</b> on the <a href="https://www.seai.ie/grants/home-energy-grants/fully-funded-upgrades-for-eligible-homes/" target="_blank" rel="noopener noreferrer">official SEAI Warmer Homes Scheme website</a>.</li>
+                                <li><b>Explore other options.</b> You might be able to get a grant through the <a href="grant-guide.html">co-funded grant paths</a> instead.</li>
+                            </ul>
+                        </div>`;
+            }
+            resultDiv.innerHTML = resultHTML;
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function checkEligibilityOlderPeople() {
+            const form = document.getElementById('eligibilityFormOlderPeople');
+            const resultDiv = document.getElementById('resultOlderPeople');
+
+            if (!form.checkValidity()) {
+                resultDiv.innerHTML = `<div class="result-box provisional"><p><b>Please answer all questions.</b></p><p>You need to answer all the questions before we can check if you qualify.</p></div>`;
+                   resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            const personAge = form.opPersonAge.value;
+            const propertyStatus = form.opPropertyStatus.value;
+            const householdIncome = form.opHouseholdIncome.value;
+            const essentialWorks = form.opEssentialWorks.value;
+            let messages = [];
+            let isProvisional = false;
+            let provisionalMessage = '';
+
+            if (propertyStatus === 'no') messages.push("The grant is for people who own their own home.");
+            if (householdIncome === 'over_limit') messages.push("Your household income may be above the limit. You should check with your Local Authority.");
+            if (essentialWorks === 'no') messages.push("The work you want to do must be for essential repairs.");
+            if (personAge === 'no') {
+                provisionalMessage = `<p style="font-weight:500; margin-top:1rem;"><b>Important Note on Age:</b> Because the applicant is under 66, qualifying for this grant is rare and depends on your Local Authority viewing it as a hardship case. <strong>You must contact them directly to discuss your situation.</strong></p>`;
+                messages.push("Applicant is under 66.");
+                isProvisional = true;
+            }
+            
+            let resultHTML = '';
+            if (messages.length === 0) {
+                   let incomeGuidance = '';
+                   switch (householdIncome) {
+                        case 'low': incomeGuidance = 'With income up to €37,500, you may get up to 95-100% of the cost of the works covered (up to the maximum grant amount).'; break;
+                        case 'medium_low': incomeGuidance = 'With income from €37,501 - €50,000, you may get a large portion of the costs covered (e.g., 75-85%).'; break;
+                        case 'medium_high': incomeGuidance = 'With income from €50,001 - €62,500, you may get a smaller portion of the costs covered (e.g., around 50%).'; break;
+                        case 'high': incomeGuidance = 'With income from €62,501 - €75,000, you may get the smallest portion of the costs covered (e.g., around 30%).'; break;
+                }
+                incomeGuidance += ' You should always check with your Local Authority for their exact income rules and grant amounts.';
+
+                resultHTML = `
+                        <div class="result-box eligible">
+                            <p><b>Good news! You might qualify for the Housing Aid Grant.</b></p>
+                            <p>Based on your answers, you seem to meet several of the main requirements.</p>
+                            <p><b>About Your Income:</b> ${incomeGuidance}</p>
+                            <p><b>Your Next Steps:</b></p>
+                            <ul class="checklist">
+                                <li><b>CRITICAL - Contact Your Local Authority:</b> Speak to the Housing Grants section of your local council. They will give you the final say and the correct application form.</li>
+                                <li><b>Confirm Your Income:</b> Get paperwork ready to prove your household income for the last tax year.</li>
+                                <li><b>Get Detailed Quotes:</b> Ask qualified contractors for written quotes for the essential works needed.</li>
+                                <li><b>Get Your Documents Ready:</b> You'll likely need proof of age, home ownership, and tax compliance.</li>
+                                <li><b>Wait for Approval:</b> Do NOT start any work before you get written grant approval from the Local Authority.</li>
+                            </ul>
+                            <p style="margin-top: 1.5rem; font-style: italic; font-size: 0.9em;">Please note: Your Local Authority will make the final decision after you apply.</p>
+                        </div>`;
+
+            } else {
+                   const statusClass = isProvisional ? 'provisional' : 'not-eligible';
+                   const title = isProvisional ? 'You Should Contact Your Local Authority' : 'Based on your answers, you probably don\'t qualify.';
+                   resultHTML = `
+                        <div class="result-box ${statusClass}">
+                            <p><b>${title}</b></p>
+                            <p>It looks like you don't meet one or more of the main rules. Here are the reasons why:</p>
+                            <ul style="list-style: disc; padding-left: 20px; margin: 0.5rem 0 1rem 0; font-size: 0.95em;">
+                                ${messages.map(msg => `<li>${msg}</li>`).join('')}
+                            </ul>
+                            ${provisionalMessage}
+                            <p><b>What you can do next:</b></p>
+                            <ul class="checklist">
+                                <li><b>Contact Your Local Authority:</b> Discuss your situation with your council's Housing Grants section for a definite answer, especially if age or income is the issue.</li>
+                                <li><b>Review the Official Rules:</b> Check your Local Authority's website for their specific criteria for this grant.</li>
+                            </ul>
+                        </div>`;
+            }
+            resultDiv.innerHTML = resultHTML;
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
+
+</body></html>
