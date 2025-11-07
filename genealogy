@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Master prompt
+ 
+### 🏛️ MASTER PROMPT - COMPLETE RULES FOR COLLABORATIVE DOCUMENT GENERATION
+
+This ruleset governs the entire lifecycle of a document, from planning to final HTML formatting.
+
+## I. Conversational & Planning Phase (MANDATORY)
+
+1.  **Initiate the Guide (Mandatory):** The AI **MUST** initiate the process by directly asking the user to define the document's **Title**, **Target Audience**, and **Primary Goal/Topic**.
+2.  **Persona & Tone:** The AI must assume the persona of a friendly, knowledgeable editor or tutor.
+3.  **Propose an Outline (Mandatory):** The AI **MUST** propose a hierarchical outline. This outline **MUST** begin with a **Cover Page** (`#cover`), followed by the Chapters and Topics.
+
+---
+
+## II. Structural Constraints & Naming Rules (Strict)
+
+1.  **Section ID Naming (CRITICAL):**
+    * A mandatory **Cover Page** **MUST** use the ID `#cover`.
+    * Chapter Introduction pages **MUST** use the format `#chap-name`.
+    * Concept Topics **MUST** use the format `#concept-name`.
+    * Task Topics **MUST** use the format `#task-name`.
+    * Reference Topics **MUST** use the format `#ref-name`.
+2.  **No DITA Terminology in Titles (CRITICAL):** Page headings (`<h1>`, `<h2>`), Card Titles, and Navigation Links **MUST NOT** include DITA prefixes or structural terminology (e.g., **NEVER** use "Task 1:," "Concept A:," or "Reference:").
+3.  **Content Block Layout (DITA-Inspired):**
+    * **Concept Topics:** `<h1>` → Initial `<p>` (Short Description) → Logical `<h2>` subheadings.
+    * **Task Topics:** `<h1>` → Initial `<p>` (Short Description) → `<h2>Prerequisites</h2>` → `<h2>Steps</h2>` (`<ol>`) → `<h2>Result</h2>`.
+4.  **Navigation Rules:** The sub-topic `<ul>` **MUST NOT** contain a redundant link to its parent chapter-intro page.
+5.  **Title Matching:** Link text **MUST** exactly match the target `<h1>` title (or the `textContent` of the Cover Page's `<h1>`).
+
+---
+
+## III. Content & Formatting Rules (Semantic HTML)
+
+1.  **No Markdown in Content (CRITICAL):** Generated HTML content **MUST** be pure HTML. **NEVER** use Markdown characters (`**`, `*`, `#`, `>`).
+2.  **Semantic Tag Usage (Strict):**
+    * **Strong Importance/Warnings:** Use `<strong>...</strong>`.
+    * **Emphasis/Stress:** Use `<em>...</em>`.
+    * **UI Controls/Keywords:** Use `<b>...</b>`.
+    * **Code/Filepaths:** Use `<code>...</code>`.
+3.  **Style Constraints:** Standard text links (`<a>`) **MUST NOT** be aggressively bold or italic.
+4.  **Cross-Referencing & Modularity:** All external URLs **MUST** be formatted as proper HTML hyperlinks.
+5.  **Breadcrumb Navigation (CRITICAL):** All pages **MUST** begin with a functional, hierarchical, and clickable breadcrumb navigation, **with the exception of the `#cover` page**, which must have no breadcrumbs.
+    * **Example (Chapter Intro):**
+        `<div class="breadcrumbs"><a href="#cover">Cover Page</a> &gt; Chapter 1 Title</div>`
+    * **Example (Child Topic):**
+        `<div class="breadcrumbs"><a href="#cover">Cover Page</a> &gt; <a href="#chap-name">Chapter 1 Title</a> &gt; Current Topic Title</div>`
+
+---
+
+## IV. Iconography & Visual Rules (Conditional)
+
+1.  **Icon Library (CRITICAL):** All icons **MUST** use the **Font Awesome Free CDN** (`<i>` tags).
+    * The AI **MUST** verify that any icon used (e.g., `fa-solid fa-star`) is part of the Font Awesome **Free** set.
+    * Using "Pro" icons (e.g., `fa-microphone-lines`, `fa-lamp`) will result in a broken, blank image and is a critical failure.
+2.  **Judicious Use of Visuals:** Visual elements (Icons, Cards, Mermaid Diagrams) should only be used when they add **semantic clarity or illustrate a critical process**.
+3.  **Mermaid Diagrams:** Only use for processes that genuinely **fork or require decision points**. Simple linear flowcharts are **forbidden**.
+4.  **Mermaid Exception:** The only exception to the No Markdown rule is for formatting text **inside** a Mermaid node, using the syntax: `A["\`**Formatted Text**\`"]`.
+
+---
+
+## V. Guide Logic Adaptations (Mandatory)
+
+1.  **Cover Page Navigation (MANDATORY):** The left `<nav>` pane **MUST** begin with a link to the Cover Page, styled as an `<h3>` (e.g., `<h3><a href="#cover">Cover Page</a></h3>`). The `<ul>` following this link must be present but empty.
+2.  **Chapter Link Highlighting (CRITICAL):** In the left navigation pane (`<nav>`), the active page must **ALWAYS** be a single `<a>` tag. The system **MUST NOT** display two simultaneously active links.
+3.  **Chapter Structure as Topic (MANDATORY):** All Chapter Introduction links (targetting `#chap-name` IDs) must be included in the chronological list of pages, functioning as a regular content topic that introduces the subsequent sections.
+    * **CLARIFICATION:** In the left `<nav>` pane, the `<h3>` tag **MUST** contain the hyperlink to the chapter-intro page (e.g., `<h3><a href="#chap-name">Chapter Title</a></h3>`). The `<ul>` that follows it contains the links to the child topics *only*.
+4.  **Mini-TOC Requirement (Format Update):** Every Chapter Introduction page (`#chap-name`) **MUST** include a **Mini-TOC Card Grid**. This list MUST use the `<div class="card-grid chapter-links">` wrapper, containing individual cards (`<a href="..." class="comorbidity-card">`) for each direct child topic, each **MANDATORILY** styled with a relevant icon (`<i>`).
+5.  **Section Definition (CRITICAL):** Every ID in the entire navigation list MUST correspond to one, and only one, self-contained `<section id="...">...</section>` block in the `<main>` content.
+6.  **Mini-TOC Content Limit:** Content within a `#chap-name` section MUST be limited to the introductory paragraph, the Mini-TOC list (now the card grid), and the chapter's `<h1>` title/breadcrumbs. No subsequent task/concept content is allowed within this section.
+7.  **Icon Relevance (MANDATORY):** Icons used in the Mini-TOC Card Grid **MUST** be highly relevant to the **specific topic/action** described in the card title (e.g., use a `trash` icon for a disposal task, not a generic `clipboard` icon for a task).
+
+---
+
+## VI. Code Delivery & Workflow (CRITICAL)
+
+1.  **Deliver Full Collapsible Blocks (CRITICAL):** When providing generated HTML for the navigation pane or the content pane, the AI **MUST** deliver the *entire parent `div` block*.
+    * For navigation, deliver the complete `<div id="nav-content-wrapper">...</div>` block.
+    * For content, deliver the complete `<div id="content-pages-wrapper">...</div>` block.
+2.  **Reason (Do Not Repeat):** This is a critical workflow requirement, as it allows the user to collapse, select, and replace the entire block easily in a code editor like VS Code. **Do not** provide only the inner HTML.
+
+
+-->
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Standalone Digital Guide Title</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f4f6f8;
+            --border-color: #e1e4e8;
+            --text-color: #24292e;
+            --heading-color: #1a1a1a;
+            --link-color: #0366d6;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            font-style: normal;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .nav-pane {
+            width: 300px;
+            flex-shrink: 0;
+            background-color: var(--secondary-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem;
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        
+        /* --- THIS IS THE CSS FROM AUTISM.HTML --- */
+        .nav-pane h3 {
+            font-size: 1.1rem;
+            color: var(--heading-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        /* THIS IS THE CRITICAL FIX FOR BLACK NAV LINKS */
+        .nav-pane h3 a {
+            text-decoration: none;
+            color: inherit; /* Makes the link black, not blue */
+            display: block;
+            padding: 0.4rem 0.8rem;
+            margin: 0 -0.8rem;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        
+        .nav-pane h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .nav-pane ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-bottom: 1rem; /* Space below each chapter list */
+            padding-bottom: 1rem; /* Space below each chapter list */
+            border-bottom: 1px solid var(--border-color); /* Separator */
+        }
+        
+        .nav-pane h3 + ul {
+             margin-top: -0.5rem; /* Pull list up to its heading */
+        }
+
+        .nav-pane li a {
+            display: block;
+            color: var(--text-color); /* This makes topic links grey */
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: normal;
+        }
+        
+        .nav-pane a:hover {
+            background-color: #e9ecef;
+        }
+
+        .nav-pane a.active {
+            background-color: var(--link-color);
+            color: white;
+            font-weight: 600;
+        }
+         /* --- END OF NAV PANE CSS --- */
+
+
+        .content-pane {
+            flex-grow: 1;
+            width: 100%; 
+            padding: 2rem 4rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content-pane section {
+            display: none; 
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        #cover {
+            border-bottom: none;
+            text-align: center;
+            padding-top: 5rem;
+        }
+        
+        .breadcrumbs {
+            font-size: 0.9rem;
+            color: #586069;
+            margin-bottom: 1rem;
+        }
+        
+        /* --- THIS IS THE CORRECTED TEXT STYLING --- */
+        .content-pane h1 {
+            font-size: 2.5rem;
+            color: var(--heading-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        .content-pane h2 {
+            font-size: 1.75rem;
+            color: var(--heading-color);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .content-pane a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: normal; /* Links inside paragraphs aren't bold */
+        }
+        
+        .content-pane a:hover {
+            text-decoration: underline;
+        }
+        
+        .content-pane p,
+        .content-pane ul,
+        .content-pane ol,
+        .content-pane dl {
+            margin-bottom: 1.25rem;
+        }
+
+        .content-pane ul, .content-pane ol {
+            padding-left: 2rem;
+        }
+        
+        .content-pane li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-pane dl dt {
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+        
+        .content-pane dl dd {
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .content-pane blockquote {
+            margin-left: 0;
+            padding: 0.8rem 1.5rem;
+            border-left: 4px solid var(--border-color);
+            background-color: var(--secondary-bg);
+            color: #586069;
+        }
+        /* --- END OF TEXT STYLING --- */
+
+
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .page-nav a {
+            display: block;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            max-width: 45%;
+            text-decoration: none;
+        }
+        .page-nav a:hover {
+            background-color: var(--secondary-bg);
+            border-color: #cacaca;
+        }
+        .page-nav .nav-label {
+            font-size: 0.8rem;
+            color: #586069;
+            margin-bottom: 0.25rem;
+            font-weight: normal;
+        }
+        .page-nav .nav-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .page-nav .nav-next {
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .nav-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 2000;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        @media (max-width: 992px) {
+            .nav-pane {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 1000;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            }
+            .nav-pane.is-visible {
+                transform: translateX(0);
+            }
+            .nav-toggle {
+                display: block;
+            }
+            .content-pane {
+                padding: 2rem 1.5rem;
+                padding-top: 5rem;
+            }
+        }
+
+        /* Card styles (for Font Awesome) */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .comorbidity-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: var(--primary-bg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: block;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .comorbidity-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: var(--link-color);
+            text-decoration: none;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            color: var(--heading-color);
+            font-weight: 600;
+            font-style: normal;
+        }
+        
+        .card-icon {
+            color: var(--link-color);
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .comorbidity-card .card-body p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            line-height: 1.5;
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+        /* END CARD STYLING */
+
+    </style>
+</head>
+<body>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
+    <div class="container">
+        <nav class="nav-pane" id="navPane">
+
+            <!-- Start of navigation block -->
+
+            <div id="nav-content-wrapper">
+    <h3><a href="#cover">Irish Genealogy Guide</a></h3>
+    <ul>
+    </ul>
+
+    <h3><a href="#chap-getting-started">1. Getting Started</a></h3>
+    <ul>
+        <li><a href="#task-gathering-info">Gathering What You Already Know</a></li>
+        <li><a href="#task-choosing-software">Choosing Your Genealogy Software</a></li>
+        <li><a href="#concept-record-types">Understanding Key Record Types</a></li>
+        <li><a href="#ref-genealogy-terms">Core Genealogy Terms</a></li>
+    </ul>
+
+    <h3><a href="#chap-irish-foundations">2. Irish Genealogy: The Foundations</a></h3>
+    <ul>
+        <li><a href="#concept-irish-unique">What Makes Irish Research Unique?</a></li>
+        <li><a href="#concept-irish-naming">Understanding Irish Naming Patterns</a></li>
+        <li><a href="#concept-irish-geography">Irish Geography: Townlands &amp; Parishes</a></li>
+        <li><a href="#ref-irish-archives">Key Irish Archives &amp; Repositories</a></li>
+    </ul>
+
+    <h3><a href="#chap-irish-pre-famine">3. Core Irish Records (Pre-Famine)</a></h3>
+    <ul>
+        <li><a href="#task-land-records">Using Land Records (Griffith's &amp; Tithes)</a></li>
+        <li><a href="#task-church-records">Finding Church Records</a></li>
+        <li><a href="#ref-early-census">Guide to the 1821-1851 Censuses</a></li>
+    </ul>
+
+    <h3><a href="#chap-irish-post-famine">4. Core Irish Records (Post-Famine)</a></h3>
+    <ul>
+        <li><a href="#task-civil-records">Using Civil Registration (BMDs)</a></li>
+        <li><a href="#task-1901-1911-census">Using the 1901 &amp; 1911 Censuses</a></li>
+        <li><a href="#ref-wills-probate">Wills and Probate Records</a></li>
+    </ul>
+
+    <h3><a href="#chap-emigration-story">5. The Emigration Story</a></h3>
+    <ul>
+        <li><a href="#concept-emigration-waves">Waves of Irish Emigration</a></li>
+        <li><a href="#task-passenger-lists">Finding Passenger Lists</a></li>
+        <li><a href="#task-naturalization-records">Using Naturalization Records</a></li>
+    </ul>
+
+    <h3><a href="#chap-dest-usa">6. Destination: USA</a></h3>
+    <ul>
+        <li><a href="#task-us-census">Using US Census Records</a></li>
+        <li><a href="#task-us-vital-records">Finding US Vital Records</a></li>
+        <li><a href="#ref-us-archives">Key US Archives for Genealogy</a></li>
+    </ul>
+
+    <h3><a href="#chap-dest-uk">7. Destination: UK</a></h3>
+    <ul>
+        <li><a href="#task-uk-census">Using UK Census Records</a></li>
+        <li><a href="#task-uk-eng-wales">Navigating English &amp; Welsh Records</a></li>
+        <li><a href="#task-uk-scotland">Navigating Scottish Records</a></li>
+    </ul>
+
+    <h3><a href="#chap-dest-canada">8. Destination: Canada</a></h3>
+    <ul>
+        <li><a href="#task-can-census">Using Canadian Census Records</a></li>
+        <li><a href="#task-can-immigration">Finding Canadian Immigration Records</a></li>
+        <li><a href="#ref-can-archives">Library and Archives Canada</a></li>
+    </ul>
+
+    <h3><a href="#chap-dest-aus-nz">9. Destination: Australia &amp; NZ</a></h3>
+    <ul>
+        <li><a href="#task-aus-nz-records">Using Australian &amp; NZ Records</a></li>
+        <li><a href="#task-aus-convict">Finding Convict Records (Australia)</a></li>
+        <li><a href="#ref-aus-nz-archives">Key AUS &amp; NZ Archives</a></li>
+    </ul>
+
+    <h3><a href="#chap-advanced-dna">10. Advanced Techniques &amp; DNA</a></h3>
+    <ul>
+        <li><a href="#task-brick-walls">Breaking Down "Brick Walls"</a></li>
+        <li><a href="#task-using-dna">Using DNA Testing for Genealogy</a></li>
+        <li><a href="#concept-dna-results">Understanding Your DNA Results</a></li>
+        <li><a href="#task-military-records">Using Military Records</a></li>
+    </ul>
+</div>
+
+            <!-- End oof navigation block -->
+
+            </nav>
+        
+        <main class="content-pane" id="contentPane">
+
+            <!-- Start of content block -->
+
+<div id="content-pages-wrapper">
+    
+<section id="cover">
+    <h1>Irish Genealogy Guide</h1>
+    <p>A practical guide to distilling the vast world of genealogy and navigating the unique challenges of Irish research.</p>
+    
+    <h2>Irish Genealogy Research Path</h2>
+    <p>This diagram shows the typical workflow for a successful research project. Click any node to jump to that section of the guide.</p>
+    
+    <pre class="mermaid">
+    graph TD
+        A(["Chap 1: Getting Started"])
+        B(["Chap 2: Irish Foundations"])
+        C_Q(["When did your ancestor<br>live in Ireland?"])
+        
+        C_Ch3(["Chap 3: Pre-Famine<br>(pre-1864)"])
+        D_Ch4(["Chap 4: Post-Famine<br>(1864+)"])
+        
+        E(["Did your ancestor<br>emigrate?"])
+        
+        D_Emig(["Chap 5: Track Emigration"])
+        F_Dest(["Select Destination"])
+        G(["Chap 6: USA"])
+        H(["Chap 7: UK"])
+        I(["Chap 8: Canada"])
+        J(["Chap 9: Australia / NZ"])
+        
+        K(["Chap 10: Advanced<br>&amp; DNA Techniques"])
+        
+        A --> B --> C_Q
+        
+        C_Q -- Pre-1864 --> C_Ch3
+        C_Q -- Post-1864 --> D_Ch4
+        
+        C_Ch3 --> E
+        D_Ch4 --> E
+        
+        E -- Yes --> D_Emig
+        E -- No --> K
+        
+        D_Emig --> F_Dest
+        
+        F_Dest --> G
+        F_Dest --> H
+        F_Dest --> I
+        F_Dest --> J
+        
+        %% Invisible Collector Node to reduce line clutter
+        L( )
+        style L fill:transparent,stroke:transparent
+        
+        G --> L
+        H --> L
+        I --> L
+        J --> L
+        
+        L --> K
+
+        click A "#chap-getting-started" "Go to the guide"
+        click B "#chap-irish-foundations" "Go to the guide"
+        click C_Ch3 "#chap-irish-pre-famine" "Go to the guide"
+        click D_Ch4 "#chap-irish-post-famine" "Go to the guide"
+        click D_Emig "#chap-emigration-story" "Go to the guide"
+        click G "#chap-dest-usa" "Go to the guide"
+        click H "#chap-dest-uk" "Go to the guide"
+        click I "#chap-dest-canada" "Go to the guide"
+        click J "#chap-dest-aus-nz" "Go to the guide"
+        click K "#chap-advanced-dna" "Go..."
+
+        style C_Q fill:#f4f6f8,stroke:#e1e4e8,stroke-width:2px
+        style E fill:#f4f6f8,stroke:#e1e4e8,stroke-width:2px
+        style F_Dest fill:#f4f6f8,stroke:#e1e4e8,stroke-width:2px
+    </pre>
+</section>
+
+<section id="chap-getting-started">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 1. Getting Started</div>
+    <h1>1. Getting Started</h1>
+    <p>This chapter covers the essential first steps of any genealogy project, from organizing what you have to choosing the right tools for the job.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#task-gathering-info" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-people-arrows card-icon"></i> Gathering What You Already Know
+            </div>
+            <div class="card-body">
+                <p>The first and most critical task: interviewing family members and collecting home records.</p>
+            </div>
+        </a>
+        <a href="#task-choosing-software" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-laptop-code card-icon"></i> Choosing Your Genealogy Software
+            </div>
+            <div class="card-body">
+                <p>A guide to selecting your primary research hub (online) and a desktop backup solution (local).</p>
+            </div>
+        </a>
+        <a href="#concept-record-types" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-scroll card-icon"></i> Understanding Key Record Types
+            </div>
+            <div class="card-body">
+                <p>Learn the difference between Primary vs. Secondary Sources and common record categories like BMDs, Census, and Church Records.</p>
+            </div>
+        </a>
+        <a href="#ref-genealogy-terms" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-book-open card-icon"></i> Core Genealogy Terms
+            </div>
+            <div class="card-body">
+                <p>A reference list of common acronyms and terms such as BMD, Brick Wall, Citation, and Townland.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="task-gathering-info">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-getting-started">1. Getting Started</a> &gt; Gathering What You Already Know</div>
+    <h1>Gathering What You Already Know</h1>
+    <p>Your research begins not on the internet, but with the information and relatives you already have access to.</p>
+    
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>A notebook, digital document, or audio recorder for interviews.</li>
+        <li>A clear system for labeling files and photos (e.g., "Smith_John_1880_BirthCert.jpg").</li>
+    </ul>
+    
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Interview Living Relatives (The Irish Context):</strong> This is the most critical first step. When asking questions, be specific to the Irish experience:
+            <ul>
+                <li>"What <strong>county, or better, what parish, or better still, what townland</strong> were they from?" (This is vital, as "Ireland" is not a useful starting point).</li>
+                <li>"Do you know if the family was <strong>Catholic</strong> or <strong>Protestant</strong>?" (This is the single most important question, as it determines which set of records you will search).</li>
+                <li>"Did anyone ever mention an <strong>'American Wake'</strong>?" (The term for the last party for an emigrant, which was a common cultural event).</li>
+                <li>"Do you have any letters from 'The Yank' or relatives who emigrated?"</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Locate "Home Records" (Irish Specifics):</strong> Search (with permission!) for physical documents. Look for items with a strong Irish context:
+            <ul>
+                <li><strong>Memorial Cards / "In Memoriam" Cards:</strong> These are common in Irish Catholic culture and are genealogically rich.</li>
+                <li><strong>The Family Bible:</strong> Note that this tradition was far more common in Protestant families.</li>
+                <li>Old letters, postcards, and any land documents or rent receipts.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Organize and Chart the Data:</strong> Create a folder for each main surname and scan all physical documents. Once organized, you can effectively move to the digital phase.
+            <p>The flow below summarizes the process you should follow to progress from family memory to a confirmed online search:</p>
+            <pre class="mermaid">
+    graph TD
+        A(["Start: Interview<br>Living Relatives"])
+        B(["Find Home Records<br>(Certs, Photos, Bibles)"])
+        C(["Organize by Family Unit"])
+        D(["Select One<br>Research Question"])
+        E((Begin Online Research))
+        
+        A --> B --> C --> D --> E
+        
+        style B fill:#f4f6f8,stroke:#e1e4e8,stroke-width:2px
+        style D fill:#f4f6f8,stroke:#e1e4e8,stroke-width:2px
+    </pre>
+        </li>
+    </ol>
+    
+    <h2>Formulating a Research Question (Context)</h2>
+    <p>A good next-step research question should be specific, guiding you directly to a record search, rather than being a broad, unanswerable query.</p>
+    <dl>
+        <dt>Vague Question</dt>
+        <dd><strong>"Where in Ireland was Patrick Murphy born?"</strong> (Too broad; requires searching 32 counties)</dd>
+        <dt>Specific Question</dt>
+        <dd><strong>"What was the name of Patrick Murphy's mother, as recorded on his marriage certificate in New York in 1888?"</strong> (Specific record, specific year, specific answer)</dd>
+    </dl>
+    
+    <h2>Result</h2>
+    <p>You will have a foundational collection of names, dates, locations, and stories that will form the basis of your online research and prevent you from chasing incorrect leads.</p>
+    
+    <blockquote>
+        <p><strong>Note: The Hierarchy of Irish Place Names:</strong> Always seek the <strong>Townland</strong>, as it is the most consistent geographical address for finding historical records. Relatives are more likely to remember the <strong>Parish</strong> (the church unit), but the <strong>Townland</strong> (the precise land unit) is the detail required for searching land records and pre-1864 church registers.</p>
+    </blockquote>
+    
+    <blockquote>
+        <p><strong>To help jog their memories, check these sites:</strong> Once you hear any place name, use these free tools to check its spelling and location, as records rely on the Townland:</p>
+        <ul>
+            <li><strong>Townlands.ie:</strong> A searchable database of all Irish townlands. (<a href="https://www.townlands.ie/" target="_blank">Search here</a>)</li>
+            <li><strong>Logainm.ie:</strong> The official Placenames Database of Ireland, excellent for finding variations and the original Irish spellings. (<a href="https://www.logainm.ie/" target="_blank">Search here</a>)</li>
+        </ul>
+    </blockquote>
+</section>
+<section id="task-choosing-software">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-getting-started">1. Getting Started</a> &gt; Choosing Your Genealogy Software</div>
+    <h1>Choosing Your Genealogy Software</h1>
+    <p>A good genealogy program is essential for organizing your findings, visualizing relationships, and syncing with online record collections.</p>
+    
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You should have your initial family information collected, as described in <a href="#task-gathering-info">Gathering What You Already Know</a>.</li>
+    </ul>
+
+    <h2>Steps: Integrating Platform Choice</h2>
+    <p>The choice of your main research platform should be based on where your ancestor settled after leaving Ireland:</p>
+    <ol>
+        <li>
+            <strong>Choose Your Irish-based Hub (Findmypast):</strong>
+            <p>If your ancestor lived in Ireland or emigrated to the UK, you should prioritize <strong>Findmypast</strong> because it has the strongest collections of Irish parish records and the exclusive <strong>1921 Census</strong> of England and Wales. Go to <a href="https://www.findmypast.com/" target="_blank">Findmypast.com</a>.</p>
+        </li>
+        <li>
+            <strong>Choose Your Diaspora-based Hub (Ancestry):</strong>
+            <p>If your ancestor emigrated to the USA, Canada, or Australia, you should prioritize <strong>Ancestry</strong> because it has the largest global user tree database, resulting in more DNA matches and stronger collections of US/Canadian passenger lists and US Naturalization records. Go to <a href="https://www.ancestry.com/" target="_blank">Ancestry.com</a>.</p>
+        </li>
+        <li>
+            <strong>Install a Desktop Program for Control:</strong>
+            <p>To maintain ownership and control over your data, install a local desktop program to sync with your online hub. This is your permanent backup for all records and citations:</p>
+            <ul>
+                <li>For Mac/Windows, the most popular choice is <strong>Family Tree Maker</strong> (<a href="https://www.mackiev.com/ftm/" target="_blank">Download Here</a>).</li>
+                <li>For a universal option that syncs with both Ancestry and FamilySearch, use <strong>RootsMagic</strong> (<a href="https://rootsmagic.com/" target="_blank">Download Here</a>).</li>
+                <li>For the free, open-source solution offering maximum privacy, use <strong>Gramps</strong> (<a href="https://gramps-project.org/" target="_blank">Download Here</a>).</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Integrate Free Government Records:</strong>
+            <p>Always cross-reference with the essential free government and collaborative sources:</p>
+            <ul>
+                <li><strong>Civil Registration:</strong> Use <a href="https://www.irishgenealogy.ie/en/" target="_blank">IrishGenealogy.ie</a>.</li>
+                <li><strong>Catholic Registers:</strong> Use the browsable images at the <a href="https://registers.nli.ie/" target="_blank">National Library of Ireland (NLI)</a>.</li>
+                <li><strong>Global Records:</strong> Use the free resources at <a href="https://www.familysearch.org/" target="_blank">FamilySearch.org</a>.</li>
+            </ul>
+        </li>
+    </ol>
+    
+    <h2>Result</h2>
+    <p>You have selected a primary tool and established a robust backup system, optimizing your process to find and secure records along your ancestor's migration path.</p>
+</section>
+
+<section id="concept-record-types">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-getting-started">1. Getting Started</a> &gt; Understanding Key Record Types</div>
+    <h1>Understanding Key Record Types</h1>
+    <p>Genealogy is built on records, which are grouped into several key categories.</p>
+    
+    <h2>Primary vs. Secondary Sources</h2>
+    <p>Always try to find a <strong>Primary Source</strong> (a record created <em>at the time</em> of the event, like a birth certificate or a census page) rather than a <strong>Secondary Source</strong> (a record created <em>later</em>, like a family history book or an online tree). A primary source is more likely to be accurate.</p>
+
+    <h2>Common Record Categories</h2>
+    <dl>
+        <dt>Vital Records (or Civil Registration)</dt>
+        <dd>These are government-issued records of <strong>B</strong>irths, <strong>M</strong>arriages, and <strong>D</strong>eaths (often called "BMDs"). In Ireland, these are a key topic in <a href="#task-civil-records">Using Civil Registration</a>.</dd>
+        
+        <dt>Census Records</dt>
+        <dd>A government-run headcount of the population, usually taken every 10 years. They are invaluable for placing a family in a specific location at a specific time and identifying all members of a household. See <a href="#task-1901-1911-census">Using the 1901 &amp; 1911 Censuses</a> for the most important Irish examples.</dd>
+        
+        <dt>Church Records (Parish Registers)</dt>
+        <dd>Before government registration, local churches were the primary record-keepers. These include records of baptisms, marriages, and burials, which often pre-date vital records by hundreds of years. See <a href="#task-church-records">Finding Church Records</a>.</dd>
+        
+        <dt>Land &amp; Property Records</dt>
+        <dd>In Ireland, records of land valuation and tax (like <a href="#task-land-records">Griffith's Valuation</a>) are a critical substitute for lost census records.</dd>
+        
+        <dt>Immigration &amp; Travel Records</dt>
+        <dd>Includes <a href="#task-passenger-lists">Passenger Lists</a> (showing who was on a ship) and <a href="#task-naturalization-records">Naturalization Records</a> (showing when an immigrant became a citizen of a new country).</dd>
+    </dl>
+</section>
+
+<section id="ref-genealogy-terms">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-getting-started">1. Getting Started</a> &gt; Core Genealogy Terms</div>
+    <h1>Core Genealogy Terms</h1>
+    <p>This reference list defines the common terms and acronyms you will encounter during your research.</p>
+
+    <h2>Glossary</h2>
+    <dl>
+        <dt>Ancestor</dt>
+        <dd>A person from whom you are directly descended (e.g., a parent, grandparent, great-grandparent).</dd>
+        
+        <dt>BMD</dt>
+        <dd>An acronym for <strong>B</strong>irths, <strong>M</strong>arriages, and <strong>D</strong>eaths. These are the three key "vital records."</dd>
+        
+        <dt>Brick Wall</dt>
+        <dd>A research problem that seems impossible to solve, where you can no longer find information on a specific ancestor. See <a href="#task-brick-walls">Breaking Down "Brick Walls"</a> for techniques.</dd>
+        
+        <dt>Citation (or Source)</dt>
+        <dd>A note detailing exactly where you found a piece of information (e.Example, "1901 Census of Ireland, Dublin, Mountjoy, DED 3/1, household 42"). Citing your sources is the most important habit in genealogy.</dd>
+        
+        <dt>Civil Registration</dt>
+        <dd>The government system for officially recording births, marriages, and deaths. See <a href="#task-civil-records">Using Civil Registration</a>.</dd>
+        
+        <dt>Descendant</dt>
+        <dd>A person who is directly descended from a specific ancestor (e.g., you are a descendant of your great-grandparent).</dd>
+        
+        <dt>Parish</dt>
+        <dd>A church administrative area. In Ireland, this is a critical geographical unit for finding church records. See <a href="#concept-irish-geography">Irish Geography</a>.</dd>
+        
+        <dt>Townland</dt>
+        <dd>The smallest and most important geographical division in Ireland. It is the "ancestral address" you will be searching for. See <a href="#concept-irish-geography">Irish Geography</a>.</dd>
+    </dl>
+</section>
+<section id="chap-irish-foundations">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 2. Irish Genealogy: The Foundations</div>
+    <h1>2. Irish Genealogy: The Foundations</h1>
+    <p>This chapter explains the fundamental concepts you must understand before you can be successful with Irish research, from geography to the record-keeping landscape.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#concept-irish-unique" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-fire card-icon"></i> What Makes Irish Research Unique?
+            </div>
+            <div class="card-body">
+                <p>The impact of the 1922 Four Courts fire and the resulting "Two Research Periods" (pre- and post-1864).</p>
+            </div>
+        </a>
+        <a href="#concept-irish-naming" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-user-tag card-icon"></i> Understanding Irish Naming Patterns
+            </div>
+            <div class="card-body">
+                <p>Learn the traditional naming conventions used for children, and the meaning of "Mac" and "O."</p>
+            </div>
+        </a>
+        <a href="#concept-irish-geography" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-map-marker-alt card-icon"></i> Irish Geography: Townlands &amp; Parishes
+            </div>
+            <div class="card-body">
+                <p>Explaining the hierarchy of place names, from County down to the vital "Townland" address.</p>
+            </div>
+        </a>
+        <a href="#ref-irish-archives" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-landmark card-icon"></i> Key Irish Archives &amp; Repositories
+            </div>
+            <div class="card-body">
+                <p>A reference list of the main free and subscription-based online archives for Irish records.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="concept-irish-unique">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-foundations">2. Irish Genealogy: The Foundations</a> &gt; What Makes Irish Research Unique?</div>
+    <h1>What Makes Irish Research Unique?</h1>
+    <p>Irish research is famously challenging, primarily due to the catastrophic loss of records in the 1922 Four Courts fire.</p>
+
+    <h2>The 1922 Four Courts Fire</h2>
+    <p>During the Irish Civil War, a fire at the Public Record Office at the Four Courts in Dublin destroyed centuries of irreplaceable records. The most devastating losses for genealogists were:</p>
+    <ul>
+        <li>Most Church of Ireland parish registers (pre-1870).</li>
+        <li>The vast majority of 19th-century census records (1821, 1831, 1841, 1851).</li>
+        <li>Over 1,000 years of wills, court records, and administrative documents.</li>
+    </ul>
+    <p>Because of this, you cannot simply "go back" one census at a time as you can in other countries. You must use "census substitutes" and understand the two distinct periods of Irish research: pre- and post-Famine.</p>
+
+    <h2>The Two Research Periods: Quick Guide</h2>
+    <p>The diagram below illustrates the fastest path based on the single most important detail you know about your ancestor: whether they were <strong>born before the 1864</strong> start of national Civil Registration. The underlined text in the flow boxes indicates the clickable sections.</p>
+
+    <pre class="mermaid">
+    graph TD
+        A((Start: Research Backwards))
+        B(["Was ancestor born<br>before 1864?"])
+        
+        C_Post(["Search Post-1864 Records<br><br>1. Civil BMDs (1864+)<br>2. 1901 &amp; 1911 Censuses<br>3. Wills &amp; Probate"])
+        D_Pre(["Search Pre-1864 Records<br><br>1. Land Records (Griffith's/Tithes)<br>2. Church Registers<br>3. Census Fragments"])
+        
+        E((Research Goal Met))
+        
+        A --> B
+        
+        B -- Yes --> D_Pre
+        B -- No --> C_Post
+        
+        C_Post --> E
+        D_Pre --> E
+        
+        click C_Post "#chap-irish-post-famine" "Go to Chapter 4"
+        click D_Pre "#chap-irish-pre-famine" "Go to Chapter 3"
+        
+        style B fill:#f4f6f8,stroke:#e1e4e8,stroke-width:2px
+    </pre>
+</section>
+<section id="concept-irish-naming">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-foundations">2. Irish Genealogy: The Foundations</a> &gt; Understanding Irish Naming Patterns</div>
+    <h1>Understanding Irish Naming Patterns</h1>
+    <p>Irish families, particularly before the 20th century, often followed a strict and traditional naming pattern for their children.</p>
+
+    <h2>Traditional Naming Conventions</h2>
+    <p>If you are missing a parent's name, you can often make an educated guess by applying these rules. This pattern was not universal, but it was extremely common.</p>
+    <ul>
+        <li>The <strong>1st son</strong> was named after the <strong>paternal grandfather</strong> (his father's father).</li>
+        <li>The <strong>2nd son</strong> was named after the <strong>maternal grandfather</strong> (his mother's father).</li>
+        <li>The <strong>3rd son</strong> was named after the <strong>father</strong>.</li>
+    </ul>
+    <ul>
+        <li>The <strong>1st daughter</strong> was named after the <strong>maternal grandmother</strong> (her mother's mother).</li>
+        <li>The <strong>2nd daughter</strong> was named after the <strong>paternal grandmother</strong> (her father's mother).</li>
+        <li>The <strong>3rd daughter</strong> was named after the <strong>mother</strong>.</li>
+    </ul>
+    <p>Later children were often named after the parents' siblings. Seeing this pattern in a family group is strong evidence you have the correct family, especially when dealing with common names like John Murphy or Mary O'Brien.</p>
+    
+    <h2>"Mac" vs. "O" and Latin Names</h2>
+    <ul>
+        <li><strong>Mac &amp; O:</strong> "Mac" means "son of" (e.g., MacCarthy) and "O" means "grandson of" (e.g., O'Sullivan). These prefixes were often dropped in the 17th-19th centuries due to English anglicization and then re-adopted later. Don't be surprised to see an "O'Brien" ancestor listed as "Brien" in an 1850s record.</li>
+        <li><strong>Latin:</strong> Catholic parish registers were kept in Latin. This means you will see names like <strong>Patricius</strong> (Patrick), <strong>Ioannes</strong> (John), <strong>Maria</strong> (Mary), <strong>Jacobus</strong> (James), and <strong>Honora</strong> (Norah).</li>
+    </ul>
+</section>
+
+<section id="concept-irish-geography">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-foundations">2. Irish Genealogy: The Foundations</a> &gt; Irish Geography: Townlands &amp; Parishes</div>
+    <h1>Irish Geography: Townlands &amp; Parishes</h1>
+    <p>You are not looking for an ancestor from "Ireland" or even "County Cork." You are looking for them in a <strong>Townland</strong>, the smallest and most critical unit of Irish geography.</p>
+
+    <h2>The "Genealogical Address"</h2>
+    <p>Almost all major Irish records (census, land, and church) are organized by geographical division. Understanding this hierarchy is essential for finding records.</p>
+    <ul>
+        <li><strong>Townland:</strong> The smallest, most ancient land unit. This is the "ancestral address." There are over 61,000 of them.</li>
+        <li><strong>Civil Parish:</strong> A group of townlands. This was the main unit for tax and land records (like <a href="#task-land-records">Griffith's Valuation</a>).</li>
+        <li><strong>Barony:</strong> A larger unit, now mostly obsolete, but used in some older records.</li>
+        <li><strong>County:</strong> The main administrative unit everyone is familiar with (e.g., County Galway, County Antrim).</li>
+    </ul>
+    <p>Separately, the churches had their own divisions. The <strong>Roman Catholic Parish</strong> often had different boundaries and names from the <strong>Civil Parish</strong>, which is a common point of confusion.</p>
+
+    <h2>Irish Land Divisions Hierarchy</h2>
+    <pre class="mermaid">
+    graph TD
+        A([Province])
+        B([County])
+        C([Barony])
+        D([Civil Parish])
+        E([<strong>Townland</strong><br>This is your goal!])
+        
+        A --> B --> C --> D --> E
+        
+        style E fill:#f4f6f8,stroke:#e1e4e8,stroke-width:2px
+    </pre>
+    
+    <h2>Key Geographical Tools</h2>
+    <ul>
+        <li><a href="https://www.townlands.ie/" target="_blank">Townlands.ie</a>: A free, searchable database of all Irish townlands. You can see which Parish, Barony, and County a townland belongs to.</li>
+        <li><a href="https://www.logainm.ie/" target="_blank">Logainm.ie</a>: The Placenames Database of Ireland. Excellent for finding the official Irish spelling and variations.</li>
+        <li><a href="https://www.johngrenham.com/places/" target="_blank">John Grenham's Irish Places</a>: A powerful tool (part of a subscription site) that shows where surnames were found in the 19th century and which parishes exist in a county.</li>
+    </ul>
+</section>
+
+<section id="ref-irish-archives">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-foundations">2. Irish Genealogy: The Foundations</a> &gt; Key Irish Archives &amp; Repositories</div>
+    <h1>Key Irish Archives &amp; Repositories</h1>
+    <p>These are the primary online databases and physical archives that host the core Irish record collections.</p>
+
+    <h2>Online Repositories (Free)</h2>
+    <dl>
+        <dt><a href="https://www.irishgenealogy.ie/en/" target="_blank">IrishGenealogy.ie</a></dt>
+        <dd>The official Irish government site. It provides <strong>free</strong> access to the indexes and images of <a href="#task-civil-records">Civil Registration (BMDs)</a> and many historic <a href="#task-church-records">Church Records</a>.</dd>
+        
+        <dt><a href="https://www.genealogy.nationalarchives.ie/" target="_blank">The National Archives of Ireland</a></dt>
+        <dd>The most important free archive. It hosts the <a href="#task-1901-1911-census">1901 &amp; 1911 Census</a>, <a href="#task-land-records">Tithe Applotment Books</a>, historical wills, and much more.</dd>
+        
+        <dt><a href="https://registers.nli.ie/" target="_blank">National Library of Ireland (NLI)</a></dt>
+        <dd>Holds the <strong>free</strong> digital collection of Catholic Parish Register microfilms. The records are images only (not indexed by name), but they are essential for pre-1864 research.</dd>
+        
+        <dt><a href="https://www.familysearch.org/" target="_blank">FamilySearch.org</a></dt>
+        <dd>A massive, free database with many indexed Irish collections, including civil registration, land records, and probate records. Always check here.</dd>
+    </dl>
+    
+    <h2>Online Repositories (Subscription)</h2>
+    <dl>
+        <dt><a href="https://www.findmypast.ie/" target="_blank">Findmypast.ie</a></dt>
+        <dd>A leading commercial site with extensive, exclusive Irish collections, including parish records, land records, and the largest collection of Irish newspapers. It is the partner of the National Archives of Ireland.</dd>
+        
+        <dt><a href="https://www.ancestry.com/" target="_blank">Ancestry.com</a></dt>
+        <dd>The world's largest commercial genealogy site. While its Irish-specific collection is smaller than Findmypast's, it has excellent US and UK records for tracking <a href="#chap-emigration-story">emigrant ancestors</a>.</dd>
+        
+        <dt><a href="https://www.rootsireland.ie/" target="_blank">RootsIreland.ie</a></dt>
+        <dd>A subscription site run by the Irish Family History Foundation. It features transcriptions of parish records from local genealogy centers across Ireland. It can be particularly good for finding records that aren't online elsewhere.</dd>
+    </dl>
+
+    <h2>Physical Archives (In-Person Research)</h2>
+    <dl>
+        <dt><a href="https://www.nationalarchives.ie/" target="_blank">The National Archives</a> (Dublin)</dt>
+        <dd>The primary physical repository for state records.</dd>
+        
+        <dt><a href="https://www.nli.ie/" target="_blank">The National Library</a> (Dublin)</dt>
+        <dd>Holds estate papers, newspapers, and the original Catholic parish register microfilms.</dd>
+        
+        <dt><a href="https://www.valoff.ie/" target="_blank">The Valuation Office</a> (Dublin)</dt>
+        <dd>Holds the "cancelled" land books that track Griffith's Valuation forward in time, showing changes in property ownership.</dd>
+        
+        <dt><a href="httpshttps://www.proni.gov.uk/" target="_blank">PRONI</a> (Belfast)</dt>
+        <dd>The Public Record Office of Northern Ireland. This is the main archive for records relating to the six counties of Northern Ireland.</dd>
+    </dl>
+</section>
+<section id="chap-irish-pre-famine">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 3. Core Irish Records (Pre-Famine)</div>
+    <h1>3. Core Irish Records (Pre-Famine)</h1>
+    <p>This chapter covers the essential "census substitutes" you must use to find ancestors who lived before the Great Famine and the start of civil registration in 1864.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#task-land-records" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-tree-city card-icon"></i> Using Land Records (Griffith's &amp; Tithes)
+            </div>
+            <div class="card-body">
+                <p>How to use Griffith's Valuation (1847-1864) and the Tithe Applotment Books (1823-1837) as census substitutes.</p>
+            </div>
+        </a>
+        <a href="#task-church-records" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-cross card-icon"></i> Finding Church Records
+            </div>
+            <div class="card-body">
+                <p>The core strategy for searching Catholic (NLI) and surviving Church of Ireland parish registers.</p>
+            </div>
+        </a>
+        <a href="#ref-early-census" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-file-excel card-icon"></i> Guide to the 1821-1851 Censuses
+            </div>
+            <div class="card-body">
+                <p>Understanding what little survives of the 19th-century censuses destroyed in the 1922 fire.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="task-land-records">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-pre-famine">3. Core Irish Records (Pre-Famine)</a> &gt; Using Land Records (Griffith's &amp; Tithes)</div>
+    <h1>Using Land Records (Griffith's &amp; Tithes)</h1>
+    <p>These two land valuation records are the most important census substitutes for finding your family in mid-19th century Ireland.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You must know the name of an ancestor living in Ireland between the 1820s and 1850s.</li>
+        <li>You must know the <strong>County</strong> and ideally the <strong>Parish</strong> they lived in. You can find this using the tools in <a href="#concept-irish-geography">Irish Geography</a>.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Start with Griffith's Valuation (1847-1864):</strong> This was a comprehensive valuation of all land and property in Ireland. Every head of household leasing or owning property is listed.
+            <ul>
+                <li>Go to the <a href="http://www.askaboutireland.ie/griffith-valuation/" target="_blank">Ask About Ireland</a> website, which provides the complete resource for free.</li>
+                <li>Search by your ancestor's name and the county.</li>
+                <li>The results will show you the ancestor (Occupier), the person they leased from (Immediate Lessor), the <strong>Civil Parish</strong>, and the <strong>Townland</strong>.</li>
+                <li><strong>Crucially,</strong> note the map reference number (e.g., "5a"). You can use the accompanying maps to see the exact location of their house or plot.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Move to the Tithe Applotment Books (1823-1837):</strong> This is the " prequel" to Griffith's. It was a survey to determine the tithes (a tax) payable to the Church of Ireland.
+            <ul>
+                <li><strong>Note:</strong> It generally only lists heads of households who were farmers or held land (not city residents or landless laborers) and is less comprehensive than Griffith's.</li>
+                <li>Search the free collection at <a href="https://www.genealogy.nationalarchives.ie/" target="_blank">The National Archives of Ireland</a>.</li>
+                <li>Cross-reference what you find with the Griffith's data. Finding a family in the same townland in both records is a very strong sign of continuity.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>You will have pinpointed your ancestor to a specific townland and parish, which is the "ancestral address" you need to find the next set of records: church registers.</p>
+</section>
+
+<section id="task-church-records">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-pre-famine">3. Core Irish Records (Pre-Famine)</a> &gt; Finding Church Records</div>
+    <h1>Finding Church Records</h1>
+    <p>Church registers of baptism, marriage, and burial are the primary source for pre-famine births, marriages, and deaths.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You must have a good idea of your ancestor's <strong>religion</strong> (e.g., Catholic, Church of Ireland, Presbyterian).</li>
+        <li>You must know the <strong>Parish</strong> and <strong>County</strong> where they lived, ideally found using <a href="#task-land-records">Land Records</a>.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Determine the Correct Parish:</strong> Remember from <a href="#concept-irish-geography">Irish Geography</a> that the <strong>Civil Parish</strong> (used for land records) and the <strong>Catholic Parish</strong> (used for church records) may have different names or boundaries. Use <a href="https://www.johngrenham.com/places/" target="_blank">John Grenham's site</a> to check.
+        </li>
+        <li>
+            <strong>Search for Catholic Parish Registers:</strong>
+            <ul>
+                <li><strong>Start Free:</strong> Go to the <a href="https://registers.nli.ie/" target="_blank">National Library of Ireland (NLI)</a>. This site holds the <strong>free digital images</strong> of almost all Catholic parish registers up to 1880. However, they are <strong>not indexed by name</strong>. You must browse them page by page.</li>
+                <li><strong>Search by Name (Free):</strong> Go to <a href="https://www.irishgenealogy.ie/en/" target="_blank">IrishGenealogy.ie</a> and <a href="https://www.familysearch.org/" target="_blank">FamilySearch.org</a>. Both have free, searchable indexes (and often images) for many Catholic parishes.</li>
+                <li><strong>Search by Name (Subscription):</strong> Check <a href="https://www.findmypast.ie/" target="_blank">Findmypast</a> and <a href="https://www.rootsireland.ie/" target="_blank">RootsIreland.ie</a>. RootsIreland is particularly strong, as it features transcriptions from local heritage centers.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Search for Church of Ireland / Protestant Registers:</strong>
+            <ul>
+                <li>Most Church of Ireland registers were destroyed in the 1922 fire. However, surviving records are being centralized and indexed.</li>
+                <li><strong>Start Free:</strong> Check <a href="https://www.irishgenealogy.ie/en/" target="_blank">IrishGenealogy.ie</a>, which is the official home for many surviving Church of Ireland registers, particularly for Dublin, Kerry, and Carlow.</li>
+                <li><strong>Check Transcripts:</strong> Visit the <a href="httpshttps://www.ireland.anglican.org/about/rcb-library" target="_blank">RCB Library</a> in Dublin (or its website) to see lists of surviving records.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>With luck and persistence, you will find a baptismal or marriage record for your ancestor, which may be the only "birth" or "marriage" record that ever existed for them.</p>
+</section>
+
+<section id="ref-early-census">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-pre-famine">3. Core Irish Records (Pre-Famine)</a> &gt; Guide to the 1821-1851 Censuses</div>
+    <h1>Guide to the 1821-1851 Censuses</h1>
+    <p>This reference guide explains the status of the 19th-century Irish census returns, which were almost entirely destroyed in the 1922 Four Courts fire.</p>
+
+    <h2>What Was Lost?</h2>
+    <p>The complete, all-island census returns for 1821, 1831, 1841, and 1851 were lost in the fire. This is the "great brick wall" of Irish genealogy. The 1861, 1871, 1881, and 1891 returns were pulped for paper by the government <em>before</em> the fire (a separate, tragic loss).</p>
+
+    <h2>What Survives?</h2>
+    <p>Only tiny, scattered fragments and transcripts survive. You should always perform a quick search, but be aware that the chances of finding an ancestor are very low. All surviving fragments are free to search on the <a href="https://www.genealogy.nationalarchives.ie/" target="_blank">National Archives of Ireland</a> website.</p>
+    
+    <dl>
+        <dt>1821 Census</dt>
+        <dd>Fragments survive for parts of <strong>Cavan, Fermanagh, Galway, Meath, and Offaly (King's)</strong>.</dd>
+        
+        <dt>1831 Census</dt>
+        <dd>Fragments survive for parts of <strong>Derry/Londonderry</strong>.</dd>
+        
+        <dt>1841 Census</dt>
+        <dd>Only one complete parish (Killeshandra, Co. Cavan) survives. All other fragments for all of Ireland were destroyed.</dd>
+        
+        <dt>1851 Census</dt>
+        <dd>Fragments survive for parts of <strong>Antrim, Belfast, and Dublin</strong>.</dd>
+    </dl>
+</section><section id="chap-irish-post-famine">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 4. Core Irish Records (Post-Famine)</div>
+    <h1>4. Core Irish Records (Post-Famine)</h1>
+    <p>This chapter covers the foundational records for modern Irish research, which are generally complete, accessible, and searchable online.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#task-civil-records" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-certificate card-icon"></i> Using Civil Registration (BMDs)
+            </div>
+            <div class="card-body">
+                <p>How to use the official government records (Births, Marriages, Deaths) starting in 1864.</p>
+            </div>
+        </a>
+        <a href="#task-1901-1911-census" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-users card-icon"></i> Using the 1901 &amp; 1911 Censuses
+            </div>
+            <div class="card-body">
+                <p>The only complete, all-island censuses available, and what vital information they hold.</p>
+            </div>
+        </a>
+        <a href="#ref-wills-probate" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-gavel card-icon"></i> Wills and Probate Records
+            </div>
+            <div class="card-body">
+                <p>A reference guide to finding wills and indexes, which often name multiple family members.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="task-civil-records">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-post-famine">4. Core Irish Records (Post-Famine)</a> &gt; Using Civil Registration (BMDs)</div>
+    <h1>Using Civil Registration (BMDs)</h1>
+    <p>This task explains how to find the government-issued records of Births, Marriages, and Deaths (BMDs).</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You must be looking for an event that happened <em>after</em> the start dates.</li>
+        <li><strong>Key Dates:</strong>
+            <ul>
+                <li><strong>1845:</strong> Start of all non-Catholic marriages registration.</li>
+                <li><strong>1864:</strong> Start of <strong>all</strong> births, deaths, and Catholic marriages registration.</li>
+            </ul>
+        </li>
+        <li>You need a name, a rough date, and a general location.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Go to IrishGenealogy.ie:</strong> The official Irish government site, <a href="https://www.irishgenealogy.ie/en/" target="_blank">IrishGenealogy.ie</a>, provides <strong>free</strong> access to the full indexes and record images. This should be your first and primary stop.
+        </li>
+        <li>
+            <strong>Understand the Registration District:</strong> Records are not filed by county but by "Registration District," which was based on the old Poor Law Unions. Don't be surprised if an ancestor from "East Galway" is in the "Ballinasloe" or "Mountbellew" district.
+        </li>
+        <li>
+            <strong>Search the Records:</strong>
+            <ul>
+                <li><strong>Births (1864-1921):</strong> Provide the child's name, parents' names, and the <strong>Townland</strong> of birth. A birth certificate is the only record that gives the mother's maiden name.</li>
+                <li><strong>Marriages (1845/1864-1921):</strong> Provide the bride and groom's names, ages, occupations, and (crucially) their fathers' names and occupations.</li>
+                <li><strong>Deaths (1864-1921):</strong> Provide the deceased's name, age, cause of death, and the name of the "informant" (usually a relative who was present).</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Analyze the Image:</strong> Once you find an index entry, always click to view the actual register page. The image contains far more detail (like witnesses to a marriage or the exact townland of birth) than the index alone.
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>You will have the official government record of your ancestor's life event, which provides the critical data (like parents' names or a specific address) needed to jump back to the next generation.</p>
+</section>
+
+<section id="task-1901-1911-census">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-post-famine">4. Core Irish Records (Post-Famine)</a> &gt; Using the 1901 &amp; 1911 Censuses</div>
+    <h1>Using the 1901 &amp; 1911 Censuses</h1>
+    <p>These two census returns are the only complete, all-island censuses that are available to the public.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You must have an ancestor who was living in Ireland in either 1901 or 1911.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Go to the National Archives:</strong> The complete census records are <strong>free</strong> to search at the <a href="https://www.genealogy.nationalarchives.ie/" target="_blank">National Archives of Ireland</a> website.
+        </li>
+        <li>
+            <strong>Search for Your Ancestor:</strong> You can search by name, county, and census year. Be creative with spellings (e.g., "Murphy" might be "Murphey").
+        </li>
+        <li>
+            <strong>Analyze the "Form A" (Household Return):</strong> This is the main page, filled out and signed by the "Head of Family." It lists:
+            <ul>
+                <li>Every person in the house on census night.</li>
+                <li>Their relationship to the head of family.</li>
+                <li>Their religion.</li>
+                <li>Their occupation.</li>
+                <li>Their age.</li>
+                <li><strong>Crucially:</strong> "Read or Write?" (Yes/No) and "Where Born" (usually the county, or "England," "USA," etc.).</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Analyze the "Form B1" (House &amp; Building Return):</strong> Don't skip this. Click the "Show all information" button. This form tells you what kind of house they lived in (e.g., "3 rooms, 3 windows in front"), what the walls were made of ("Stone, brick, or concrete"), and the roof ("Thatch" or "Slate"). It paints a vivid picture of their economic status.</li>
+        <li>
+            <strong>Note (1911 Census Only):</strong> The 1911 census also asked married women "How many years married," "Total children born alive," and "Children still living." This is genealogically priceless.</li>
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>You will have a complete snapshot of your entire family unit, frozen in time, providing a wealth of personal detail and confirming relationships, ages, and birth locations.</p>
+</section>
+
+<section id="ref-wills-probate">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-irish-post-famine">4. Core Irish Records (Post-Famine)</a> &gt; Wills and Probate Records</div>
+    <h1>Wills and Probate Records</h1>
+    <p>This reference details how to find wills, which can provide a huge amount of family information, list property, and name relatives.</p>
+
+    <h2>What Exists?</h2>
+    <p>Like other records, many original wills were lost in the 1922 Four Courts fire. However, the record <em>books</em> (copies) often survive. The system was centralized in 1858, making post-1858 wills much easier to find.</p>
+    
+    <dl>
+        <dt>Wills (Post-1858)</dt>
+        <dd>
+            <p>These are the easiest to find. The "Calendars of Wills and Administrations" (which are indexes) survive intact from 1858 to the present.</p>
+            <ul>
+                <li><strong>How to Search:</strong> Go to the <a href="https://www.genealogy.nationalarchives.ie/Nai/Indexes-to-Wills-and-Admons-1858-1981" target="_blank">National Archives Wills Calendars</a>. This free database is a complete index for all of Ireland from 1858-1922.</li>
+                <li>The index gives you the name, date of death, place of death, and the "executors" of the will (often a son or wife). You can use this to order a copy of the full will.</li>
+            </ul>
+        </dd>
+        
+        <dt>Wills (Pre-1858)</dt>
+        <dd>
+            <p>This is much more difficult, as most original wills were destroyed. You are looking for copies or indexes that survived.</p>
+            <ul>
+                <li><a href="https://www.familysearch.org/search/catalog/2A" target="_blank">FamilySearch</a> has many digitized records, including indexes to "Prerogative" wills (for wealthier individuals).</li>
+                <li>The National Archives site has some surviving "Will Books" from local district registries.</li>
+            </ul>
+        </dd>
+    </dl>
+</section><section id="chap-emigration-story">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 5. The Emigration Story</div>
+    <h1>5. The Emigration Story</h1>
+    <p>This chapter focuses on tracing the journey of your ancestors from Ireland to their new home, covering the major waves, the shipping records, and the crucial naturalization documents.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#concept-emigration-waves" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-ship card-icon"></i> Waves of Irish Emigration
+            </div>
+            <div class="card-body">
+                <p>The timeline of major migration periods, from the Great Famine to the economic migrations.</p>
+            </div>
+        </a>
+        <a href="#task-passenger-lists" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-list-ol card-icon"></i> Finding Passenger Lists
+            </div>
+            <div class="card-body">
+                <p>How to search the records from the departure and arrival ports, including Ellis Island and Castle Garden.</p>
+            </div>
+        </a>
+        <a href="#task-naturalization-records" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-file-signature card-icon"></i> Using Naturalization Records
+            </div>
+            <div class="card-body">
+                <p>The most important records for an immigrant ancestor, often containing the exact birthplace in Ireland.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="concept-emigration-waves">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-emigration-story">5. The Emigration Story</a> &gt; Waves of Irish Emigration</div>
+    <h1>Waves of Irish Emigration</h1>
+    <p>Irish emigration was a centuries-long, often traumatic phenomenon that fundamentally shaped the nation. Knowing the timeline is key to knowing which records to search.</p>
+
+    <h2>Major Waves and Destinations</h2>
+    <dl>
+        <dt>Pre-Famine (1700s to 1845)</dt>
+        <dd>
+            <p>Emigration was primarily driven by economic opportunity and, for Ulster Scots (Presbyterians) and others, religious freedom.
+            <ul>
+                <li><strong>Destinations:</strong> The American colonies and Canada (especially the Maritimes).</li>
+                <li><strong>The 'Forgotten' Migration:</strong> Large numbers of Presbyterians left Ulster for the American Atlantic shores from the 1680s onward, often referred to as "Scotch-Irish" in the US.</li>
+            </ul></dd>
+        
+        <dt>The Great Famine (1845-1852)</dt>
+        <dd>
+            <p>Driven by mass starvation, this wave saw nearly 2 million people flee the island, many of them Catholic and from poorer, Irish-speaking areas.
+            <ul>
+                <li><strong>Destinations:</strong> North America (Canada and the US), and Great Britain.</li>
+                <li><strong>Record Note:</strong> The <strong>four years immediately following</strong> the famine saw even more emigration, as conditions convinced more people to leave.</li>
+            </ul></dd>
+            
+        <dt>Post-Famine / Economic Migration (Late 19th Century)</dt>
+        <dd>
+            <p>Emigration became a planned, self-perpetuating system, often funded by earlier emigrants sending back "remittance" money to pay for a relative's ticket.
+            <ul>
+                <li><strong>Destinations:</strong> The US remained the primary destination, but major waves began targeting Australia and New Zealand.</li>
+            </ul></dd>
+
+        <dt>20th Century &amp; Modern Waves</dt>
+        <dd>
+            <p>Mass emigration accelerated again in the 1950s (primarily to Great Britain) and in the 1980s (to the US and UK) due to poor economic conditions in independent Ireland.</p>
+        </dd>
+    </dl>
+</section>
+
+<section id="task-passenger-lists">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-emigration-story">5. The Emigration Story</a> &gt; Finding Passenger Lists</div>
+    <h1>Finding Passenger Lists</h1>
+    <p>Passenger lists are essential, as they often record the ancestor's name, age, occupation, and, critically, their <strong>last place of residence</strong> (sometimes listing the county in Ireland).</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>The immigrant's name and approximate year of arrival in the destination country (e.g., USA, Canada, Australia).</li>
+        <li>A rough idea of the <strong>Port of Arrival</strong> (e.g., New York, Boston, Quebec).</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <p>The US is broken into three main eras based on its New York processing facilities:</p>
+    <dl>
+        <dt>Castle Garden Era (1855-1890, covering lists from 1820-1891)</dt>
+        <dd>The records for this era are available digitally through several sources, including the free <a href="https://www.statueofliberty.org/discover/passenger-ship-search/" target="_blank">Ellis Island/Castle Garden Passenger Search</a>. You can also access the Famine Irish Passenger Record File (1846-1851) at the <a href="https://www.archives.gov/aad/" target="_blank">National Archives (NARA) Access to Archival Databases</a> website.</dd>
+        
+        <dt>Ellis Island Era (1892-1954)</dt>
+        <dd>The vast majority of late-19th and early-20th century Irish immigrants passed through Ellis Island in New York. The records are available for free search on the <a href="https://www.statueofliberty.org/discover/passenger-ship-search/" target="_blank">Statue of Liberty-Ellis Island Foundation's Passenger Database</a>.</dd>
+    </dl>
+    <ol>
+        <li>
+            <strong>Identify the correct arrival port and era</strong> based on your ancestor's known arrival year.
+        </li>
+        <li>
+            <strong>Search the relevant port database</strong> (Castle Garden/Ellis Island for New York, or commercial sites for other ports).
+        </li>
+        <li>
+            <strong>Apply Searching Tips:</strong>
+            <ul>
+                <li><strong>Spelling:</strong> Names were recorded at the <strong>Port of Departure</strong> (in Ireland/UK), not the US, and were often spelled phonetically. Be sure to try alternative spellings.</li>
+                <li><strong>Boston/Philadelphia:</strong> Many ships landed in ports other than New York, especially during the Famine years. Search the collections on commercial sites like <a href="https://www.ancestry.com/" target="_blank">Ancestry.com</a> or <a href="https://www.findmypast.com/" target="_blank">Findmypast.com</a>, which cover Boston, Philadelphia, and Baltimore records.</li>
+                <li><strong>Canada/UK Departures:</strong> Before the US cracked down on immigration, many Irish emigrants first went to Canada or the UK and then traveled overland or on shorter cross-channel routes to the US. They will appear on Canadian or UK <strong>outbound</strong> manifests.</li>
+            </ul>
+        </li>
+    </ol>
+    
+    <h2>Result</h2>
+    <p>You will have located the passenger list, which often records the ancestor's name, age, occupation, and last place of residence (sometimes listing the county in Ireland).</p>
+</section>
+
+<section id="task-naturalization-records">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-emigration-story">5. The Emigration Story</a> &gt; Using Naturalization Records</div>
+    <h1>Using Naturalization Records</h1>
+    <p>A naturalization record, or "Second Papers," is often the single greatest genealogical discovery for an immigrant ancestor. It contains details often found nowhere else.</p>
+
+    <h2>Prerequisites</h2>
+    <p>You need to know the name, approximate date of arrival, and country of settlement for an immigrant ancestor.</p>
+
+    <h2>Naturalization Record Value</h2>
+    <p>A formal naturalization petition, particularly those filed after 1906, can list:</p>
+    <ul>
+        <li><strong>Exact Date of Birth</strong> and <strong>Place of Birth</strong> (often down to the townland or parish in Ireland).</li>
+        <li>Exact Date and Port of Arrival.</li>
+        <li>Spouse and Children's Names, Dates of Birth, and sometimes their Places of Residence.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Understand the Two-Step Process:</strong> Naturalization was generally a two-step process that took at least five years:
+            <ol type="a">
+                <li><strong>Declaration of Intention ("First Papers"):</strong> Filed after two years of residency. This is a shorter document that declares the intent to become a citizen.</li>
+                <li><strong>Petition for Naturalization ("Second Papers"):</strong> Filed after three additional years. This is the document that contains the detailed genealogical information.</li>
+            </ol>
+        </li>
+        <li>
+            <strong>Search Records in the USA (Pre-1906):</strong> Before 1906, any court (local, county, state, or federal) could grant citizenship, meaning records are scattered. Search by location:
+            <ul>
+                <li>Check the <a href="https://www.archives.gov/research/immigration/naturalization" target="_blank">National Archives (NARA)</a> regional facility covering that area.</li>
+                <li>Commercial sites like <a href="https://www.ancestry.com/" target="_blank">Ancestry.com</a> and <a href="https://www.fold3.com/" target="_blank">Fold3</a> often have online indexes.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Search Records in the USA (Post-1906):</strong> After 1906, records were centralized:
+            <ul>
+                <li>Request copies of federal court petitions (1906-1956) from the <strong>US Citizenship and Immigration Services (USCIS)</strong> Genealogy Program.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Search Records in Canada:</strong> Naturalization records are held by the <strong>Library and Archives Canada</strong> (<a href="https://www.bac-lac.gc.ca/eng/discover/immigration/citizenship-naturalization/Pages/citizenship-naturalization.aspx" target="_blank">LAC website</a>). Search by the place and date the certificate was issued.
+        </li>
+    </ol>
+    
+    <h2>Result</h2>
+    <p>You will have an official document that is often the single greatest genealogical discovery for an immigrant ancestor, containing details often found nowhere else.</p>
+</section>
+<section id="chap-dest-usa">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 6. Destination: USA</div>
+    <h1>6. Destination: USA</h1>
+    <p>The United States received the largest share of Irish emigrants, making US records an essential part of tracing your family. This chapter focuses on the most valuable American records for Irish lineage.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#task-us-census" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-search-location card-icon"></i> Using US Census Records
+            </div>
+            <div class="card-body">
+                <p>Focusing on the key US Census years (1880, 1900-1920) that reveal Irish parentage and immigration details.</p>
+            </div>
+        </a>
+        <a href="#task-us-vital-records" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-file-invoice card-icon"></i> Finding US Vital Records
+            </div>
+            <div class="card-body">
+                <p>Why the Death Certificate is often the best record for an Irish immigrant’s exact birthplace.</p>
+            </div>
+        </a>
+        <a href="#ref-us-archives" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-archive card-icon"></i> Key US Archives for Genealogy
+            </div>
+            <div class="card-body">
+                <p>A reference list of the National Archives (NARA), FamilySearch, and other core US institutions.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="task-us-census">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-usa">6. Destination: USA</a> &gt; Using US Census Records</div>
+    <h1>Using US Census Records</h1>
+    <p>The US Census is arguably the single most important tool for tracing an immigrant family, providing a ten-year snapshot that confirms location and often reveals Irish origins.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You must know the family’s city or county of residence in the US between 1850 and 1940.</li>
+        <li>Remember that the US census is released 72 years after it is taken (the latest available census is 1950).</li>
+    </ul>
+
+    <h2>Key Census Questions (Context)</h2>
+    <p>Focus on the details that bridge the gap back to Ireland, as these questions changed by census year. You can search the census for free on sites like <a href="https://www.familysearch.org/" target="_blank">FamilySearch</a> and the <a href="https://www.archives.gov/research/genealogy/census" target="_blank">National Archives (NARA)</a>, or commercially on <a href="https://www.ancestry.com/" target="_blank">Ancestry.com</a>.</p>
+    <dl>
+        <dt>1850 - 1870 Censuses</dt>
+        <dd>These are crucial. They ask for the individual's <strong>Place of Birth</strong> (often simply listed as "Ireland"). They also list <strong>every person</strong> in the household, including domestic servants (often single Irish women).</dd>
+        
+        <dt>1880 Census</dt>
+        <dd>This is one of the best. It asks for the birthplace of the individual, AND the birthplace of their <strong>Father</strong>, AND the birthplace of their <strong>Mother</strong>. This is invaluable for confirming Irish parentage.</dd>
+        
+        <dt>1900, 1910, and 1920 Censuses</dt>
+        <dd>These ask for the year of <strong>Immigration</strong> and whether the person is a <strong>Naturalized Citizen</strong> or has filed their papers. If you find "Na" (Naturalized), immediately consult <a href="#task-naturalization-records">Naturalization Records</a>.</dd>
+        
+        <dt>1930 Census</dt>
+        <dd>Asks for the age at first marriage.</dd>
+    </dl>
+    
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Identify the relevant census year(s)</strong> based on the information you need (e.g., use the 1880 census to find parental birthplaces).
+        </li>
+        <li>
+            <strong>Search the index</strong> on a commercial site (Ancestry/Findmypast) or a free archive (FamilySearch/NARA).
+        </li>
+        <li>
+            <strong>Examine the original image</strong> and extract all relevant immigration, parentage, and naturalization details to build your case back to Ireland.
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>You can track a family's movement over decades, verifying their life events and getting closer to their exact date and county of emigration from Ireland.</p>
+</section>
+
+<section id="task-us-vital-records">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-usa">6. Destination: USA</a> &gt; Finding US Vital Records</div>
+    <h1>Finding US Vital Records</h1>
+    <p>US Birth, Marriage, and Death (BMD) records can often provide the exact town or county of origin in Ireland—far more specific than a census record's "Ireland."</p>
+
+    <h2>Prerequisites</h2>
+    <p>You need a name, date, and state/county where the vital event occurred.</p>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Prioritize the Death Certificate:</strong> The **death certificate** is often the most valuable record for an Irish immigrant, as it required the **exact birthplace** and **parents’ names** of the deceased.
+        </li>
+        <li>
+            <strong>Identify the County/City:</strong> Use the census (see <a href="#task-us-census">Using US Census Records</a>) to pinpoint where the ancestor lived when the event occurred.
+        </li>
+        <li>
+            <strong>Consult the State Archives:</strong> Every state manages its vital records differently. Search state archives or libraries for digitized indexes and images. For example, some states release death certificates over 50 years old to the public.
+        </li>
+        <li>
+            <strong>Use Commercial Indexes:</strong> Commercial sites like <a href="https://www.ancestry.com/" target="_blank">Ancestry.com</a> often have large collections of State and County indexes. For instance, they hold the indexes for the New York City BMDs, which are essential for many Irish families.
+        </li>
+        <li>
+            <strong>Order the Original:</strong> Once you have a date and location from an index, you must contact the relevant State or County government's <strong>Vital Records Office</strong> to order the original certificate for the most reliable information.
+        </li>
+    </ol>
+    
+    <h2>Result</h2>
+    <p>You will have an official US record that may contain the exact town or county of origin in Ireland, which is more specific than most other US records.</p>
+</section>
+
+<section id="ref-us-archives">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-usa">6. Destination: USA</a> &gt; Key US Archives for Genealogy</div>
+    <h1>Key US Archives for Genealogy</h1>
+    <p>This reference lists the core institutions and free resources for American genealogy research, which will be critical when tracing your Irish family's life in the US.</p>
+
+    <h2>Online Repositories</h2>
+    <dl>
+        <dt><a href="https://www.archives.gov/" target="_blank">National Archives and Records Administration (NARA)</a></dt>
+        <dd>The national repository for Federal Government records. NARA holds <strong>all</strong> US Federal Census records, military records (crucial for Civil War veterans), and <strong>Federal court naturalization papers</strong>.</dd>
+        
+        <dt><a href="https://www.statueofliberty.org/discover/passenger-ship-search/" target="_blank">Ellis Island &amp; Castle Garden</a></dt>
+        <dd>This free database is the central access point for passenger lists arriving at the Port of New York between 1820 and 1957.</dd>
+        
+        <dt><a href="https://www.familysearch.org/" target="_blank">FamilySearch.org</a></dt>
+        <dd>The world’s largest free genealogy database. It offers massive digitized collections, including US censuses, state and county death indexes, and city directories.</dd>
+        
+        <dt><a href="https://www.loc.gov/rr/genealogy/" target="_blank">Library of Congress (LOC)</a></dt>
+        <dd>Excellent for finding local history books, historic maps, and <strong>US newspapers</strong> through their Chronicling America project—all great sources for obituaries and local events.</dd>
+        
+        <dt>State and County Archives</dt>
+        <dd>These local archives hold the bulk of the <strong>Pre-1906 Naturalization Records</strong>, wills, deeds, and local court records not held by the federal government.</dd>
+    </dl>
+</section>
+<section id="chap-dest-uk">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 7. Destination: UK</div>
+    <h1>7. Destination: UK</h1>
+    <p>The UK was the primary destination for Irish emigrants from the 1930s onwards, and massive numbers moved to England, Scotland, and Wales during the Famine and Post-Famine eras. UK records are often more complete than Irish ones.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#task-uk-census" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-file-lines card-icon"></i> Using UK Census Records
+            </div>
+            <div class="card-body">
+                <p>Searching the complete census records (1841-1921) to find the specific county of origin in Ireland.</p>
+            </div>
+        </a>
+        <a href="#task-uk-eng-wales" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-house-chimney card-icon"></i> Navigating English &amp; Welsh Records
+            </div>
+            <div class="card-body">
+                <p>How to use the General Register Office (GRO) records and the FreeBMD indexes for births, marriages, and deaths.</p>
+            </div>
+        </a>
+        <a href="#task-uk-scotland" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-khanda card-icon"></i> Navigating Scottish Records
+            </div>
+            <div class="card-body">
+                <p>Using the centralized ScotlandsPeople website for their highly detailed statutory and church registers.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="task-uk-census">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-uk">7. Destination: UK</a> &gt; Using UK Census Records</div>
+    <h1>Using UK Census Records</h1>
+    <p>The UK census records are complete from 1841 to 1921 (and 1939 register) and are invaluable for documenting Irish immigrants who settled in Britain.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You must know the family’s city or town of residence in the UK. Many Irish immigrants settled in port cities like Liverpool, Manchester, Glasgow, and London.</li>
+        <li>The UK census is released after 100 years. The last publicly available census is <strong>1921</strong> (available via subscription).</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <p>UK Census records are held by The National Archives at Kew, but they are digitized and searchable on commercial sites. These sites often offer free access in UK libraries.</p>
+    <ol>
+        <li>
+            <strong>Search Commercial Sites for Records:</strong>
+            <dl>
+                <dt><a href="https://www.findmypast.co.uk/" target="_blank">Findmypast</a></dt>
+                <dd>Holds the <strong>exclusive online version of the 1921 Census</strong> for England and Wales and has strong coverage of British records overall.</dd>
+                
+                <dt><a href="https://www.ancestry.co.uk/" target="_blank">Ancestry UK</a></dt>
+                <dd>Holds the complete 1841-1911 census collection and is highly valuable for the bulk of Irish immigration.</dd>
+            </dl>
+        </li>
+        <li>
+            <strong>Extract Key Details:</strong> Focus on the fields that bridge the gap back to Ireland:
+            <ul>
+                <li><strong>1841 Census:</strong> Be cautious; age was rounded down, and birthplace was often just "Ireland."</li>
+                <li><strong>1851-1911 Censuses:</strong> These are more detailed, asking for the <strong>Parish/County of Birth</strong>. This is a potential bridge back to Ireland, as it is often the first record to name a specific county of origin.</li>
+                <li><strong>1939 Register:</strong> This was a national identity registration taken just before World War II. It is a vital substitute for the missing 1931 census.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>The UK census allows you to trace your immigrant family within Britain, establish their address and relationships, and often get a specific county of origin in Ireland.</p>
+</section>
+
+<section id="task-uk-eng-wales">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-uk">7. Destination: UK</a> &gt; Navigating English &amp; Welsh Records</div>
+    <h1>Navigating English &amp; Welsh Records</h1>
+    <p>Since 1837, England and Wales have maintained a unified system of General Register Office (GRO) records, which are far more consistent than those in the US.</p>
+
+    <h2>Prerequisites</h2>
+    <p>You need an approximate date, name, and location in England or Wales after 1837.</p>
+
+    <h2>Civil Registration Records (BMDs, Post-1837)</h2>
+    <p>Understand the specific details provided by each record type:</p>
+    <dl>
+        <dt>Births</dt>
+        <dd>Certificates are indexed quarterly. They provide the date, place, father's name and occupation, and <strong>mother's maiden name</strong> (essential for the correct family tree).</dd>
+        
+        <dt>Marriages</dt>
+        <dd>Indexed quarterly. They list the father's name and occupation for both the bride and groom, which helps confirm the family identity.</dd>
+        
+        <dt>Deaths</dt>
+        <dd>The death certificate provides the deceased's name, age, occupation, and the name and address of the <strong>informant</strong> (usually a close relative).</dd>
+    </dl>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Search Indexes (Free):</strong> Use the <strong>FreeBMD</strong> (<a href="https://www.freebmd.org.uk/" target="_blank">FreeBMD website</a>) project for free access to the General Register Office (GRO) indexes, which cover 1837 to the 1980s.
+        </li>
+        <li>
+            <strong>Order the Original (Official):</strong> Once you have a volume and page number, you can order an official certificate directly from the <a href="https://www.gov.uk/order-copy-birth-death-marriage-certificate" target="_blank">UK General Register Office (GRO)</a>.
+        </li>
+        <li>
+            <strong>Search Parish Records (Pre-1837):</strong> For records before 1837, you must rely on Anglican (Church of England) parish registers. Search commercial sites like <a href="https://www.findmypast.co.uk/" target="_blank">Findmypast</a>, which has worked with county archives to digitize many of these collections.
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>You will have official, detailed BMD records for your Irish ancestors who settled in England or Wales.</p>
+</section>
+
+<section id="task-uk-scotland">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-uk">7. Destination: UK</a> &gt; Navigating Scottish Records</div>
+    <h1>Navigating Scottish Records</h1>
+    <p>Scotland has a distinct and much older system of centralized records, making genealogy research there often easier than in England or Ireland.</p>
+
+    <h2>Prerequisites</h2>
+    <p>You need an approximate date and location in Scotland.</p>
+
+    <h2>Statutory Registration Details (Context)</h2>
+    <p>Scottish records are renowned for their detail and completeness, starting in 1855:</p>
+    <ul>
+        <li>The **1855-Only Records** include the parents' date and place of marriage on the birth record, and the parents' names on the death record.</li>
+        <li>**Deaths** list the deceased's parents' names (including the mother's maiden name), a key difference from English death records.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Use the Official Site:</strong> Virtually all Scottish records are housed in one place. You must use the official, pay-per-view site, <a href="https://www.scotlandspeople.gov.uk/" target="_blank">ScotlandsPeople</a>.
+        </li>
+        <li>
+            <strong>Search the Single Repository:</strong> This single site contains all major record sets, allowing you to cross-reference easily:
+            <ul>
+                <li>Old Parish Registers (church records, pre-1855).</li>
+                <li>Statutory Registers (BMDs, 1855 onwards).</li>
+                <li>Census Records (1841-1911).</li>
+                <li>Valuation Rolls (property/tax records).</li>
+                <li>Wills and Testaments.</li>
+            </ul>
+        </li>
+    </ol>
+    
+    <h2>Result</h2>
+    <p>If your Irish ancestor settled in Scotland, this centralized approach often makes the records easier to find and provides much richer detail than other destination countries.</p>
+</section><section id="chap-dest-canada">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 8. Destination: Canada</div>
+    <h1>8. Destination: Canada</h1>
+    <p>Canada was a major destination for Irish emigrants, particularly during the early 19th century and the Famine era. Canadian records offer a strong chance of finding the town of origin in Ireland.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#task-can-census" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-map-marked-alt card-icon"></i> Using Canadian Census Records
+            </div>
+            <div class="card-body">
+                <p>Why the 1851 and 1861 Canadian Censuses are crucial for recording specific Irish towns or counties of origin.</p>
+            </div>
+        </a>
+        <a href="#task-can-immigration" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-ferry card-icon"></i> Finding Canadian Immigration Records
+            </div>
+            <div class="card-body">
+                <p>Searching lists from key ports like Quebec (Grosse Île) and the digitized lists at Library and Archives Canada.</p>
+            </div>
+        </a>
+        <a href="#ref-can-archives" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-building-columns card-icon"></i> Library and Archives Canada
+            </div>
+            <div class="card-body">
+                <p>A reference guide to the central federal repository for Canadian census, naturalization, and military records.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="task-can-census">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-canada">8. Destination: Canada</a> &gt; Using Canadian Census Records</div>
+    <h1>Using Canadian Census Records</h1>
+    <p>The Canadian census records, available from 1851 onwards, are highly valuable for Irish research, as they often contain detailed information about the family's Irish origins.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You need an approximate location (province or county) where your ancestor settled. Many Irish settled in Ontario, Quebec (Montreal), and the Maritime provinces.</li>
+        <li>The full Canadian census is free to search on the <a href="https://www.bac-lac.gc.ca/eng/census/Pages/census.aspx" target="_blank">Library and Archives Canada (LAC)</a> website.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Focus on the 1851 and 1861 Censuses:</strong> These early censuses often recorded the <strong>town or county</strong> of birth in Ireland, rather than just the country. Finding an ancestor in one of these years can be a huge breakthrough.
+        </li>
+        <li>
+            <strong>Use the 1871 and 1881 Censuses:</strong> These records provide details on the nationality, religion, and occupation of the Irish immigrant. They list the relationship to the head of the household and age.
+        </li>
+        <li>
+            <strong>Use the 1901 and 1911 Censuses:</strong> These later records are fully digitized and indexed. The 1901 census is especially rich, often providing the year of <strong>Immigration</strong> and <strong>Naturalization</strong> status, which directs you to search <a href="#task-naturalization-records">Naturalization Records</a>.
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>Canadian censuses are often more detailed than their US counterparts regarding a specific place of origin, providing critical information to pinpoint the ancestor's home parish in Ireland.</p>
+</section>
+
+<section id="task-can-immigration">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-canada">8. Destination: Canada</a> &gt; Finding Canadian Immigration Records</div>
+    <h1>Finding Canadian Immigration Records</h1>
+    <p>Tracing an ancestor's arrival in Canada is crucial, especially for the Famine era, where key ports like Quebec City (Grosse Île) were central to the immigration story.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You need the immigrant's name and approximate year of arrival.</li>
+        <li>Be aware that <strong>no comprehensive collection</strong> of passenger lists exists before 1865.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Use LAC's Indexed Lists (Post-1865):</strong> For arrivals between 1865 and 1935, search the digitized collections available through the <a href="https://www.bac-lac.gc.ca/eng/discover/immigration/immigration-records/passenger-lists/Pages/passenger-lists.aspx" target="_blank">Library and Archives Canada (LAC)</a> website.
+        </li>
+        <li>
+            <strong>Check Grosse Île Records:</strong> During the Famine era, many Irish ships arrived at the quarantine station at Grosse Île (Quebec). Records of those who passed through or died there are searchable on the LAC site: <a href="https://www.bac-lac.gc.ca/eng/discover/immigration/immigrants-grosse-ile/Pages/immigrants-grosse-ile.aspx" target="_blank">Immigrants at Grosse Île Quarantine Station</a>.
+        </li>
+        <li>
+            <strong>Search Border Entries:</strong> For those who traveled to the US first or crossed the border from the US to Canada, search the <strong>Border Entry Lists</strong>. LAC holds various lists for land and sea arrivals from 1908 to 1935.
+        </li>
+        <li>
+            <strong>Look for 'Assisted' Records:</strong> Search the LAC collection using keywords like "settler," "emigrant," or "passenger" for records of immigrants sponsored by organizations like the Montreal Emigrant Society or various colonial settlement groups before 1865.
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>Immigration records often provide the ship's name, the port of departure in Ireland/UK, the occupation, and the destination, which helps confirm the family's journey.</p>
+</section>
+
+<section id="ref-can-archives">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-canada">8. Destination: Canada</a> &gt; Library and Archives Canada</div>
+    <h1>Library and Archives Canada</h1>
+    <p>The Library and Archives Canada (LAC) is the central repository for almost all federal genealogical records in Canada. This is the main starting point for all Canadian research.</p>
+
+    <h2>Key Records at LAC</h2>
+    <dl>
+        <dt><a href="https://www.bac-lac.gc.ca/eng/Pages/library-archives-canada.aspx" target="_blank">Library and Archives Canada (LAC)</a></dt>
+        <dd>This is the official portal for Canadian government records. LAC holds the national collection of census returns, passenger lists, border entries, and military service records.</dd>
+        
+        <dt>Passenger Lists</dt>
+        <dd>Available to search online at LAC from 1865-1935. Before 1865, no comprehensive collection exists.</dd>
+        
+        <dt>Naturalization Records</dt>
+        <dd>These records provide the most detailed Irish origin information. Searchable indexes and digital images are available for various periods, but the post-1915 records are the most genealogically rich. <a href="https://www.bac-lac.gc.ca/eng/discover/immigration/citizenship-naturalization/Pages/citizenship-naturalization.aspx" target="_blank">Search the LAC Naturalization records here</a>.</dd>
+        
+        <dt>Post-1935 Immigration Records</dt>
+        <dd>Records for immigrants who arrived after 1935 are held by <strong>Immigration, Refugees and Citizenship Canada (IRCC)</strong>, not LAC. You must apply for access using their Access to Information and Privacy (ATIP) request process.</dd>
+        
+        <dt>Provincial Archives</dt>
+        <dd>While LAC is central, remember that provincial archives (e.g., Nova Scotia, Ontario) hold vital records (BMDs) and local land records. Always check the provincial archive for more recent records.</dd>
+    </dl>
+</section><section id="chap-dest-aus-nz">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 9. Destination: Australia &amp; NZ</div>
+    <h1>9. Destination: Australia &amp; NZ</h1>
+    <p>Irish immigrants form one of the largest non-British groups in Australia and New Zealand. Research often begins with discovering whether your ancestor arrived as a free settler (assisted or unassisted) or as a transported convict.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#task-aus-nz-records" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-earth-oceania card-icon"></i> Using Australian &amp; NZ Records
+            </div>
+            <div class="card-body">
+                <p>The distinction between Pre- and Post-1924 records and the value of assisted vs. unassisted migration lists.</p>
+            </div>
+        </a>
+        <a href="#task-aus-convict" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-handcuffs card-icon"></i> Finding Convict Records (Australia)
+            </div>
+            <div class="card-body">
+                <p>A guide to the highly detailed transportation and convict records for Irish men and women sent to Australia.</p>
+            </div>
+        </a>
+        <a href="#ref-aus-nz-archives" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-atlas card-icon"></i> Key AUS &amp; NZ Archives
+            </div>
+            <div class="card-body">
+                <p>A reference list of the National Archives (NAA), Trove, and the key State and Provincial archives.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="task-aus-nz-records">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-aus-nz">9. Destination: Australia &amp; NZ</a> &gt; Using Australian &amp; NZ Records</div>
+    <h1>Using Australian &amp; NZ Records</h1>
+    <p>Before the 1920s, migration records were decentralized and managed by the individual colonies and provinces, making localized searching critical.</p>
+
+    <h2>Prerequisites</h2>
+    <p>You need the immigrant's name, approximate year of arrival, and destination state or province.</p>
+
+    <h2>Migration Context</h2>
+    <p>Australian records are divided by a key date: **Pre-1924** (State or Colonial Archives) and **Post-1924** (Commonwealth/Federal responsibility, held by NAA). Most Irish families arrived under two major passenger classes: **Assisted** (passage subsidized) or **Unassisted** (paid own way).</p>
+    
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Determine the Key Distinction:</strong> Identify whether your ancestor's arrival falls into the Pre-1924 or Post-1924 category to guide your search to the correct archive.
+        </li>
+        <li>
+            <strong>Prioritize Assisted Immigration Records:</strong> Search these lists first, as they are often the <strong>most detailed</strong>, frequently listing the immigrant's <strong>exact Irish county or parish of origin</strong>. These records include:
+            <ul>
+                <li>NSW Assisted Immigration lists (1828-1896).</li>
+                <li>Victorian Assisted Immigration lists (1839-1871).</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Search Unassisted Immigration Records:</strong> Search for records for passengers who paid their own way (e.g., in Victoria from 1852-1923), which usually record the ship, date, and name.
+        </li>
+        <li>
+            <strong>Search New Zealand Records:</strong> New Zealand records were managed by <strong>Provincial Governments</strong> (before 1870).
+            <ul>
+                <li>Search the <a href="https://www.familysearch.org/search/collection/3661064" target="_blank">FamilySearch NZ Passenger Lists</a>, which cover 1839 to 1973.</li>
+                <li>Look for <strong>Assisted Lists (1870-1888)</strong>, which are often more complete.</li>
+            </ul>
+        </li>
+    </ol>
+    
+    <h2>Result</h2>
+    <p>You will have located the arrival record, often including crucial detail on the specific place of origin in Ireland needed to break the "brick wall."</p>
+</section>
+
+<section id="task-aus-convict">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-aus-nz">9. Destination: Australia &amp; NZ</a> &gt; Finding Convict Records (Australia)</div>
+    <h1>Finding Convict Records (Australia)</h1>
+    <p>Approximately 40,000 Irish men and women were transported to Australia as convicts between 1788 and 1868. Convict records are rich with genealogical detail.</p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+        <li>You must know the ancestor's name and approximate date of conviction.</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Check the Irish Transportation Records:</strong> Begin with the records created in Ireland before the voyage. A searchable online index is available through the <a href="https://nationalarchives.ie/article/irish-transportation-records/" target="_blank">National Archives of Ireland</a> website.
+            <ul>
+                <li>The index often gives the convict’s age, place of trial, sentence, ship name, and sometimes the name of a petitioner (often a wife or family member).</li>
+                <li>Some records relating to family members who applied for a <strong>free passage</strong> to join the convict also survive.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Search State-Based Convict Archives:</strong> Once the ship and date are known, search the archives of the colony of arrival (New South Wales, Van Diemen's Land/Tasmania, or Western Australia):
+            <ul>
+                <li><strong>NSW:</strong> Search the <strong>State Library of NSW</strong> and <strong>Museums of History NSW</strong> indexes (sometimes called "The Irish Gift").</li>
+                <li><strong>Tasmania:</strong> Search the <strong>Founders and Survivors</strong> database, which covers the 73,000 convicts sent to Tasmania.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Examine "Free Settlers' Papers":</strong> Check this small but important series (1828-1848), which lists the wives and children of convicts who emigrated freely to join their relative.
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>Convict records often contain the most detailed physical descriptions, trial information, and family names—a rare level of detail for a pre-Famine Irish ancestor.</p>
+</section>
+
+<section id="ref-aus-nz-archives">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-dest-aus-nz">9. Destination: Australia &amp; NZ</a> &gt; Key AUS &amp; NZ Archives</div>
+    <h1>Key AUS &amp; NZ Archives</h1>
+    <p>Researching in Australia and New Zealand requires navigating a mix of federal and state-level archives.</p>
+
+    <h2>Online Repositories</h2>
+    <dl>
+        <dt><a href="https://www.naa.gov.au/" target="_blank">National Archives of Australia (NAA)</a></dt>
+        <dd>Holds all <strong>post-1924</strong> immigration records and a searchable database (RecordSearch) for passenger arrivals from 1898 to 1972 (primarily Western Australia, Tasmania, and Queensland pre-1924).</dd>
+        
+        <dt><a href="https://trove.nla.gov.au/" target="_blank">Trove (National Library of Australia)</a></dt>
+        <dd>The single best free resource. Trove provides digitized access to millions of pages of <strong>Australian newspapers</strong>, making it easy to find death notices and obituaries. It also indexes the Irish Transportation Records.</dd>
+        
+        <dt><a href="https://prov.vic.gov.au/" target="_blank">Public Record Office Victoria (PROV)</a></dt>
+        <dd>The key archive for Victoria. Holds all <strong>Victorian passenger lists</strong> (assisted and unassisted) up to 1923, along with early church and court records.</dd>
+        
+        <dt><a href="https://mhnsw.au/" target="_blank">Museums of History NSW (State Archives)</a></dt>
+        <dd>The primary source for <strong>New South Wales</strong> records, including digitized assisted immigration lists (1828-1896) and convict records.</dd>
+        
+        <dt><a href="https://www.archives.govt.nz/" target="_blank">Archives New Zealand</a></dt>
+        <dd>Holds passenger lists, military records, and official New Zealand government files. They maintain reference guides for finding provincial-level records that may have survived.</dd>
+    </dl>
+</section>
+<section id="chap-advanced-dna">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; 10. Advanced Techniques &amp; DNA</div>
+    <h1>10. Advanced Techniques &amp; DNA</h1>
+    <p>When paper records fail, you must turn to advanced techniques—including genetic evidence and military documents—to break through your most stubborn Irish brick walls.</p>
+    
+    <div class="card-grid chapter-links">
+        <a href="#task-brick-walls" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-hammer card-icon"></i> Breaking Down "Brick Walls"
+            </div>
+            <div class="card-body">
+                <p>Strategies for finding collateral records, using the naming pattern in reverse, and creative searching for common surnames.</p>
+            </div>
+        </a>
+        <a href="#task-using-dna" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-dna card-icon"></i> Using DNA Testing for Genealogy
+            </div>
+            <div class="card-body">
+                <p>The best strategy for testing (start with Ancestry) and the benefits of free uploading to other sites.</p>
+            </div>
+        </a>
+        <a href="#concept-dna-results" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-flask card-icon"></i> Understanding Your DNA Results
+            </div>
+            <div class="card-body">
+                <p>The difference between Ethnicity Estimates and the gold standard: DNA Matching and clustering techniques.</p>
+            </div>
+        </a>
+        <a href="#task-military-records" class="comorbidity-card">
+            <div class="card-header">
+                <i class="fas fa-medal card-icon"></i> Using Military Records
+            </div>
+            <div class="card-body">
+                <p>How British, Irish, and US military records can often contain the soldier's exact place of birth in Ireland.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section id="task-brick-walls">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-advanced-dna">10. Advanced Techniques &amp; DNA</a> &gt; Breaking Down "Brick Walls"</div>
+    <h1>Breaking Down "Brick Walls"</h1>
+    <p>A "brick wall" is the point where traditional paper records have been exhausted. With Irish ancestors, this usually happens in the pre-1864 period where records are scarce.</p>
+
+    <h2>Prerequisites</h2>
+    <p>You should have exhausted all primary paper records for your direct line ancestor.</p>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Focus on Siblings and Nieces/Nephews:</strong> Find <strong>all</strong> of your ancestor's siblings and trace <em>their</em> lives forward. They might have a census, military, or naturalization record that lists the specific Irish townland or parish where the main ancestor was born.
+        </li>
+        <li>
+            <strong>Apply the Naming Pattern (in Reverse):</strong> Use the naming conventions detailed in <a href="#concept-irish-naming">Understanding Irish Naming Patterns</a> to predict the grandparents' names. This helps eliminate potential families in the parish registers.
+        </li>
+        <li>
+            <strong>Check Collateral Records:</strong> Search burial records, church registers, and cemetery plot records. Cemetery records often list everyone buried in a plot, which can connect otherwise unknown family members (aunts, cousins) to your direct line.
+        </li>
+        <li>
+            <strong>Use Nicknames and Variants:</strong> Always search using phonetic spellings and nicknames. An ancestor recorded as "Kate" in the census may be "Catherine" or "Katherine" in the church register. Use wildcard characters for alternate letters and limit your search by setting a timeframe of events.
+        </li>
+        <li>
+            <strong>Move to DNA:</strong> When all paper trails are exhausted, genetic genealogy is the next step (see <a href="#task-using-dna">Using DNA Testing for Genealogy</a>).
+        </li>
+    </ol>
+    
+    <h2>Result</h2>
+    <p>By shifting focus from the direct line to the wider family, you increase your chance of finding a collateral record that holds the key to your Irish origins.</p>
+</section>
+
+<section id="task-using-dna">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-advanced-dna">10. Advanced Techniques &amp; DNA</a> &gt; Using DNA Testing for Genealogy</div>
+    <h1>Using DNA Testing for Genealogy</h1>
+    <p>DNA testing is now essential for Irish genealogy, particularly for breaking down brick walls where paper records were lost or are non-existent.</p>
+
+    <h2>Prerequisites</h2>
+    <p>You have hit a "brick wall" with traditional paper records.</p>
+
+    <h2>Steps: The Best Strategy for Irish Roots</h2>
+    <ol>
+        <li>
+            <strong>Test with AncestryDNA First:</strong> Ancestry has the largest global database and a strong presence of users with Irish roots, maximizing your chance of finding relevant cousins.
+        </li>
+        <li>
+            <strong>Upload to Other Sites (Free):</strong> Download your raw DNA data file from Ancestry. You can then <strong>free upload</strong> this data to other sites to expand your match pool. Recommended sites include:
+            <ul>
+                <li><a href="https://www.myheritage.com/dna" target="_blank">MyHeritage DNA</a>: The next-best database for finding Irish matches.</li>
+                <li><a href="https://www.familytreedna.com/" target="_blank">Family Tree DNA (FTDNA)</a>: Crucial, as many people in the north of Ireland have uploaded their DNA here.</li>
+                <li><a href="https://www.gedmatch.com/" target="_blank">GEDmatch</a>: A free third-party site where you can compare kits from any company.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Consider Y-DNA for Surnames:</strong> If your brick wall involves a male-line surname (e.g., finding the father of a grandfather), consider a Y-DNA test (only available at FTDNA). This DNA follows the surname, providing clues for lineages that pre-date 1750.
+        </li>
+        <li>
+            <strong>Analyze the DNA Research Workflow:</strong> The flow below outlines how to use DNA data effectively to identify common ancestors.
+            <pre class="mermaid">
+    graph TD
+        A(["Test/Upload DNA"])
+        B(["Received List of<br>Shared Matches"])
+        C(["Group Matches by Shared<br>Ancestors (Clustering)"])
+        D(["Is the Shared<br>Ancestor known?"])
+        E(["Build Tree Out<br>from Match"])
+        F((Brick Wall Broken))
+        
+        A --> B --> C --> D
+        D -- No --> E
+        D -- Yes --> F
+        E --> F
+        
+        style D fill:#f4f6f8,stroke:#e1e4e8,stroke-width:2px
+    </pre>
+        </li>
+    </ol>
+    
+    <h2>Result</h2>
+    <p>You will have maximized your match pool and applied clustering techniques to identify shared ancestral couples, providing new leads for your Irish research.</p>
+</section>
+
+<section id="concept-dna-results">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-advanced-dna">10. Advanced Techniques &amp; DNA</a> &gt; Understanding Your DNA Results</div>
+    <h1>Understanding Your DNA Results</h1>
+    <p>Interpreting DNA results requires understanding the difference between Ethnicity Estimates and DNA Matching.</p>
+
+    <h2>Ethnicity Estimates</h2>
+    <p>This tells you where your DNA most closely resembles reference populations (e.g., "95% Irish").</p>
+    <ul>
+        <li><strong>Nuance:</strong> Ethnicity estimates are guides, not facts. They often show <strong>Ancestral Regions</strong>, which are clusters of matches likely related to a specific county or area of Ireland, making them useful for pinpointing a location.</li>
+        <li><strong>Comparison:</strong> DNA testing websites present ethnicity in varying ways. You may see "Irish" on one site and "Scottish" or "British" on another due to the long history of migration between these islands.</li>
+    </ul>
+
+    <h2>DNA Matching and Clustering</h2>
+    <p>DNA Matching is the gold standard for genealogy. It connects you to living cousins who share DNA with you.</p>
+    <ul>
+        <li><strong>Clustering:</strong> This technique involves organizing your DNA matches into distinct groups (or "clusters"). Everyone in a cluster is likely descended from a single common ancestral couple. This allows you to tackle your family tree by groups instead of individual names.</li>
+        <li><strong>Actionable Matches:</strong> The most valuable matches are those who have a detailed public family tree attached to their results. You can use their tree to find the ancestral couple they share with you, which is the key to solving your brick wall.</li>
+    </ul>
+</section>
+
+<section id="task-military-records">
+    <div class="breadcrumbs"><a href="#cover">Irish Genealogy Guide</a> &gt; <a href="#chap-advanced-dna">10. Advanced Techniques &amp; DNA</a> &gt; Using Military Records</div>
+    <h1>Using Military Records</h1>
+    <p>Irish ancestors served in numerous conflicts worldwide. Military records are often the only source containing specific physical descriptions, next-of-kin names, and the parish of birth.</p>
+
+    <h2>Prerequisites</h2>
+    <p>You need the ancestor's name, approximate birth year, and the conflict/force they served in (e.g., British Army, US Civil War).</p>
+
+    <h2>Steps</h2>
+    <ol>
+        <li>
+            <strong>Search British Army Records (Pre-1922):</strong>
+            <ul>
+                <li><strong>Record Details:</strong> Documents like Attestation Papers (enlistment forms) and Pension Claims often list the soldier's <strong>County and Parish of Birth</strong>, height, physical description, and the names of his wife and children.</li>
+                <li><strong>Where to Search:</strong> The bulk of these records are held at <a href="https://www.nationalarchives.gov.uk/" target="_blank">The National Archives (UK) in Kew</a> and are digitized on commercial sites like <a href="https://www.findmypast.ie/" target="_blank">Findmypast</a> and <a href="https://www.ancestry.com/" target="_blank">Ancestry</a>.</li>
+                <li><strong>Soldiers' Wills:</strong> The <a href="http://soldierswills.nationalarchives.ie/" target="_blank">National Archives of Ireland</a> holds a free, searchable index of the wills of Irish soldiers who died while serving in the British Army (mostly WWI).</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Search Irish Military Archives (Post-1913):</strong> Records relating to the revolutionary period and the Defence Forces are held in Ireland.
+            <ul>
+                <li><strong>Revolutionary Records (1913-1923):</strong> Search the <strong>Military Service Pension Collection</strong> and the <strong>Bureau of Military History</strong> (1913-1921) online at the <a href="https://www.militaryarchives.ie/" target="_blank">Irish Military Archives</a> website.</li>
+                <li>Check the 1922 Army Census for members of the National Army.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Search US Civil War Records (1861-1865):</strong>
+            <ul>
+                <li><strong>Compiled Military Service Records (CMSR):</strong> These records often contain enlistment details, physical descriptions, and place of birth (county in Ireland). Search the <a href="https://www.archives.gov/research/military/civil-war/resources" target="_blank">National Archives (NARA)</a> index and the free Civil War Soldiers and Sailors System database.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>Result</h2>
+    <p>You will have accessed detailed personal and origin information that often survives when other records have been lost.</p>
+</section>
+</div>
+            <!-- End of content block -->
+
+            </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({ startOnLoad: false });
+            }
+
+            const navPane = document.getElementById('navPane');
+            const contentPane = document.getElementById('contentPane');
+            const navToggle = document.getElementById('navToggle');
+            
+            let navLinks = document.querySelectorAll('.nav-pane a');
+            let contentSections = document.querySelectorAll('.content-pane section');
+            let pageOrder = [];
+
+            function buildPageNav() {
+                contentSections = document.querySelectorAll('.content-pane section');
+                // CORRECTED: This now selects ALL links in order, including H3 links
+                pageOrder = Array.from(document.querySelectorAll('.nav-pane a')).map(link => link.getAttribute('href').substring(1));
+                
+                contentSections.forEach(section => {
+                    const existingNav = section.querySelector('.page-nav');
+                    if (existingNav) existingNav.remove();
+                    
+                    const currentId = section.id;
+                    const currentIndex = pageOrder.indexOf(currentId);
+                    
+                    let prevLinkHTML = '';
+                    if (currentIndex > 0) {
+                        const prevId = pageOrder[currentIndex - 1];
+                        const prevLinkElement = document.querySelector(`.nav-pane a[href="#${prevId}"]`);
+                        if (prevLinkElement) {
+                            prevLinkHTML = `<a href="#${prevId}" class="nav-prev"><div class="nav-label">Previous</div><div class="nav-title">${prevLinkElement.textContent}</div></a>`;
+                        }
+                    }
+
+                    let nextLinkHTML = '';
+                    if (currentIndex > -1 && currentIndex < pageOrder.length - 1) {
+                        const nextId = pageOrder[currentIndex + 1];
+                        const nextLinkElement = document.querySelector(`.nav-pane a[href="#${nextId}"]`);
+                        if(nextLinkElement) {
+                            nextLinkHTML = `<a href="#${nextId}" class="nav-next"><div class="nav-label">Next</div><div class="nav-title">${nextLinkElement.textContent}</div></a>`;
+                        }
+                    }
+
+                    if (prevLinkHTML || nextLinkHTML) {
+                        const footerNavHTML = `<div class="page-nav">${prevLinkHTML}${nextLinkHTML}</div>`;
+                        section.insertAdjacentHTML('beforeend', footerNavHTML);
+                    }
+                });
+            }
+
+            function showContent(hash) {
+                // Re-select all links to build page order correctly
+                navLinks = document.querySelectorAll('.nav-pane a');
+                pageOrder = Array.from(navLinks).map(link => link.getAttribute('href').substring(1));
+
+                // *** THIS IS THE CRITICAL FIX ***
+                // It now defaults to 'cover' instead of the first nav item
+                let targetId = hash ? hash.substring(1) : 'cover';
+                
+                let targetSection = document.getElementById(targetId);
+                
+                if (!targetSection && contentSections.length > 0) {
+                     // Fallback if 'cover' somehow fails
+                     targetSection = contentSections[0];
+                     if(targetSection) targetId = targetSection.id;
+                }
+
+                contentSections = document.querySelectorAll('.content-pane section');
+                contentSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    
+                    if (typeof mermaid !== 'undefined') {
+                        const diagrams = targetSection.querySelectorAll('pre.mermaid');
+                        if (diagrams.length > 0) {
+                            mermaid.run({ nodes: diagrams }).catch(e => {
+                                 console.error("Mermaid rendering error in section " + targetId + ":", e);
+                            });
+                        }
+                    }
+                
+                    contentPane.scrollTop = 0;
+                    window.scrollTo(0, 0);
+                }
+                
+                // CORRECTED: This logic correctly finds the one active link
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + targetId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                buildPageNav(); 
+            }
+
+            function initializeApp() {
+                navLinks = document.querySelectorAll('.nav-pane a');
+                contentSections = document.querySelectorAll('.content-pane section');
+                pageOrder = Array.from(document.querySelectorAll('.nav-pane a')).map(link => link.getAttribute('href').substring(1));
+                
+                buildPageNav();
+                
+                const clickHandler = function(e) {
+                    const link = e.target.closest('a[href^="#"]');
+                    if (link) {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        
+                        try {
+                            history.pushState(null, null, targetId);
+                        } catch (err) {
+                            window.location.hash = targetId;
+                        }
+                        
+                        showContent(targetId);
+
+                        if (window.innerWidth <= 992 && navPane.classList.contains('is-visible')) {
+                            navPane.classList.remove('is-visible');
+                        }
+                    }
+                };
+
+                navPane.addEventListener('click', clickHandler);
+                contentPane.addEventListener('click', clickHandler);
+                
+                navToggle.addEventListener('click', function() {
+                    navPane.classList.toggle('is-visible');
+                });
+                
+                window.addEventListener('popstate', function() {
+                    showContent(window.location.hash);
+                });
+
+                showContent(window.location.hash);
+            }
+
+            initializeApp();
+        });
+    </script>
+</body>
+</html>
