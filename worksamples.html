@@ -92,14 +92,41 @@
         .sub-tab-panel.active { display: block; }
 
         /* --- BLOCKS (Note, Example) --- */
-        .note-block { background-color: var(--cv-note-bg); border-left: 4px solid var(--cv-note-border); padding: 0.8rem 1rem 0.8rem 1.2rem; /* Adjusted padding */ margin: 1rem 0; /* Adjusted margin */ color: #575735; border-radius: 0 4px 4px 0; }
-        .note-block p { font-size: 1rem; color: #575735; line-height: 1.4; /* Adjusted line height */ margin-bottom: 0.15rem; }
-        .note-block p:first-of-type::before { content: "📝 "; font-weight: 600; color: #575735; margin-right: 0.3em; display: inline-block; vertical-align: text-top; }
-        .note-block p:first-of-type { font-weight: 600; font-style: normal; margin-bottom: 0.15rem; }
-        .note-block p:not(:first-of-type) { font-style: normal; }
+        /* CSS UPDATED: Replaced old .note-block styles with this cleaner version */
+        .note-block {
+            background-color: var(--cv-note-bg);
+            border-left: 4px solid var(--cv-note-border);
+            padding: 0.8rem 1rem 0.8rem 1.2rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        /* This is the title: bold, with icon */
+        .note-block p:first-of-type {
+            font-size: 1rem;
+            color: #444422; /* Darker color for title */
+            line-height: 1.4;
+            margin: 0 0 0.4rem 0; /* Space after title */
+            font-weight: 600; /* Bold */
+            font-style: normal;
+        }
+        /* Add the icon to the title */
+        .note-block p:first-of-type::before {
+            content: "📝 ";
+            margin-right: 0.3em;
+        }
+        /* This is the content: unbolded */
+        .note-block p:not(:first-of-type) {
+            font-size: 1rem;
+            color: #575735;
+            line-height: 1.4;
+            margin-bottom: 0.15rem;
+            font-weight: 400; /* Explicitly unbolded */
+            font-style: normal;
+        }
         .note-block strong { color: #444422; }
         .note-block > *:first-child { margin-top: 0; }
         .note-block > *:last-child { margin-bottom: 0; }
+        /* END CSS UPDATE */
 
         .example-block { background-color: var(--cv-bg-sidebar); border-left: 4px solid var(--cv-accent); padding: 0.8rem 1rem 0.8rem 1.2rem; /* Adjusted padding */ margin: 1rem 0; /* Adjusted margin */ border-radius: 0 4px 4px 0; color: var(--cv-text-med); }
         .example-block h4 { font-size: 1rem; font-weight: 600; margin: 0 0 0.5rem 0; /* Reduced margin */ color: var(--cv-text-dark); }
@@ -201,7 +228,7 @@
                 <header>
                     <h1>Donnacha's Work Samples</h1>
                     <div class="header-cv-button">
-                           <a href="index.html" title="View Donnacha Bushe's CV">View CV</a>
+                        <a href="index.html" title="View Donnacha Bushe's CV">View CV</a>
                     </div>
                 </header>
 
@@ -236,7 +263,9 @@
                                             <span class="icon">↔️</span> API Reference
                                         </a>
                                     </div>
+                                    <!-- HTML UPDATED: Standardized note structure -->
                                     <div class="note-block">
+                                        <p>Note</p>
                                         <p>Work samples for other clients like SAP and Ericsson involved significant documentation strategy and execution but are hosted behind company firewalls and cannot be shared directly.</p>
                                     </div>
                                 </section>
@@ -266,7 +295,7 @@
                                                     <h3 id="sample1-prerequisites">Prerequisites</h3>
                                                     <ul>
                                                         <li>You have a <b>LinkedIn Premium</b> subscription to access the <b>Qualifications</b> section of job advertisements.&nbsp;
-                                                             <p>This section is unique to <b>LinkedIn Premium</b> and provides valuable insights into the skills associated with the job post and additional skills among applicants.</p>
+                                                            <p>This section is unique to <b>LinkedIn Premium</b> and provides valuable insights into the skills associated with the job post and additional skills among applicants.</p>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -276,10 +305,10 @@
                                                     <ol class="steps-list">
                                                         <li><b>Navigate to the Job Advertisement:</b> Open the job advertisement on LinkedIn.</li>
                                                         <li><b>Access the Qualifications Section:</b> Scroll down to the <b>Qualifications</b> section, which is exclusive to <b>LinkedIn Premium</b> users.
-                                                             <p>This section provides a list of skills associated with the job post and additional skills common among applicants.</p>
+                                                            <p>This section provides a list of skills associated with the job post and additional skills common among applicants.</p>
                                                         </li>
                                                         <li><b>Add Skills:</b> Click on <b>Add Skills</b> located in the tip box below the list of skills.
-                                                             <p>This action opens the <b>Qualification details</b> dialog. A green tick appears beside each skill that is already listed on your profile.</p>
+                                                            <p>This action opens the <b>Qualification details</b> dialog. A green tick appears beside each skill that is already listed on your profile.</p>
                                                         </li>
                                                         <li><b>Add Missing Skills:</b> If you possess a skill that isn't ticked green, click the <b>+ Add</b> button beside that skill.</li>
                                                         <li><b>Showcase Your Skill:</b> Respond to the <b>Show us where you used this skill</b> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <b>Save</b>.</li>
@@ -294,9 +323,10 @@
                                                 <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
                                                 <p>Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
                                                 <p><a href="https://www.ixiasoft.com/" target="_blank" rel="noopener noreferrer"><b>IXIASOFT CCMS</b></a> provides the following features designed to streamline this process. Click on a feature below to see details.</p>
+                                                <!-- HTML UPDATED: Standardized note structure -->
                                                 <div class="note-block">
-                                                    <p><b>Note</b></p>
-                                                    <p><i>Examples provided on this page are based on a <b>SupplyChain Solutions</b> company, that manages supply chain operations for various clients and often needs to create variant documents.</i></p>
+                                                    <p>Note</p>
+                                                    <p>Examples provided on this page are based on a <b>SupplyChain Solutions</b> company, that manages supply chain operations for various clients and often needs to create variant documents.</p>
                                                 </div>
 
                                                 <div class="feature-selector-container">
@@ -423,7 +453,11 @@
 <div id="tab-template" class="tab-panel" role="tabpanel">
     <section class="work-sample prominent-sample">
         <h2 id="project-template">DITA-Inspired Guide Template (AI-Driven Conversational Architecture)</h2>
-        <p><strong>⚠️ IMPORTANT NOTE FOR EVALUATORS:</strong> The content within the two linked guides are <strong>early, experimental drafts</strong> generated rapidly by an LLM based on a single prompt session. They are deliberately shared as an <strong>unpolished proof-of-concept</strong> and may contain factual, stylistic, and procedural errors. Please evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content.</p>
+        <!-- HTML UPDATED: Standardized note structure -->
+        <div class="note-block">
+            <p>Important Note for Evaluators</p>
+            <p>The content within the two linked guides are <strong>early, experimental drafts</strong> generated rapidly by an LLM based on a single prompt session. They are deliberately shared as an <strong>unpolished proof-of-concept</strong> and may contain factual, stylistic, and procedural errors. Please evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content.</p>
+        </div>
         <p>This template is an <strong>embedded content system</strong> designed to direct large language models (LLMs) through a multi-step, structured conversation. It enforces a strict authoring methodology that begins by requiring the AI to solicit the guide's <strong>Title</strong>, <strong>Audience</strong>, and <strong>Primary Goal</strong>, and culminates in the complete generation of a navigable, DITA-compliant digital book.</p>
         <p>The system's value lies in its <strong>predictable output</strong>: it transforms conceptual requirements into DITA-compliant content, ensuring reuse and accuracy across diverse topics.</p>
         <p><strong>Key Architectural & Design Features:</strong></p>
