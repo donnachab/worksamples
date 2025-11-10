@@ -527,10 +527,6 @@
                         <span>intive</span>
                         <small>2017-Present</small>
                     </button>
-                    <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-personal-projects" id="btn-personal-projects" tabindex="-1">
-                        <span>Personal Projects</span>
-                        <small>Various</small>
-                    </button>
                     <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-sap" id="btn-sap" tabindex="-1">
                         <span>SAP</span>
                         <small>2005-2015</small>
@@ -566,31 +562,6 @@
                             <li>Integrated docs-as-code using Backstage and pioneered topic reuse in Git/Markdown and DITA.</li>
                             <li>Streamlined API docs: Direct codebase editing and Swagger publishing, eliminating IXIASOFT copy/paste.</li>
                             <li>Regularly engaged with advanced <strong>Generative AI</strong> systems to gather, verify, and understand complex technical information, including anonymizing sensitive data to ensure privacy.</li>
-                        </ul>
-                    </div>
-
-                    <div id="tab-personal-projects" class="tab-content" role="tabpanel" aria-labelledby="btn-personal-projects" hidden>
-                        <div class="print-only-tab-heading" style="display: none;">
-                            <span>Personal Projects</span> <small>Various</small>
-                        </div>
-                        <h3 class="text-lg font-semibold font-heading text-cv-text-dark">Technical Documentation and Interactive Tools</h3>
-                        <p class="text-xs text-cv-text-dim mb-3 uppercase tracking-wider">Galway, Ireland | Ongoing</p>
-
-                        <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">WarmHomeHub.ie - SEAI Grants & Checkers</h4>
-                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
-                            <li>Developed a comprehensive interactive guide and eligibility checkers for Irish home energy grants (SEAI), featuring multi-level tab navigation, dynamic content, clear <strong>in-product UX writing</strong>, such as tooltips, and print/copy functionality. Check out the live project here:
-                                <ul class="list-disc list-outside space-y-1 pl-5 text-cv-text-med text-sm marker:text-cv-accent mt-1">
-                                    <li><a href="https://donnachab.github.io/worksamples/find-out-if-you-qualify.html" target="_blank" rel="noopener noreferrer" class="text-cv-accent hover:underline">Do I Qualify for a Free Grant?</a></li>
-                                    <li><a href="https://donnachab.github.io/worksamples/explore-all-grant-options.html" target="_blank" rel="noopener noreferrer" class="text-cv-accent hover:underline">Explore All Grant Options</a></li>
-                                </ul>
-                            </li>
-                            <li>Designed the information architecture and mostly edited (and did not write a lot of the generated content) for various grant types, including detailed grant amounts and pros/cons analyses for different property types.</li>
-                            <li>Leveraged <strong>Generative AI</strong> heavily for content generation, structuring, and front-end development (HTML/CSS/JavaScript), demonstrating efficient modern documentation and web development workflows.</li>
-                            <li><strong>Note:</strong> This project was developed as a personal initiative with a friend to explore innovative approaches to public information and did not involve any commercial engagement or payment from previous employers.</li>
-                        </ul>
-                         <h4 class="text-base font-semibold font-heading text-cv-text-dark mt-2 mb-2">Other Personal Projects</h4>
-                        <ul class="list-disc list-outside space-y-2 pl-5 text-cv-text-med text-sm marker:text-cv-accent mb-4">
-                            <li>Explored various technical documentation concepts and content modeling for personal learning and skill development.</li>
                         </ul>
                     </div>
 
@@ -757,6 +728,7 @@
                 if (targetContent) {
                     targetContent.classList.add('active');
                     targetContent.removeAttribute('hidden');
+
                 }
             });
 
