@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered DITA Map Generator</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- JSZip for zipping files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- FileSaver.js for saving files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <style>
+        /* Base styling */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* SortableJS styles */
+        .sortable-ghost {
+            background-color: #c8ebfb;
+            opacity: 0.7;
+            border: 1px dashed #0366d6;
+        }
+        .sortable-chosen {
+            background-color: #f0f6fc;
+        }
+
+        /* Tree styles */
+        .tree-node {
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Align items vertically */
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            background-color: #ffffff;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px; /* Rounded corners for nodes */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .tree-node .handle {
+            cursor: grab;
+            margin-right: 10px;
+            color: #b0b8c2;
+        }
+
+        .tree-node .node-content {
+            flex-grow: 1; /* Allow content to take up available space */
+            display: flex;
+            align-items: center;
+        }
+
+        .tree-node .node-icon {
+            margin-right: 8px;
+            width: 16px; /* Ensure icon width is consistent */
+            text-align: center;
+        }
+        
+        .tree-node .node-title {
+            font-weight: 500; /* Use medium weight */
+            color: #24292e; /* Darker text */
+        }
+        
+        .tree-node .node-title-input {
+            padding: 4px 6px;
+            border: 1px solid #0366d6;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .tree-node .node-actions {
+            display: flex;
+            align-items: center;
+            margin-left: 16px; /* Space between content and actions */
+        }
+        
+        .tree-node .node-actions select,
+        .tree-node .node-actions button {
+            margin-left: 6px;
+            border: 1px solid #d1d5da;
+            background-color: #fafbfc;
+            border-radius: 4px;
+            height: 30px; /* Consistent height */
+            padding: 0 8px;
+            font-size: 0.8rem;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .tree-node .node-actions button {
+            width: 30px;
+            padding: 0;
+            line-height: 28px; /* Center icon vertically */
+        }
+
+        .tree-node .node-actions button:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .tree-node .node-actions select {
+            padding: 0 4px;
+        }
+
+        .tree-node .node-children {
+            margin-left: 30px; /* Indentation for children */
+            padding-left: 10px;
+            border-left: 2px solid #e1e4e8;
+        }
+
+        /* Loading Overlay styles */
+        #loading-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none; /* Changed from hidden to none for default state */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #loading-overlay .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #f0f6fc;
+            border-top-color: #0366d6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modal styles */
+        #export-modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .tab-button {
+            padding: 10px 16px;
+            font-medium;
+            color: #586069;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            margin-bottom: -1px; /* Overlap border */
+        }
+        .tab-button.active {
+            color: #0366d6;
+            border-bottom-color: #0366d6;
+            font-weight: 600;
+        }
+
+        /* Shared styles from previous CSS */
+        .tab-content {
+            display: none;
+            padding: 16px;
+            border: 1px solid #e1e4e8;
+            border-top: 0;
+            border-radius: 0 0 6px 6px;
+            background-color: #ffffff;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tab-content pre {
+            background-color: #f6f8fa;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            max-height: 400px;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: #ffffff;
+            border: 1px solid #e1e4e8;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .copy-btn:hover {
+            background-color: #f6f8fa;
+        }
+        .copy-btn.copied {
+            background-color: #16a34a;
+            color: white;
+            border-color: #16a34a;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake-error {
+            animation: shake 0.5s ease-in-out;
+            border: 2px solid #d73a49 !important;
+        }
+        .tree-node .node-actions button.confirm-delete {
+            background-color: #ffebe9;
+            color: #d73a49;
+            border-color: #d73a49;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p class="mt-4 text-lg font-medium text-gray-700">Generating proposed map...</p>
+        <p class="text-sm text-gray-500">This may take a moment.</p>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div id="export-modal-backdrop" class="fixed inset-0"></div>
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl z-10">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-xl font-semibold">Export Guide Structure</h3>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <!-- Tabs -->
+                <div class="flex border-b">
+                    <!-- NEW: Summary Tab -->
+                    <button class="tab-button active" data-tab="tab-summary">Summary</button>
+                    <button class="tab-button" data-tab="tab-ditamap">guide.ditamap</button>
+                    <button class="tab-button" data-tab="tab-yaml">structure.yml</button>
+                    <!-- NEW: TOML Tab -->
+                    <button class="tab-button" data-tab="tab-toml">structure.toml</button>
+                    <button class="tab-button" data-tab="tab-shell">scaffold.sh</button>
+                </div>
+
+                <!-- Tab Content -->
+                <!-- NEW: Summary Tab Content -->
+                <div id="tab-summary" class="tab-content active relative">
+                    <h4 class="font-semibold text-lg mb-3">Generation Request</h4>
+                    <div class="space-y-2 text-sm">
+                        <div>
+                            <span class="font-medium text-gray-500 w-24 inline-block">Topic:</span>
+                            <span id="summary-topic" class="text-gray-800"></span>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-500 w-24 inline-block">Level:</span>
+                            <span id="summary-level" class="text-gray-800"></span>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-500 w-24 inline-block">Goal:</span>
+                            <span id="summary-goal" class="text-gray-800"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-ditamap" class="tab-content relative">
+                    <button class="copy-btn" onclick="copyToClipboard('ditamap-output')">Copy</button>
+                    <pre><code id="ditamap-output" class="language-xml"></code></pre>
+                </div>
+                <div id="tab-yaml" class="tab-content relative">
+                    <button class="copy-btn" onclick="copyToClipboard('yaml-output')">Copy</button>
+                    <pre><code id="yaml-output" class="language-yaml"></code></pre>
+                </div>
+                <!-- NEW: TOML Tab Content -->
+                <div id="tab-toml" class="tab-content relative">
+                    <button class="copy-btn" onclick="copyToClipboard('toml-output')">Copy</button>
+                    <pre><code id="toml-output" class="language-toml"></code></pre>
+                </div>
+                <div id="tab-shell" class="tab-content relative">
+                    <button class="copy-btn" onclick="copyToClipboard('shell-output')">Copy</button>
+                    <pre><code id="shell-output" class="language-shell"></code></pre>
+                </div>
+            </div>
+            <div class="p-4 border-t bg-gray-50 rounded-b-lg flex justify-between items-center">
+                <!-- NEW: Download ZIP Button -->
+                <button id="download-zip-btn" class="px-4 py-2 bg-green-600 text-white rounded-md shadow-sm text-sm font-medium hover:bg-green-700">
+                    <i class="fas fa-file-archive mr-2"></i>Download as .zip
+                </button>
+                <button id="close-modal-btn-2" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-gray-300">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">AI-Powered DITA Map Generator</h1>
+                <p class="text-gray-600 mt-1">Visually design your documentation hierarchy. Start with an AI-powered proposal.</p>
+            </div>
+            <div class="flex space-x-2 mt-4 md:mt-0">
+                <button id="add-topic-btn" class="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-plus mr-2"></i>Add Topic
+                </button>
+                <button id="export-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm text-sm font-medium hover:bg-blue-700">
+                    <i class="fas fa-file-export mr-2"></i>Export All
+                </button>
+            </div>
+        </div>
+
+        <!-- AI Prompt Section -->
+        <div class="my-4 md:my-6 p-4 md:p-6 bg-blue-50 border border-blue-200 rounded-lg shadow-sm">
+            <h2 class="text-lg font-semibold text-gray-800 mb-3">Start with AI</h2>
+            <p class="text-sm text-gray-600 mb-4">Enter a guide topic, and the AI will propose a complete DITA map structure for you.</p>
+            
+            <!-- Input Row 1: Topic -->
+            <div class="mb-3">
+                <label for="ai-prompt-input" class="block text-sm font-medium text-gray-700 mb-1">Topic</label>
+                <input type="text" id="ai-prompt-input" placeholder="e.g., 'Beginner's Guide to Beekeeping'" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+
+            <!-- Input Row 2: Level & Goal -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="ai-level-select" class="block text-sm font-medium text-gray-700 mb-1">Expertise Level</label>
+                    <select id="ai-level-select" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Expert">Expert</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="ai-goal-input" class="block text-sm font-medium text-gray-700 mb-1">Audience Goal (Free Text)</label>
+                    <input type="text" id="ai-goal-input" placeholder="e.g., 'To learn basic hive management'" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+            
+            <!-- Button -->
+            <div class="text-right">
+                <button id="generate-map-btn" class="px-6 py-2 bg-blue-600 text-white rounded-md shadow-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <i class="fas fa-magic mr-2"></i>Generate Map
+                </button>
+            </div>
+        </div>
+
+        <!-- Error Message Box -->
+        <div id="error-message-box" class="hidden my-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
+            <h3 class="font-bold mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>An Error Occurred</h3>
+            <p id="error-message-content" class="text-sm whitespace-pre-wrap"></p>
+        </div>
+
+        <!-- Map Editor -->
+        <div class="bg-white p-4 md:p-6 shadow rounded-lg border border-gray-200 min-h-[400px]">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Map Editor</h2>
+            <div id="tree-root" class="sortable-list">
+                <!-- Tree nodes will be dynamically inserted here -->
+                <div id="empty-state" class="text-center text-gray-500 py-16 border-2 border-dashed border-gray-300 rounded-lg">
+                    <p class="mb-2"><i class="fas fa-sitemap fa-3x text-gray-400"></i></p>
+                    <p class="font-medium">Your map is empty.</p>
+                    <p class="text-sm">Use the "Generate" button above or "Add Topic" to build your map.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SortableJS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM Content Loaded. Initializing app...');
+            
+            try {
+                // --- STATE & CONFIG ---
+                // This holds the JS object representation of the map
+                let treeData = [];
+                // This holds the Sortable instances to be destroyed later
+                let sortableInstances = [];
+                
+                // --- CACHED DOM ELEMENTS ---
+                const treeRoot = document.getElementById('tree-root');
+                const addTopicBtn = document.getElementById('add-topic-btn');
+                const exportBtn = document.getElementById('export-btn');
+                const modal = document.getElementById('export-modal');
+                const modalBackdrop = document.getElementById('export-modal-backdrop');
+                const closeModalBtn = document.getElementById('close-modal-btn');
+                const closeModalBtn2 = document.getElementById('close-modal-btn-2');
+                const generateMapBtn = document.getElementById('generate-map-btn');
+                const aiPromptInput = document.getElementById('ai-prompt-input');
+                const aiLevelSelect = document.getElementById('ai-level-select');
+                const aiGoalInput = document.getElementById('ai-goal-input');
+                const loadingOverlay = document.getElementById('loading-overlay');
+                const errorBox = document.getElementById('error-message-box');
+                const errorContent = document.getElementById('error-message-content');
+                const downloadZipBtn = document.getElementById('download-zip-btn');
+                const emptyState = document.getElementById('empty-state');
+
+                // --- API & GENERATION LOGIC ---
+
+                /**
+                 * Calls the Gemini API to propose a DITA map structure.
+                 */
+                async function fetchMapProposal() {
+                    const topic = aiPromptInput.value.trim();
+                    const level = aiLevelSelect.value;
+                    const goal = aiGoalInput.value.trim();
+
+                    if (!topic || !goal) {
+                        showError("Please provide both a topic and a goal for the AI.");
+                        if (!topic) shakeElement(aiPromptInput);
+                        if (!goal) shakeElement(aiGoalInput);
+                        return;
+                    }
+
+                    console.log(`fetchMapProposal CALLED with topic: ${topic}`);
+                    showLoading(true);
+                    hideError();
+
+                    // --- SEMANTIC PROMPT (Updated with stricter rules) ---
+                    const systemPrompt = `You are an expert instructional designer and DITA specialist. Your task is to generate a logical, hierarchical DITA map for a technical guide based on a user's topic.
+Analyze the topic and propose a clear structure.
+The structure MUST be a JSON array. Each object in the array MUST have:
+1. "title": A string for the topic title. Do NOT include prefixes like "Task:".
+2. "type": A string that is ONLY "concept", "task", "reference", or "troubleshooting".
+3. "children": An array of nested topic objects, or an empty array.
+
+*** DITA SEMANTIC RULES (MANDATORY) ***
+
+1.  **Nesting:** Do not nest topics more than 3 levels deep.
+2.  **Concept:** Use for "what is" or "how it works" topics. A parent node (a node with children) should almost always be a 'concept'.
+3.  **Task:** Use for "how to" or step-by-step instructions (e.g., "Installing X").
+    * A topic titled 'Investigating...' or 'Diagnosing...' is a single 'task' topic. Do NOT give it a 'concept' parent with the same name.
+4.  **Reference:** Use for lists, API specs, or "parts of" topics (e.g., "Error Codes").
+5.  **Troubleshooting (CRITICAL):**
+    * Use for "how to fix," "what to do when," or "resolving" topics (e.g., "Resolving Disk Space Issues").
+    * A 'troubleshooting' topic is a self-contained leaf node. It describes ONE problem and its solution.
+    * Do NOT give a 'troubleshooting' topic any children.
+    * Do NOT create a 'concept' topic for a problem (e.g., "Connection Fails") and a separate child 'task' for its solution (e.g., "Check Firewall"). Merge them into ONE 'troubleshooting' topic titled "Fixing Connection Failures" or similar.
+    * A parent topic (e.g., "Database Errors") that contains a list of problems should be a 'concept' topic, and its children should be a flat list of 'troubleshooting' topics.
+
+Your response MUST be ONLY the valid JSON array, starting with [ and ending with ].`;
+                    
+                    const userQuery = `Generate a DITA map for a guide titled: "${topic}". The target audience is at the "${level}" level, and their primary goal is to "${goal}".`;
+                    
+                    // --- JSON SCHEMA (3-Level Limit) ---
+                    const jsonSchema = {
+                        "type": "ARRAY",
+                        "items": {
+                            "type": "OBJECT",
+                            "properties": {
+                                "title": { "type": "STRING" },
+                                "type": { "type": "STRING", "enum": ["concept", "task", "reference", "troubleshooting"] },
+                                "children": {
+                                    "type": "ARRAY",
+                                    "items": {
+                                        "type": "OBJECT",
+                                        "properties": {
+                                            "title": { "type": "STRING" },
+                                            "type": { "type": "STRING", "enum": ["concept", "task", "reference", "troubleshooting"] },
+                                            "children": {
+                                                "type": "ARRAY",
+                                                "items": {
+                                                    "type": "OBJECT",
+                                                    "properties": {
+                                                        "title": { "type": "STRING" },
+                                                        "type": { "type": "STRING", "enum": ["concept", "task", "reference", "troubleshooting"] },
+                                                        "children": { "type": "ARRAY", "items": {} } // Level 3 must have empty children
+                                                    },
+                                                    "required": ["title", "type", "children"]
+                                                }
+                                            }
+                                        },
+                                        "required": ["title", "type", "children"]
+                                    }
+                                }
+                            },
+                            "required": ["title", "type", "children"]
+                        }
+                    };
+
+                    // --- API CONFIG ---
+                    const apiKey = "AIzaSyDn_n7fdB-3_YSxYg5lktfGQW87zcO6wRo"; 
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+                    const payload = {
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        systemInstruction: {
+                            parts: [{ text: systemPrompt }]
+                        },
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: jsonSchema,
+                        }
+                    };
+                    
+                    try {
+                        const response = await fetchWithRetry(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            let errorBody = await response.text();
+                            try {
+                                errorBody = JSON.stringify(JSON.parse(errorBody), null, 2);
+                            } catch (e) { /* Not JSON, just show text */ }
+                            throw new Error(`A "${response.status} ${response.statusText}" error occurred. The AI model may have had an issue with the prompt or the requested JSON format.\n\nError:\n${errorBody}`);
+                        }
+
+                        const result = await response.json();
+                        
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            
+                            const jsonText = result.candidates[0].content.parts[0].text;
+                            const parsedJson = JSON.parse(jsonText);
+                            
+                            treeData = parsedJson;
+                            renderTree(treeData, treeRoot);
+                            if (treeData.length > 0 && emptyState) {
+                                emptyState.style.display = 'none';
+                            }
+                            
+                        } else {
+                            throw new Error("The AI returned an empty or invalid response.");
+                        }
+
+                    } catch (error) {
+                        console.error('Error fetching map proposal:', error);
+                        showError(error.message);
+                    } finally {
+                        showLoading(false);
+                    }
+                }
+                
+                /**
+                 * Wrapper for fetch to implement exponential backoff.
+                 */
+                async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
+                    try {
+                        const response = await fetch(url, options);
+                        if (!response.ok) {
+                            if (response.status === 429 && retries > 0) { // 429 Too Many Requests
+                                console.warn(`Throttled. Retrying in ${delay}ms... (${retries} retries left)`);
+                                await new Promise(res => setTimeout(res, delay));
+                                return fetchWithRetry(url, options, retries - 1, delay * 2);
+                            }
+                            return response; // Return the error response to be handled by the caller
+                        }
+                        return response; // Return the successful response
+                    } catch (error) {
+                        if (retries > 0) {
+                            console.warn(`Fetch error. Retrying in ${delay}ms... (${retries} retries left)`);
+                            await new Promise(res => setTimeout(res, delay));
+                            return fetchWithRetry(url, options, retries - 1, delay * 2);
+                        }
+                        throw error; // Throw the error after all retries
+                    }
+                }
+
+
+                // --- UI & TREE RENDERING ---
+
+                /**
+                 * Renders the entire tree structure recursively.
+                 */
+                function renderTree(nodes, parentElement) {
+                    parentElement.innerHTML = ''; // Clear the parent
+                    destroySortables(); // Clear all old Sortable instances
+
+                    if (nodes.length === 0 && parentElement === treeRoot && emptyState) {
+                        emptyState.style.display = 'block';
+                        return;
+                    }
+                    
+                    if (parentElement === treeRoot && emptyState) {
+                        emptyState.style.display = 'none';
+                    }
+
+                    nodes.forEach((node, index) => {
+                        const nodeElement = createNodeElement(node);
+                        parentElement.appendChild(nodeElement);
+                        
+                        const childrenContainer = nodeElement.querySelector('.node-children');
+                        if (childrenContainer) {
+                            // Make the children container sortable
+                            sortableInstances.push(new Sortable(childrenContainer, {
+                                group: 'nested',
+                                animation: 150,
+                                ghostClass: 'sortable-ghost',
+                                chosenClass: 'sortable-chosen',
+                                onEnd: (evt) => updateTreeDataFromDOM(treeRoot, treeData)
+                            }));
+                            
+                            // Recurse
+                            if (node.children && node.children.length > 0) {
+                                renderTree(node.children, childrenContainer);
+                            }
+                        }
+                    });
+
+                    // Make the top-level list sortable
+                    if (parentElement === treeRoot) {
+                        sortableInstances.push(new Sortable(parentElement, {
+                            group: 'nested',
+                            animation: 150,
+                            handle: '.handle',
+                            ghostClass: 'sortable-ghost',
+                            chosenClass: 'sortable-chosen',
+                            onEnd: (evt) => updateTreeDataFromDOM(treeRoot, treeData)
+                        }));
+                    }
+                }
+                
+                /**
+                 * Destroys all Sortable.js instances to prevent memory leaks.
+                 */
+                function destroySortables() {
+                    sortableInstances.forEach(instance => instance.destroy());
+                    sortableInstances = [];
+                }
+
+                /**
+                 * Creates a single HTML element for a node.
+                 */
+                function createNodeElement(node) {
+                    const element = document.createElement('div');
+                    element.className = 'tree-node-wrapper'; // Wrapper for Sortable
+
+                    const { iconClass, iconColor } = getIconForType(node.type);
+
+                    element.innerHTML = `
+                        <div class="tree-node" data-id="${escapeHTML(node.title)}">
+                            <i class="fas fa-grip-vertical handle"></i>
+                            <div class="node-content">
+                                <span class="node-icon" style="color: ${iconColor};">
+                                    <i class="${iconClass}"></i>
+                                </span>
+                                <span class="node-title">${escapeHTML(node.title)}</span>
+                            </div>
+                            <div class="node-actions">
+                                <select class="node-type-select" data-value="${node.type}">
+                                    <option value="concept" ${node.type === 'concept' ? 'selected' : ''}>Concept</option>
+                                    <option value="task" ${node.type === 'task' ? 'selected' : ''}>Task</option>
+                                    <option value="reference" ${node.type === 'reference' ? 'selected' : ''}>Reference</option>
+                                    <option value="troubleshooting" ${node.type === 'troubleshooting' ? 'selected' : ''}>Troubleshooting</option>
+                                </select>
+                                <button class="add-child-btn" title="Add Child">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="edit-btn" title="Edit">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button class="delete-btn" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-children sortable-list"></div>
+                    `;
+
+                    // Add event listeners
+                    const deleteBtn = element.querySelector('.delete-btn');
+                    deleteBtn.addEventListener('click', () => {
+                        if (deleteBtn.classList.contains('confirm-delete')) {
+                            element.remove();
+                            updateTreeDataFromDOM(treeRoot, treeData);
+                        } else {
+                            deleteBtn.classList.add('confirm-delete');
+                            deleteBtn.innerHTML = '<i class="fas fa-check"></i>';
+                            setTimeout(() => {
+                                deleteBtn.classList.remove('confirm-delete');
+                                deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                            }, 3000);
+                        }
+                    });
+
+                    element.querySelector('.add-child-btn').addEventListener('click', () => {
+                        const newChild = { title: 'New Topic', type: 'concept', children: [] };
+                        if (!node.children) {
+                            node.children = [];
+                        }
+                        node.children.push(newChild);
+                        renderTree(treeData, treeRoot); // Full re-render to update sortables
+                    });
+                    
+                    element.querySelector('.node-type-select').addEventListener('change', (e) => {
+                        node.type = e.target.value;
+                        renderTree(treeData, treeRoot); // Re-render to update icon
+                    });
+
+                    const editBtn = element.querySelector('.edit-btn');
+                    const nodeTitle = element.querySelector('.node-title');
+                    editBtn.addEventListener('click', () => {
+                        const currentTitle = node.title;
+                        nodeTitle.innerHTML = `<input type="text" class="node-title-input" value="${escapeHTML(currentTitle)}">`;
+                        const input = nodeTitle.querySelector('input');
+                        input.focus();
+                        input.select();
+
+                        const save = () => {
+                            const newTitle = input.value.trim();
+                            if (newTitle) {
+                                node.title = newTitle;
+                                nodeTitle.innerHTML = escapeHTML(newTitle);
+                            } else {
+                                nodeTitle.innerHTML = escapeHTML(currentTitle); // Revert
+                            }
+                        };
+                        
+                        input.addEventListener('blur', save);
+                        input.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                save();
+                            } else if (e.key === 'Escape') {
+                                nodeTitle.innerHTML = escapeHTML(currentTitle); // Revert
+                            }
+                        });
+                    });
+
+                    return element;
+                }
+
+                /**
+                 * Reads the DOM and updates the `treeData` object.
+                 */
+                function updateTreeDataFromDOM(parentElement, dataArray) {
+                    const childNodes = Array.from(parentElement.children).filter(el => el.classList.contains('tree-node-wrapper'));
+                    
+                    // Clear the data array
+                    dataArray.length = 0; 
+                    
+                    childNodes.forEach(nodeElement => {
+                        const title = nodeElement.querySelector('.node-title').textContent;
+                        const type = nodeElement.querySelector('.node-type-select').value;
+                        
+                        const newNodeData = { title, type, children: [] };
+                        dataArray.push(newNodeData);
+                        
+                        const childrenContainer = nodeElement.querySelector('.node-children');
+                        if (childrenContainer) {
+                            updateTreeDataFromDOM(childrenContainer, newNodeData.children);
+                        }
+                    });
+                    
+                    // Show/hide empty state
+                    if (treeData.length === 0 && emptyState) {
+                        emptyState.style.display = 'block';
+                    } else if (emptyState) {
+                        emptyState.style.display = 'none';
+                    }
+                }
+                
+                /**
+                 * Gets the correct icon for a DITA topic type.
+                 */
+                function getIconForType(type) {
+                    switch (type) {
+                        case 'task':
+                            return { iconClass: 'fas fa-tasks', iconColor: '#28a745' };
+                        case 'reference':
+                            return { iconClass: 'fas fa-book', iconColor: '#6f42c1' };
+                        case 'troubleshooting':
+                            return { iconClass: 'fas fa-wrench', iconColor: '#d73a49' };
+                        case 'concept':
+                        default:
+                            return { iconClass: 'fas fa-info-circle', iconColor: '#0366d6' };
+                    }
+                }
+
+
+                // --- EXPORT & FILE LOGIC ---
+                
+                function showExportModal() {
+                    if (treeData.length === 0) {
+                        shakeElement(exportBtn);
+                        showError("Cannot export an empty map. Add some topics first.");
+                        return;
+                    }
+                    
+                    // Update request summary
+                    document.getElementById('summary-topic').textContent = aiPromptInput.value || '(Not set)';
+                    document.getElementById('summary-level').textContent = aiLevelSelect.value;
+                    document.getElementById('summary-goal').textContent = aiGoalInput.value || '(Not set)';
+
+                    // Generate content for all tabs
+                    document.getElementById('ditamap-output').textContent = convertToDitamap(treeData);
+                    document.getElementById('yaml-output').textContent = convertToYAML(treeData);
+                    document.getElementById('toml-output').textContent = convertToTOML(treeData);
+                    document.getElementById('shell-output').textContent = convertToShell(treeData);
+
+                    // Reset tabs to default
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    document.querySelector('.tab-button[data-tab="tab-summary"]').classList.add('active');
+                    document.getElementById('tab-summary').classList.add('active');
+                    
+                    modal.classList.remove('hidden');
+                }
+
+                function hideExportModal() {
+                    modal.classList.add('hidden');
+                }
+
+                function slugify(text) {
+                    return text.toLowerCase()
+                        .replace(/\s+/g, '-')           // Replace spaces with -
+                        .replace(/[^\w-]+/g, '')       // Remove all non-word chars
+                        .replace(/--+/g, '-')         // Replace multiple - with single -
+                        .replace(/^-+/, '')           // Trim - from start of text
+                        .replace(/-+$/, '');          // Trim - from end of text
+                }
+
+                function convertToDitamap(nodes) {
+                    const title = aiPromptInput.value.trim() || "My DITA Map";
+                    
+                    let mapContent = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+  <title>${escapeHTML(title)}</title>
+  <!-- This is the 'cover' or 'index' page -->
+  <topicref href="index.xml" format="dita" type="concept"/>
+`;
+
+                    function buildMap(nodes, indent) {
+                        let xml = "";
+                        nodes.forEach(node => {
+                            const filename = `${node.type}-${slugify(node.title)}.xml`;
+                            if (node.children && node.children.length > 0) {
+                                xml += `${' '.repeat(indent)}<topichead navtitle="${escapeHTML(node.title)}">\n`;
+                                // Add a "Chapter Introduction" page for the parent concept
+                                xml += `${' '.repeat(indent + 2)}<topicref href="chap-${slugify(node.title)}.xml" format="dita" type="concept"/>\n`;
+                                xml += buildMap(node.children, indent + 2);
+                                xml += `${' '.repeat(indent)}</topichead>\n`;
+                            } else {
+                                xml += `${' '.repeat(indent)}<topicref href="${filename}" format="dita" type="${node.type}"/>\n`;
+                            }
+                        });
+                        return xml;
+                    }
+                    
+                    mapContent += buildMap(treeData, 2);
+                    mapContent += '</map>';
+                    return mapContent;
+                }
+
+                function convertToYAML(nodes) {
+                    let yaml = "nav:\n";
+                    yaml += "  - 'Home': 'index.md'\n";
+
+                    function buildYaml(nodes, indent) {
+                        let yml = "";
+                        nodes.forEach(node => {
+                            const slug = slugify(node.title);
+                            const filename = `${node.type}-${slug}.md`;
+                            const indentStr = ' '.repeat(indent);
+
+                            if (node.children && node.children.length > 0) {
+                                yml += `${indentStr}- '${escapeHTML(node.title)}':\n`;
+                                // Add a "Chapter Introduction" page
+                                yml += `${indentStr}  - 'Chapter Introduction': 'chap-${slug}.md'\n`;
+                                yml += buildYaml(node.children, indent + 2);
+                            } else {
+                                yml += `${indentStr}- '${escapeHTML(node.title)}': '${filename}'\n`;
+                            }
+                        });
+                        return yml;
+                    }
+                    
+                    yaml += buildYaml(treeData, 2);
+                    return yaml;
+                }
+
+                function convertToTOML(nodes) {
+                    let toml = `# This TOML structure is compatible with Hugo's 'nav' configuration.
+[[nav]]
+  name = "Home"
+  url = "index.md"
+  weight = 1
+
+`;
+                    let weight = 10;
+
+                    function buildToml(nodes, indentLevel) {
+                        let tomlStr = "";
+                        let childArray = [];
+                        
+                        nodes.forEach(node => {
+                            const slug = slugify(node.title);
+                            const filename = `${node.type}-${slug}.md`;
+                            const indentStr = "  ".repeat(indentLevel);
+                            let nodeStr = "";
+                            
+                            if (indentLevel === 0) {
+                                nodeStr += `\n[[nav]]\n  weight = ${weight}\n`;
+                                weight += 10;
+                                nodeStr += `name = "${escapeHTML(node.title)}"\n`;
+                                if (node.children && node.children.length > 0) {
+                                    nodeStr += `children = [\n`;
+                                    // Add "Chapter Introduction"
+                                    nodeStr += `${indentStr}  { name = "Chapter Introduction", url = "chap-${slug}.md" },\n`;
+                                    nodeStr += buildToml(node.children, indentLevel + 1);
+                                    nodeStr += `]\n`;
+                                }
+                            } else {
+                                nodeStr += `${indentStr}{ name = "${escapeHTML(node.title)}"`;
+                                if (node.children && node.children.length > 0) {
+                                    nodeStr += `, url = "concept-${slug}.md", children = [\n`; // Parent is always a concept
+                                    // Add "Chapter Introduction"
+                                    nodeStr += `${indentStr}  { name = "Chapter Introduction", url = "chap-${slug}.md" },\n`;
+                                    nodeStr += buildToml(node.children, indentLevel + 1);
+                                    nodeStr += `${indentStr}] }`;
+                                } else {
+                                    nodeStr += `, url = "${filename}" }`;
+                                }
+                                childArray.push(nodeStr);
+                            }
+                            
+                            if(indentLevel === 0) {
+                                tomlStr += nodeStr;
+                            }
+                        });
+                        
+                        if(indentLevel > 0) {
+                            return childArray.join(",\n") + "\n";
+                        }
+
+                        return tomlStr;
+                    }
+                    
+                    toml += buildToml(treeData, 0);
+                    return toml;
+                }
+
+                function convertToShell(nodes) {
+                    let shell = `#!/bin/bash
+# This script scaffolds the directories and files for your guide.
+
+echo "Creating directories and files..."
+
+# Create guide.ditamap
+cat <<'EOM' > guide.ditamap
+${convertToDitamap(treeData).replace(/'/g, "'\\''")}
+EOM
+
+# Create structure.yml
+cat <<'EOM' > structure.yml
+${convertToYAML(treeData).replace(/'/g, "'\\''")}
+EOM
+
+# Create structure.toml
+cat <<'EOM' > structure.toml
+${convertToTOML(treeData).replace(/'/g, "'\\''")}
+EOM
+
+# Create summary.txt
+cat <<'EOM' > summary.txt
+--- Generation Request Summary ---
+Topic:   ${(aiPromptInput.value || "").replace(/'/g, "'\\''")}
+Level:   ${(aiLevelSelect.value || "").replace(/'/g, "'\\''")}
+Goal:    ${(aiGoalInput.value || "").replace(/'/g, "'\\''")}
+EOM
+
+mkdir -p content
+touch content/index.xml
+`;
+
+                    function buildShell(nodes, path) {
+                        let sh = "";
+                        nodes.forEach(node => {
+                            const slug = slugify(node.title);
+                            if (node.children && node.children.length > 0) {
+                                const newPath = `${path}/${slug}`;
+                                sh += `mkdir -p content${newPath}\n`;
+                                sh += `touch content${newPath}/chap-${slug}.xml\n`;
+                                sh += buildShell(node.children, newPath);
+                            } else {
+                                const filename = `${node.type}-${slug}.xml`;
+                                sh += `touch content${path}/${filename}\n`;
+                            }
+                        });
+                        return sh;
+                    }
+
+                    shell += buildShell(treeData, "");
+                    
+                    let successMessage = "Scaffolding complete. All files and directories created.";
+                    shell += `
+_SUCCESS="${successMessage}"
+echo -e "\\n\\x1b[32m$_SUCCESS\\x1b[0m"
+`;
+                    return shell;
+                }
+
+                function downloadZip() {
+                    const zip = new JSZip();
+                    
+                    // Get file content
+                    const ditamap = convertToDitamap(treeData);
+                    const yaml = convertToYAML(treeData);
+                    const toml = convertToTOML(treeData);
+                    const shell = convertToShell(treeData);
+                    
+                    // Create summary text
+                    const summary = `--- Generation Request Summary ---
+Topic:   ${aiPromptInput.value || '(Not set)'}
+Level:   ${aiLevelSelect.value}
+Goal:    ${aiGoalInput.value || '(Not set)'}
+Generated: ${new Date().toUTCString()}
+`;
+
+                    // Add root files
+                    zip.file("guide.ditamap", ditamap);
+                    zip.file("structure.yml", yaml);
+                    zip.file("structure.toml", toml);
+                    zip.file("scaffold.sh", shell, { unixPermissions: "755" }); // Make script executable
+                    zip.file("generation_summary.txt", summary);
+
+                    // Add content files
+                    const contentFolder = zip.folder("content");
+                    contentFolder.file("index.xml", "<concept><title>Home</title><conbody></conbody></concept>"); // Add placeholder index
+
+                    function addFilesToZip(nodes, folder, path) {
+                        nodes.forEach(node => {
+                            const slug = slugify(node.title);
+                            if (node.children && node.children.length > 0) {
+                                const newFolder = folder.folder(slug);
+                                // Add placeholder chapter intro file
+                                newFolder.file(`chap-${slug}.xml`, `<concept><title>${escapeHTML(node.title)}</title><conbody></conbody></concept>`);
+                                addFilesToZip(node.children, newFolder, `${path}/${slug}`);
+                            } else {
+                                const filename = `${node.type}-${slug}.xml`;
+                                // Add placeholder topic file
+                                const xmlContent = `<${node.type}><title>${escapeHTML(node.title)}</title>${getDitaBody(node.type)}</${node.type}>`;
+                                folder.file(filename, xmlContent);
+                            }
+                        });
+                    }
+                    
+                    addFilesToZip(treeData, contentFolder, "");
+                    
+                    // Generate and download zip
+                    zip.generateAsync({ type: "blob" })
+                        .then(function(content) {
+                            const zipFilename = `${slugify(aiPromptInput.value || "dita-map")}.zip`;
+                            saveAs(content, zipFilename);
+                        });
+                }
+
+                function getDitaBody(type) {
+                    switch (type) {
+                        case 'task': return '<taskbody></taskbody>';
+                        case 'reference': return '<refbody></refbody>';
+                        case 'troubleshooting': return '<troubleshootingbody></troubleshootingbody>';
+                        case 'concept':
+                        default: return '<conbody></conbody>';
+                    }
+                }
+
+
+                // --- UTILITY FUNCTIONS ---
+
+                function escapeHTML(str) {
+                    if (typeof str !== 'string') {
+                        return '';
+                    }
+                    return str.replace(/[&<>"']/g, function(match) {
+                        return {
+                            '&': '&amp;',
+                            '<': '&lt;',
+                            '>': '&gt;',
+                            '"': '&quot;',
+                            "'": '&#39;'
+                        }[match];
+                    });
+                }
+
+                function copyToClipboard(elementId) {
+                    const text = document.getElementById(elementId).textContent;
+                    const textArea = document.createElement("textarea");
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        // Find the button associated with this content
+                        const btn = document.querySelector(`button[onclick="copyToClipboard('${elementId}')"]`);
+                        if(btn) {
+                            btn.textContent = 'Copied!';
+                            btn.classList.add('copied');
+                            setTimeout(() => {
+                                btn.textContent = 'Copy';
+                                btn.classList.remove('copied');
+                            }, 2000);
+                        }
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                    document.body.removeChild(textArea);
+                }
+
+                function showLoading(isLoading) {
+                    if (isLoading) {
+                        loadingOverlay.style.display = 'flex';
+                    } else {
+                        loadingOverlay.style.display = 'none';
+                    }
+                }
+
+                function showError(message) {
+                    errorContent.textContent = message;
+                    errorBox.classList.remove('hidden');
+                }
+
+                function hideError() {
+                    errorBox.classList.add('hidden');
+                }
+
+                function shakeElement(el) {
+                    el.classList.add('shake-error');
+                    setTimeout(() => el.classList.remove('shake-error'), 500);
+                }
+                
+                // --- EVENT LISTENERS ---
+                
+                // Initial render
+                renderTree(treeData, treeRoot);
+
+                // Add top-level topic
+                addTopicBtn.addEventListener('click', () => {
+                    treeData.push({ title: 'New Topic', type: 'concept', children: [] });
+                    renderTree(treeData, treeRoot);
+                    if (emptyState) emptyState.style.display = 'none';
+                });
+                
+                // AI generation
+                generateMapBtn.addEventListener('click', fetchMapProposal);
+
+                // Export modal
+                exportBtn.addEventListener('click', showExportModal);
+                closeModalBtn.addEventListener('click', hideExportModal);
+                closeModalBtn2.addEventListener('click', hideExportModal);
+                modalBackdrop.addEventListener('click', hideExportModal);
+                downloadZipBtn.addEventListener('click', downloadZip);
+
+                // Export modal tabs
+                document.querySelectorAll('.tab-button').forEach(button => {
+                    button.addEventListener('click', () => { // <--- FIX: Corrected syntax error here
+                        const tabId = button.dataset.tab;
+
+                        // Deactivate all
+                        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                        // Activate selected
+                        button.classList.add('active');
+                        document.getElementById(tabId).classList.add('active');
+                    });
+                });
+
+                // Make copy function available globally for the inline `onclick`
+                window.copyToClipboard = copyToClipboard;
+                
+                console.log('App initialization complete. Waiting for user interaction.');
+
+            } catch (e) {
+                console.error("Fatal error during app initialization:", e);
+                document.body.innerHTML = `<div class="p-8 bg-red-100 text-red-800">A critical error occurred: ${e.message}. Please reload.</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
