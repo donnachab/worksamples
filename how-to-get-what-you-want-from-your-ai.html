@@ -16,8 +16,8 @@
             
             --text-primary: #ffffff;
             --text-secondary: #e4e4e7;
-            --text-dim: #a1a1aa;       /* Kept for unimportant deco elements */
-            --text-legible: #d4d4d8;   /* NEW: High contrast gray for small reading text */
+            --text-dim: #a1a1aa;
+            --text-legible: #d4d4d8;
             
             --accent-cyan: #22d3ee;
             --accent-purple: #a78bfa;
@@ -88,18 +88,17 @@
             display: none;
             width: 100%;
             height: 100%;
-            /* Massive bottom padding to prevent nav overlap */
-            padding: 4rem 6vw 12rem 6vw; 
+            /* Desktop: Spacious padding */
+            padding: 4rem 6vw 10rem 6vw; 
             flex-direction: column;
             justify-content: center;
             overflow-y: auto;
             scroll-behavior: smooth;
         }
 
-        /* FIX FOR SLIDE 26: Safe top start + horizontal layout space */
         #slide-final {
             justify-content: flex-start;
-            padding-top: 10vh; /* Slightly reduced top padding to balance */
+            padding-top: 10vh; 
         }
 
         .slide.active {
@@ -208,14 +207,20 @@
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid var(--border-panel);
-            background: #000;
+            background: transparent; /* Changed to transparent for clean look if image is contained */
             width: 100%;
+            /* Center the contained image */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+        
         .img-frame {
             width: 100%;
             height: auto;
             max-height: 65vh;
-            object-fit: cover;
+            /* FIX: Contain ensures text inside images (like "Hard Reset") is never cut off */
+            object-fit: contain; 
             object-position: center;
             display: block;
         }
@@ -286,12 +291,9 @@
             margin: 1rem 0;
             border: 1px dashed var(--accent-cyan);
         }
-        
-        /* W3C READABILITY FIX: 
-           Increased contrast and font-size for helper text. */
         .platform-helper-text {
-            font-size: 0.95rem; /* Was 0.85rem */
-            color: var(--text-legible); /* Was --text-dim */
+            font-size: 0.95rem;
+            color: var(--text-legible);
             margin-top: 1rem;
             line-height: 1.5;
         }
@@ -425,8 +427,8 @@
 
         .contact-links {
             display: flex;
-            flex-direction: row; /* Horizontal by default */
-            flex-wrap: wrap; /* Wrap if screen too small */
+            flex-direction: row;
+            flex-wrap: wrap;
             justify-content: center;
             gap: 1.5rem;
             width: 100%;
@@ -442,7 +444,7 @@
             background: var(--bg-panel);
             border: 1px solid var(--border-panel);
             padding: 1rem 1.5rem;
-            border-radius: 100px; /* Pill shape */
+            border-radius: 100px;
             color: #fff;
             text-decoration: none;
             font-weight: 600;
@@ -506,9 +508,21 @@
 
         .progress { font-family: var(--font-code); font-size: 1rem; color: #fff; min-width: 60px; text-align: center; }
 
-        /* --- MOBILE --- */
+        /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 900px) {
             .watermark { top: 1rem; right: 1rem; font-size: 0.65rem; }
+
+            /* Mobile Layout: Safe but not empty */
+            .slide {
+                /* Reduced bottom padding (6rem) so content isn't pushed too high, but nav is clear */
+                padding: 5rem 1.5rem 7rem 1.5rem; 
+                justify-content: center; /* Default center for aesthetic */
+            }
+            
+            /* Force top alignment for scrollable/tall slides */
+            .slide.scrollable-mobile {
+                justify-content: flex-start;
+            }
 
             .layout-split, .slide:nth-child(even) .layout-split {
                 grid-template-columns: 1fr;
@@ -518,9 +532,12 @@
                 gap: 2rem;
             }
             
-            .img-frame { object-fit: contain; background: transparent; border:none; }
+            .img-frame { 
+                object-fit: contain; 
+                background: transparent; 
+                border: none; 
+            }
 
-            .slide { padding: 6rem 1.5rem 12rem 1.5rem; } 
             h1 { font-size: 2.8rem; }
             h2 { font-size: 2rem; }
             .img-container { width: 100%; margin: 0; }
@@ -532,7 +549,6 @@
             
             .nav-ui { width: 92%; justify-content: space-between; bottom: 1rem; padding: 0.5rem 1rem; }
             
-            /* Mobile Profile: Stack buttons */
             .contact-links { flex-direction: column; }
         }
     </style>
@@ -552,7 +568,6 @@
             <h1 tabindex="-1">How to Get What You Want From Your AI</h1>
             <p>A Strategic Framework for Generative AI.</p>
             
-            <!-- Author Badge -->
             <div style="margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 12px 24px; border-radius: 50px; border: 1px solid var(--border-panel);">
                     <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent-cyan);">
@@ -590,7 +605,6 @@
                     <h3>The Mechanism</h3>
                     <h2 tabindex="-1">The Context Bucket</h2>
                     <p>Every AI has a "Context Window." Think of it as a bucket.</p>
-                    <!-- FIX: Text updated -->
                     <p>Every word you type goes into the bucket. When the bucket is full, the oldest <strong>data blocks spill out</strong> to make room for the new.</p>
                 </div>
                 <div class="img-container">
@@ -604,7 +618,6 @@
             <h3>New Concept</h3>
             <h2 tabindex="-1">It's a Prediction Engine</h2>
             <p>Unlike a database, AI doesn't "know" facts. It guesses the next likely word.</p>
-            <!-- FIX: Mobile styling ensures full brain is visible -->
             <div class="img-container" style="max-width: 900px; margin: 2rem auto; width: 100%;">
                 <img src="assets/slide3b_prediction_tree.png" class="img-frame" style="object-position: center;" alt="Prediction tree diagram">
             </div>
@@ -627,11 +640,15 @@
             </div>
         </section>
 
-        <!-- Slide 6 -->
+        <!-- Slide 6: Section Header 01 (New Image Slot) -->
         <section class="slide layout-center" aria-label="Slide 6">
             <div class="section-number">01</div>
             <h2 tabindex="-1" style="font-size: 4rem;">Quick Fixes</h2>
-            <p>How to clear the noise and get back on track.</p>
+            <p style="margin-bottom: 2rem;">How to clear the noise and get back on track.</p>
+            <!-- New Image Slot -->
+            <div class="img-container" style="max-width: 600px; margin: 0 auto; border:none; background:transparent;">
+                 <img src="assets/slide5_section_toolkit.png" class="img-frame" alt="Futuristic Toolkit" onerror="this.style.display='none'">
+            </div>
         </section>
 
         <!-- Slide 7 -->
@@ -690,11 +707,15 @@
             </div>
         </section>
 
-        <!-- Slide 10 -->
+        <!-- Slide 10: Section Header 02 (New Image Slot) -->
         <section class="slide layout-center" aria-label="Slide 10">
             <div class="section-number">02</div>
             <h2 tabindex="-1" style="font-size: 4rem;">Setting the Stage</h2>
-            <p>Defining the AI's persona.</p>
+            <p style="margin-bottom: 2rem;">Defining the AI's persona.</p>
+             <!-- New Image Slot -->
+             <div class="img-container" style="max-width: 600px; margin: 0 auto; border:none; background:transparent;">
+                 <img src="assets/slide10_section_stage.png" class="img-frame" alt="Digital Stage" onerror="this.style.display='none'">
+            </div>
         </section>
 
         <!-- Slide 11 -->
@@ -716,7 +737,7 @@
 
         <!-- Slide 12 -->
         <section class="slide layout-center" aria-label="Slide 12">
-            <h2 tabindex="-1">Knowledge vs. Attitude</h2>
+            <h2 tabindex="-1" style="margin-bottom: 3rem;">Knowledge vs. Attitude</h2>
             <div class="comparison-grid">
                 <div class="comp-card">
                     <h3>The Role</h3>
@@ -755,7 +776,7 @@
             </div>
         </section>
 
-        <!-- Slide 15: Workflow -->
+        <!-- Slide 15 -->
         <section class="slide layout-center" aria-label="Slide 15">
             <h3>Power User Strategy</h3>
             <h2 tabindex="-1">The Protocol Workflow</h2>
@@ -798,7 +819,7 @@
             </div>
         </section>
 
-        <!-- Slide 16: Management -->
+        <!-- Slide 16 -->
         <section class="slide layout-center" aria-label="Slide 16">
             <h3>System Configuration</h3>
             <h2 tabindex="-1">Where to Manage Protocols</h2>
@@ -808,7 +829,6 @@
                     <div class="platform-title">ChatGPT</div>
                     <p style="font-size:0.9rem; margin-bottom:1rem;">Custom Instructions</p>
                     <span class="platform-path">Profile Icon &rarr; Customize ChatGPT</span>
-                    <!-- FIX: High contrast, readable text -->
                     <p class="platform-helper-text">Paste your protocols in the bottom box. Applies to ALL new chats.</p>
                 </div>
 
@@ -817,7 +837,6 @@
                     <div class="platform-title">Claude</div>
                     <p style="font-size:0.9rem; margin-bottom:1rem;">Project Settings</p>
                     <span class="platform-path">Create Project &rarr; Custom Instructions</span>
-                    <!-- FIX: High contrast, readable text -->
                     <p class="platform-helper-text">Best for separating work modes. Protocols apply only to chats <em>inside</em> that Project.</p>
                 </div>
 
@@ -826,17 +845,20 @@
                     <div class="platform-title">Gemini</div>
                     <p style="font-size:0.9rem; margin-bottom:1rem;">Gem Manager</p>
                     <span class="platform-path">Gem Manager &rarr; New Gem</span>
-                    <!-- FIX: High contrast, readable text -->
                     <p class="platform-helper-text">Create a standalone "Gem" for each major Protocol.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Slide 17 -->
+        <!-- Slide 17: Section Header 03 (New Image Slot) -->
         <section class="slide layout-center" aria-label="Slide 17">
             <div class="section-number">03</div>
             <h2 tabindex="-1" style="font-size: 4rem;">Pro Tips</h2>
-            <p>Advanced steering techniques.</p>
+            <p style="margin-bottom: 2rem;">Advanced steering techniques.</p>
+             <!-- New Image Slot -->
+             <div class="img-container" style="max-width: 600px; margin: 0 auto; border:none; background:transparent;">
+                 <img src="assets/slide17_section_diamond.png" class="img-frame" alt="Diamond Knowledge" onerror="this.style.display='none'">
+            </div>
         </section>
 
         <!-- Slide 18 -->
@@ -962,7 +984,7 @@
             </div>
         </section>
 
-        <!-- Slide 25: Author Profile (Center Aligned + Safe Start) -->
+        <!-- Slide 25: Author Profile -->
         <section class="slide layout-center" id="slide-final" aria-label="Slide 25">
             
             <div class="profile-container">
