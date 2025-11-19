@@ -16,7 +16,8 @@
             
             --text-primary: #ffffff;
             --text-secondary: #e4e4e7;
-            --text-dim: #a1a1aa;
+            --text-dim: #a1a1aa;       /* Kept for unimportant deco elements */
+            --text-legible: #d4d4d8;   /* NEW: High contrast gray for small reading text */
             
             --accent-cyan: #22d3ee;
             --accent-purple: #a78bfa;
@@ -285,6 +286,15 @@
             margin: 1rem 0;
             border: 1px dashed var(--accent-cyan);
         }
+        
+        /* W3C READABILITY FIX: 
+           Increased contrast and font-size for helper text. */
+        .platform-helper-text {
+            font-size: 0.95rem; /* Was 0.85rem */
+            color: var(--text-legible); /* Was --text-dim */
+            margin-top: 1rem;
+            line-height: 1.5;
+        }
 
         /* Split Terminal */
         .split-terminal {
@@ -378,18 +388,19 @@
             flex-shrink: 0;
         }
 
-        /* --- CONTACT SLIDE STYLES (UPDATED) --- */
+        /* --- CONTACT SLIDE STYLES --- */
         .profile-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Start from top to prevent crop */
+            justify-content: center;
             gap: 2.5rem;
-            max-width: 1200px;
+            max-width: 800px;
             width: 100%;
             max-width: 90vw; 
             margin-inline: auto; 
             text-align: center;
+            padding-top: 1rem;
         }
         
         .profile-pic-frame {
@@ -412,7 +423,6 @@
             display: block;
         }
 
-        /* NEW: Horizontal Row Layout */
         .contact-links {
             display: flex;
             flex-direction: row; /* Horizontal by default */
@@ -521,7 +531,7 @@
             .term-right::before { top: -12px; left: 20px; width: 2px; height: 24px; }
             
             .nav-ui { width: 92%; justify-content: space-between; bottom: 1rem; padding: 0.5rem 1rem; }
-
+            
             /* Mobile Profile: Stack buttons */
             .contact-links { flex-direction: column; }
         }
@@ -706,7 +716,7 @@
 
         <!-- Slide 12 -->
         <section class="slide layout-center" aria-label="Slide 12">
-            <h2 tabindex="-1" style="margin-bottom: 3rem;">Knowledge vs. Attitude</h2>
+            <h2 tabindex="-1">Knowledge vs. Attitude</h2>
             <div class="comparison-grid">
                 <div class="comp-card">
                     <h3>The Role</h3>
@@ -745,7 +755,7 @@
             </div>
         </section>
 
-        <!-- Slide 15 -->
+        <!-- Slide 15: Workflow -->
         <section class="slide layout-center" aria-label="Slide 15">
             <h3>Power User Strategy</h3>
             <h2 tabindex="-1">The Protocol Workflow</h2>
@@ -788,7 +798,7 @@
             </div>
         </section>
 
-        <!-- Slide 16 -->
+        <!-- Slide 16: Management -->
         <section class="slide layout-center" aria-label="Slide 16">
             <h3>System Configuration</h3>
             <h2 tabindex="-1">Where to Manage Protocols</h2>
@@ -798,7 +808,8 @@
                     <div class="platform-title">ChatGPT</div>
                     <p style="font-size:0.9rem; margin-bottom:1rem;">Custom Instructions</p>
                     <span class="platform-path">Profile Icon &rarr; Customize ChatGPT</span>
-                    <p style="font-size:0.85rem; color:var(--text-dim); margin-top:1rem;">Paste your protocols in the bottom box. Applies to ALL new chats.</p>
+                    <!-- FIX: High contrast, readable text -->
+                    <p class="platform-helper-text">Paste your protocols in the bottom box. Applies to ALL new chats.</p>
                 </div>
 
                 <!-- Claude -->
@@ -806,7 +817,8 @@
                     <div class="platform-title">Claude</div>
                     <p style="font-size:0.9rem; margin-bottom:1rem;">Project Settings</p>
                     <span class="platform-path">Create Project &rarr; Custom Instructions</span>
-                    <p style="font-size:0.85rem; color:var(--text-dim); margin-top:1rem;">Best for separating work modes. Protocols apply only to chats <em>inside</em> that Project.</p>
+                    <!-- FIX: High contrast, readable text -->
+                    <p class="platform-helper-text">Best for separating work modes. Protocols apply only to chats <em>inside</em> that Project.</p>
                 </div>
 
                 <!-- Gemini -->
@@ -814,7 +826,8 @@
                     <div class="platform-title">Gemini</div>
                     <p style="font-size:0.9rem; margin-bottom:1rem;">Gem Manager</p>
                     <span class="platform-path">Gem Manager &rarr; New Gem</span>
-                    <p style="font-size:0.85rem; color:var(--text-dim); margin-top:1rem;">Create a standalone "Gem" for each major Protocol.</p>
+                    <!-- FIX: High contrast, readable text -->
+                    <p class="platform-helper-text">Create a standalone "Gem" for each major Protocol.</p>
                 </div>
             </div>
         </section>
@@ -949,7 +962,7 @@
             </div>
         </section>
 
-        <!-- Slide 25: Author Profile (SAFE LAYOUT) -->
+        <!-- Slide 25: Author Profile (Center Aligned + Safe Start) -->
         <section class="slide layout-center" id="slide-final" aria-label="Slide 25">
             
             <div class="profile-container">
@@ -997,7 +1010,7 @@
     </nav>
 
     <script>
-        // Define Globals for Inline Access
+        // Globals for Inline Access
         let currentIndex = 0;
         let slides = [];
         let total = 0;
@@ -1013,7 +1026,7 @@
                     // requestAnimationFrame removed, using simple class toggle
                     setTimeout(() => s.classList.add('active'), 10);
                     
-                    // Focus logic (only if not initial load)
+                    // Focus logic (skip on initial load)
                     if (document.activeElement !== document.body) {
                         const header = s.querySelector('h1, h2');
                         if(header) header.focus({preventScroll: true});
