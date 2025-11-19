@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mastering AI Context & Control</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
@@ -44,6 +46,28 @@
             position: fixed;
         }
 
+        /* --- GLOBAL WATERMARK --- */
+        .watermark {
+            position: fixed;
+            top: 1.5rem;
+            right: 2rem;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            opacity: 0.5;
+            z-index: 50;
+            pointer-events: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* --- SCROLLBAR FIX --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        * { scrollbar-width: thin; scrollbar-color: #333 transparent; }
+
         /* --- A11Y --- */
         :focus-visible {
             outline: 3px solid var(--accent-cyan);
@@ -63,11 +87,18 @@
             display: none;
             width: 100%;
             height: 100%;
-            padding: 4rem 6vw 10rem 6vw; 
+            /* Massive bottom padding to prevent nav overlap */
+            padding: 4rem 6vw 12rem 6vw; 
             flex-direction: column;
             justify-content: center;
             overflow-y: auto;
             scroll-behavior: smooth;
+        }
+
+        /* FIX FOR SLIDE 26: Safe top start + horizontal layout space */
+        #slide-final {
+            justify-content: flex-start;
+            padding-top: 10vh; /* Slightly reduced top padding to balance */
         }
 
         .slide.active {
@@ -76,8 +107,8 @@
         }
 
         @keyframes fadeEnter {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.99); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         /* --- TYPOGRAPHY --- */
@@ -255,7 +286,7 @@
             border: 1px dashed var(--accent-cyan);
         }
 
-        /* Split Terminal (Slide 15) */
+        /* Split Terminal */
         .split-terminal {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -297,7 +328,7 @@
             font-size: 1rem;
             line-height: 1.6;
             color: #e2e8f0;
-            overflow-y: auto; /* Scrollbar if content is tall */
+            overflow-y: auto;
         }
         
         .term-left { background: #0c0c0e; border-right: 1px solid #333; }
@@ -347,7 +378,81 @@
             flex-shrink: 0;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- CONTACT SLIDE STYLES (UPDATED) --- */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Start from top to prevent crop */
+            gap: 2.5rem;
+            max-width: 1200px;
+            width: 100%;
+            max-width: 90vw; 
+            margin-inline: auto; 
+            text-align: center;
+        }
+        
+        .profile-pic-frame {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-cyan);
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.3);
+            background: #000;
+            margin-inline: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .profile-pic-frame img {
+            width: 100%;
+            height: auto; 
+            display: block;
+        }
+
+        /* NEW: Horizontal Row Layout */
+        .contact-links {
+            display: flex;
+            flex-direction: row; /* Horizontal by default */
+            flex-wrap: wrap; /* Wrap if screen too small */
+            justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+            margin-inline: auto;
+            margin-top: 1rem;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-panel);
+            padding: 1rem 1.5rem;
+            border-radius: 100px; /* Pill shape */
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .contact-btn:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-3px);
+            background: rgba(34, 211, 238, 0.1);
+        }
+
+        .contact-btn i {
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+        }
+
+        /* --- NAVIGATION (HARDENED) --- */
         .nav-ui {
             position: fixed;
             bottom: 1.5rem;
@@ -360,7 +465,7 @@
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            z-index: 99999; /* CRITICAL FIX: Top of stack */
+            z-index: 2147483647; 
             box-shadow: 0 10px 50px rgba(0,0,0,0.9);
         }
         .nav-btn {
@@ -374,23 +479,27 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background 0.2s;
-            /* Prevent icon from capturing click */
+            transition: background 0.1s;
             pointer-events: auto; 
+            user-select: none;
+            position: relative;
+            z-index: 2147483647;
         }
-        /* CRITICAL FIX: Icon ignores clicks so button handles them */
         .nav-btn svg { 
             pointer-events: none; 
             width: 28px; height: 28px; 
         }
         
         .nav-btn:hover:not(:disabled) { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); }
+        .nav-btn:active:not(:disabled) { transform: scale(0.95); }
         .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
         .progress { font-family: var(--font-code); font-size: 1rem; color: #fff; min-width: 60px; text-align: center; }
 
         /* --- MOBILE --- */
         @media (max-width: 900px) {
+            .watermark { top: 1rem; right: 1rem; font-size: 0.65rem; }
+
             .layout-split, .slide:nth-child(even) .layout-split {
                 grid-template-columns: 1fr;
                 direction: ltr; 
@@ -399,7 +508,6 @@
                 gap: 2rem;
             }
             
-            /* Fix Slide 4 Brain cropping: Show whole image */
             .img-frame { object-fit: contain; background: transparent; border:none; }
 
             .slide { padding: 6rem 1.5rem 12rem 1.5rem; } 
@@ -408,12 +516,14 @@
             .img-container { width: 100%; margin: 0; }
             .comparison-grid, .platform-grid, .split-terminal { grid-template-columns: 1fr; }
             
-            /* Slide 15 Fix: Allow scrolling inside terminal */
             .term-pane { height: auto; min-height: 250px; }
             .term-content { max-height: 40vh; overflow-y: auto; }
             .term-right::before { top: -12px; left: 20px; width: 2px; height: 24px; }
             
             .nav-ui { width: 92%; justify-content: space-between; bottom: 1rem; padding: 0.5rem 1rem; }
+
+            /* Mobile Profile: Stack buttons */
+            .contact-links { flex-direction: column; }
         }
     </style>
 </head>
@@ -421,15 +531,30 @@
 
     <div id="a11y-announcer" aria-live="polite" class="sr-only" style="position:absolute; left:-9999px;"></div>
 
+    <!-- GLOBAL WATERMARK -->
+    <div class="watermark">Donnacha Bushe</div>
+
     <main id="deck">
 
         <!-- Slide 1 -->
         <section class="slide layout-center active" aria-label="Slide 1">
             <h3 aria-hidden="true">Strategy Guide</h3>
             <h1 tabindex="-1">How to Get What You Want From Your AI</h1>
-            <p>A Pilot's Guide to Large Language Models.</p>
-            <div style="margin-top: 3rem;">
-                <span style="font-family:var(--font-code); font-size:0.9rem; color:var(--text-dim); border:1px solid var(--border-panel); padding: 10px 20px; border-radius:20px;">v5.0 // Interaction Fix</span>
+            <p>A Strategic Framework for Generative AI.</p>
+            
+            <!-- Author Badge -->
+            <div style="margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 12px 24px; border-radius: 50px; border: 1px solid var(--border-panel);">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent-cyan);">
+                        <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="text-align: left;">
+                        <div style="font-family: var(--font-main); font-size: 1.1rem; color: #fff; font-weight: 700;">Donnacha Bushe</div>
+                    </div>
+                </div>
+                <span style="font-family: var(--font-code); font-size: 0.85rem; color: var(--text-secondary); opacity: 0.8; text-align: center; max-width: 400px; line-height: 1.4;">
+                    Senior Technical Writer | Doc Architect | Developer Advocate
+                </span>
             </div>
         </section>
 
@@ -455,7 +580,7 @@
                     <h3>The Mechanism</h3>
                     <h2 tabindex="-1">The Context Bucket</h2>
                     <p>Every AI has a "Context Window." Think of it as a bucket.</p>
-                    <!-- FIX: Text matches Ice Cube visual -->
+                    <!-- FIX: Text updated -->
                     <p>Every word you type goes into the bucket. When the bucket is full, the oldest <strong>data blocks spill out</strong> to make room for the new.</p>
                 </div>
                 <div class="img-container">
@@ -471,7 +596,7 @@
             <p>Unlike a database, AI doesn't "know" facts. It guesses the next likely word.</p>
             <!-- FIX: Mobile styling ensures full brain is visible -->
             <div class="img-container" style="max-width: 900px; margin: 2rem auto; width: 100%;">
-                <img src="assets/slide3b_prediction_tree.png" class="img-frame" alt="Prediction tree diagram">
+                <img src="assets/slide3b_prediction_tree.png" class="img-frame" style="object-position: center;" alt="Prediction tree diagram">
             </div>
             <div class="prompt-box" style="text-align: left; display: inline-block; max-width: 900px;">
                 <strong>System:</strong> Generating output based on highest probability tokens...
@@ -581,7 +706,7 @@
 
         <!-- Slide 12 -->
         <section class="slide layout-center" aria-label="Slide 12">
-            <h2 tabindex="-1">Knowledge vs. Attitude</h2>
+            <h2 tabindex="-1" style="margin-bottom: 3rem;">Knowledge vs. Attitude</h2>
             <div class="comparison-grid">
                 <div class="comp-card">
                     <h3>The Role</h3>
@@ -596,12 +721,11 @@
             </div>
         </section>
 
-        <!-- Slide 13: Prompt Fix -->
+        <!-- Slide 13 -->
         <section class="slide layout-center" aria-label="Slide 13">
             <h3>Efficiency Hack</h3>
             <h2 tabindex="-1">Kill the Politeness</h2>
-            <p>AI apologies waste tokens and fill up your context bucket with fluff.</p>
-            <!-- FIX: Label changed to "Your Prompt" -->
+            <p>AI apologies waste tokens and fill up your context bucket with fluff. Tell the system to stop.</p>
             <div class="prompt-box" style="max-width: 700px; margin: 3rem auto;">
                 <strong>Your Prompt:</strong> "Do not apologize. Do not explain what you did wrong. Just output the corrected text."
             </div>
@@ -621,7 +745,7 @@
             </div>
         </section>
 
-        <!-- Slide 15: Terminal Fix (Scrolling) -->
+        <!-- Slide 15 -->
         <section class="slide layout-center" aria-label="Slide 15">
             <h3>Power User Strategy</h3>
             <h2 tabindex="-1">The Protocol Workflow</h2>
@@ -664,7 +788,7 @@
             </div>
         </section>
 
-        <!-- Slide 16: Management -->
+        <!-- Slide 16 -->
         <section class="slide layout-center" aria-label="Slide 16">
             <h3>System Configuration</h3>
             <h2 tabindex="-1">Where to Manage Protocols</h2>
@@ -825,107 +949,129 @@
             </div>
         </section>
 
+        <!-- Slide 25: Author Profile (SAFE LAYOUT) -->
+        <section class="slide layout-center" id="slide-final" aria-label="Slide 25">
+            
+            <div class="profile-container">
+                <div class="profile-pic-frame">
+                    <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe">
+                </div>
+
+                <!-- Name as MAIN TITLE -->
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <h1 style="font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 1rem; color: #fff; text-align: center; letter-spacing: -0.02em;">Donnacha Bushe</h1>
+                    <p style="font-family: var(--font-code); color: var(--text-secondary); font-size: 1.1rem; margin: 0 auto;">
+                        Senior Technical Writer | Doc Architect | Developer Advocate
+                    </p>
+                </div>
+                
+                <div class="contact-links">
+                    <a href="https://www.linkedin.com/in/donnachab" target="_blank" class="contact-btn">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a href="https://donnachab.github.io/worksamples/worksamples.html" target="_blank" class="contact-btn">
+                        <i class="fas fa-briefcase"></i> Work Samples
+                    </a>
+                    <a href="https://donnachab.github.io/worksamples/index.html" target="_blank" class="contact-btn">
+                        <i class="fas fa-file-lines"></i> CV
+                    </a>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- NAV -->
+    <!-- NAV (Inline Method) -->
     <nav class="nav-ui" role="navigation" aria-label="Slide Controls">
-        <button class="nav-btn" id="prevBtn" aria-label="Previous">
+        <button class="nav-btn" onclick="window.prevSlide()" aria-label="Previous">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         
         <div class="progress" aria-live="polite">
-            <span id="currSlide">1</span> / <span id="totalSlide">24</span>
+            <span id="currSlide">1</span> / <span id="totalSlide">25</span>
         </div>
         
-        <button class="nav-btn" id="nextBtn" aria-label="Next">
+        <button class="nav-btn" onclick="window.nextSlide()" aria-label="Next">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
     </nav>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const currDisplay = document.getElementById('currSlide');
-            const totalDisplay = document.getElementById('totalSlide');
-            
-            let currentIndex = 0;
-            const total = slides.length;
-            
-            totalDisplay.textContent = total;
+        // Define Globals for Inline Access
+        let currentIndex = 0;
+        let slides = [];
+        let total = 0;
+        const currDisplay = document.querySelector('#currSlide');
+        const prevBtn = document.querySelector('button[aria-label="Previous"]');
+        const nextBtn = document.querySelector('button[aria-label="Next"]');
 
-            function update(triggerSource) {
-                slides.forEach(s => {
+        function updateUI() {
+            // 1. Toggle Visibility
+            slides.forEach((s, i) => {
+                if(i === currentIndex) {
+                    s.style.display = 'flex';
+                    // requestAnimationFrame removed, using simple class toggle
+                    setTimeout(() => s.classList.add('active'), 10);
+                    
+                    // Focus logic (only if not initial load)
+                    if (document.activeElement !== document.body) {
+                        const header = s.querySelector('h1, h2');
+                        if(header) header.focus({preventScroll: true});
+                    }
+                } else {
                     s.classList.remove('active');
                     s.style.display = 'none';
-                });
-
-                const activeSlide = slides[currentIndex];
-                activeSlide.style.display = 'flex'; 
-                
-                requestAnimationFrame(() => {
-                    activeSlide.classList.add('active');
-                });
-
-                if(triggerSource === 'navigation') {
-                    const header = activeSlide.querySelector('h1, h2');
-                    if(header) header.focus({preventScroll: true});
                 }
+            });
 
-                currDisplay.textContent = currentIndex + 1;
-                prevBtn.disabled = (currentIndex === 0);
-                nextBtn.disabled = (currentIndex === total - 1);
+            // 2. Update Counter
+            if(currDisplay) currDisplay.textContent = currentIndex + 1;
+            
+            // 3. Update Buttons
+            if(prevBtn) prevBtn.disabled = (currentIndex === 0);
+            if(nextBtn) nextBtn.disabled = (currentIndex === total - 1);
+        }
+
+        // Global Functions attached to window
+        window.nextSlide = function() {
+            if(currentIndex < total - 1) {
+                currentIndex++;
+                updateUI();
             }
+        };
 
-            nextBtn.addEventListener('click', () => {
-                if(currentIndex < total - 1) {
-                    currentIndex++;
-                    update('navigation');
-                }
-            });
+        window.prevSlide = function() {
+            if(currentIndex > 0) {
+                currentIndex--;
+                updateUI();
+            }
+        };
 
-            prevBtn.addEventListener('click', () => {
-                if(currentIndex > 0) {
-                    currentIndex--;
-                    update('navigation');
-                }
-            });
-
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            slides = document.querySelectorAll('.slide');
+            total = slides.length;
+            if(document.querySelector('#totalSlide')) {
+                 document.querySelector('#totalSlide').textContent = total;
+            }
+            
+            // Keyboard
             document.addEventListener('keydown', (e) => {
-                if(e.key === 'ArrowRight') {
-                    if(currentIndex < total - 1) {
-                        currentIndex++;
-                        update('navigation');
-                    }
-                }
-                if(e.key === 'ArrowLeft') {
-                    if(currentIndex > 0) {
-                        currentIndex--;
-                        update('navigation');
-                    }
-                }
+                if(e.key === 'ArrowRight') window.nextSlide();
+                if(e.key === 'ArrowLeft') window.prevSlide();
             });
 
+            // Touch
             let touchStart = 0;
             document.addEventListener('touchstart', e => touchStart = e.changedTouches[0].screenX);
             document.addEventListener('touchend', e => {
                 const touchEnd = e.changedTouches[0].screenX;
-                if(touchStart - touchEnd > 50) {
-                    if(currentIndex < total - 1) {
-                        currentIndex++;
-                        update('navigation');
-                    }
-                }
-                if(touchEnd - touchStart > 50) {
-                    if(currentIndex > 0) {
-                        currentIndex--;
-                        update('navigation');
-                    }
-                }
+                if(touchStart - touchEnd > 50) window.nextSlide();
+                if(touchEnd - touchStart > 50) window.prevSlide();
             });
 
-            update('init');
+            // Initial Paint
+            updateUI();
         });
     </script>
 </body>
