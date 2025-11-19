@@ -2,820 +2,931 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>How to Get What You Want From Your AI (Final)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering AI Context & Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* --- Palette --- */
-            --bg-app: #050507;
-            --bg-surface: #121216;
-            --bg-surface-highlight: #1c1c22;
+            --bg-deep: #020203; 
+            --bg-panel: rgba(20, 20, 25, 0.95); 
+            --border-panel: rgba(255, 255, 255, 0.15);
             
-            --border-subtle: #27272a;
-            --border-focus: #3f3f46;
-
-            --text-main: #f4f4f5;       
-            --text-muted: #a1a1aa;      
-            --text-dim: #52525b;        
-
-            --accent-primary: #3b82f6;  
-            --accent-glow: rgba(59, 130, 246, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #e4e4e7;
+            --text-dim: #a1a1aa;
             
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
+            --accent-cyan: #22d3ee;
+            --accent-purple: #a78bfa;
+            --accent-success: #34d399;
+            --accent-danger: #f87171;
+            
+            --brand-openai: #10a37f;
+            --brand-anthropic: #d97757;
+            --brand-google: #4285f4;
 
-            /* --- Spacing --- */
-            --space-sm: 1rem;
-            --space-md: 2rem;
-            --space-lg: 4rem;
+            --font-main: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html, body {
-            height: 100%;
-            width: 100%;
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg-app);
-            color: var(--text-main);
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.05), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.05), transparent 30%);
+            color: var(--text-primary);
+            font-family: var(--font-main);
             overflow: hidden;
-            -webkit-font-smoothing: antialiased;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
         }
 
-        /* --- CONTAINER --- */
-        #presentation-container {
+        /* --- A11Y --- */
+        :focus-visible {
+            outline: 3px solid var(--accent-cyan);
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        /* --- SLIDE ENGINE --- */
+        #deck {
             position: relative;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: radial-gradient(circle at 80% 20%, #1a1a24 0%, var(--bg-app) 70%);
         }
 
-        /* --- SLIDE CORE --- */
         .slide {
-            position: absolute;
-            inset: 0;
-            display: flex;
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 4rem 6vw 10rem 6vw; 
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            
-            padding: var(--space-lg);
-            padding-bottom: 120px; /* Critical Nav Clearance */
-            gap: var(--space-md); 
-            
-            /* Logic: Off-screen Right */
-            transform: translateX(100%);
-            opacity: 0;
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
-            z-index: 0;
-            
-            visibility: hidden; 
-            pointer-events: none;
-            
-            overflow-y: auto; 
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
+            overflow-y: auto;
+            scroll-behavior: smooth;
         }
 
         .slide.active {
-            transform: translateX(0);
-            opacity: 1;
-            z-index: 10;
-            visibility: visible;
-            pointer-events: auto;
+            display: flex;
+            animation: fadeEnter 0.3s ease-out;
+        }
+
+        @keyframes fadeEnter {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* --- TYPOGRAPHY --- */
         h1 {
-            font-size: clamp(3rem, 6vw, 5rem);
-            font-weight: 700;
-            background: linear-gradient(to bottom right, #fff 30%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: var(--space-sm);
-            max-width: 90%;
-            text-align: center;
+            font-size: clamp(2.5rem, 5vw, 5rem);
             line-height: 1.1;
-            margin-left: auto;
-            margin-right: auto;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            color: #fff;
         }
 
         h2 {
-            font-size: clamp(2rem, 4vw, 3.5rem);
-            color: var(--text-main);
-            margin-bottom: var(--space-xs);
-            max-width: 100%;
-            text-align: center;
-            line-height: 1.2;
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
         }
 
         h3 {
-            font-size: 1.1rem;
-            color: var(--accent-primary);
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-align: center;
-        }
-
-        p, li {
-            font-size: clamp(1rem, 1.1vw, 1.25rem);
-            line-height: 1.6;
-            color: var(--text-muted);
+            letter-spacing: 0.15em;
+            color: var(--accent-cyan);
             margin-bottom: 1rem;
-            max-width: 65ch; 
-            margin-left: auto;
-            margin-right: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .subtitle {
-            font-size: clamp(1.2rem, 2vw, 1.5rem);
-            color: var(--accent-primary);
-            font-weight: 300;
+        h3::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: var(--accent-cyan);
+        }
+
+        p {
+            font-size: clamp(1.125rem, 1.3vw, 1.35rem);
+            line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 60ch;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- LAYOUT GRIDS --- */
+        .layout-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 5vw;
+            align-items: center;
+            max-width: 1800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .slide:nth-child(even) .layout-split { direction: rtl; }
+        .slide:nth-child(even) .layout-split > * { direction: ltr; }
+
+        .layout-center {
             text-align: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .layout-center h3 { justify-content: center; }
+        .layout-center h3::after {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: var(--accent-cyan);
         }
 
         /* --- COMPONENTS --- */
-
-        .prompt-card {
-            background: rgba(18, 18, 22, 0.6);
-            border: 1px solid var(--border-subtle);
-            border-left: 4px solid var(--success); 
-            border-radius: 8px;
-            padding: 1.25rem; 
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: var(--text-main);
-            width: 100%;
-            margin-top: 1rem;
-            white-space: pre-wrap;      
-            word-wrap: break-word;      
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .instruction-card {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-left: 4px solid var(--accent-primary);
-            border-radius: 6px;
-            padding: 1.25rem; 
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 500;
+        .prompt-box {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-panel);
+            border-left: 4px solid var(--accent-purple);
+            padding: 2rem;
+            border-radius: 12px;
+            font-family: var(--font-code);
             color: #fff;
-            margin-top: 1.5rem;
-            width: 100%;
-            max-width: 65ch;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
-        }
-        .instruction-card::before {
-            content: "PROMPT INSTRUCTION";
-            display: block;
-            font-size: 0.7rem;
-            color: var(--accent-primary);
-            margin-bottom: 0.25rem;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-        }
-
-        .explanation-box {
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-subtle);
-            width: 100%;
-        }
-        .explanation-box strong { 
-            color: var(--accent-primary); 
-            display: block; 
-            margin-bottom: 0.25rem; 
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-        .explanation-box p { 
-            font-size: 1rem; 
-            color: var(--text-dim); 
-            font-style: italic;
-            margin: 0;
-        }
-
-        /* Nav Spacer */
-        .nav-spacer {
-            width: 100%;
-            height: 120px;
-            flex-shrink: 0;
-        }
-
-        /* --- LAYOUTS --- */
-
-        /* 1. Gradient Background */
-        .slide.gradient-bg { padding: 0; }
-        .slide.gradient-bg .content-overlay {
-            width: 100%;
-            max-width: 1200px;
-            padding: var(--space-lg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
-        }
-
-        #slide1 { background: radial-gradient(circle at center, #1e1e2e 0%, #0a0a10 80%); }
-        #slide5 { background: linear-gradient(135deg, #0f172a 0%, #0a0a10 100%); }
-        #slide9 { background: linear-gradient(135deg, #1e1b4b 0%, #0a0a10 100%); }
-        #slide14 { background: linear-gradient(135deg, #312e81 0%, #0a0a10 100%); }
-        #slide19 { background: radial-gradient(circle at bottom, #1e1e2e 0%, #0a0a10 70%); }
-
-        /* 2. Bleed Image Layout */
-        .slide.bleed-image-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-            padding: 0;
-            align-items: stretch;
-        }
-
-        .bleed-image-layout .content-container {
-            padding: 4rem 6%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            text-align: left;
-            order: 1;
-            gap: 1rem;
-            padding-bottom: 10rem;
-        }
-        
-        /* Alignment overrides */
-        .bleed-image-layout .content-container h2, 
-        .bleed-image-layout .content-container h3, 
-        .bleed-image-layout .content-container p,
-        .bleed-image-layout .content-container .explanation-box,
-        .bleed-image-layout .content-container .prompt-card,
-        .bleed-image-layout .content-container .instruction-card {
-            margin-left: 0;
-            margin-right: 0;
-            text-align: left;
-            max-width: 100%;
-            margin-bottom: 0;
-        }
-
-        .bleed-image-layout .image-container {
-            width: 100%;
-            height: 100%;
-            background: var(--bg-surface);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-top: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             position: relative;
+        }
+        .prompt-box strong { color: var(--accent-purple); }
+
+        .img-container {
+            position: relative;
+            border-radius: 20px;
             overflow: hidden;
-            border-left: 1px solid var(--border-subtle);
-            order: 2;
-        }
-
-        .bleed-image-layout img {
+            border: 1px solid var(--border-panel);
+            background: #000;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.95;
-            transition: transform 10s ease;
         }
-        .slide.active .bleed-image-layout img { transform: scale(1.05); }
+        .img-frame {
+            width: 100%;
+            height: auto;
+            max-height: 65vh;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
 
-        /* 3. Two Column Cards */
-        .two-column-container {
+        .section-number {
+            font-size: 12rem;
+            font-weight: 900;
+            opacity: 0.1;
+            position: absolute;
+            z-index: -1;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            pointer-events: none;
+        }
+
+        .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
             width: 100%;
-            max-width: 1400px;
-            margin-top: 2rem;
+            margin-top: 3rem;
         }
-
-        /* SQUASH FIX for Slide 7 */
-        #slide7 {
-            gap: 1rem;
-        }
-        
-        #slide7 .intro-text {
-            max-width: 90% !important;
-        }
-
-        #slide7 .two-column-container {
-            max-width: 800px; /* Tight squash */
-            margin-top: 1rem;
-            gap: 1.5rem;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #slide7 .column {
-            padding: 1.5rem 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        #slide7 h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            text-align: left;
-        }
-
-        #slide7 ol {
-            padding-left: 1.2rem;
-            margin: 0;
-        }
-        
-        #slide7 li {
-            margin-bottom: 0.25rem;
-            line-height: 1.4;
-            font-size: 1rem;
-            text-align: left; /* Enforce left alignment */
-        }
-        
-        #slide7 .explanation-box {
-            margin-top: 1.5rem;
-            max-width: 800px;
-        }
-
-        .column {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
+        .comp-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-panel);
             padding: 2.5rem;
+            border-radius: 16px;
             text-align: left;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
         }
-        
-        /* FIX: Reset margins for ALL content inside columns to ensure left align */
-        .column h3, .column p, .column blockquote, .column li {
-            margin-left: 0;
-            margin-right: 0;
+        .comp-card.bad { border-top: 6px solid var(--accent-danger); }
+        .comp-card.good { border-top: 6px solid var(--accent-success); }
+
+        /* Platform Grid */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-top: 3rem;
+            max-width: 1400px;
+        }
+        .platform-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-panel);
+            padding: 2rem;
+            border-radius: 16px;
             text-align: left;
-            max-width: 100%;
-            margin-bottom: 0;
+            transition: transform 0.2s;
         }
+        .platform-card:hover { transform: translateY(-5px); border-color: var(--text-dim); }
         
-        .column.bad { border-top: 4px solid var(--danger); }
-        .column.good { border-top: 4px solid var(--success); }
-        
-        .column blockquote {
-            background: var(--bg-surface-highlight);
-            padding: 1rem;
-            border-radius: 4px;
-            border-left: 3px solid var(--text-dim);
-            margin-top: auto;
-            font-size: 1rem;
-            color: var(--text-main);
+        .platform-title {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .platform-path {
+            color: var(--accent-cyan);
+            font-family: var(--font-code);
+            font-size: 0.95rem;
+            background: rgba(34, 211, 238, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: block;
+            margin: 1rem 0;
+            border: 1px dashed var(--accent-cyan);
         }
 
-        /* --- NAVIGATION (FIXED) --- */
-        .nav-container {
+        /* Split Terminal (Slide 15) */
+        .split-terminal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            max-width: 1400px;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            font-family: var(--font-code);
+        }
+        
+        .term-pane { 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            height: 400px; 
+        }
+        
+        .term-header {
+            padding: 12px 20px;
+            background: #1f1f23;
+            border-bottom: 1px solid #333;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #888;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+        .status-dot.active { background: var(--accent-success); box-shadow: 0 0 8px var(--accent-success); }
+        
+        .term-content {
+            padding: 2rem;
+            flex-grow: 1;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            overflow-y: auto; /* Scrollbar if content is tall */
+        }
+        
+        .term-left { background: #0c0c0e; border-right: 1px solid #333; }
+        .term-left .code-tag { color: var(--accent-purple); }
+        
+        .term-right { background: #141417; position: relative; }
+        .term-right::before {
+            content: '';
+            position: absolute;
+            top: 45%; left: -12px;
+            width: 24px; height: 2px;
+            background: var(--accent-cyan);
+            z-index: 10;
+        }
+        .term-right .user-msg { color: var(--accent-cyan); margin-bottom: 1.5rem; }
+        .term-right .ai-msg { color: #9ca3af; font-style: italic; border-left: 2px solid #333; padding-left: 1rem; }
+
+        /* Checklists */
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .checklist li {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-panel);
+            font-size: 1.1rem;
+        }
+        .checkmark {
+            color: #000;
+            background: var(--accent-success);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-ui {
             position: fixed;
-            bottom: 2rem;
+            bottom: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1000;
-            
-            /* FLEX ROW ENFORCEMENT */
+            background: #121212;
+            border: 1px solid #333;
+            padding: 0.75rem;
+            border-radius: 100px;
             display: flex;
-            flex-direction: row; 
-            flex-wrap: nowrap; /* Prevent wrapping */
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 99999; /* CRITICAL FIX: Top of stack */
+            box-shadow: 0 10px 50px rgba(0,0,0,0.9);
+        }
+        .nav-btn {
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            
-            padding: 0.5rem 1rem;
-            background: rgba(18, 18, 22, 0.95);
-            border: 1px solid var(--border-subtle);
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            
-            width: max-content; /* Fit content width */
-            max-width: 90vw;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        
-        .nav-container button {
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-family: monospace; /* For symbols */
-            font-weight: 700;
-            font-size: 1.5rem;
-            line-height: 1;
             cursor: pointer;
-            padding: 0.5rem 0.75rem;
-            transition: color 0.2s;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: background 0.2s;
+            /* Prevent icon from capturing click */
+            pointer-events: auto; 
         }
-        .nav-container button:hover:not(:disabled) { color: var(--accent-primary); }
-        .nav-container button:disabled { color: var(--border-subtle); cursor: default; }
-        
-        .page-counter {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            padding: 0 0.75rem;
-            border-left: 1px solid var(--border-subtle);
-            border-right: 1px solid var(--border-subtle);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        /* --- MOBILE RESPONSIVENESS --- */
-        @media (max-width: 1024px) {
-            .slide.bleed-image-layout { display: block; overflow-y: auto; padding: 0; }
-            .bleed-image-layout .image-container { height: 35vh; width: 100%; position: sticky; top: 0; z-index: 0; }
-            .bleed-image-layout .content-container { min-height: 65vh; padding: 2rem; background: var(--bg-app); position: relative; z-index: 1; }
-            .two-column-container { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 600px) {
-            .nav-container { bottom: 1rem; width: auto; max-width: 95%; padding: 0.5rem; }
-            
-            /* FIX: Mobile Spacing */
-            .slide { 
-                padding: 1.5rem; 
-                padding-top: 4rem; 
-                padding-bottom: 180px !important;
-                justify-content: flex-start;
-            }
-            .slide.gradient-bg .content-overlay { 
-                padding: 1.5rem; 
-                padding-bottom: 180px !important; 
-                justify-content: flex-start; 
-                padding-top: 15vh; 
-            }
-            .bleed-image-layout .content-container { padding-bottom: 160px !important; }
-            
-            #slide7 .two-column-container { gap: 1rem; margin-top: 1rem; }
-            #slide7 .column { padding: 1.25rem; }
-            
-            pre { font-size: 0.85rem; padding: 1rem; }
-            .column { padding: 1.5rem; }
-            .prompt-card, .instruction-card { padding: 1.25rem; margin-top: 1rem; }
+        /* CRITICAL FIX: Icon ignores clicks so button handles them */
+        .nav-btn svg { 
+            pointer-events: none; 
+            width: 28px; height: 28px; 
         }
         
-        .placeholder-box {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: var(--text-muted); width: 100%; height: 100%; background: #1a1a1a; text-align: center;
+        .nav-btn:hover:not(:disabled) { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .progress { font-family: var(--font-code); font-size: 1rem; color: #fff; min-width: 60px; text-align: center; }
+
+        /* --- MOBILE --- */
+        @media (max-width: 900px) {
+            .layout-split, .slide:nth-child(even) .layout-split {
+                grid-template-columns: 1fr;
+                direction: ltr; 
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 2rem;
+            }
+            
+            /* Fix Slide 4 Brain cropping: Show whole image */
+            .img-frame { object-fit: contain; background: transparent; border:none; }
+
+            .slide { padding: 6rem 1.5rem 12rem 1.5rem; } 
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2rem; }
+            .img-container { width: 100%; margin: 0; }
+            .comparison-grid, .platform-grid, .split-terminal { grid-template-columns: 1fr; }
+            
+            /* Slide 15 Fix: Allow scrolling inside terminal */
+            .term-pane { height: auto; min-height: 250px; }
+            .term-content { max-height: 40vh; overflow-y: auto; }
+            .term-right::before { top: -12px; left: 20px; width: 2px; height: 24px; }
+            
+            .nav-ui { width: 92%; justify-content: space-between; bottom: 1rem; padding: 0.5rem 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="presentation-container">
+    <div id="a11y-announcer" aria-live="polite" class="sr-only" style="position:absolute; left:-9999px;"></div>
 
-        <!-- Slide 1: Title -->
-        <div class="slide active" id="slide1">
-            <h1 style="background: linear-gradient(to right, #fff, #999); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">How to Get What You Want From Your AI</h1>
-            <p class="subtitle">A non-technical guide to stopping loops and getting better answers.</p>
-        </div>
+    <main id="deck">
 
-        <!-- Slide 2: The Symptom -->
-        <div class="slide bleed-image-layout" id="slide2">
-             <div class="image-container">
-                <img src="assets/slide2_tangled_logic.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide2_tangled_logic.png</div>')">
+        <!-- Slide 1 -->
+        <section class="slide layout-center active" aria-label="Slide 1">
+            <h3 aria-hidden="true">Strategy Guide</h3>
+            <h1 tabindex="-1">How to Get What You Want From Your AI</h1>
+            <p>A Pilot's Guide to Large Language Models.</p>
+            <div style="margin-top: 3rem;">
+                <span style="font-family:var(--font-code); font-size:0.9rem; color:var(--text-dim); border:1px solid var(--border-panel); padding: 10px 20px; border-radius:20px;">v5.0 // Interaction Fix</span>
             </div>
-            <div class="content-container">
-                <h3>The Problem</h3>
-                <h2>Getting Stuck</h2>
-                <p>Have you ever felt like the AI is ignoring your latest instructions and keeps repeating mistakes? It feels like it's looping.</p>
-                <p>This isn't a "bug" or stubbornness—it's a <strong>memory issue</strong>.</p>
-            </div>
-        </div>
+        </section>
 
-        <!-- Slide 3: The Cause -->
-        <div class="slide bleed-image-layout" id="slide3">
-             <div class="image-container">
-                <img src="assets/slide3_context_bucket.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide3_context_bucket.png</div>')">
+        <!-- Slide 2 -->
+        <section class="slide" aria-label="Slide 2">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>The Problem</h3>
+                    <h2 tabindex="-1">Why does it keep repeating mistakes?</h2>
+                    <p>You give clear instructions. The AI ignores them. You repeat yourself. It apologizes, then does the exact same thing again.</p>
+                    <p>It feels like stubbornness. It's actually a <strong>memory failure</strong>.</p>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide2_tangled_logic.png" class="img-frame" alt="Abstract tangled wires">
+                </div>
             </div>
-            <div class="content-container">
-                <h3>The Cause</h3>
-                <h2>Short-Term Memory</h2>
-                <p>The AI has a limited "Context Window." Think of it like a small bucket for our conversation.</p>
-                <p>When the bucket is full, the oldest parts of our chat spill out and are forgotten forever.</p>
-            </div>
-        </div>
+        </section>
 
-        <!-- Slide 4: Mechanics -->
-        <div class="slide bleed-image-layout" id="slide4">
-             <div class="content-container">
-                <h3>Mechanics</h3>
-                <h2>How Memory Works</h2>
-                <p>Imagine a box. New messages enter from the left, pushing old messages off the right edge.</p>
-                <p>If your original instructions fall off the edge, the AI literally doesn't know they exist anymore.</p>
+        <!-- Slide 3 -->
+        <section class="slide" aria-label="Slide 3">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>The Mechanism</h3>
+                    <h2 tabindex="-1">The Context Bucket</h2>
+                    <p>Every AI has a "Context Window." Think of it as a bucket.</p>
+                    <!-- FIX: Text matches Ice Cube visual -->
+                    <p>Every word you type goes into the bucket. When the bucket is full, the oldest <strong>data blocks spill out</strong> to make room for the new.</p>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide3_context_bucket.png" class="img-frame" alt="Overflowing data bucket">
+                </div>
             </div>
-            <div class="image-container">
-                <img src="assets/slide4_FIFO_Gradual_Degradation.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide4_FIFO_Gradual_Degradation.png</div>')">
-            </div>
-        </div>
+        </section>
 
-        <!-- Slide 5: Section 1 -->
-        <div class="slide" id="slide5">
-            <h1>Part 1: Quick Fixes</h1>
-            <p>Simple tricks to get back on track.</p>
-        </div>
-
-        <!-- Slide 6: Tool 1 -->
-        <div class="slide bleed-image-layout" id="slide6">
-            <div class="content-container">
-                <h3>Tool #1</h3>
-                <h2>The "Fresh Start"</h2>
-                <p>Sometimes you need to clear the desk. Tell the AI to ignore the mess and focus on right now.</p>
-                <div class="prompt-card">"New task:"
-"Ignore previous instructions."
-"Focus ONLY on this:"</div>
+        <!-- Slide 4 -->
+        <section class="slide layout-center" aria-label="Slide 4">
+            <h3>New Concept</h3>
+            <h2 tabindex="-1">It's a Prediction Engine</h2>
+            <p>Unlike a database, AI doesn't "know" facts. It guesses the next likely word.</p>
+            <!-- FIX: Mobile styling ensures full brain is visible -->
+            <div class="img-container" style="max-width: 900px; margin: 2rem auto; width: 100%;">
+                <img src="assets/slide3b_prediction_tree.png" class="img-frame" alt="Prediction tree diagram">
             </div>
-             <div class="image-container">
-                <img src="assets/slide6_hard_reset.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide6_hard_reset.png</div>')">
+            <div class="prompt-box" style="text-align: left; display: inline-block; max-width: 900px;">
+                <strong>System:</strong> Generating output based on highest probability tokens...
             </div>
-        </div>
+        </section>
 
-        <!-- Slide 7: Tool 2 (SQUASHED) -->
-        <div class="slide" id="slide7">
-            <div class="content-wrapper">
-                <h3>Tool #2</h3>
-                <h2>Use Checklists</h2>
-                <p class="intro-text">Paragraphs are easy to misread. Numbered lists are clearer.</p>
-                <div class="two-column-container">
-                    <div class="column bad">
-                        <h3>Hard to Follow</h3>
-                        <p>"...I also see you're using asterisks again, and you forgot the inventory..."</p>
+        <!-- Slide 5 -->
+        <section class="slide" aria-label="Slide 5">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>The Consequence</h3>
+                    <h2 tabindex="-1">Forgotten Instructions</h2>
+                    <p>If your "Rules" were at the start of a long chat, they might have fallen out of the bucket. The AI literally doesn't know those rules exist anymore.</p>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide4_FIFO_Gradual_Degradation.png" class="img-frame" alt="Data degradation diagram">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6 -->
+        <section class="slide layout-center" aria-label="Slide 6">
+            <div class="section-number">01</div>
+            <h2 tabindex="-1" style="font-size: 4rem;">Quick Fixes</h2>
+            <p>How to clear the noise and get back on track.</p>
+        </section>
+
+        <!-- Slide 7 -->
+        <section class="slide" aria-label="Slide 7">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Tool #1</h3>
+                    <h2 tabindex="-1">The "Fresh Start"</h2>
+                    <p>If the AI is looping or confused, don't argue. Arguing fills the bucket with bad data.</p>
+                    <div class="prompt-box">
+                        "Ignore previous instructions."<br>
+                        "Start a new task:"<br>
+                        "Focus ONLY on the following:"
                     </div>
-                    <div class="column good">
-                        <h3>Easy to Follow</h3>
-                        <p><strong>Please fix these 2 things:</strong></p>
-                        <ol>
-                            <li>Stop using asterisks.</li>
-                            <li>Add the 'Inventory' slide.</li>
-                        </ol>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide6_hard_reset.png" class="img-frame" alt="Hard Reset Button">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8 -->
+        <section class="slide layout-center" aria-label="Slide 8">
+            <h3>Tool #2</h3>
+            <h2 tabindex="-1">Use Structured Checklists</h2>
+            <div class="comparison-grid">
+                <div class="comp-card bad">
+                    <strong style="color:var(--accent-danger); display:block; margin-bottom:1rem; font-size:1.2rem;">The Paragraph (Bad)</strong>
+                    <p>"I also noticed you used asterisks again, which I said not to do, and you forgot the inventory slide, can you fix that?"</p>
+                </div>
+                <div class="comp-card good">
+                    <strong style="color:var(--accent-success); display:block; margin-bottom:1.5rem; font-size:1.2rem;">The Checklist (Good)</strong>
+                    <ul class="checklist">
+                        <li style="background: transparent; padding: 0; border:none;">
+                            <span class="checkmark">✓</span> Remove all asterisks.
+                        </li>
+                        <li style="background: transparent; padding: 0; border:none;">
+                            <span class="checkmark">✓</span> Add the 'Inventory' slide.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9 -->
+        <section class="slide" aria-label="Slide 9">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Tool #3</h3>
+                    <h2 tabindex="-1">One Task at a Time</h2>
+                    <p>Don't ask for a summary, a code rewrite, and a joke in one prompt. Split complex requests.</p>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide8_atomic_focus.png" class="img-frame" alt="Atomic Focus Cube">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10 -->
+        <section class="slide layout-center" aria-label="Slide 10">
+            <div class="section-number">02</div>
+            <h2 tabindex="-1" style="font-size: 4rem;">Setting the Stage</h2>
+            <p>Defining the AI's persona.</p>
+        </section>
+
+        <!-- Slide 11 -->
+        <section class="slide" aria-label="Slide 11">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Concept</h3>
+                    <h2 tabindex="-1">The "Job Description"</h2>
+                    <p>Don't just start chatting. Give the AI a title. This primes its prediction engine to use vocabulary from that profession.</p>
+                    <div class="prompt-box">
+                        "You are an expert Senior Python Architect."
                     </div>
                 </div>
-                <div class="explanation-box">
-                    <strong>Why this works</strong>
-                    <p>Structured formats reduce the chance of misinterpretation.</p>
+                <div class="img-container">
+                    <img src="assets/slide10_control_panel.png" class="img-frame" alt="Control Panel">
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Slide 8: Tool 3 -->
-        <div class="slide bleed-image-layout" id="slide8">
-            <div class="content-container">
-                <h3>Tool #3</h3>
-                <h2>One Task at a Time</h2>
-                <p>Don't ask for a summary, a code rewrite, and a joke all at once.</p>
-                <div class="explanation-box">
-                    <strong>Why this works</strong>
-                    <p>Just like humans, AI does better quality work when it focuses on one single job at a time.</p>
+        <!-- Slide 12 -->
+        <section class="slide layout-center" aria-label="Slide 12">
+            <h2 tabindex="-1">Knowledge vs. Attitude</h2>
+            <div class="comparison-grid">
+                <div class="comp-card">
+                    <h3>The Role</h3>
+                    <p><em>What it knows.</em></p>
+                    <div class="prompt-box" style="margin-top:1.5rem">"Senior Editor"</div>
+                </div>
+                <div class="comp-card">
+                    <h3>The Personality</h3>
+                    <p><em>How it speaks.</em></p>
+                    <div class="prompt-box" style="margin-top:1.5rem">"Be brutal and concise."</div>
                 </div>
             </div>
-             <div class="image-container">
-                <img src="assets/slide8_atomic_focus.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide8_atomic_focus.png</div>')">
-            </div>
-        </div>
+        </section>
 
-        <!-- Slide 9: Section 2 -->
-        <div class="slide" id="slide9">
-            <h1>Part 2: Setting the Stage</h1>
+        <!-- Slide 13: Prompt Fix -->
+        <section class="slide layout-center" aria-label="Slide 13">
+            <h3>Efficiency Hack</h3>
+            <h2 tabindex="-1">Kill the Politeness</h2>
+            <p>AI apologies waste tokens and fill up your context bucket with fluff.</p>
+            <!-- FIX: Label changed to "Your Prompt" -->
+            <div class="prompt-box" style="max-width: 700px; margin: 3rem auto;">
+                <strong>Your Prompt:</strong> "Do not apologize. Do not explain what you did wrong. Just output the corrected text."
+            </div>
+        </section>
+
+        <!-- Slide 14 -->
+        <section class="slide" aria-label="Slide 14">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Strategy</h3>
+                    <h2 tabindex="-1">The Perfect Colleague</h2>
+                    <p>You want the <strong>Role</strong> of an expert, with the <strong>Attitude</strong> of a subordinate.</p>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide13_duality_masks.png" class="img-frame" alt="Duality Masks">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 15: Terminal Fix (Scrolling) -->
+        <section class="slide layout-center" aria-label="Slide 15">
+            <h3>Power User Strategy</h3>
+            <h2 tabindex="-1">The Protocol Workflow</h2>
+            <p>Define your "Wardrobe" of personas once in your System Settings. Then invoke them instantly in any chat.</p>
+            
+            <div class="split-terminal">
+                <!-- Left: Definition -->
+                <div class="term-pane term-left">
+                    <div class="term-header">
+                        <div class="status-dot"></div>
+                        System Settings (Config)
+                    </div>
+                    <div class="term-content" style="text-align: left;">
+                        <span class="code-comment">// Define modes once.</span><br><br>
+                        <span class="code-tag">[PROTOCOL: DESIGNER]</span><br>
+                        Focus on aesthetics, alignment.<br><br>
+                        <span class="code-tag">[PROTOCOL: CODER]</span><br>
+                        Senior Dev. Clean code.<br><br>
+                    </div>
+                </div>
+                
+                <!-- Right: Execution -->
+                <div class="term-pane term-right">
+                    <div class="term-header">
+                        <div class="status-dot active"></div>
+                        Active Chat (Invocation)
+                    </div>
+                    <div class="term-content" style="text-align: left;">
+                        <div class="user-msg">
+                            User > <span class="code-highlight">[PROTOCOL: CODER]</span> Fix this nav.
+                        </div>
+                        <div class="ai-msg">
+                            (Activating Coder Persona...)<br>
+                            Scanning CSS grid...<br>
+                            Found overlay issue.<br>
+                            Applying z-index fix...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 16: Management -->
+        <section class="slide layout-center" aria-label="Slide 16">
+            <h3>System Configuration</h3>
+            <h2 tabindex="-1">Where to Manage Protocols</h2>
+            <div class="platform-grid">
+                <!-- ChatGPT -->
+                <div class="platform-card" style="border-top: 4px solid var(--brand-openai);">
+                    <div class="platform-title">ChatGPT</div>
+                    <p style="font-size:0.9rem; margin-bottom:1rem;">Custom Instructions</p>
+                    <span class="platform-path">Profile Icon &rarr; Customize ChatGPT</span>
+                    <p style="font-size:0.85rem; color:var(--text-dim); margin-top:1rem;">Paste your protocols in the bottom box. Applies to ALL new chats.</p>
+                </div>
+
+                <!-- Claude -->
+                <div class="platform-card" style="border-top: 4px solid var(--brand-anthropic);">
+                    <div class="platform-title">Claude</div>
+                    <p style="font-size:0.9rem; margin-bottom:1rem;">Project Settings</p>
+                    <span class="platform-path">Create Project &rarr; Custom Instructions</span>
+                    <p style="font-size:0.85rem; color:var(--text-dim); margin-top:1rem;">Best for separating work modes. Protocols apply only to chats <em>inside</em> that Project.</p>
+                </div>
+
+                <!-- Gemini -->
+                <div class="platform-card" style="border-top: 4px solid var(--brand-google);">
+                    <div class="platform-title">Gemini</div>
+                    <p style="font-size:0.9rem; margin-bottom:1rem;">Gem Manager</p>
+                    <span class="platform-path">Gem Manager &rarr; New Gem</span>
+                    <p style="font-size:0.85rem; color:var(--text-dim); margin-top:1rem;">Create a standalone "Gem" for each major Protocol.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 17 -->
+        <section class="slide layout-center" aria-label="Slide 17">
+            <div class="section-number">03</div>
+            <h2 tabindex="-1" style="font-size: 4rem;">Pro Tips</h2>
+            <p>Advanced steering techniques.</p>
+        </section>
+
+        <!-- Slide 18 -->
+        <section class="slide" aria-label="Slide 18">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Tip #1</h3>
+                    <h2 tabindex="-1">Give Examples (Few-Shot)</h2>
+                    <p>Don't just describe the format. Show it. This is called "Few-Shot Prompting."</p>
+                    <div class="prompt-box">
+                        Input: "Apple" -> Output: "Fruit: Red"<br>
+                        Input: "Spinach" -> Output: "Vegetable: Green"
+                    </div>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide15_pattern_stamp.png" class="img-frame" alt="Pattern Stamp">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 19 -->
+        <section class="slide" aria-label="Slide 19">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Tip #2</h3>
+                    <h2 tabindex="-1">"Show Your Work"</h2>
+                    <p>If you ask for a complex answer immediately, the AI guesses. If you ask it to "think step-by-step," it reasons.</p>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide16_sequential_steps.png" class="img-frame" alt="Sequential Steps">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 20 -->
+        <section class="slide" aria-label="Slide 20">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Tip #3</h3>
+                    <h2 tabindex="-1">Provide Source Material</h2>
+                    <p>Connect the AI brain to a <strong>Library</strong> (RAG), so it reads facts instead of guessing them.</p>
+                    <div class="prompt-box">
+                        "Answer using ONLY the text provided below."
+                    </div>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide17_rag_library.png" class="img-frame" alt="RAG Library">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 21 -->
+        <section class="slide" aria-label="Slide 21">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Tip #4</h3>
+                    <h2 tabindex="-1">Preventing "Drift"</h2>
+                    <p>As the conversation gets long, the original instructions are far away. Remind the AI of its role every 5-10 messages.</p>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide18_state_drift.png" class="img-frame" alt="State Drift">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 22 -->
+        <section class="slide" aria-label="Slide 22">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Tip #5</h3>
+                    <h2 tabindex="-1">The Pattern Break</h2>
+                    <p>If the AI starts hallucinating, STOP immediately. Use a "Stop Protocol" to force it to re-verify facts.</p>
+                    <div class="prompt-box" style="border-left-color: var(--accent-danger);">
+                        <strong>Rule:</strong> "STOP. You are hallucinating facts not in evidence."
+                    </div>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide19_verification_scanner.png" class="img-frame" alt="Scanner">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 23 -->
+        <section class="slide" aria-label="Slide 23">
+            <div class="layout-split">
+                <div class="split-content">
+                    <h3>Conclusion</h3>
+                    <h2 tabindex="-1">You are the Pilot</h2>
+                    <p>The AI is a powerful engine, but it has no steering wheel. You are the steering wheel.</p>
+                </div>
+                <div class="img-container">
+                    <img src="assets/slide18_conclusion_cockpit.png" class="img-frame" alt="Cockpit">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 24 -->
+        <section class="slide layout-center" aria-label="Slide 24">
+            <h2 tabindex="-1" style="margin-bottom: 3rem;">Pre-Flight Checklist</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; width: 100%; max-width: 1200px;">
+                <div class="img-container">
+                    <img src="assets/slide21_preflight_checklist.png" class="img-frame" alt="Checklist Hologram">
+                </div>
+                
+                <div>
+                    <ul class="checklist">
+                        <li>
+                            <span class="checkmark" aria-hidden="true">✓</span>
+                            <span><strong>Define Role:</strong> "You are an Expert..."</span>
+                        </li>
+                        <li>
+                            <span class="checkmark" aria-hidden="true">✓</span>
+                            <span><strong>Define Task:</strong> "Your goal is to..."</span>
+                        </li>
+                        <li>
+                            <span class="checkmark" aria-hidden="true">✓</span>
+                            <span><strong>Constraints:</strong> "No emojis. Be brief."</span>
+                        </li>
+                    </ul>
+                    <h3 style="margin-top: 2rem; color: var(--text-primary); justify-content: flex-start;">Safe Flying.</h3>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- NAV -->
+    <nav class="nav-ui" role="navigation" aria-label="Slide Controls">
+        <button class="nav-btn" id="prevBtn" aria-label="Previous">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        
+        <div class="progress" aria-live="polite">
+            <span id="currSlide">1</span> / <span id="totalSlide">24</span>
         </div>
         
-        <!-- Slide 10: Master Prompt -->
-        <div class="slide bleed-image-layout" id="slide10">
-            <div class="content-container">
-                <h3>Concept</h3>
-                <h2>The "Job Description"</h2>
-                <p>Don't just start chatting. Give the AI a job title (Master Prompt).</p>
-            </div>
-             <div class="image-container">
-                <img src="assets/slide10_control_panel.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide10_control_panel.png</div>')">
-            </div>
-        </div>
-
-        <!-- Slide 11: Role vs Personality -->
-        <div class="slide" id="slide11">
-            <h2>Knowledge vs. Attitude</h2>
-            <div class="two-column-container">
-                <div class="column">
-                    <h3>Role (Knowledge)</h3>
-                    <p>What the AI knows.</p>
-                    <blockquote>"You are an expert Senior Editor."</blockquote>
-                    <blockquote>"You are a Python Architect."</blockquote>
-                </div>
-                <div class="column">
-                    <h3>Personality (Attitude)</h3>
-                    <p>How the AI speaks.</p>
-                    <blockquote>"Be brief. No fluff."</blockquote>
-                    <blockquote>"Explain it like I'm 5 years old."</blockquote>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Slide 12: Example -->
-        <div class="slide" id="slide12">
-            <h2>Example: Stop the Apologies</h2>
-            <div class="two-column-container">
-                <div class="column bad">
-                    <h3>Default (Annoying)</h3>
-                    <p>"I am so, so sorry. I apologize for the confusion. I will try to do better next time..."</p>
-                </div>
-                <div class="column good">
-                    <h3>With Instructions</h3>
-                    <blockquote>[Rule: Do not apologize. Just fix the error.]</blockquote>
-                    <p style="margin-top: 1rem;">"Understood. Here is the corrected code."</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 13: Combining -->
-        <div class="slide bleed-image-layout" id="slide13">
-             <div class="content-container">
-                <h3>Strategy</h3>
-                <h2>The Perfect Colleague</h2>
-                <p>Combine smarts and efficiency.</p>
-            </div>
-             <div class="image-container">
-                <img src="assets/slide13_duality_masks.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide13_duality_masks.png</div>')">
-            </div>
-        </div>
-
-        <!-- Slide 14: Section 3 -->
-        <div class="slide" id="slide14">
-            <h1>Part 3: Pro Tips</h1>
-        </div>
-
-        <!-- Slide 15: Tip 1 -->
-        <div class="slide bleed-image-layout" id="slide15">
-            <div class="content-container">
-                <h3>Tip #1</h3>
-                <h2>Give Examples</h2>
-                <div class="prompt-card">Example 1: Input: "Apple" -> Output: "Fruit"
-Input: "Spinach" -> Output: ...</div>
-            </div>
-             <div class="image-container">
-                <img src="assets/slide15_pattern_stamp.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide15_pattern_stamp.png</div>')">
-            </div>
-        </div>
-
-        <!-- Slide 16: Tip 2 -->
-        <div class="slide bleed-image-layout" id="slide16">
-            <div class="content-container">
-                <h3>Tip #2</h3>
-                <h2>"Show Your Work"</h2>
-                <p>Ask it to think step-by-step first.</p>
-            </div>
-             <div class="image-container">
-                <img src="assets/slide16_sequential_steps.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide16_sequential_steps.png</div>')">
-            </div>
-        </div>
-
-        <!-- Slide 17: Tip 3 -->
-        <div class="slide bleed-image-layout" id="slide17">
-            <div class="content-container">
-                <h3>Tip #3</h3>
-                <h2>Stick to the Facts</h2>
-                <p>Prevent hallucinations by providing source material.</p>
-            </div>
-             <div class="image-container">
-                <img src="assets/slide17_ground_truth_anchor.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide17_ground_truth_anchor.png</div>')">
-            </div>
-        </div>
-
-        <!-- Slide 18: Tip 4 -->
-        <div class="slide bleed-image-layout" id="slide18">
-            <div class="content-container">
-                <h3>Tip #4</h3>
-                <h2>Preventing "Drift"</h2>
-                <p>Re-anchor to the source of truth often.</p>
-            </div>
-             <div class="image-container">
-                <img src="assets/slide18_state_drift.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide18_state_drift.png</div>')">
-            </div>
-        </div>
-
-        <!-- Slide 19: Pattern Break -->
-        <div class="slide bleed-image-layout" id="slide19">
-            <div class="content-container">
-                <h3>Tip #5</h3>
-                <h2>The Pattern Break</h2>
-                <p>Stop it immediately when it hallucinates.</p>
-                <div class="prompt-card">"STOP. Review my previous message."</div>
-            </div>
-             <div class="image-container">
-                <img src="assets/slide19_pattern_break.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide19_pattern_break.png</div>')">
-            </div>
-        </div>
-
-        <!-- Slide 20: Conclusion -->
-        <div class="slide bleed-image-layout" id="slide20">
-             <div class="image-container">
-                <img src="assets/slide18_conclusion_cockpit.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide18_conclusion_cockpit.png</div>')">
-            </div>
-            <div class="content-container">
-                <h1>You Are the Pilot</h1>
-                <p>1. Memory Limit<br>2. Checklists<br>3. Roles</p>
-            </div>
-        </div>
-
-         <!-- Slide 21: Q&A -->
-         <div class="slide" id="slide21">
-            <h1>Questions?</h1>
-        </div>
-
-    </div>
-
-    <!-- NAVIGATION (FIXED) -->
-    <div class="nav-container">
-        <button id="prev" disabled>&lt;</button>
-        <div class="page-counter">
-            <span id="current-page">1</span> / <span id="total-pages">21</span>
-        </div>
-        <button id="next">&gt;</button>
-    </div>
+        <button class="nav-btn" id="nextBtn" aria-label="Next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </nav>
 
     <script>
-        const slides = document.querySelectorAll('.slide');
-        const prevBtn = document.getElementById('prev');
-        const nextBtn = document.getElementById('next');
-        const currentPageElem = document.getElementById('current-page');
-        const totalPagesElem = document.getElementById('total-pages');
-
-        let currentSlide = 0;
-        const totalSlides = slides.length; 
-
-        if(totalPagesElem) totalPagesElem.textContent = totalSlides;
-
-        function updateButtons() {
-            nextBtn.disabled = (currentSlide === totalSlides - 1);
-            prevBtn.disabled = (currentSlide === 0);
-        }
-
-        function showSlide(index) {
-            if (index < 0 || index >= totalSlides || index === currentSlide) return;
-
-            const direction = index > currentSlide ? 'next' : 'prev';
-            const oldSlide = slides[currentSlide];
-            const newSlide = slides[index];
-
-            // Clean logic: Percentage based movement
-            newSlide.style.transition = 'none';
-            newSlide.style.transform = direction === 'next' ? 'translateX(100%)' : 'translateX(-100%)';
-            newSlide.style.opacity = '0';
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const currDisplay = document.getElementById('currSlide');
+            const totalDisplay = document.getElementById('totalSlide');
             
-            void newSlide.offsetWidth; 
+            let currentIndex = 0;
+            const total = slides.length;
             
-            newSlide.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
-            oldSlide.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+            totalDisplay.textContent = total;
 
-            oldSlide.classList.remove('active');
-            oldSlide.style.transform = direction === 'next' ? 'translateX(-100%)' : 'translateX(100%)';
-            oldSlide.style.opacity = '0';
+            function update(triggerSource) {
+                slides.forEach(s => {
+                    s.classList.remove('active');
+                    s.style.display = 'none';
+                });
 
-            newSlide.classList.add('active');
-            newSlide.style.transform = 'translateX(0)';
-            newSlide.style.opacity = '1';
+                const activeSlide = slides[currentIndex];
+                activeSlide.style.display = 'flex'; 
+                
+                requestAnimationFrame(() => {
+                    activeSlide.classList.add('active');
+                });
 
-            currentSlide = index;
-            if(currentPageElem) currentPageElem.textContent = currentSlide + 1;
-            updateButtons();
-        }
+                if(triggerSource === 'navigation') {
+                    const header = activeSlide.querySelector('h1, h2');
+                    if(header) header.focus({preventScroll: true});
+                }
 
-        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
-        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+                currDisplay.textContent = currentIndex + 1;
+                prevBtn.disabled = (currentIndex === 0);
+                nextBtn.disabled = (currentIndex === total - 1);
+            }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
-            if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
+            nextBtn.addEventListener('click', () => {
+                if(currentIndex < total - 1) {
+                    currentIndex++;
+                    update('navigation');
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if(currentIndex > 0) {
+                    currentIndex--;
+                    update('navigation');
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'ArrowRight') {
+                    if(currentIndex < total - 1) {
+                        currentIndex++;
+                        update('navigation');
+                    }
+                }
+                if(e.key === 'ArrowLeft') {
+                    if(currentIndex > 0) {
+                        currentIndex--;
+                        update('navigation');
+                    }
+                }
+            });
+
+            let touchStart = 0;
+            document.addEventListener('touchstart', e => touchStart = e.changedTouches[0].screenX);
+            document.addEventListener('touchend', e => {
+                const touchEnd = e.changedTouches[0].screenX;
+                if(touchStart - touchEnd > 50) {
+                    if(currentIndex < total - 1) {
+                        currentIndex++;
+                        update('navigation');
+                    }
+                }
+                if(touchEnd - touchStart > 50) {
+                    if(currentIndex > 0) {
+                        currentIndex--;
+                        update('navigation');
+                    }
+                }
+            });
+
+            update('init');
         });
-
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, {passive: true});
-
-        document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            if (touchEndX < touchStartX - 50) showSlide(currentSlide + 1);
-            if (touchEndX > touchStartX + 50) showSlide(currentSlide - 1);
-        }, {passive: true});
-
-        // Init
-        slides[0].classList.add('active');
-        updateButtons();
     </script>
-
 </body>
 </html>
