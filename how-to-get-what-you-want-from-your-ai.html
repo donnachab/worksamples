@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>How to Get What You Want From Your AI (Final)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* --- Palette: Deep Cyberpunk / Productivity --- */
+            /* --- Palette --- */
             --bg-app: #050507;
             --bg-surface: #121216;
             --bg-surface-highlight: #1c1c22;
@@ -16,11 +16,11 @@
             --border-subtle: #27272a;
             --border-focus: #3f3f46;
 
-            --text-main: #f4f4f5;       /* Zinc 100 - High Contrast */
-            --text-muted: #a1a1aa;      /* Zinc 400 - Readable but subtle */
-            --text-dim: #52525b;        /* Zinc 600 - For unimportant details */
+            --text-main: #f4f4f5;       
+            --text-muted: #a1a1aa;      
+            --text-dim: #52525b;        
 
-            --accent-primary: #3b82f6;  /* Blue 500 */
+            --accent-primary: #3b82f6;  
             --accent-glow: rgba(59, 130, 246, 0.3);
             
             --success: #10b981;
@@ -28,7 +28,6 @@
             --warning: #f59e0b;
 
             /* --- Spacing --- */
-            --space-xs: 0.5rem;
             --space-sm: 1rem;
             --space-md: 2rem;
             --space-lg: 4rem;
@@ -46,15 +45,16 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- CONTAINER & SLIDE CORE --- */
+        /* --- CONTAINER --- */
         #presentation-container {
             position: relative;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: radial-gradient(circle at top right, #1e1e2e 0%, var(--bg-app) 60%);
+            background: radial-gradient(circle at 80% 20%, #1a1a24 0%, var(--bg-app) 70%);
         }
 
+        /* --- SLIDE CORE --- */
         .slide {
             position: absolute;
             inset: 0;
@@ -63,135 +63,211 @@
             justify-content: center;
             align-items: center;
             
-            padding: var(--space-md);
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: scale(0.98) translateY(10px);
-            transition: opacity 0.4s cubic-bezier(0.2, 0, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
-            z-index: 1;
+            padding: var(--space-lg);
+            padding-bottom: 120px; /* Critical Nav Clearance */
+            gap: var(--space-md); 
             
-            /* Scroll handling for mobile text overflow */
+            /* Logic: Off-screen Right */
+            transform: translateX(100%);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+            z-index: 0;
+            
+            visibility: hidden; 
+            pointer-events: none;
+            
             overflow-y: auto; 
             overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         .slide.active {
+            transform: translateX(0);
             opacity: 1;
+            z-index: 10;
             visibility: visible;
             pointer-events: auto;
-            transform: scale(1) translateY(0);
-            z-index: 10;
         }
 
-        /* --- TYPOGRAPHY SYSTEM --- */
-        h1, h2, h3 {
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-
+        /* --- TYPOGRAPHY --- */
         h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-size: clamp(3rem, 6vw, 5rem);
             font-weight: 700;
             background: linear-gradient(to bottom right, #fff 30%, #94a3b8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: var(--space-sm);
+            max-width: 90%;
+            text-align: center;
+            line-height: 1.1;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         h2 {
-            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-size: clamp(2rem, 4vw, 3.5rem);
             color: var(--text-main);
-            margin-bottom: var(--space-md);
+            margin-bottom: var(--space-xs);
+            max-width: 100%;
+            text-align: center;
+            line-height: 1.2;
         }
 
         h3 {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: var(--accent-primary);
             font-weight: 600;
-            margin-bottom: var(--space-xs);
+            margin-bottom: 0.25rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            text-align: center;
         }
 
         p, li {
-            font-size: clamp(1rem, 1.5vw, 1.25rem);
-            line-height: 1.7;
+            font-size: clamp(1rem, 1.1vw, 1.25rem);
+            line-height: 1.6;
             color: var(--text-muted);
-            max-width: 65ch; /* Optimal reading length */
-            margin-bottom: var(--space-sm);
+            margin-bottom: 1rem;
+            max-width: 65ch; 
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .subtitle {
-            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
             color: var(--accent-primary);
             font-weight: 300;
+            text-align: center;
         }
 
         /* --- COMPONENTS --- */
 
-        /* Code Blocks - Modern Terminal Style */
-        pre {
-            background: var(--bg-surface);
+        .prompt-card {
+            background: rgba(18, 18, 22, 0.6);
             border: 1px solid var(--border-subtle);
+            border-left: 4px solid var(--success); 
             border-radius: 8px;
-            padding: 1.5rem;
+            padding: 1.25rem; 
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.95rem;
-            color: var(--success);
+            line-height: 1.5;
+            color: var(--text-main);
             width: 100%;
-            max-width: 800px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            position: relative;
-            overflow-x: auto;
-        }
-        /* Terminal header dot decoration */
-        pre::before {
-            content: "•••";
-            position: absolute;
-            top: 0.5rem;
-            left: 1rem;
-            color: var(--border-focus);
-            font-size: 1.5rem;
-            line-height: 0.5;
-            letter-spacing: -2px;
+            margin-top: 1rem;
+            white-space: pre-wrap;      
+            word-wrap: break-word;      
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* Explanation Box - "Why this works" */
-        .explanation-box {
-            background: rgba(59, 130, 246, 0.08);
+        .instruction-card {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
             border-left: 4px solid var(--accent-primary);
-            padding: 1.5rem;
-            border-radius: 0 8px 8px 0;
-            margin-top: var(--space-md);
+            border-radius: 6px;
+            padding: 1.25rem; 
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #fff;
+            margin-top: 1.5rem;
+            width: 100%;
+            max-width: 65ch;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
         }
-        .explanation-box strong { color: var(--accent-primary); display: block; margin-bottom: 0.5rem; }
-        .explanation-box p { margin: 0; font-size: 1rem; color: var(--text-main); }
+        .instruction-card::before {
+            content: "PROMPT INSTRUCTION";
+            display: block;
+            font-size: 0.7rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+
+        .explanation-box {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-subtle);
+            width: 100%;
+        }
+        .explanation-box strong { 
+            color: var(--accent-primary); 
+            display: block; 
+            margin-bottom: 0.25rem; 
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .explanation-box p { 
+            font-size: 1rem; 
+            color: var(--text-dim); 
+            font-style: italic;
+            margin: 0;
+        }
+
+        /* Nav Spacer */
+        .nav-spacer {
+            width: 100%;
+            height: 120px;
+            flex-shrink: 0;
+        }
 
         /* --- LAYOUTS --- */
 
-        /* 1. Layout: Title & Section (Centered, Gradient) */
+        /* 1. Gradient Background */
+        .slide.gradient-bg { padding: 0; }
         .slide.gradient-bg .content-overlay {
+            width: 100%;
+            max-width: 1200px;
+            padding: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
             text-align: center;
-            max-width: 900px;
         }
 
-        /* 2. Layout: Split / Bleed (Image + Text) */
+        #slide1 { background: radial-gradient(circle at center, #1e1e2e 0%, #0a0a10 80%); }
+        #slide5 { background: linear-gradient(135deg, #0f172a 0%, #0a0a10 100%); }
+        #slide9 { background: linear-gradient(135deg, #1e1b4b 0%, #0a0a10 100%); }
+        #slide14 { background: linear-gradient(135deg, #312e81 0%, #0a0a10 100%); }
+        #slide19 { background: radial-gradient(circle at bottom, #1e1e2e 0%, #0a0a10 70%); }
+
+        /* 2. Bleed Image Layout */
         .slide.bleed-image-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--space-lg);
-            padding: 0; /* Full bleed */
-            align-items: center;
+            gap: 0;
+            padding: 0;
+            align-items: stretch;
         }
 
         .bleed-image-layout .content-container {
-            padding: var(--space-lg);
+            padding: 4rem 6%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
             text-align: left;
+            order: 1;
+            gap: 1rem;
+            padding-bottom: 10rem;
+        }
+        
+        /* Alignment overrides */
+        .bleed-image-layout .content-container h2, 
+        .bleed-image-layout .content-container h3, 
+        .bleed-image-layout .content-container p,
+        .bleed-image-layout .content-container .explanation-box,
+        .bleed-image-layout .content-container .prompt-card,
+        .bleed-image-layout .content-container .instruction-card {
+            margin-left: 0;
+            margin-right: 0;
+            text-align: left;
+            max-width: 100%;
+            margin-bottom: 0;
         }
 
         .bleed-image-layout .image-container {
@@ -200,192 +276,204 @@
             background: var(--bg-surface);
             position: relative;
             overflow: hidden;
-            /* Add a subtle border/seam on the left */
             border-left: 1px solid var(--border-subtle);
+            order: 2;
         }
 
         .bleed-image-layout img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures image fills the side */
-            opacity: 0.9;
-            transition: opacity 0.5s ease;
+            object-fit: cover;
+            opacity: 0.95;
+            transition: transform 10s ease;
         }
-        .bleed-image-layout img:hover { opacity: 1; }
+        .slide.active .bleed-image-layout img { transform: scale(1.05); }
 
-        /* 3. Layout: Two Column Cards */
+        /* 3. Two Column Cards */
         .two-column-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--space-md);
+            gap: 2rem;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
+            margin-top: 2rem;
+        }
+
+        /* SQUASH FIX for Slide 7 */
+        #slide7 {
+            gap: 1rem;
+        }
+        
+        #slide7 .intro-text {
+            max-width: 90% !important;
+        }
+
+        #slide7 .two-column-container {
+            max-width: 800px; /* Tight squash */
+            margin-top: 1rem;
+            gap: 1.5rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #slide7 .column {
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        #slide7 h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+
+        #slide7 ol {
+            padding-left: 1.2rem;
+            margin: 0;
+        }
+        
+        #slide7 li {
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+            font-size: 1rem;
+            text-align: left; /* Enforce left alignment */
+        }
+        
+        #slide7 .explanation-box {
+            margin-top: 1.5rem;
+            max-width: 800px;
         }
 
         .column {
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
-            padding: 2rem;
+            padding: 2.5rem;
+            text-align: left;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            gap: 0.5rem;
         }
-        .column:hover {
-            border-color: var(--border-focus);
-            transform: translateY(-2px);
+        
+        /* FIX: Reset margins for ALL content inside columns to ensure left align */
+        .column h3, .column p, .column blockquote, .column li {
+            margin-left: 0;
+            margin-right: 0;
+            text-align: left;
+            max-width: 100%;
+            margin-bottom: 0;
         }
-
+        
         .column.bad { border-top: 4px solid var(--danger); }
         .column.good { border-top: 4px solid var(--success); }
-
+        
         .column blockquote {
-            margin-top: auto; /* Pushes example to bottom */
             background: var(--bg-surface-highlight);
             padding: 1rem;
-            border-radius: 6px;
-            border-left: 2px solid var(--text-dim);
+            border-radius: 4px;
+            border-left: 3px solid var(--text-dim);
+            margin-top: auto;
+            font-size: 1rem;
             color: var(--text-main);
-            font-style: italic;
-            width: 100%;
         }
 
-        /* --- NAVIGATION (Floating Glass) --- */
+        /* --- NAVIGATION (FIXED) --- */
         .nav-container {
             position: fixed;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 0.75rem 1.5rem;
+            z-index: 1000;
             
-            background: rgba(18, 18, 22, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            /* FLEX ROW ENFORCEMENT */
+            display: flex;
+            flex-direction: row; 
+            flex-wrap: nowrap; /* Prevent wrapping */
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            
+            padding: 0.5rem 1rem;
+            background: rgba(18, 18, 22, 0.95);
             border: 1px solid var(--border-subtle);
             border-radius: 50px;
-            z-index: 100;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            
+            width: max-content; /* Fit content width */
+            max-width: 90vw;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
-        .nav-buttons button {
+        
+        .nav-container button {
             background: transparent;
             border: none;
             color: var(--text-main);
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
+            font-family: monospace; /* For symbols */
+            font-weight: 700;
+            font-size: 1.5rem;
+            line-height: 1;
             cursor: pointer;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: background 0.2s ease;
-        }
-
-        .nav-buttons button:hover:not(:disabled) {
-            background: var(--bg-surface-highlight);
-            color: var(--accent-primary);
-        }
-
-        .nav-buttons button:disabled {
-            color: var(--text-dim);
-            cursor: not-allowed;
-        }
-
-        .page-counter {
-            color: var(--text-muted);
-            font-variant-numeric: tabular-nums;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            border-left: 1px solid var(--border-subtle);
-            border-right: 1px solid var(--border-subtle);
-            padding: 0 1rem;
-        }
-
-
-        /* =========================================
-           MOBILE RESPONSIVENESS (The Critical Part)
-           ========================================= */
-        
-        /* Tablets & Phones */
-        @media (max-width: 1024px) {
-            .slide.bleed-image-layout {
-                grid-template-columns: 1fr; /* Stack vertically */
-                grid-template-rows: 40vh auto; /* Image takes top 40% */
-                overflow-y: auto;
-                display: block; /* Switch to block to allow scrolling */
-            }
-
-            .bleed-image-layout .image-container {
-                width: 100%;
-                height: 40vh; /* Fixed header image */
-                position: sticky;
-                top: 0;
-                z-index: 0;
-                border-left: none;
-                border-bottom: 1px solid var(--border-subtle);
-            }
-
-            .bleed-image-layout .content-container {
-                width: 100%;
-                padding: 2rem;
-                background: var(--bg-app); /* Opaque background to scroll over image */
-                position: relative;
-                z-index: 1;
-                min-height: 60vh; /* Ensure it fills the rest */
-            }
-
-            /* Typography adjustments for smaller screens */
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 2rem; }
-            p { font-size: 1.1rem; }
-        }
-
-        /* Phones Only */
-        @media (max-width: 600px) {
-            /* Navigation: More compact */
-            .nav-container {
-                bottom: 1rem;
-                width: 90%;
-                justify-content: space-between;
-                padding: 0.5rem 1rem;
-            }
-
-            /* Stack Columns */
-            .two-column-container {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .bleed-image-layout .image-container {
-                height: 250px; /* Shorter image header on phones */
-            }
-
-            /* Adjust padding */
-            .slide { padding: 1.5rem; }
-            .slide.gradient-bg .content-overlay { padding: 1.5rem; }
-            
-            /* Code blocks scroll horizontally */
-            pre { font-size: 0.85rem; padding: 1rem; }
-        }
-
-        /* Image Placeholder Style */
-        .placeholder-box {
+            padding: 0.5rem 0.75rem;
+            transition: color 0.2s;
+            flex-shrink: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--text-dim);
-            border: 2px dashed var(--border-focus);
-            width: 100%;
-            height: 100%;
-            background: var(--bg-surface);
         }
-        .placeholder-box i { font-size: 2rem; margin-bottom: 0.5rem; }
-        .placeholder-box span { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+        .nav-container button:hover:not(:disabled) { color: var(--accent-primary); }
+        .nav-container button:disabled { color: var(--border-subtle); cursor: default; }
+        
+        .page-counter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            padding: 0 0.75rem;
+            border-left: 1px solid var(--border-subtle);
+            border-right: 1px solid var(--border-subtle);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 1024px) {
+            .slide.bleed-image-layout { display: block; overflow-y: auto; padding: 0; }
+            .bleed-image-layout .image-container { height: 35vh; width: 100%; position: sticky; top: 0; z-index: 0; }
+            .bleed-image-layout .content-container { min-height: 65vh; padding: 2rem; background: var(--bg-app); position: relative; z-index: 1; }
+            .two-column-container { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .nav-container { bottom: 1rem; width: auto; max-width: 95%; padding: 0.5rem; }
+            
+            /* FIX: Mobile Spacing */
+            .slide { 
+                padding: 1.5rem; 
+                padding-top: 4rem; 
+                padding-bottom: 180px !important;
+                justify-content: flex-start;
+            }
+            .slide.gradient-bg .content-overlay { 
+                padding: 1.5rem; 
+                padding-bottom: 180px !important; 
+                justify-content: flex-start; 
+                padding-top: 15vh; 
+            }
+            .bleed-image-layout .content-container { padding-bottom: 160px !important; }
+            
+            #slide7 .two-column-container { gap: 1rem; margin-top: 1rem; }
+            #slide7 .column { padding: 1.25rem; }
+            
+            pre { font-size: 0.85rem; padding: 1rem; }
+            .column { padding: 1.5rem; }
+            .prompt-card, .instruction-card { padding: 1.25rem; margin-top: 1rem; }
+        }
+        
+        .placeholder-box {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: var(--text-muted); width: 100%; height: 100%; background: #1a1a1a; text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -393,20 +481,15 @@
     <div id="presentation-container">
 
         <!-- Slide 1: Title -->
-        <div class="slide gradient-bg active" id="slide1">
-            <div class="content-overlay">
-                <h1>How to Get What You Want From Your AI</h1>
-                <p class="subtitle">A non-technical guide to stopping loops and getting better answers.</p>
-                <p style="margin-top: var(--space-lg); color: var(--text-muted); font-size: 0.9rem;">Swipe or Click Next to begin</p>
-            </div>
+        <div class="slide active" id="slide1">
+            <h1 style="background: linear-gradient(to right, #fff, #999); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">How to Get What You Want From Your AI</h1>
+            <p class="subtitle">A non-technical guide to stopping loops and getting better answers.</p>
         </div>
 
         <!-- Slide 2: The Symptom -->
         <div class="slide bleed-image-layout" id="slide2">
              <div class="image-container">
-                <img src="assets/slide2_tangled_logic.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide2_tangled_logic.png</span></div>')"
-                     alt="Abstract Tangled Logic">
+                <img src="assets/slide2_tangled_logic.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide2_tangled_logic.png</div>')">
             </div>
             <div class="content-container">
                 <h3>The Problem</h3>
@@ -419,9 +502,7 @@
         <!-- Slide 3: The Cause -->
         <div class="slide bleed-image-layout" id="slide3">
              <div class="image-container">
-                <img src="assets/slide3_context_bucket.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide3_context_bucket.png</span></div>')"
-                     alt="Context Bucket">
+                <img src="assets/slide3_context_bucket.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide3_context_bucket.png</div>')">
             </div>
             <div class="content-container">
                 <h3>The Cause</h3>
@@ -431,110 +512,97 @@
             </div>
         </div>
 
-        <!-- Slide 4: FIFO Diagram -->
+        <!-- Slide 4: Mechanics -->
         <div class="slide bleed-image-layout" id="slide4">
-             <div class="image-container">
-                <img src="assets/slide4_FIFO_Gradual_Degradation.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide4_FIFO_Gradual_Degradation.png</span></div>')"
-                     alt="Memory Box Diagram">
-            </div>
-            <div class="content-container">
+             <div class="content-container">
                 <h3>Mechanics</h3>
                 <h2>How Memory Works</h2>
-                <p>Imagine a transparent box. New messages enter from the right, pushing old messages off the left edge.</p>
+                <p>Imagine a box. New messages enter from the left, pushing old messages off the right edge.</p>
                 <p>If your original instructions fall off the edge, the AI literally doesn't know they exist anymore.</p>
+            </div>
+            <div class="image-container">
+                <img src="assets/slide4_FIFO_Gradual_Degradation.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide4_FIFO_Gradual_Degradation.png</div>')">
             </div>
         </div>
 
         <!-- Slide 5: Section 1 -->
-        <div class="slide gradient-bg" id="slide5">
-            <div class="content-overlay">
-                <h3>Part 1</h3>
-                <h2>Quick Fixes</h2>
-                <p class="subtitle">Simple tricks to get back on track when things go wrong.</p>
-            </div>
+        <div class="slide" id="slide5">
+            <h1>Part 1: Quick Fixes</h1>
+            <p>Simple tricks to get back on track.</p>
         </div>
 
         <!-- Slide 6: Tool 1 -->
         <div class="slide bleed-image-layout" id="slide6">
-             <div class="image-container">
-                <img src="assets/slide6_hard_reset.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide6_hard_reset.png</span></div>')"
-                     alt="Hard Reset Button">
-            </div>
             <div class="content-container">
                 <h3>Tool #1</h3>
                 <h2>The "Fresh Start"</h2>
                 <p>Sometimes you need to clear the desk. Tell the AI to ignore the mess and focus on right now.</p>
-                <pre><code>"New task:"
+                <div class="prompt-card">"New task:"
 "Ignore previous instructions."
-"Focus ONLY on this:"</code></pre>
-                <div class="explanation-box">
-                    <strong>Why this works:</strong>
-                    <p>It tells the AI that the old conversation is clutter and to treat your new request as the only thing that matters.</p>
-                </div>
+"Focus ONLY on this:"</div>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide6_hard_reset.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide6_hard_reset.png</div>')">
             </div>
         </div>
 
-        <!-- Slide 7: Tool 2 -->
+        <!-- Slide 7: Tool 2 (SQUASHED) -->
         <div class="slide" id="slide7">
-            <h2>Tool #2: Use Checklists</h2>
-            <p>Paragraphs are easy to misread. Numbered lists are like a recipe—easy to follow step-by-step.</p>
-            <div class="two-column-container">
-                <div class="column bad">
-                    <h3>Hard to Follow</h3>
-                    <p>"...I also see you're using asterisks again, and you forgot the inventory, and the tone is wrong..."</p>
+            <div class="content-wrapper">
+                <h3>Tool #2</h3>
+                <h2>Use Checklists</h2>
+                <p class="intro-text">Paragraphs are easy to misread. Numbered lists are clearer.</p>
+                <div class="two-column-container">
+                    <div class="column bad">
+                        <h3>Hard to Follow</h3>
+                        <p>"...I also see you're using asterisks again, and you forgot the inventory..."</p>
+                    </div>
+                    <div class="column good">
+                        <h3>Easy to Follow</h3>
+                        <p><strong>Please fix these 2 things:</strong></p>
+                        <ol>
+                            <li>Stop using asterisks.</li>
+                            <li>Add the 'Inventory' slide.</li>
+                        </ol>
+                    </div>
                 </div>
-                <div class="column good">
-                    <h3>Easy to Follow</h3>
-                    <p><strong>Please fix these 2 things:</strong></p>
-                    <ol>
-                        <li>Stop using asterisks.</li>
-                        <li>Add the 'Inventory' slide.</li>
-                    </ol>
+                <div class="explanation-box">
+                    <strong>Why this works</strong>
+                    <p>Structured formats reduce the chance of misinterpretation.</p>
                 </div>
             </div>
         </div>
 
         <!-- Slide 8: Tool 3 -->
         <div class="slide bleed-image-layout" id="slide8">
-             <div class="image-container">
-                <img src="assets/slide8_atomic_focus.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide8_atomic_focus.png</span></div>')"
-                     alt="Atomic Focus">
-            </div>
             <div class="content-container">
                 <h3>Tool #3</h3>
                 <h2>One Task at a Time</h2>
                 <p>Don't ask for a summary, a code rewrite, and a joke all at once.</p>
                 <div class="explanation-box">
-                    <strong>Why this works:</strong>
+                    <strong>Why this works</strong>
                     <p>Just like humans, AI does better quality work when it focuses on one single job at a time.</p>
                 </div>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide8_atomic_focus.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide8_atomic_focus.png</div>')">
             </div>
         </div>
 
         <!-- Slide 9: Section 2 -->
-        <div class="slide gradient-bg" id="slide9">
-            <div class="content-overlay">
-                <h3>Part 2</h3>
-                <h2>Setting the Stage</h2>
-                <p class="subtitle">How to set up the AI to succeed before you even start.</p>
-            </div>
+        <div class="slide" id="slide9">
+            <h1>Part 2: Setting the Stage</h1>
         </div>
         
         <!-- Slide 10: Master Prompt -->
         <div class="slide bleed-image-layout" id="slide10">
-             <div class="image-container">
-                <img src="assets/slide10_control_panel.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide10_control_panel.png</span></div>')"
-                     alt="Control Panel">
-            </div>
             <div class="content-container">
                 <h3>Concept</h3>
                 <h2>The "Job Description"</h2>
-                <p>Don't just start chatting. You are in the driver's seat. Give the AI a job title and a rulebook first.</p>
-                <p>This is a <strong>Master Prompt</strong>. It stops the AI from guessing what you want and tells it exactly who to be.</p>
+                <p>Don't just start chatting. Give the AI a job title (Master Prompt).</p>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide10_control_panel.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide10_control_panel.png</div>')">
             </div>
         </div>
 
@@ -568,121 +636,115 @@
                 <div class="column good">
                     <h3>With Instructions</h3>
                     <blockquote>[Rule: Do not apologize. Just fix the error.]</blockquote>
-                    <p style="margin-top: auto; color: var(--text-main);">"Understood. Here is the corrected code."</p>
+                    <p style="margin-top: 1rem;">"Understood. Here is the corrected code."</p>
                 </div>
             </div>
         </div>
 
         <!-- Slide 13: Combining -->
         <div class="slide bleed-image-layout" id="slide13">
-             <div class="image-container">
-                <img src="assets/slide13_duality_masks.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide13_duality_masks.png</span></div>')"
-                     alt="Duality Masks">
-            </div>
-            <div class="content-container">
+             <div class="content-container">
                 <h3>Strategy</h3>
                 <h2>The Perfect Colleague</h2>
-                <p>You can combine these to create the perfect helper. You get the smarts of an expert with the efficiency of a pro.</p>
-                <div class="explanation-box" style="margin-top: 2rem; background: var(--bg-surface-highlight); border-color: var(--success);">
-                    <strong>The Prompt:</strong>
-                    <p>"You are a Senior Writer. Be direct. Don't use jargon."</p>
-                    <br>
-                    <strong>Result:</strong> High quality work, zero wasted time.
-                </div>
+                <p>Combine smarts and efficiency.</p>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide13_duality_masks.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide13_duality_masks.png</div>')">
             </div>
         </div>
 
         <!-- Slide 14: Section 3 -->
-        <div class="slide gradient-bg" id="slide14">
-            <div class="content-overlay">
-                <h3>Part 3</h3>
-                <h2>Pro Tips</h2>
-                <p class="subtitle">Advanced tricks to guide the AI's thinking.</p>
-            </div>
+        <div class="slide" id="slide14">
+            <h1>Part 3: Pro Tips</h1>
         </div>
 
-        <!-- Slide 15: Few-Shot -->
+        <!-- Slide 15: Tip 1 -->
         <div class="slide bleed-image-layout" id="slide15">
-             <div class="image-container">
-                <img src="assets/slide15_pattern_stamp.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide15_pattern_stamp.png</span></div>')"
-                     alt="Pattern Stamp">
-            </div>
             <div class="content-container">
                 <h3>Tip #1</h3>
                 <h2>Give Examples</h2>
-                <p>Don't just describe what you want. <strong>Show</strong> an example. It's the fastest way to get the right format.</p>
-                <pre><code>Example 1: Input: "Apple" Output: "Fruit"
-Example 2: Input: "Carrot" Output: "Vegetable"
-Your task: Input: "Spinach" Output: ...</code></pre>
+                <div class="prompt-card">Example 1: Input: "Apple" -> Output: "Fruit"
+Input: "Spinach" -> Output: ...</div>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide15_pattern_stamp.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide15_pattern_stamp.png</div>')">
             </div>
         </div>
 
-        <!-- Slide 16: Chain of Thought -->
+        <!-- Slide 16: Tip 2 -->
         <div class="slide bleed-image-layout" id="slide16">
-             <div class="image-container">
-                <img src="assets/slide16_sequential_steps.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide16_sequential_steps.png</span></div>')"
-                     alt="Sequential Steps">
-            </div>
             <div class="content-container">
                 <h3>Tip #2</h3>
                 <h2>"Show Your Work"</h2>
-                <p>If you ask for a complex answer immediately, the AI might guess. Ask it to think step-by-step first.</p>
-                <pre><code>"Think step-by-step and explain your logic before giving the final answer."</code></pre>
-                <div class="explanation-box">
-                    <strong>Why this works:</strong> It forces the AI to slow down and check its own logic, reducing mistakes.
-                </div>
+                <p>Ask it to think step-by-step first.</p>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide16_sequential_steps.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide16_sequential_steps.png</div>')">
             </div>
         </div>
 
-        <!-- Slide 17: Ground Truth -->
+        <!-- Slide 17: Tip 3 -->
         <div class="slide bleed-image-layout" id="slide17">
-             <div class="image-container">
-                <img src="assets/slide17_ground_truth_anchor.png" 
-                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'><span>assets/slide17_ground_truth_anchor.png</span></div>')"
-                     alt="Ground Truth Anchor">
-            </div>
             <div class="content-container">
                 <h3>Tip #3</h3>
                 <h2>Stick to the Facts</h2>
-                <p>AI can make things up ("hallucinate") if it doesn't know the answer. Prevent this by giving it the source material.</p>
-                <pre><code>"Use ONLY the text I paste below to answer my question. Do not invent new facts."</code></pre>
+                <p>Prevent hallucinations by providing source material.</p>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide17_ground_truth_anchor.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide17_ground_truth_anchor.png</div>')">
             </div>
         </div>
 
-        <!-- Slide 18: Conclusion -->
-        <div class="slide gradient-bg" id="slide18">
-            <div class="content-overlay">
+        <!-- Slide 18: Tip 4 -->
+        <div class="slide bleed-image-layout" id="slide18">
+            <div class="content-container">
+                <h3>Tip #4</h3>
+                <h2>Preventing "Drift"</h2>
+                <p>Re-anchor to the source of truth often.</p>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide18_state_drift.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide18_state_drift.png</div>')">
+            </div>
+        </div>
+
+        <!-- Slide 19: Pattern Break -->
+        <div class="slide bleed-image-layout" id="slide19">
+            <div class="content-container">
+                <h3>Tip #5</h3>
+                <h2>The Pattern Break</h2>
+                <p>Stop it immediately when it hallucinates.</p>
+                <div class="prompt-card">"STOP. Review my previous message."</div>
+            </div>
+             <div class="image-container">
+                <img src="assets/slide19_pattern_break.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide19_pattern_break.png</div>')">
+            </div>
+        </div>
+
+        <!-- Slide 20: Conclusion -->
+        <div class="slide bleed-image-layout" id="slide20">
+             <div class="image-container">
+                <img src="assets/slide18_conclusion_cockpit.png" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'placeholder-box\'>assets/slide18_conclusion_cockpit.png</div>')">
+            </div>
+            <div class="content-container">
                 <h1>You Are the Pilot</h1>
-                <p class="subtitle">From frustrating to functional.</p>
-                <div style="margin-top: var(--space-lg); display: flex; flex-direction: column; gap: 1rem; text-align: left;">
-                    <p>1. Remember the <strong>Memory Limit</strong>.</p>
-                    <p>2. Use <strong>Checklists</strong> and <strong>Resets</strong>.</p>
-                    <p>3. Tell the AI <strong>Who to Be</strong>.</p>
-                </div>
+                <p>1. Memory Limit<br>2. Checklists<br>3. Roles</p>
             </div>
         </div>
 
-         <!-- Slide 19: Q&A -->
-         <div class="slide gradient-bg" id="slide19">
-            <div class="content-overlay">
-                <h1>Questions?</h1>
-                <p class="subtitle">Thank you.</p>
-            </div>
+         <!-- Slide 21: Q&A -->
+         <div class="slide" id="slide21">
+            <h1>Questions?</h1>
         </div>
 
     </div>
 
+    <!-- NAVIGATION (FIXED) -->
     <div class="nav-container">
-        <div class="nav-buttons">
-            <button id="prev" disabled aria-label="Previous Slide">← Prev</button>
-            <div class="page-counter">
-                <span id="current-page">1</span> / <span id="total-pages">19</span>
-            </div>
-            <button id="next" aria-label="Next Slide">Next →</button>
+        <button id="prev" disabled>&lt;</button>
+        <div class="page-counter">
+            <span id="current-page">1</span> / <span id="total-pages">21</span>
         </div>
+        <button id="next">&gt;</button>
     </div>
 
     <script>
@@ -695,11 +757,7 @@ Your task: Input: "Spinach" Output: ...</code></pre>
         let currentSlide = 0;
         const totalSlides = slides.length; 
 
-        totalPagesElem.textContent = totalSlides;
-
-        // Touch Handling Variables
-        let touchStartX = 0;
-        let touchEndX = 0;
+        if(totalPagesElem) totalPagesElem.textContent = totalSlides;
 
         function updateButtons() {
             nextBtn.disabled = (currentSlide === totalSlides - 1);
@@ -713,19 +771,16 @@ Your task: Input: "Spinach" Output: ...</code></pre>
             const oldSlide = slides[currentSlide];
             const newSlide = slides[index];
 
-            // Reset transitions for cleanliness
+            // Clean logic: Percentage based movement
             newSlide.style.transition = 'none';
             newSlide.style.transform = direction === 'next' ? 'translateX(100%)' : 'translateX(-100%)';
             newSlide.style.opacity = '0';
             
-            // Force reflow to apply reset
-            void newSlide.offsetWidth;
+            void newSlide.offsetWidth; 
             
-            // Re-enable transitions
-            newSlide.style.transition = 'transform 0.5s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.2, 0, 0.2, 1)';
-            oldSlide.style.transition = 'transform 0.5s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.2, 0, 0.2, 1)';
+            newSlide.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+            oldSlide.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
 
-            // Animate
             oldSlide.classList.remove('active');
             oldSlide.style.transform = direction === 'next' ? 'translateX(-100%)' : 'translateX(100%)';
             oldSlide.style.opacity = '0';
@@ -735,7 +790,7 @@ Your task: Input: "Spinach" Output: ...</code></pre>
             newSlide.style.opacity = '1';
 
             currentSlide = index;
-            currentPageElem.textContent = currentSlide + 1;
+            if(currentPageElem) currentPageElem.textContent = currentSlide + 1;
             updateButtons();
         }
 
