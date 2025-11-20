@@ -29,7 +29,6 @@
     --cv-note-border: #fcd34d;
     --cv-note-text: #92400e;
 }
-
 /* --- BASE and LAYOUT --- */
 html { scroll-behavior: smooth; }
 body {
@@ -41,7 +40,6 @@ body {
     color: var(--cv-text-med);
     font-size: 14px;
 }
-
 .body-padding-wrapper {
     padding: 0.5rem;
 }
@@ -50,7 +48,6 @@ body {
         padding: 3rem 2rem;
     }
 }
-
 .container {
     max-width: 1100px;
     margin: 0 auto;
@@ -60,7 +57,6 @@ body {
     overflow: hidden;
     border: 1px solid var(--cv-border);
 }
-
 main {
     padding: 1rem;
 }
@@ -69,7 +65,6 @@ main {
         padding: 2rem;
     }
 }
-
 footer {
     text-align: center;
     padding: 1.5rem 1rem;
@@ -85,7 +80,6 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
-
 .technical-note {
     margin-top: 1rem;
     font-size: 0.85em;
@@ -94,7 +88,6 @@ footer a:hover {
     padding-top: 1rem;
     display: inline-block;
 }
-
 /* --- HEADER --- */
 header {
     background-color: #ffffff;
@@ -111,7 +104,6 @@ header {
         padding: 1.5rem 2rem;
     }
 }
-
 .header-branding {
     display: flex;
     align-items: center;
@@ -122,7 +114,6 @@ header {
         gap: 1.5rem;
     }
 }
-
 .header-profile-pic {
     width: 48px;
     height: 48px;
@@ -137,7 +128,6 @@ header {
         height: 64px;
     }
 }
-
 header h1 {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -151,7 +141,6 @@ header h1 {
         font-size: 1.5rem;
     }
 }
-
 /* Unified Button Style */
 .btn-primary {
     display: inline-flex;
@@ -183,7 +172,6 @@ header h1 {
     font-size: 0.8em;
     opacity: 0.8;
 }
-
 /* --- TYPOGRAPHY --- */
 p {
     margin-bottom: 1rem;
@@ -218,7 +206,6 @@ h4 {
     font-weight: 600;
     margin: 1rem 0 0.5rem 0;
 }
-
 /* --- MAIN TABS --- */
 .main-tab-nav {
     display: flex;
@@ -263,7 +250,6 @@ h4 {
     border-bottom-color: var(--cv-accent);
     font-weight: 600;
 }
-
 /* --- TAB PANELS --- */
 .tab-panel {
     display: none;
@@ -282,7 +268,6 @@ h4 {
         transform: translateY(0);
     }
 }
-
 /* --- SUB-NAVIGATION (Pills) --- */
 .sub-nav-container {
     display: flex;
@@ -322,7 +307,6 @@ h4 {
     color: white;
     border-color: var(--cv-text-dark);
 }
-
 /* --- CARDS & CONTENT --- */
 .narrative-card {
     background-color: #ffffff;
@@ -337,7 +321,6 @@ h4 {
         margin-bottom: 2rem;
     }
 }
-
 .sample-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -392,7 +375,6 @@ h4 {
     font-size: 0.9rem;
     color: var(--cv-text-dim);
 }
-
 details {
     background: white;
     border: 1px solid var(--cv-border);
@@ -438,7 +420,6 @@ details[open] summary::before {
         padding: 1.5rem;
     }
 }
-
 .styled-list {
     list-style: none;
     padding: 0;
@@ -455,7 +436,6 @@ details[open] summary::before {
     left: 0;
     font-weight: bold;
 }
-
 .project-link-buttons {
     margin-top: 1rem;
     display: flex;
@@ -483,7 +463,6 @@ details[open] summary::before {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px var(--cv-shadow);
 }
-
 /* --- TECHNICAL DEMO (DITA VIEWER) --- */
 .dita-viewer-container {
     display: flex;
@@ -502,7 +481,6 @@ details[open] summary::before {
         height: 700px;
     }
 }
-
 .dita-sidebar {
     background-color: #252526;
     width: 100%;
@@ -522,7 +500,6 @@ details[open] summary::before {
         overflow-y: auto;
     }
 }
-
 .dita-sidebar-header {
     padding: 0.75rem 1rem;
     font-size: 0.7rem;
@@ -572,7 +549,6 @@ details[open] summary::before {
     color: white;
     border-left-color: var(--cv-accent);
 }
-
 .dita-main-area {
     flex: 1;
     display: flex;
@@ -603,7 +579,6 @@ details[open] summary::before {
         font-size: 0.85rem;
     }
 }
-
 .dita-toggle {
     display: flex;
     background: #252526;
@@ -631,7 +606,6 @@ details[open] summary::before {
     color: white;
     font-weight: 600;
 }
-
 .dita-content {
     flex: 1;
     overflow: auto;
@@ -645,7 +619,6 @@ details[open] summary::before {
 .dita-pane.active {
     display: block;
 }
-
 /* Preview Pane Styling */
 .dita-preview {
     background: white;
@@ -723,7 +696,6 @@ details[open] summary::before {
     color: #db2777;
     font-size: 0.9em;
 }
-
 /* UNIFIED NOTE STYLING */
 .note, .mobile-dita-note, .dita-preview .note {
     background: var(--cv-note-bg);
@@ -743,7 +715,6 @@ details[open] summary::before {
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 1rem;
 }
-
 /* Keyref Resolved Style */
 .keyref-resolved {
     background-color: #e0e7ff;
@@ -753,7 +724,6 @@ details[open] summary::before {
     cursor: help;
     font-weight: 500;
 }
-
 /* DITA Map TOC Styling */
 .dita-map-tree ul {
     list-style: none;
@@ -778,7 +748,6 @@ details[open] summary::before {
 .dita-map-tree a:hover {
     text-decoration: underline;
 }
-
 /* Interactive Preview Elements (Pills/Tabs) */
 .feature-selector-container {
     display: flex;
@@ -865,7 +834,6 @@ details[open] summary::before {
 .example-block h4::before {
     content: "💡";
 }
-
 /* Source Pane Styling */
 .dita-source {
     padding: 1rem;
@@ -888,7 +856,6 @@ details[open] summary::before {
         font-size: 0.85rem;
     }
 }
-
 /* Syntax Highlighting */
 .xml-tag { color: #569cd6; }
 .xml-attr { color: #9cdcfe; }
@@ -896,7 +863,6 @@ details[open] summary::before {
 .xml-comment { color: #6a9955; font-style: italic; }
 
 /* --- HOVER IMAGE POPUP STYLES (for Presentation) --- */
-
 /* Mobile: Remove hover styling since popups are disabled */
 @media (max-width: 767px) {
     .hover-trigger {
@@ -932,6 +898,7 @@ details[open] summary::before {
         background-color: #dcfce7;
     }
 }
+
 /* Floating Image Container - MOBILE OPTIMIZED */
 #floating-image-viewer {
     position: absolute;
@@ -958,7 +925,6 @@ details[open] summary::before {
     border-radius: 4px;
     display: block;
 }
-
 #floating-image-viewer p {
     margin: 8px 0 0 0;
     font-size: 0.85rem;
@@ -979,7 +945,8 @@ details[open] summary::before {
 }
 .definition-trigger .tooltip-text {
     visibility: hidden;
-    width: 200px;
+    width: 220px;
+    max-width: calc(100vw - 40px);
     background-color: var(--cv-text-dark);
     color: #fff;
     text-align: center;
@@ -998,6 +965,18 @@ details[open] summary::before {
     white-space: normal;
     border: 1px solid var(--cv-accent);
 }
+
+/* Mobile: Ensure tooltips stay within viewport */
+@media (max-width: 767px) {
+    .definition-trigger .tooltip-text {
+        width: 200px;
+        max-width: calc(100vw - 30px);
+        left: 50%;
+        right: auto;
+        margin-left: 0;
+    }
+}
+
 @media (min-width: 768px) {
     .definition-trigger .tooltip-text {
         width: 250px;
@@ -1066,6 +1045,7 @@ details[open] summary::before {
             <button class="sub-nav-btn active" onclick="switchDtOneSubTab('overview', this)">Project Overview</button>
             <button class="sub-nav-btn" onclick="switchDtOneSubTab('samples', this)">Work Samples</button>
         </div>
+
         <div id="dtone-overview" class="sub-panel active">
             <h2 style="margin-bottom: 0.5rem;">DT One Developer Portal</h2>
             <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Role: Technical Writer and Information Architect</p>
@@ -1086,6 +1066,7 @@ details[open] summary::before {
                 <strong>Note:</strong> The DT One project was an <strong>assignment from intive</strong>, not voluntary personal development. As a policy, most of my content strategy and structuring work for large clients (including SAP and Ericsson) remains behind strict confidentiality and enterprise firewalls. The DT One documentation style, which is <strong>Stripe-influenced</strong> and highly user-centric, serves as a clear, public-facing example of the quality and strategic approach applied across all my enterprise engagements.
             </div>
         </div>
+
         <div id="dtone-samples" class="sub-panel" style="display:none;">
             <h2 style="margin-bottom: 0.5rem;">Work Samples</h2>
             
@@ -1129,6 +1110,7 @@ details[open] summary::before {
             </details>
         </div>
     </div>
+
     <div id="tab-personal" class="tab-panel">
         <div class="sub-nav-container">
             <button class="sub-nav-btn active" onclick="switchSubTab('dita-tool', this)">DITA XML Explorer</button>
@@ -1136,6 +1118,7 @@ details[open] summary::before {
             <button class="sub-nav-btn" onclick="switchSubTab('presentation', this)">Mastering AI Context</button>
             <button class="sub-nav-btn" onclick="switchSubTab('template', this)">AI Book Template</button>
         </div>
+
         <div id="sub-dita-tool" class="sub-panel active">
             <h2>DITA XML Explorer</h2>
             
@@ -1170,6 +1153,7 @@ details[open] summary::before {
                 </div>
             </div>
         </div>
+
         <div id="sub-seai" class="sub-panel" style="display: none;">
             <h2>SEAI Grant Guide and Checkers</h2>
             
@@ -1194,7 +1178,7 @@ details[open] summary::before {
                 <a href="https://github.com/donnachab/worksamples/tree/main" target="_blank" class="btn-primary">💻 View Code on GitHub</a>
             </div>
         </div>
-        
+      
         <div id="sub-presentation" class="sub-panel" style="display: none;">
             <h2>Mastering AI Context and Control</h2>
             
@@ -1211,6 +1195,7 @@ details[open] summary::before {
                 <a href="how-to-get-what-you-want-from-your-ai.html" target="_blank" class="btn-primary">📺 View Presentation</a>
             </div>
         </div>
+
         <div id="sub-template" class="sub-panel" style="display: none;">
             <h2>Template for AI-Generated Digital Books</h2>
             
@@ -1248,7 +1233,6 @@ details[open] summary::before {
 </div>
 
 <script>
-
 // --- HOVER IMAGE LOGIC (Desktop Only) ---
 document.addEventListener('DOMContentLoaded', () => {
     const viewer = document.getElementById('floating-image-viewer');
@@ -1316,7 +1300,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    
     // Hide viewer when window is resized to mobile
     window.addEventListener('resize', () => {
         if (!isDesktop()) {
@@ -1325,6 +1308,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// --- TOOLTIP SMART POSITIONING (Mobile-friendly) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const triggers = document.querySelectorAll('.definition-trigger');
+    
+    triggers.forEach(trigger => {
+        trigger.addEventListener('mouseenter', function() {
+            const tooltip = this.querySelector('.tooltip-text');
+            if (!tooltip) return;
+            
+            // Small delay to ensure tooltip is rendered
+            setTimeout(() => {
+                const rect = tooltip.getBoundingClientRect();
+                const triggerRect = this.getBoundingClientRect();
+                
+                // Check if tooltip goes off left edge
+                if (rect.left < 10) {
+                    tooltip.style.left = '0';
+                    tooltip.style.transform = 'translateX(0)';
+                }
+                // Check if tooltip goes off right edge
+                else if (rect.right > window.innerWidth - 10) {
+                    tooltip.style.left = 'auto';
+                    tooltip.style.right = '0';
+                    tooltip.style.transform = 'translateX(0)';
+                }
+                // Default centered
+                else {
+                    tooltip.style.left = '50%';
+                    tooltip.style.right = 'auto';
+                    tooltip.style.transform = 'translateX(-50%)';
+                }
+            }, 10);
+        });
+        
+        // Reset on mouse leave
+        trigger.addEventListener('mouseleave', function() {
+            const tooltip = this.querySelector('.tooltip-text');
+            if (tooltip) {
+                tooltip.style.left = '50%';
+                tooltip.style.right = 'auto';
+                tooltip.style.transform = 'translateX(-50%)';
+            }
+        });
+    });
+});
 
 // --- MAIN TAB LOGIC ---
 window.switchMainTab = function(tabId, btn) {
@@ -1419,11 +1447,11 @@ const ditaContent = {
     <topicref href="tasks/t_linkedin_add_skills.dita" format="dita" type="task">
         <topicmeta><navtitle>(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</navtitle></topicmeta>
     </topicref>
-    
+  
     <topicref href="concepts/c_ixiasoft_reuse.dita" format="dita" type="concept">
         <topicmeta><navtitle>Reuse Concepts in IXIASOFT CCMS</navtitle></topicmeta>
     </topicref>
-    
+  
     <reltable>
         <relheader>
             <relcolspec type="task"/>
@@ -1490,8 +1518,7 @@ const ditaContent = {
                 <li>Directly add any missing skills that they possess to their profiles, which improves their match with the job post.</li>
                 <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li>
             </ul>
-            <p>These actions
-help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
+            <p>These actions help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
         </context>
         <prereq>
             <p>A <tm tmtype="tm">LinkedIn</tm> Premium subscription is required to access the <uicontrol>Qualifications</uicontrol> section of job advertisements.</p>
@@ -1572,12 +1599,12 @@ help users enhance their profiles to better reflect their qualifications and inc
     <title>Reuse Features in IXIASOFT CCMS</title>
     <conbody>
         <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts.</p>
-        
+      
         <div class="note">
             <p>Note</p>
             <p>Examples provided on this page are based on <keyword keyref="product_name"/>, a company that manages supply chain operations for various clients and often needs to create variant documents.</p>
         </div>
-        
+      
         <div class="feature-selector-container">
             <div class="feature-titles">
                 <button class="feature-title-button active" onclick="showFeature('conref', this)">Content References (Conref)</button>
@@ -1624,9 +1651,9 @@ window.escapeHtml = function(text) {
 window.highlightXml = function(xml) {
     return escapeHtml(xml)
         .replace(/(<!--[\s\S]*?-->)/g, '<span class="xml-comment">$1</span>')
-        .replace(/(<\/?)([\w]+)(.*?)(\/?>)/g, function(match, p1, p2, p3, p4) {
+        .replace(/(<\/?)(\w+)(.*?)(\/?>)/g, function(match, p1, p2, p3, p4) {
             return '<span class="xml-tag">' + p1 + p2 + '</span>' +
-                   p3.replace(/(\s+[\w]+=)(".*?")/g, '<span class="xml-attr">$1</span><span class="xml-string">$2</span>') +
+                   p3.replace(/(\s+\w+=)(".*?")/g, '<span class="xml-attr">$1</span><span class="xml-string">$2</span>') +
                    '<span class="xml-tag">' + p4 + '</span>';
         });
 }
@@ -1689,3 +1716,4 @@ window.showFeature = function(featureName, btn) {
 </script>
 </body>
 </html>
+ 
