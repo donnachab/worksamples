@@ -169,7 +169,7 @@
         border-radius: 4px; 
         color: var(--cv-note-text);
     }
-    .note strong, .mobile-dita-note strong, .dita-preview .note strong {
+    .note strong {
         color: var(--cv-note-text); 
     }
 
@@ -313,6 +313,13 @@
         </div>
     </header>
 
+    <!-- Portfolio Introduction Section (Now above main tabs) -->
+    <div style="padding: 2rem 2rem 0 2rem; background-color: var(--cv-bg-main);">
+        <p style="font-size: 1.1em; color: var(--cv-text-dark); margin-bottom: 2.5rem; border-left: 4px solid var(--cv-accent); padding-left: 1rem;">
+            My 25+ year career in technical communication lies primarily behind client firewalls (SAP, Ericsson), where the bulk of my work followed established enterprise standards. The <strong>Personal Projects</strong> section below represents a recent, focused <strong>R&D effort</strong> (all created in 2025) undertaken to master modern <span class="definition-trigger">User Experience<span class="tooltip-text">The practice of designing products, systems, or services with the goal of improving user satisfaction and usability.</span></span> (UX) standards, content architecture, and the integration of <span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) into technical communication workflows.
+        </p>
+    </div>
+
     <nav class="main-tab-nav">
         <button class="main-tab-btn active" onclick="switchMainTab('client', this)">Client Project: DT One</button>
         <button class="main-tab-btn" onclick="switchMainTab('personal', this)">Personal Projects</button>
@@ -344,13 +351,13 @@
                 <p>I also improved the <a href="https://developers.dtone.com/reference" target="_blank" rel="noopener noreferrer" style="font-weight:600; color: var(--cv-accent-hover);">Swagger and OpenAPI Documentation</a> by adding context and examples, linking it directly to the task guides.</p>
                 
                 <div class="note">
-                    <strong>Note:</strong> As a policy, most of my content strategy and structuring work for large clients (including SAP and Ericsson) remains behind strict confidentiality and enterprise firewalls. While the approach was often influenced by user-centric documentation models (like Stripe), the DT One project documentation style, which is <strong>Stripe-influenced</strong> and highly user-centric, serves as a clear, public-facing example of the quality and strategic approach applied across all my enterprise engagements.
+                    <strong>Note:</strong> The DT One project was an <strong>assignment from intive</strong>, not voluntary personal development. As a policy, most of my content strategy and structuring work for large clients (including SAP and Ericsson) remains behind strict confidentiality and enterprise firewalls. The DT One documentation style, which is <strong>Stripe-influenced</strong> and highly user-centric, serves as a clear, public-facing example of the quality and strategic approach applied across all my enterprise engagements.
                 </div>
             </div>
 
             <div id="dtone-samples" class="sub-panel" style="display:none;">
                 <h2 style="margin-bottom: 0.5rem;">Work Samples</h2>
-                
+
                  <p>
                     I collaborated with developers to build a reusable integration template. We iterated on the design by tackling the most divergent use cases first, ensuring the structure could handle any product type while keeping the authoring workflow in Confluence (the developers' preferred tool).
                 </p>
