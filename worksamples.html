@@ -1,644 +1,904 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donnacha's Work Samples</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500anddisplay=swap" rel="stylesheet">
-    <style>
-        /* --- COLOR SCHEME --- */
-        :root {
-            --cv-bg-base: #f0fdf4; --cv-bg-main: #ffffff; --cv-bg-sidebar: #dcfce7;
-            --cv-text-dark: #14532d; --cv-text-med: #166534; --cv-text-dim: #15803d;
-            --cv-accent: #22c55e; --cv-accent-hover: #16a34a; --cv-border: #86efac;
-            --cv-shadow: rgba(34, 197, 94, 0.15); --cv-code-bg: #ecfdf5; --cv-code-border: #d1fae5;
-            --cv-note-bg: #FFFACD; --cv-note-border: #F0E68C;
-            --tab-button-inactive-bg: #e7f8ee; --tab-button-inactive-border: var(--cv-border);
-            --tab-button-active-bg: var(--cv-accent); --tab-button-active-text: var(--cv-bg-main);
-            --tab-button-hover-bg: #bbf7d0;
-            --subtab-button-inactive-bg: #f0fdf4; --subtab-button-inactive-border: var(--cv-border);
-            --subtab-button-active-bg: var(--cv-bg-main); --subtab-button-active-text: var(--cv-accent);
-            --subtab-button-hover-bg: #e7f8ee;
-            --feature-title-inactive-bg: var(--cv-bg-sidebar); --feature-title-inactive-border: transparent;
-            --feature-title-active-bg: var(--cv-accent); --feature-title-active-text: var(--cv-bg-main);
-            --feature-title-hover-bg: #bbf7d0;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donnacha's Work Samples</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&family=Consolas&display=swap" rel="stylesheet">
+<style>
+    /* --- COLOR SCHEME (Spring Palette) --- */
+    :root {
+        --cv-bg-base: #f0fdf4;       
+        --cv-bg-main: #ffffff;       
+        --cv-bg-sidebar: #dcfce7;    
+        --cv-text-dark: #14532d;     
+        --cv-text-med: #166534;      
+        --cv-text-dim: #15803d;      
+        --cv-accent: #22c55e;        
+        --cv-accent-hover: #16a34a;  
+        --cv-border: #86efac;        
+        --cv-shadow: rgba(34, 197, 94, 0.15);
+        
+        --cv-code-bg: #f0fdf4;       
+        --cv-code-border: #86efac;
+        --feature-title-inactive-bg: #dcfce7;
+        --feature-title-active-bg: #22c55e;
+        --feature-title-active-text: #ffffff;
+        
+        /* UNIFIED NOTE COLORS */
+        --cv-note-bg: #fffbeb;       /* Light Amber */
+        --cv-note-border: #fcd34d;   /* Amber Border */
+        --cv-note-text: #92400e;     /* Dark Amber Text */
+    }
+
+    /* --- BASE and LAYOUT --- */
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: var(--cv-bg-base); color: var(--cv-text-med); font-size: 14px; }
+    
+    .body-padding-wrapper { padding: 2rem 1rem; }
+    @media (min-width: 768px) { .body-padding-wrapper { padding: 3rem 2rem; } }
+    
+    .container { max-width: 1100px; margin: 0 auto; background-color: var(--cv-bg-main); box-shadow: 0 4px 6px -1px var(--cv-shadow), 0 2px 4px -1px var(--cv-shadow); border-radius: 8px; overflow: hidden; border: 1px solid var(--cv-border); }
+    
+    main { padding: 2rem; }
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--cv-border); font-size: 0.9em; color: var(--cv-text-dim); background-color: var(--cv-bg-sidebar); }
+    footer a { color: var(--cv-accent-hover); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .technical-note { margin-top: 1rem; font-size: 0.85em; color: var(--cv-text-dim); border-top: 1px dashed var(--cv-border); padding-top: 1rem; display: inline-block;}
+
+    /* --- HEADER --- */
+    header { background-color: #ffffff; padding: 1.5rem 2rem; border-bottom: 1px solid var(--cv-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    
+    .header-branding { display: flex; align-items: center; gap: 1.5rem; }
+    .header-profile-pic { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 3px solid var(--cv-accent); box-shadow: 0 2px 4px var(--cv-shadow); }
+    
+    header h1 { margin: 0; font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--cv-text-dark); font-size: 1.5rem; line-height: 1.2; }
+    
+    /* Unified Button Style */
+    .btn-primary { 
+        display: inline-flex; 
+        align-items: center; 
+        padding: 0.5rem 1rem; 
+        background-color: var(--cv-text-dark); 
+        color: white; 
+        font-weight: 500; 
+        font-size: 0.9rem; 
+        text-decoration: none; 
+        border-radius: 6px; 
+        transition: background-color 0.2s ease; 
+        border: none; 
+        cursor: pointer;
+    }
+    .btn-primary:hover { background-color: var(--cv-accent-hover); }
+    .btn-primary::after { content: "↗"; margin-left: 0.5rem; font-size: 0.8em; opacity: 0.8;}
+
+    /* --- TYPOGRAPHY --- */
+    p { margin-bottom: 1rem; }
+    h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; color: var(--cv-text-dark); }
+    h2 { font-size: 1.5rem; margin: 0 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--cv-border); }
+    h3 { font-size: 1.2rem; margin: 1.5rem 0 0.8rem 0; font-weight: 600; }
+    h4 { font-size: 1rem; font-weight: 600; margin: 1rem 0 0.5rem 0; }
+    
+    /* --- MAIN TABS --- */
+    .main-tab-nav { display: flex; background-color: var(--cv-bg-sidebar); border-bottom: 1px solid var(--cv-border); padding: 0 2rem; gap: 2rem; overflow-x: auto; }
+    .main-tab-btn { background: none; border: none; padding: 1.2rem 0; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 500; color: var(--cv-text-dim); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+    .main-tab-btn:hover { color: var(--cv-text-dark); }
+    .main-tab-btn.active { color: var(--cv-accent-hover); border-bottom-color: var(--cv-accent); font-weight: 600; }
+
+    /* --- TAB PANELS --- */
+    .tab-panel { display: none; animation: fadeIn 0.3s ease-in-out; }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* --- SUB-NAVIGATION (Pills) --- */
+    .sub-nav-container { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; padding-bottom: 1rem; border-bottom: 1px solid var(--cv-border); }
+    .sub-nav-btn { background-color: white; border: 1px solid var(--cv-border); color: var(--cv-text-med); padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+    .sub-nav-btn:hover { background-color: var(--cv-bg-sidebar); }
+    .sub-nav-btn.active { background-color: var(--cv-text-dark); color: white; border-color: var(--cv-text-dark); }
+
+    /* --- CARDS & CONTENT --- */
+    .narrative-card { background-color: #ffffff; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--cv-border); }
+    
+    .sample-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; list-style: none; padding: 0; }
+    .sample-card { background: white; border: 1px solid var(--cv-border); border-radius: 8px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
+    .sample-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px var(--cv-shadow); border-color: var(--cv-accent); }
+    .sample-card a { font-weight: 700; color: var(--cv-text-dark); text-decoration: none; font-size: 1.1rem; margin-bottom: 0.5rem; display: block; }
+    .sample-card a:hover { color: var(--cv-accent-hover); text-decoration: underline; }
+    .sample-desc { font-size: 0.9rem; color: var(--cv-text-dim); }
+
+    details { background: white; border: 1px solid var(--cv-border); border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+    summary { padding: 1rem 1.5rem; background: var(--cv-bg-sidebar); cursor: pointer; font-weight: 600; color: var(--cv-text-dark); display: flex; align-items: center; }
+    summary:hover { background: #e2e8f0; }
+    summary::marker { display: none; }
+    summary::before { content: "▸"; margin-right: 0.5rem; font-size: 1.2rem; transition: transform 0.2s; }
+    details[open] summary::before { transform: rotate(90deg); }
+    .details-content { padding: 1.5rem; border-top: 1px solid var(--cv-border); }
+
+    .styled-list { list-style: none; padding: 0; }
+    .styled-list li { margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; }
+    .styled-list li::before { content: "•"; color: var(--cv-accent); position: absolute; left: 0; font-weight: bold; }
+
+    .project-link-buttons { margin-top: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+    /* --- TECHNICAL DEMO (DITA VIEWER) --- */
+    .dita-viewer-container { display: flex; flex-direction: column; border: 1px solid var(--cv-border); border-radius: 8px; overflow: hidden; background-color: #1e1e1e; color: #d4d4d4; font-family: 'Consolas', 'Monaco', monospace; height: 700px; }
+    @media (min-width: 768px) { .dita-viewer-container { flex-direction: row; } }
+    
+    .dita-sidebar { background-color: #252526; width: 100%; border-bottom: 1px solid #3e3e42; display: flex; overflow-x: auto; flex-shrink: 0; }
+    @media (min-width: 768px) { .dita-sidebar { width: 240px; flex-direction: column; border-bottom: none; border-right: 1px solid #3e3e42; } }
+    
+    .dita-sidebar-header { padding: 1rem; font-size: 0.75rem; text-transform: uppercase; color: #858585; font-weight: bold; letter-spacing: 0.05em; }
+    .dita-file-btn { background: none; border: none; color: #cccccc; padding: 0.8rem 1.5rem; text-align: left; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.85rem; display: block; width: 100%; border-left: 3px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dita-file-btn:hover { background-color: #2a2d2e; color: white; }
+    .dita-file-btn.active { background-color: #37373d; color: white; border-left-color: var(--cv-accent); }
+    
+    .dita-main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .dita-toolbar { padding: 0.5rem 1rem; border-bottom: 1px solid #3e3e42; display: flex; justify-content: space-between; align-items: center; background: #1e1e1e; }
+    .dita-filename { font-size: 0.85rem; color: #9ca3af; }
+    
+    .dita-toggle { display: flex; background: #252526; border-radius: 4px; padding: 2px; }
+    .dita-toggle button { background: none; border: none; color: #9ca3af; padding: 4px 12px; font-size: 0.8rem; cursor: pointer; border-radius: 3px; font-family: 'Inter', sans-serif;}
+    .dita-toggle button.active { background: #475569; color: white; font-weight: 600;}
+    
+    .dita-content { flex: 1; overflow: auto; position: relative; }
+    .dita-pane { display: none; height: 100%; }
+    .dita-pane.active { display: block; }
+    
+    /* Preview Pane Styling */
+    .dita-preview { background: white; color: #333; padding: 2rem; font-family: 'Inter', sans-serif; overflow-y: auto; }
+    .dita-preview h1 { font-size: 1.8rem; color: var(--cv-text-dark); margin-bottom: 1rem; border-bottom: 2px solid var(--cv-border); padding-bottom: 0.5rem; }
+    .dita-preview h2 { font-size: 1.4rem; color: var(--cv-text-dark); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .dita-preview h3 { font-size: 1.2rem; color: var(--cv-text-dark); margin-top: 1.5rem; margin-bottom: 0.8rem; }
+    .dita-preview p { color: #333; margin-bottom: 1rem; }
+    .dita-preview ul, .dita-preview ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .dita-preview li { margin-bottom: 0.5rem; color: #333; }
+    .dita-preview .uicontrol { font-weight: 700; color: #0f172a; }
+    .dita-preview .wintitle { font-style: italic; font-weight: 600; }
+    .dita-preview .codeph { font-family: 'Consolas', monospace; background: #f1f5f9; padding: 0.1rem 0.3rem; border-radius: 3px; color: #db2777; font-size: 0.9em; }
+    
+    /* UNIFIED NOTE STYLING */
+    .note, .mobile-dita-note, .dita-preview .note { 
+        background: var(--cv-note-bg); 
+        border-left: 4px solid var(--cv-note-border); 
+        padding: 1rem; 
+        margin: 1rem 0; 
+        border-radius: 4px; 
+        color: var(--cv-note-text);
+    }
+    .note strong, .mobile-dita-note strong, .dita-preview .note strong {
+        color: var(--cv-note-text); 
+    }
+
+    .dita-preview .dita-compliance { font-style: italic; color: #64748b; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
+
+    /* Keyref Resolved Style */
+    .keyref-resolved {
+        background-color: #e0e7ff;
+        color: #3730a3;
+        border-bottom: 1px dotted #4f46e5;
+        padding: 0 2px;
+        border-radius: 2px;
+        cursor: help;
+        font-weight: 500;
+    }
+    
+    /* DITA Map TOC Styling */
+    .dita-map-tree ul { list-style: none; padding-left: 1rem; }
+    .dita-map-tree li { margin-bottom: 0.5rem; position: relative; }
+    .dita-map-tree li::before { content: "📄"; margin-right: 0.5rem; }
+    .dita-map-tree li.topic-head::before { content: "📂"; }
+    .dita-map-tree a { color: var(--cv-accent-hover); text-decoration: none; font-weight: 500; }
+    .dita-map-tree a:hover { text-decoration: underline; }
+
+    /* Interactive Preview Elements (Pills/Tabs) */
+    .feature-selector-container { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+    @media (min-width: 768px) { .feature-selector-container { flex-direction: row; margin-top: 0.8rem; } }
+    .feature-titles { display: flex; flex-direction: column; gap: 0.4rem; flex-shrink: 0; width: 100%; }
+    @media (min-width: 768px) { .feature-titles { width: 250px; } }
+    .feature-title-button { display: block; width: 100%; padding: 0.6rem 1rem; cursor: pointer; text-align: left; background-color: var(--feature-title-inactive-bg); border: 1px solid var(--cv-border); border-radius: 4px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--cv-text-dark); transition: all 0.2s ease; }
+    .feature-title-button:hover { background-color: #bbf7d0; } 
+    .feature-title-button.active { background-color: var(--feature-title-active-bg); color: var(--feature-title-active-text); font-weight: 600; border-color: var(--feature-title-active-bg); }
+    .feature-content-pane { border: 1px solid var(--cv-border); border-radius: 4px; padding: 1.5rem; min-height: 150px; background-color: var(--cv-bg-base); flex-grow: 1; }
+    .example-block { background-color: white; border-left: 4px solid var(--cv-accent); padding: 1rem; margin: 1rem 0; border-radius: 4px; border: 1px solid var(--cv-border); border-left-width: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .example-block h4 { margin-top: 0; display: flex; align-items: center; gap: 0.5rem; }
+    .example-block h4::before { content: "💡"; }
+
+    /* Source Pane Styling */
+    .dita-source { padding: 1.5rem; background-color: #1e1e1e; }
+    .dita-source pre { margin: 0; font-family: 'Consolas', monospace; font-size: 0.85rem; white-space: pre-wrap; }
+    
+    /* Syntax Highlighting */
+    .xml-tag { color: #569cd6; } .xml-attr { color: #9cdcfe; } .xml-string { color: #ce9178; } .xml-comment { color: #6a9955; font-style: italic; }
+    
+    /* Component Components (Note) */
+    .note strong { color: var(--cv-note-text); }
+
+    /* --- HOVER IMAGE POPUP STYLES --- */
+    .hover-trigger {
+        color: var(--cv-accent);
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 1px dotted var(--cv-accent);
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .hover-trigger:hover {
+        background-color: #dcfce7; /* Light green highlight */
+    }
+
+    /* Floating Image Container */
+    #floating-image-viewer {
+        position: absolute; /* Changed to absolute for smoother follow */
+        display: none;
+        pointer-events: none; /* Let mouse pass through */
+        z-index: 9999;
+        background: white;
+        padding: 8px;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        border: 1px solid var(--cv-border);
+        max-width: 400px;
+        width: 100%;
+        transform: translate(15px, 15px); /* Offset from cursor */
+    }
+
+    #floating-image-viewer img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+    }
+    
+    #floating-image-viewer p {
+        margin: 8px 0 0 0;
+        font-size: 0.85rem;
+        color: var(--cv-text-dim);
+        text-align: center;
+        font-weight: 500;
+    }
+    
+    /* Mobile-specific styles for DITA Explorer */
+    @media (max-width: 768px) {
+        .mobile-dita-note {
+            display: block !important;
+            /* Styling handled by unified .note class */
         }
-
-        /* --- BASE and LAYOUT --- */
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; line-height: 1.55; /* Adjusted base line height */ margin: 0; padding: 0; background-color: var(--cv-bg-base); color: var(--cv-text-med); font-size: 13px; /* Reduced base font size */ }
-        .body-padding-wrapper { padding: 1rem; }
-        @media (min-width: 768px) { .body-padding-wrapper { padding: 1.5rem; } }
-        @media (min-width: 1024px) { .body-padding-wrapper { padding: 2rem; } }
-        .container { max-width: 1152px; margin: 0 auto; background-color: var(--cv-bg-main); box-shadow: 0 10px 15px -3px var(--cv-shadow), 0 4px 6px -4px var(--cv-shadow); border-radius: 0.5rem; overflow: hidden; }
-        main { padding: 1.5rem 2rem; }
-        footer { text-align: center; margin-top: 0; padding: 1rem 2rem 1.5rem; border-top: 1px solid var(--cv-border); font-size: 0.9em; color: var(--cv-text-dim); }
-        footer a { color: var(--cv-accent); } footer a:hover { color: var(--cv-accent-hover); }
-        *:focus-visible { outline: 2px solid var(--cv-accent); outline-offset: 2px; border-radius: 2px; }
-
-        /* --- HEADER --- */
-        header { color: var(--cv-text-dark); padding: 1.5rem 2rem; border-bottom: 1px solid var(--cv-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        header h1 { margin: 0; font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--cv-text-dark); font-size: 1.9rem; /* Adjust H1 size */ line-height: 2.1rem; letter-spacing: -0.025em; }
-        .header-cv-button a { display: inline-block; padding: 0.4rem 0.8rem; border: 1px solid var(--cv-accent); border-radius: 0.375rem; background-color: var(--cv-bg-main); color: var(--cv-accent); font-weight: 600; font-size: 0.875rem; text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease; cursor: pointer; margin-left: 1rem; }
-        .header-cv-button a::before { content: "📄 "; margin-right: 0.4em; }
-        .header-cv-button a:hover { background-color: var(--cv-accent); color: var(--cv-bg-main); }
-
-        /* --- TYPOGRAPHY and GENERAL CONTENT --- */
-        p, li { font-size: 1rem; /* Inherits 13px from body */ color: var(--cv-text-med); }
-        p { margin-bottom: 0.8rem; /* Reduced paragraph margin */ line-height: 1.45; /* Adjusted line height */ }
-        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; color: var(--cv-text-dark); font-weight: 600; }
-        h2 { font-size: 1.3rem; /* Adjust H2 size */ line-height: 1.7rem; margin: 0 0 0.8rem 0; /* Reduced margin */ padding-bottom: 0.4rem; border-bottom: 1px solid var(--cv-border); color: var(--cv-accent); scroll-margin-top: 1rem; }
-        h3 { font-size: 1.15rem; /* Adjust H3 size */ line-height: 1.5rem; margin: 1.8rem 0 0.8rem 0; /* Reduced margin */ color: var(--cv-text-dark); font-weight: 600; scroll-margin-top: 1rem; }
-        h4 { font-size: 1rem; /* Keep H4 at base size relative now */ font-weight: 600; margin: 1.2rem 0 0.4rem 0; /* Reduced margin */ color: var(--cv-text-med); }
-        h2 + p, h3 + p, h3 + ul, h4 + p, h4 + ul { margin-top: 0; }
-        strong { font-weight: 600; color: var(--cv-text-dark); }
-        em { font-style: italic; }
-        code { font-family: monospace; font-size: 0.9em; color: var(--cv-text-dim); background-color: var(--cv-code-bg); padding: 0.15em 0.4em; border-radius: 4px; border: 1px solid var(--cv-code-border); white-space: nowrap; }
-        .dita-compliance { font-style: italic; color: var(--cv-text-dim); margin-bottom: 0.8em; /* Reduced margin */ font-size: 1rem; }
-
-        /* --- LISTS --- */
-        ul, ol { padding-left: 1.25rem; margin: 0.4rem 0 0.8rem 0; /* Reduced margin */ list-style-position: outside; }
-        li { margin-bottom: 0.3rem; /* Reduced spacing */ padding-left: 0.25rem; }
-        li > p { margin: 0.15rem 0; /* Reduced spacing */ padding-left: 0; line-height: 1.4; /* Adjusted line height */ }
-        li > p:last-child { margin-bottom: 0; }
-        ul li::marker, ol li::marker { color: var(--cv-accent); font-weight: 600; }
-        .more-info-list ul { margin-top: 0.2rem; }
-        .more-info-list li { font-size: 1rem; margin-bottom: 0.15rem; }
-        .more-info-list { margin-top: 0; } /* Keep h4 aligned top */
-
-        /* --- TABS --- */
-        .tab-container { margin-bottom: 1.5rem; } /* Reduced margin */
-        .tab-buttons { display: flex; border-bottom: 2px solid var(--cv-border); margin-bottom: 1rem; /* Reduced margin */ flex-wrap: wrap; gap: 0.25rem; }
-        .tab-button { padding: 0.7rem 1.1rem; /* Adjusted padding */ cursor: pointer; background-color: var(--tab-button-inactive-bg); border: 1px solid var(--tab-button-inactive-border); border-bottom: none; margin-bottom: -2px; border-radius: 6px 6px 0 0; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--cv-text-med); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; position: relative; z-index: 1; }
-        .tab-button:hover { background-color: var(--tab-button-hover-bg); color: var(--cv-text-dark); }
-        .tab-button.active { background-color: var(--cv-bg-main); color: var(--cv-accent); border-color: var(--cv-border); border-bottom: 2px solid var(--cv-bg-main); z-index: 2; }
-        .tab-content { }
-        .tab-panel { display: none; padding-top: 0.5rem; animation: fadeIn 0.5s ease-in-out; }
-        .tab-panel.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- SUB-TABS --- */
-        .sub-tab-container { margin-top: 0.8rem; } /* Reduced margin */
-        .sub-tab-container > p:first-child { margin-top: 0.2rem; margin-bottom: 0.8rem; } /* Reduced spacing */
-        .sub-tab-buttons { display: flex; border-bottom: 1px solid var(--cv-border); margin-bottom: 0.8rem; /* Reduced margin */ flex-wrap: wrap; gap: 0.25rem; }
-        .sub-tab-button { padding: 0.4rem 0.9rem; /* Adjusted padding */ cursor: pointer; background-color: var(--subtab-button-inactive-bg); border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; border-radius: 4px 4px 0 0; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.85rem; color: var(--cv-text-med); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
-        .sub-tab-button:hover { background-color: var(--subtab-button-hover-bg); color: var(--cv-text-dark); }
-        .sub-tab-button.active { background-color: var(--subtab-button-active-bg); color: var(--subtab-button-active-text); border-color: var(--cv-border); border-bottom: 1px solid var(--subtab-button-active-bg); font-weight: 600; }
-        .sub-tab-content { }
-        .sub-tab-panel { display: none; padding-top: 0.8rem; /* Reduced padding */ animation: fadeIn 0.5s ease-in-out; }
-        #subtab-concept { padding-top: 0.5rem; }
-        .sub-tab-panel.active { display: block; }
-
-        /* --- BLOCKS (Note, Example) --- */
-        /* CSS UPDATED: Replaced old .note-block styles with this cleaner version */
-        .note-block {
-            background-color: var(--cv-note-bg);
-            border-left: 4px solid var(--cv-note-border);
-            padding: 0.8rem 1rem 0.8rem 1.2rem;
-            margin: 1rem 0;
-            border-radius: 0 4px 4px 0;
-        }
-        /* This is the title: bold, with icon */
-        .note-block p:first-of-type {
-            font-size: 1rem;
-            color: #444422; /* Darker color for title */
-            line-height: 1.4;
-            margin: 0 0 0.4rem 0; /* Space after title */
-            font-weight: 600; /* Bold */
-            font-style: normal;
-        }
-        /* Add the icon to the title */
-        .note-block p:first-of-type::before {
-            content: "📝 ";
-            margin-right: 0.3em;
-        }
-        /* This is the content: unbolded */
-        .note-block p:not(:first-of-type) {
-            font-size: 1rem;
-            color: #575735;
-            line-height: 1.4;
-            margin-bottom: 0.15rem;
-            font-weight: 400; /* Explicitly unbolded */
-            font-style: normal;
-        }
-        .note-block strong { color: #444422; }
-        .note-block > *:first-child { margin-top: 0; }
-        .note-block > *:last-child { margin-bottom: 0; }
-        /* END CSS UPDATE */
-
-        .example-block { background-color: var(--cv-bg-sidebar); border-left: 4px solid var(--cv-accent); padding: 0.8rem 1rem 0.8rem 1.2rem; /* Adjusted padding */ margin: 1rem 0; /* Adjusted margin */ border-radius: 0 4px 4px 0; color: var(--cv-text-med); }
-        .example-block h4 { font-size: 1rem; font-weight: 600; margin: 0 0 0.5rem 0; /* Reduced margin */ color: var(--cv-text-dark); }
-        .example-block h4::before { content: "💡 "; display: inline-block; margin-right: 0.25em; }
-        .example-block p { font-size: 1rem; margin-bottom: 0.3rem; line-height: 1.4; /* Adjusted line height */ }
-        .example-block strong { color: var(--cv-text-dark); }
-        .example-block code { color: var(--cv-text-dim); background-color: var(--cv-code-bg); border: 1px solid var(--cv-code-border); }
-        .example-block > *:first-child { margin-top: 0; }
-        .example-block > *:last-child { margin-bottom: 0; }
-
-        /* --- TASK TOPIC SPECIFIC STYLES (adjusted spacing) --- */
-        #subtab-task h2 { margin-bottom: 0.8rem; }
-        #subtab-task h3 { margin-top: 1.2rem; margin-bottom: 0.6rem; }
-        #subtab-task p { margin-bottom: 0.6rem; line-height: 1.45; }
-        #subtab-task li { margin-bottom: 0.4rem; }
-        #subtab-task li > p { line-height: 1.45; margin: 0.2rem 0; }
-        .prerequisites, .steps { margin-top: 1.2em; }
-        .steps > h3 + ol { margin-top: 0.4rem; }
-
-        /* --- CONCEPT TOPIC SPECIFIC STYLES (adjusted spacing) --- */
-        #subtab-concept h2 { margin-bottom: 0.6rem; }
-        #subtab-concept h4 { margin-top: 0.8rem; margin-bottom: 0.2rem; }
-        #subtab-concept p { margin-bottom: 0.5rem; line-height: 1.4; }
-        #subtab-concept ul, #subtab-concept ol { margin-bottom: 0.5rem; }
-        #subtab-concept li { margin-bottom: 0.15rem; }
-        #subtab-concept li > p { line-height: 1.4; margin: 0.15rem 0; }
-        #subtab-concept .dita-compliance { margin-bottom: 0.4rem; }
-        #subtab-concept .note-block { margin: 0.8rem 0; padding: 0.6rem 0.9rem 0.6rem 1.1rem; }
-        #subtab-concept .example-block { margin: 0.6rem 0; padding: 0.6rem 0.9rem 0.6rem 1.1rem; }
-        #subtab-concept .example-block h4 { margin-bottom: 0.3rem; }
-        #subtab-concept .example-block p { margin-bottom: 0.3rem; }
-
-        /* Feature Selector Container */
-        .feature-selector-container { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; } /* Reduced gap/margin */
-        @media (min-width: 768px) {
-            .feature-selector-container { flex-direction: row; margin-top: 0.8rem; }
-        }
-        .feature-titles { display: flex; flex-direction: column; gap: 0.4rem; /* Reduced gap */ flex-shrink: 0; width: 100%; }
-        @media (min-width: 768px) { .feature-titles { width: 250px; } } /* Keep width */
-        .feature-title-button { display: block; width: 100%; padding: 0.5rem 0.9rem; /* Adjusted padding */ cursor: pointer; text-align: left; background-color: var(--feature-title-inactive-bg); border: 1px solid var(--cv-border); border-radius: 4px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--cv-text-dark); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
-        .feature-title-button:hover { background-color: var(--feature-title-hover-bg); }
-        .feature-title-button.active { background-color: var(--feature-title-active-bg); color: var(--feature-title-active-text); border-color: var(--feature-title-active-bg); font-weight: 600; }
-
-        /* Feature Content Pane */
-        .feature-content-pane { border: 1px solid var(--cv-border); border-radius: 4px; padding: 0.8rem 1rem; /* Reduced padding */ min-height: 150px; background-color: #fafdfc; flex-grow: 1; width: 100%; }
-        .feature-content-pane h4 { margin-top: 0; margin-bottom: 0.4rem; } /* Reduced margin */
-        .feature-content-pane > div > *:first-child { margin-top: 0; }
-        .feature-content-pane > div > *:last-child { margin-bottom: 0; }
-
-        /* Columns *inside* the Feature Content Pane */
-        .feature-detail-columns { display: flex; flex-direction: column; gap: 0.8rem; /* Reduced gap */ }
-        .feature-main-col { order: 1; }
-        .feature-info-col { order: 2; }
-        .feature-info-col .more-info-list { margin-top: 0; }
-        @media (min-width: 768px) {
-            .feature-detail-columns { flex-direction: row; gap: 1.2rem; /* Adjusted gap */ align-items: flex-start; }
-            .feature-main-col { flex: 2; order: 1; }
-            .feature-info-col { flex: 1; order: 2; }
-        }
-
-
-        /* --- Project Link Button Styles --- */
-        .project-link-buttons { margin-top: 1rem; margin-bottom: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap; } /* Reduced spacing */
-        .project-button { display: inline-flex; align-items: center; gap: 0.4em; padding: 0.5rem 1rem; /* Adjusted padding */ border: 1px solid var(--cv-accent); border-radius: 0.375rem; background-color: var(--cv-bg-main); color: var(--cv-accent); font-weight: 600; font-size: 0.9em; text-decoration: none; transition: all 0.2s ease; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .project-button:hover { background-color: var(--cv-accent); color: var(--cv-bg-main); transform: translateY(-2px); box-shadow: 0 4px 8px var(--cv-shadow); }
-        .project-button .icon { font-size: 1.1em; }
-
-        /* --- Responsive Adjustments --- */
-        @media (max-width: 767px) {
-            /* Adjust heading sizes further for mobile */
-            h1 { font-size: 1.7rem; line-height: 2rem;}
-            h2 { font-size: 1.2rem; line-height: 1.6rem; }
-            h3 { font-size: 1.1rem; line-height: 1.4rem; }
-
-            /* Main tabs */
-            .tab-buttons { border-bottom: none; gap: 0.4rem; }
-            .tab-button { width: 100%; margin-right: 0; margin-bottom: 0; border-radius: 4px; border: 1px solid var(--tab-button-inactive-border); }
-            .tab-button.active { border-color: var(--cv-accent); background-color: var(--tab-button-hover-bg); color: var(--cv-text-dark); border-bottom: 1px solid var(--cv-accent); }
-            .tab-content { margin-top: 0.8rem; }
-            /* Sub tabs */
-            .sub-tab-buttons { gap: 0.4rem; border-bottom: none;}
-             .sub-tab-button { width: 100%; margin-bottom: 0; border-radius: 4px; border: 1px solid var(--subtab-button-inactive-border); }
-             .sub-tab-button.active { border-color: var(--cv-accent); background-color: var(--subtab-button-hover-bg); }
-            .sub-tab-content { margin-top: 0.8rem; }
-
-            header, main, footer { padding-left: 0.8rem; padding-right: 0.8rem; } /* Reduced padding */
-            .prominent-sample { margin-top: 0; padding-top: 1rem; }
-            .project-link-buttons { justify-content: center; }
-        }
-
-    </style>
+    }
+</style>
 </head>
 <body>
-    <div class="body-padding-wrapper">
-        <div class="container">
-            <div id="page-top"></div>
 
-            <div class="main-content-area">
-                <header>
-                    <h1>Donnacha's Work Samples</h1>
-                    <div class="header-cv-button">
-                        <a href="index.html" title="View Donnacha Bushe's CV">View CV</a>
-                    </div>
-                </header>
+<div class="body-padding-wrapper">
+<div class="container">
 
-                <main>
-                    <div class="tab-container">
-                        <div class="tab-buttons" role="tablist">
-                            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-client" data-tab-target="#tab-client">
-                                Client Project Highlight
-                            </button>
-                            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-independent" data-tab-target="#tab-independent">
-                                Independent DITA Examples
-                            </button>
-                            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-seai" data-tab-target="#tab-seai">
-                                SEAI Grant Guide and Checkers
-                            </button>
-                             <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-template" data-tab-target="#tab-template">
-                                Digital Guide Template
-                            </button>
-                        </div>
-                        <div class="tab-content">
-                            <div id="tab-client" class="tab-panel active" role="tabpanel">
-                                <section class="work-sample prominent-sample">
-                                    <h2 id="project-dtone">DT One Developer Portal</h2>
-                                    <p>
-                                        This section showcases live, public-facing documentation work. I played a key role in designing the structure and heavily reworking raw technical material to produce clear, user-focused guides and API documentation for the <a href="https://developers.dtone.com/" target="_blank" rel="noopener noreferrer">DT One Developer Portal</a>.
-                                    </p>
-                                    <div class="project-link-buttons">
-                                        <a href="https://developers.dtone.com/docs/about-dt-one-products-and-services" target="_blank" rel="noopener noreferrer" class="project-button">
-                                            <span class="icon">📖</span> Guides
-                                        </a>
-                                        <a href="https://developers.dtone.com/reference/overview" target="_blank" rel="noopener noreferrer" class="project-button">
-                                            <span class="icon">↔️</span> API Reference
-                                        </a>
-                                    </div>
-                                    <!-- HTML UPDATED: Standardized note structure -->
-                                    <div class="note-block">
-                                        <p>Note</p>
-                                        <p>Work samples for other clients like SAP and Ericsson involved significant documentation strategy and execution but are hosted behind company firewalls and cannot be shared directly.</p>
-                                    </div>
-                                </section>
-                            </div>
-                            <div id="tab-independent" class="tab-panel" role="tabpanel">
-                                <div class="sub-tab-container">
-                                    <p>These independent samples were created to demonstrate proficiency in specific DITA structures and technical writing concepts.</p>
-                                    <div class="sub-tab-buttons" role="tablist">
-                                        <button class="sub-tab-button active" role="tab" aria-selected="true" aria-controls="subtab-task" data-subtab-target="#subtab-task">
-                                            Task Topic Example
-                                        </button>
-                                        <button class="sub-tab-button" role="tab" aria-selected="false" aria-controls="subtab-concept" data-subtab-target="#subtab-concept">
-                                            Concept Topic Example
-                                        </button>
-                                    </div>
-                                    <div class="sub-tab-content">
-                                        <div id="subtab-task" class="sub-tab-panel active" role="tabpanel">
-                                            <section id="sample1" class="work-sample">
-                                                <h2 id="sample1-title">(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</h2>
-                                                <p class="dita-compliance">This example complies with the Task Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
-                                                <p>With a <b>LinkedIn Premium</b> subscription, users can effectively tailor their profiles to align with the skills sought by employers in job posts.andnbsp;</p>
-                                                <p>The <b>Qualifications</b> section allows Premium users to:</p>
-                                                <ul> <li>Identify the proportion of desired skills they already have listed on their profiles, providing an indication of how well they match the job post.</li> <li>Directly add any missing skills they possess to their profiles, improving their match with the job post.</li> <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li> </ul>
-                                                <p>This way, users can enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
-
-                                                <div class="prerequisites">
-                                                    <h3 id="sample1-prerequisites">Prerequisites</h3>
-                                                    <ul>
-                                                        <li>You have a <b>LinkedIn Premium</b> subscription to access the <b>Qualifications</b> section of job advertisements.andnbsp;
-                                                            <p>This section is unique to <b>LinkedIn Premium</b> and provides valuable insights into the skills associated with the job post and additional skills among applicants.</p>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-
-                                                <div class="steps">
-                                                    <h3 id="sample1-steps">Steps</h3>
-                                                    <ol class="steps-list">
-                                                        <li><b>Navigate to the Job Advertisement:</b> Open the job advertisement on LinkedIn.</li>
-                                                        <li><b>Access the Qualifications Section:</b> Scroll down to the <b>Qualifications</b> section, which is exclusive to <b>LinkedIn Premium</b> users.
-                                                            <p>This section provides a list of skills associated with the job post and additional skills common among applicants.</p>
-                                                        </li>
-                                                        <li><b>Add Skills:</b> Click on <b>Add Skills</b> located in the tip box below the list of skills.
-                                                            <p>This action opens the <b>Qualification details</b> dialog. A green tick appears beside each skill that is already listed on your profile.</p>
-                                                        </li>
-                                                        <li><b>Add Missing Skills:</b> If you possess a skill that isn't ticked green, click the <b>+ Add</b> button beside that skill.</li>
-                                                        <li><b>Showcase Your Skill:</b> Respond to the <b>Show us where you used this skill</b> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <b>Save</b>.</li>
-                                                        <li><b>Add More Skills or Exit:</b> You can continue to add more skills or click the <b>No thanks</b> button to exit.</li>
-                                                    </ol>
-                                                </div>
-                                            </section>
-                                        </div>
-                                        <div id="subtab-concept" class="sub-tab-panel" role="tabpanel">
-                                            <section id="sample2" class="work-sample">
-                                                <h2 id="sample2-title">Reuse Features in IXIASOFT CCMS</h2>
-                                                <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
-                                                <p>Content reuse is a powerful tool in content creation, saving significant time and effort by eliminating the need to recreate identical pieces of content. It also ensures consistency across documents, preventing discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
-                                                <p><a href="https://www.ixiasoft.com/" target="_blank" rel="noopener noreferrer"><b>IXIASOFT CCMS</b></a> provides the following features designed to streamline this process. Click on a feature below to see details.</p>
-                                                <!-- HTML UPDATED: Standardized note structure -->
-                                                <div class="note-block">
-                                                    <p>Note</p>
-                                                    <p>Examples provided on this page are based on a <b>SupplyChain Solutions</b> company, that manages supply chain operations for various clients and often needs to create variant documents.</p>
-                                                </div>
-
-                                                <div class="feature-selector-container">
-                                                    <div class="feature-titles">
-                                                        <button class="feature-title-button active" data-feature-target="#content-conref">Content References (Conref)</button>
-                                                        <button class="feature-title-button" data-feature-target="#content-keyref">Key References (Keyref)</button>
-                                                        <button class="feature-title-button" data-feature-target="#content-profiling">Conditional Processing (Profiling)</button>
-                                                        <button class="feature-title-button" data-feature-target="#content-topicreuse">Topic Reuse</button>
-                                                    </div>
-                                                    <div class="feature-content-pane"></div>
-                                                </div>
-                                                <div style="display: none;">
-                                                    <div id="content-conref">
-                                                        <h4>Content References (Conref)</h4>
-                                                        <div class="feature-detail-columns">
-                                                            <div class="feature-main-col">
-                                                                <p>Content References, or <code>Conref</code>, allow you to create segments of content that can be referenced across multiple topics in DITA. These segments, often created as <code>ReferableContent</code> topic types, become a part of the topics into which they are inserted. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
-                                                                <div class="example-block">
-                                                                    <h4>Example</h4>
-                                                                    <p><b>SupplyChain Solutions</b> created a standard shipping policy as a <code>ReferableContent</code> topic in one location. This policy was inserted it into multiple topics using a <code>Conref</code>. These topics were included in various maps based on the needs of different clients.</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="feature-info-col">
-                                                                <h4 class="more-info-list">More Information</h4>
-                                                                <ul>
-                                                                    <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/lar1396892881040.html" target="_blank" rel="noopener noreferrer">Creating and using conrefs</a></li>
-                                                                    <li>Comparable feature in <b>MadCap Flare</b>: <a href="https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets" target="_blank" rel="noopener noreferrer">MadCap Flare: Snippet</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="content-keyref">
-                                                        <h4>Key References (Keyref)</h4>
-                                                        <div class="feature-detail-columns">
-                                                            <div class="feature-main-col">
-                                                                <p>Key References, or <code>Keyref</code>, allow you to create a placeholder for content that can be replaced with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
-                                                                <div class="example-block">
-                                                                    <h4>Example</h4>
-                                                                    <p><b>SupplyChain Solutions</b> uses a <code>Keyref</code> for the client’s company name, ensuring the correct name is inserted into each client’s documents at the time of publishing.</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="feature-info-col">
-                                                                <h4 class="more-info-list">More Information</h4>
-                                                                <ul>
-                                                                    <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986050420.html" target="_blank" rel="noopener noreferrer">keyrefs and keydefs</a></li>
-                                                                    <li>Comparable feature in <b>MadCap Flare</b>: <a href="https://www.madcapsoftware.com/blog/guest-post-madcap-flare-101-8-variables-and-snippets" target="_blank" rel="noopener noreferrer">MadCap Flare: Variable</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="content-profiling">
-                                                        <h4>Conditional Processing (Profiling)</h4>
-                                                        <div class="feature-detail-columns">
-                                                            <div class="feature-main-col">
-                                                                <p>Conditional Processing allows you to mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions. These conditions, which can be things like product versions, audience types, or geographic locations, can be applied to specific sections within individual topics. This allows for greater flexibility and precision in content customization.</p>
-                                                                <div class="example-block">
-                                                                    <h4>Example</h4>
-                                                                    <p><b>SupplyChain Solutions</b> uses Conditional Processing to include specific sections such as <b>Return Policies</b> or <b>Warranty Information</b> in a topic for one client, and exclude them for another client who does not require these details.</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="feature-info-col">
-                                                                <h4 class="more-info-list">More Information</h4>
-                                                                <ul>
-                                                                    <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.8/User_Guides_Advanced_User_Standard/en/per1389986186479.html" target="_blank" rel="noopener noreferrer">Applying conditions (profiling and conditional processing)</a></li>
-                                                                    <li>Comparable feature in <b>MadCap Flare</b>: <a href="https://www.madcapsoftware.com/blog/tips-and-tricks-using-conditions-in-madcap-flare/" target="_blank" rel="noopener noreferrer">MadCap Flare: Conditional Tags</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="content-topicreuse">
-                                                        <h4>Topic Reuse</h4>
-                                                        <div class="feature-detail-columns">
-                                                            <div class="feature-main-col">
-                                                                <p>Topic Reuse in IXIASOFT CCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.</p>
-                                                                <div class="example-block">
-                                                                    <h4>Example</h4>
-                                                                    <p><b>SupplyChain Solutions</b> uses a topic on <b>Inventory Management</b> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="feature-info-col">
-                                                                <h4 class="more-info-list">More Information</h4>
-                                                                <ul>
-                                                                    <li><a href="https://www.ixiasoft.com/documentation/IXIASOFT_CCMS/6.3/User_Guides_Contributors_Standard/en/cab1556029603998.html" target="_blank" rel="noopener noreferrer">Content reuse in IXIASOFT CCMS Web</a></li>
-                                                                    <li>Comparable feature in <b>MadCap Flare</b>: <a href="https://forums.madcapsoftware.com/viewtopic.php?t=28997" target="_blank" rel="noopener noreferrer">MadCap Flare: Topic Reuse</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </section>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="tab-seai" class="tab-panel" role="tabpanel">
-                                <section class="work-sample prominent-sample">
-                                    <h2 id="project-seai-grants">SEAI Grant Guide and Checkers (Personal Project)</h2>
-                                    <p>
-                                        This project demonstrates my ability to take complex, publicly available information and transform it into clear, interactive, and user-friendly guides and eligibility checkers. The project focuses on the home energy grants offered by the Sustainable Energy Authority of Ireland (SEAI). While not "technical writing" in the traditional sense of software documentation, it showcases crucial skills applicable to any documentation role:
-                                    </p>
-                                    <ul>
-                                        <li><b>Information Architecture:</b> Structuring a large volume of diverse grant information into easily navigable tabs and sections.</li>
-                                        <li><b>Content Simplification:</b> Breaking down complex government criteria into digestible explanations and interactive questions.</li>
-                                        <li><b>User Experience (UX) Focus:</b> Designing intuitive interfaces (tabs, tooltips, clear result displays) to enhance user understanding and self-service.</li>
-                                        <li><b>AI Integration:</b> Leveraging AI assistance for content generation, structuring, and front-end development (HTML/CSS/JavaScript), demonstrating efficiency and modern tooling.</li>
-                                        <li><b>Accuracy and Referencing:</b> Ensuring all information points back to official sources, a core principle of reliable documentation.</li>
-                                    </ul>
-                                    <p>
-                                        This project was a personal initiative with a friend to explore innovative approaches to public information and did not involve any commercial engagement or payment from previous employers.
-                                    </p>
-                                    <div class="project-link-buttons">
-                                        <a href="find-out-if-you-qualify.html" target="_blank" rel="noopener noreferrer" class="project-button">
-                                            <span class="icon">✅</span> View Eligibility Checkers
-                                        </a>
-                                        <a href="explore-all-grant-options.html" target="_blank" rel="noopener noreferrer" class="project-button">
-                                            <span class="icon">📖</span> View Grant Guide and Amounts
-                                        </a>
-                                        <a href="https://github.com/donnachab/worksamples/tree/main" target="_blank" rel="noopener noreferrer" class="project-button">
-                                            <span class="icon">💻</span> View Code on GitHub
-                                        </a>
-                                    </div>
-                                </section>
-                            </div>
-<div id="tab-template" class="tab-panel" role="tabpanel">
-    <section class="work-sample prominent-sample">
-        <h2 id="project-template">Template for AI-Generated Digital Books</h2>
-        <!-- HTML UPDATED: Standardized note structure -->
-        <div class="note-block">
-            <p>Important Note for Evaluators</p>
-            <p>Please evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content.</p>
+    <header>
+        <div class="header-branding">
+            <img src="profile-pic.jpg" alt="Donnacha Bushe" class="header-profile-pic" onerror="this.style.display='none'">
+            <h1>Donnacha's Work Samples</h1>
         </div>
-        <p>This template is a system for guiding a large language model (LLM) through a structured authoring process to create complete, navigable digital books.</p>
-        <p>The process begins by prompting the AI for a <strong>Title</strong>, <strong>Audience</strong>, and <strong>Primary Goal</strong>. The template then directs the LLM to generate the full content, ensuring a predictable, DITA-compliant structure that is ideal for reuse and accuracy.</p>
-        <p><strong>Key Architectural and Design Features:</strong></p>
-        <ul>
-            <li><strong>Conversational Prompting:</strong> The internal structure acts as a "Master Prompt," guiding the AI through a structured authoring process to create DITA-compliant content.</li>
-            <li><strong>AI Governance and Structure:</strong> Enforces a strict, predictable output model (mandatory IDs like <code>#chap-name</code>, DITA-inspired blocks) to ensure consistency and prevent AI-driven content "drift."</li>
-            <li><strong>Machine Readability:</strong> Uses semantic tagging for high-quality ingestion by <abbr title="Artificial Intelligence">AI</abbr> training models or conversational interfaces.</li>
-            <li><strong>Advanced Interactivity:</strong> Integrates Mermaid.js for rendering complex diagrams directly from text input.</li>
-            <li><strong>Deployment:</strong> Single-file HTML design allows for portable and zero-friction viewing.</li>
-        </ul>
-        <div class="project-link-buttons">
-            <a href="guide-ai-developer-mindset.html" target="_blank" rel="noopener noreferrer" class="project-button">
-                <span class="icon">💻</span> View Guide: The AI-Amplified Content Developer: Fusing Strategy, UX, and Technical Skill
-            </a>
-             <a href="genealogy.html" target="_blank" rel="noopener noreferrer" class="project-button">
-                <span class="icon">🌳</span> View Guide: Irish Genealogy Guide
-            </a>
-             <a href="https://github.com/donnachab/worksamples/blob/main/book-template-future-tech-writing.html" target="_blank" rel="noopener noreferrer" class="project-button">
-                <span class="icon">📜</span> View Template Source Code
-            </a>
+        <div class="header-cv-button">
+            <a href="index.html" class="btn-primary">View CV</a>
         </div>
-    </section>
-</div>
-                        </div>
-                    </div>
-                </main>
+    </header>
 
-                <footer>
-                    <p><a href="#page-top">Back to Top</a></p>
-                </footer>
+    <nav class="main-tab-nav">
+        <button class="main-tab-btn active" onclick="switchMainTab('client', this)">Client Project: DT One</button>
+        <button class="main-tab-btn" onclick="switchMainTab('personal', this)">Personal Projects</button>
+    </nav>
+
+    <main>
+        <div id="tab-client" class="tab-panel active">
+            <!-- Sub Tabs FIRST (Directly below main tabs) -->
+            <div class="sub-nav-container">
+                <button class="sub-nav-btn active" onclick="switchDtOneSubTab('overview', this)">Project Overview</button>
+                <button class="sub-nav-btn" onclick="switchDtOneSubTab('samples', this)">Work Samples</button>
+            </div>
+
+            <div id="dtone-overview" class="sub-panel active">
+                <h2 style="margin-bottom: 0.5rem;">DT One Developer Portal</h2>
+                <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Role: Technical Writer & Information Architect</p>
+
+                <p>
+                    I replaced unsearchable PowerPoint presentations and bare-bones Swagger specs with searchable, task-based guides. The existing Swagger listed <em>what</em> endpoints existed, but not <em>how</em> to use them for specific integrations.
+                </p>
+                <p>
+                    I designed a consistent four-tab template to guide developers through the core workflow: discover products, post transactions, and retrieve status. I also enriched the API reference with context and examples, linking it directly to the task guides. This bridged the gap between "how do I integrate airtime?" and "which endpoint do I call?".
+                </p>
+                <p>
+                    The result was accurate, searchable developer documentation that replaced static files and provided a clear path to successful integration.
+                </p>
+                
+                <h3>Enhanced API Reference</h3>
+                <p>I also improved the <a href="https://developers.dtone.com/reference" target="_blank" rel="noopener noreferrer" style="font-weight:600; color: var(--cv-accent-hover);">Swagger and OpenAPI Documentation</a> by adding context, examples, and links to task guides.</p>
+            </div>
+
+            <div id="dtone-samples" class="sub-panel" style="display:none;">
+                <h2 style="margin-bottom: 0.5rem;">Work Samples</h2>
+                <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Iterative Template Design</p>
+
+                 <p>
+                    I collaborated with developers to build a reusable integration template. We iterated on the design by tackling the most divergent use cases first, ensuring the structure could handle any product type while keeping the authoring workflow in Confluence (the developers' preferred tool).
+                </p>
+                <p>The following three examples show this consistent template applied across distinct products:</p>
+
+                <ul class="sample-grid">
+                    <li class="sample-card">
+                        <a href="https://developers.dtone.com/docs/airtime-fixed-copy" target="_blank" rel="noopener noreferrer">📱 Mobile: FIXED_VALUE</a>
+                        <span class="sample-desc">A standard implementation of the template for airtime top-ups.</span>
+                    </li>
+                    <li class="sample-card">
+                        <a href="https://developers.dtone.com/docs/new-mobile-template" target="_blank" rel="noopener noreferrer">📶 Mobile: RANGED_VALUE</a>
+                        <span class="sample-desc">The template adapted for variable-amount transactions.</span>
+                    </li>
+                    <li class="sample-card">
+                        <a href="https://developers.dtone.com/docs/gift-card-fixed_value_recharge" target="_blank" rel="noopener noreferrer">🎁 Gift Card: FIXED_VALUE</a>
+                        <span class="sample-desc">The template applied to a completely different product category.</span>
+                    </li>
+                </ul>
+
+                <details>
+                    <summary>Analysis: Why This Design Works</summary>
+                    <div class="details-content">
+                        <h4 style="margin-top:0;">Design Principles</h4>
+                        <ul class="styled-list">
+                            <li><strong>Task-oriented structure:</strong> Matches developer mental models ("I need to integrate airtime") rather than the endpoint-focused API structure.</li>
+                            <li><strong>Sequential workflow:</strong> Leads developers step-by-step from product discovery to transaction completion.</li>
+                            <li><strong>Prominent warnings:</strong> Highlights required fields and common mistakes to address top support issues.</li>
+                            <li><strong>Visual clarity:</strong> Uses Mermaid diagrams to make complex transaction states understandable.</li>
+                            <li><strong>Scannable content:</strong> Uses accordions so developers can expand only the details they need.</li>
+                            <li><strong>Consistent pattern:</strong> Applies one structure across 7+ product types to reduce the learning curve.</li>
+                        </ul>
+                        <h4>Impact</h4>
+                        <ul class="styled-list">
+                            <li><strong>Scalability:</strong> Successfully applied across mobile, eSIM, and gift card products.</li>
+                            <li><strong>Reduced support burden:</strong> Addressed the top two categories of support questions directly in the docs.</li>
+                            <li><strong>Faster integration:</strong> Gave developers a clear path from intent to implementation.</li>
+                        </ul>
+                    </div>
+                </details>
             </div>
         </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Main Tab Logic ---
-            const mainTabButtons = document.querySelectorAll('.tab-buttons > .tab-button');
-            const mainTabPanels = document.querySelectorAll('.tab-content > .tab-panel');
-            
-            // Function to handle tab activation logic
-            const activateTab = (button) => {
-                const targetPanelId = button.getAttribute('data-tab-target');
 
-                // Deactivate all main tabs and hide their content
-                mainTabButtons.forEach(btn => { 
-                    btn.classList.remove('active'); 
-                    btn.setAttribute('aria-selected', 'false'); 
-                });
-                mainTabPanels.forEach(panel => { 
-                    panel.classList.remove('active'); 
-                    panel.style.display = 'none'; 
-                });
+        <div id="tab-personal" class="tab-panel">
+            <div class="sub-nav-container">
+                <button class="sub-nav-btn active" onclick="switchSubTab('dita-tool', this)">DITA XML Explorer</button>
+                <button class="sub-nav-btn" onclick="switchSubTab('seai', this)">SEAI Grant Guide</button>
+                <button class="sub-nav-btn" onclick="switchSubTab('presentation', this)">Mastering AI Context</button>
+                <button class="sub-nav-btn" onclick="switchSubTab('template', this)">AI Book Template</button>
+            </div>
 
-                // Activate the clicked tab and show its content
-                button.classList.add('active'); 
-                button.setAttribute('aria-selected', 'true');
-                const targetPanel = document.querySelector(targetPanelId);
-                if (targetPanel) {
-                    targetPanel.style.display = 'block';
-                    targetPanel.offsetHeight; // Force reflow for animation
-                    requestAnimationFrame(() => { targetPanel.classList.add('active'); });
-
-                    // Handle specific sub-tab logic if the independent tab is activated
-                    if (targetPanel.id === 'tab-independent') {
-                        const subTabButtons = targetPanel.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
-                        
-                        let initialActiveSubButton = targetPanel.querySelector('.sub-tab-buttons > .sub-tab-button.active');
-                        if (!initialActiveSubButton && subTabButtons.length > 0) {
-                            initialActiveSubButton = subTabButtons[0];
-                            initialActiveSubButton.classList.add('active');
-                            initialActiveSubButton.setAttribute('aria-selected', 'true');
-                        }
-                        if (initialActiveSubButton) {
-                            const initialActiveSubPanel = targetPanel.querySelector(initialActiveSubButton.getAttribute('data-subtab-target'));
-                            if (initialActiveSubPanel) {
-                                initialActiveSubPanel.style.display = 'block';
-                                initialActiveSubPanel.classList.add('active');
-
-                                if (initialActiveSubPanel.id === 'subtab-concept') {
-                                    const firstFeatureButton = initialActiveSubPanel.querySelector('.feature-title-button.active') || initialActiveSubPanel.querySelector('.feature-title-button');
-                                    const contentPane = initialActiveSubPanel.querySelector('.feature-content-pane');
-                                    if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) {
-                                        loadFeatureContent(firstFeatureButton, contentPane);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            
-            // Set initial active tab on page load
-            if (mainTabButtons.length > 0 && mainTabPanels.length > 0) {
-                let initialActiveMainButton = document.querySelector('.tab-buttons > .tab-button.active');
-                if (!initialActiveMainButton) {
-                    initialActiveMainButton = mainTabButtons[0];
-                }
-                activateTab(initialActiveMainButton);
+            <div id="sub-dita-tool" class="sub-panel active">
+                <h2>DITA XML Explorer</h2>
                 
-                mainTabButtons.forEach(button => {
-                    button.addEventListener('click', () => activateTab(button));
-                });
+                <div class="note">
+                    <strong>Note:</strong> The DITA XML Explorer is best viewed on a desktop screen to fully appreciate the side-by-side code and preview panes.
+                </div>
+                
+                <p>This custom-built viewer showcases both **user-facing writing** (LinkedIn profile maintenance) and **developer-focused concepts** (CCMS reuse). It demonstrates my ability to tailor content for different audiences while enforcing valid DITA architecture.</p>
+                
+                <p>The content covers advanced reuse strategies (<code>conref</code>, <code>keyref</code>) to highlight my expertise in Component Content Management Systems (CCMS). You can toggle between the <strong>Preview</strong> and <strong>Source</strong> views to see how the code renders.</p>
+                <br>
+    
+                <div class="dita-viewer-container">
+                    <div class="dita-sidebar">
+                        <div class="dita-sidebar-header">FILE EXPLORER</div>
+                        <button class="dita-file-btn active" data-key="map" onclick="loadDita('map')">Portfolio Map</button>
+                        <button class="dita-file-btn" data-key="task" onclick="loadDita('task')">(Premium Users) Add Skills...</button>
+                        <button class="dita-file-btn" data-key="concept" onclick="loadDita('concept')">Reuse Features in IXIASOFT...</button>
+                    </div>
+                    <div class="dita-main-area">
+                        <div class="dita-toolbar">
+                            <div class="dita-filename" id="dita-filename">portfolio.ditamap</div>
+                            <div class="dita-toggle">
+                                <button class="active" id="btn-preview" onclick="toggleView('preview')">Preview</button>
+                                <button id="btn-source" onclick="toggleView('source')">Source</button>
+                            </div>
+                        </div>
+                        <div class="dita-content">
+                            <div id="view-preview" class="dita-pane dita-preview active"></div>
+                            <div id="view-source" class="dita-pane dita-source"><pre><code id="code-block"></code></pre></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sub-seai" class="sub-panel" style="display: none;">
+                <h2>SEAI Grant Guide and Checkers</h2>
+                
+                <p>
+                    I transformed complex government grant rules into clear, interactive guides and eligibility checkers. The project focuses on the home energy grants offered by the Sustainable Energy Authority of Ireland (SEAI).
+                </p>
+                <p>
+                    While not traditional software documentation, this project proves core technical communication skills:
+                </p>
+                <ul class="styled-list">
+                    <li><b>Information Architecture:</b> Structured diverse grant information into easily navigable tabs.</li>
+                    <li><b>Content Simplification:</b> Broke down complex criteria into digestible explanations.</li>
+                    <li><b>User Experience (UX):</b> Designed intuitive interfaces (tabs, tooltips, result displays) for self-service.</li>
+                    <li><b>AI Integration:</b> Leveraged AI for content generation and front-end coding (HTML, CSS, JS).</li>
+                    <li><b>Accuracy:</b> Ensured all information links back to official sources.</li>
+                </ul>
+                <p>This was a personal initiative to explore innovative approaches to public information.</p>
+                
+                <div class="project-link-buttons">
+                    <a href="find-out-if-you-qualify.html" target="_blank" class="btn-primary">✅ Eligibility Checkers</a>
+                    <a href="explore-all-grant-options.html" target="_blank" class="btn-primary">📖 Grant Guide</a>
+                    <a href="https://github.com/donnachab/worksamples/tree/main" target="_blank" class="btn-primary">💻 View Code on GitHub</a>
+                </div>
+            </div>
+            
+            <div id="sub-presentation" class="sub-panel" style="display: none;">
+                <h2>Mastering AI Context & Control</h2>
+                
+                <p>This presentation goes beyond simple prompt lists to explain the underlying architecture of Large Language Models (LLMs).</p>
+                <p>Using dramatic visual metaphors, I clarify complex concepts like the 
+                    <span class="hover-trigger" data-img="slide3_context_bucket.png" data-caption="Visualizing Token Limits">Context Bucket</span> 
+                    and the 
+                    <span class="hover-trigger" data-img="slide3b_prediction_tree.png" data-caption="The Probability Tree">Prediction Engine</span> 
+                    to show why AI models lose track of instructions.
+                </p>
+                <p>The guide provides a practical strategy for maintaining context and preventing hallucinations, transforming casual users into precise prompt engineers.</p>
+                
+                <div class="project-link-buttons" style="margin-top: 2rem;">
+                    <a href="guide-ai-developer-mindset.html" target="_blank" class="btn-primary">📺 View Presentation</a>
+                </div>
+            </div>
+
+            <div id="sub-template" class="sub-panel" style="display: none;">
+                <h2>Template for AI-Generated Digital Books</h2>
+                
+                <div class="note">
+                    <strong>Note:</strong> Please evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content. This template demonstrates prompt engineering and structural governance.
+                </div>
+                <p>This template guides an LLM through a structured authoring process to create complete, navigable digital books. It begins by prompting for a <strong>Title</strong>, <strong>Audience</strong>, and <strong>Goal</strong>, then enforces a predictable, DITA-compliant structure.</p>
+                <p><strong>Key Architectural Features:</strong></p>
+                <ul class="styled-list">
+                    <li><strong>Conversational Prompting:</strong> The internal structure acts as a master prompt.</li>
+                    <li><strong>AI Governance:</strong> Enforces a predictable output model (mandatory IDs, specific blocks) to prevent content drift.</li>
+                    <li><strong>Machine Readability:</strong> Uses semantic tagging for high-quality ingestion.</li>
+                    <li><strong>Advanced Interactivity:</strong> Integrates Mermaid.js for diagrams from text input.</li>
+                    <li><strong>Deployment:</strong> Single-file HTML for seamless portability.</li>
+                </ul>
+                <div class="project-link-buttons">
+                     <a href="genealogy.html" target="_blank" class="btn-primary">🌳 View Sample: Irish Genealogy Guide</a>
+                     <a href="https://github.com/donnachab/worksamples/blob/main/book-template-future-tech-writing.html" target="_blank" class="btn-primary">📜 View Template Source Code</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <footer>
+        <p><a href="#page-top">Back to Top</a></p>
+        <p class="colophon"><strong>Technical Note:</strong> This portfolio was built using AI-Assisted Development to rapidly prototype complex information architecture concepts.</p>
+    </footer>
+</div>
+</div>
+
+<!-- Floating Image Container -->
+<div id="floating-image-viewer">
+    <img id="floating-img" src="" alt="Preview">
+    <p id="floating-caption"></p>
+</div>
+
+<script>
+// --- HOVER IMAGE LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+    const viewer = document.getElementById('floating-image-viewer');
+    const img = document.getElementById('floating-img');
+    const caption = document.getElementById('floating-caption');
+    const triggers = document.querySelectorAll('.hover-trigger');
+
+    triggers.forEach(trigger => {
+        trigger.addEventListener('mouseenter', (e) => {
+            const src = trigger.getAttribute('data-img');
+            const txt = trigger.getAttribute('data-caption');
+            
+            if (src) {
+                img.src = src;
+                caption.textContent = txt || '';
+                viewer.style.display = 'block';
             }
+        });
 
-            // --- Sub-Tab Logic (for Independent DITA Examples) ---
-            const independentTab = document.querySelector('#tab-independent');
-            if (independentTab) {
-                const subTabButtons = independentTab.querySelectorAll('.sub-tab-buttons > .sub-tab-button');
-                const subTabPanels = independentTab.querySelectorAll('.sub-tab-content > .sub-tab-panel');
-
-                if (subTabButtons.length > 0 && subTabPanels.length > 0) {
-                    subTabButtons.forEach(button => {
-                        button.addEventListener('click', (e) => {
-                            const targetPanelId = button.getAttribute('data-subtab-target');
-                            subTabButtons.forEach(btn => { 
-                                btn.classList.remove('active'); 
-                                btn.setAttribute('aria-selected', 'false'); 
-                            });
-                            subTabPanels.forEach(panel => { 
-                                panel.classList.remove('active'); 
-                                panel.style.display = 'none'; 
-                            });
-                            button.classList.add('active'); 
-                            button.setAttribute('aria-selected', 'true');
-                            const targetPanel = independentTab.querySelector(targetPanelId);
-                            if (targetPanel) {
-                                targetPanel.style.display = 'block';
-                                targetPanel.offsetHeight; // Force reflow for animation
-                                requestAnimationFrame(() => { targetPanel.classList.add('active'); });
-                                if (targetPanel.id === 'subtab-concept') {
-                                    const firstFeatureButton = targetPanel.querySelector('.feature-title-button.active') || targetPanel.querySelector('.feature-title-button');
-                                    const contentPane = targetPanel.querySelector('.feature-content-pane');
-                                    if(firstFeatureButton && contentPane && !contentPane.hasChildNodes()) {
-                                        loadFeatureContent(firstFeatureButton, contentPane);
-                                    }
-                                }
-                            }
-                        });
-                    });
-                }
+        trigger.addEventListener('mousemove', (e) => {
+            // Position nicely next to cursor
+            const x = e.pageX + 15;
+            const y = e.pageY + 15;
+            
+            // Basic bounds check to prevent off-screen (simple)
+            const rightEdge = x + viewer.offsetWidth;
+            if (rightEdge > window.innerWidth) {
+                 viewer.style.left = (e.pageX - viewer.offsetWidth - 15) + 'px';
+            } else {
+                 viewer.style.left = x + 'px';
             }
+            
+            viewer.style.top = y + 'px';
+        });
 
+        trigger.addEventListener('mouseleave', () => {
+            viewer.style.display = 'none';
+        });
+    });
+});
 
-            // --- Feature Selector Logic (Concept Tab) ---
-            const conceptSubTab = document.querySelector('#subtab-concept');
-            if (conceptSubTab) {
-                const featureTitleButtons = conceptSubTab.querySelectorAll('.feature-selector-container .feature-title-button');
-                const featureContentPane = conceptSubTab.querySelector('.feature-selector-container .feature-content-pane');
+// --- MAIN TAB LOGIC ---
+window.switchMainTab = function(tabId, btn) {
+    document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+    
+    if (btn) {
+        btn.classList.add('active');
+    } else if (event && event.target) {
+        event.target.classList.add('active');
+    }
+    
+    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+    
+    const targetPanel = document.getElementById('tab-' + tabId);
+    if(targetPanel) {
+        targetPanel.classList.add('active');
+    }
 
-                if (featureTitleButtons.length > 0 && featureContentPane) {
-                    featureTitleButtons.forEach(button => {
-                        button.addEventListener('click', (e) => {
-                            loadFeatureContent(button, featureContentPane);
-                        });
-                    });
-                }
-            }
-
-        }); // End DOMContentLoaded
-
-        // --- Helper function for Feature Selector ---
-        function loadFeatureContent(button, contentPane) {
-            const targetContentId = button.getAttribute('data-feature-target');
-            const featureTitlesContainer = button.closest('.feature-titles');
-            if (!featureTitlesContainer) return;
-            const featureTitleButtons = featureTitlesContainer.querySelectorAll('.feature-title-button');
-
-            featureTitleButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-
-            const sourceContentDiv = document.querySelector(targetContentId);
-
-            if (sourceContentDiv && contentPane) {
-                contentPane.innerHTML = '';
-                const clonedContent = sourceContentDiv.cloneNode(true);
-                contentPane.appendChild(clonedContent);
-            } else if (contentPane) {
-                contentPane.innerHTML = '<p>Content not found.</p>';
-            }
+    if(tabId === 'personal') {
+        const ditaCodeBlock = document.getElementById('code-block');
+        if (ditaCodeBlock && !ditaCodeBlock.innerText.trim()) {
+            loadDita('map');
         }
-    </script>
+    }
+}
 
+// --- DT ONE SUB-TAB LOGIC ---
+window.switchDtOneSubTab = function(subId, btn) {
+    // 1. Deactivate all sub-nav buttons in the DT One section
+    const container = btn.closest('.sub-nav-container');
+    container.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+    
+    // 2. Activate clicked button
+    btn.classList.add('active');
+    
+    // 3. Hide all panels in DT One section
+    const parentPanel = document.getElementById('tab-client');
+    parentPanel.querySelectorAll('.sub-panel').forEach(panel => panel.style.display = 'none');
+    
+    // 4. Show target panel
+    const target = document.getElementById('dtone-' + subId);
+    if(target) target.style.display = 'block';
+}
+
+
+// --- PERSONAL PROJECT SUB-TAB LOGIC ---
+window.switchSubTab = function(subId, btn) {
+    // 1. Find the specific container for this set of buttons
+    const container = btn.closest('.sub-nav-container');
+    
+    // 2. Deactivate only siblings
+    container.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+    
+    // 3. Activate clicked
+    btn.classList.add('active');
+    
+    // 4. Hide panels specific to this parent tab
+    const parentPanel = btn.closest('.tab-panel');
+    parentPanel.querySelectorAll('.sub-panel').forEach(panel => panel.style.display = 'none');
+    
+    // 5. Show target
+    document.getElementById('sub-' + subId).style.display = 'block';
+
+    if(subId === 'dita-tool' && !document.getElementById('code-block').innerText) {
+        loadDita('map');
+    }
+}
+
+// --- DITA VIEWER DATA ---
+const ditaContent = {
+    map: {
+        title: "Portfolio Map",
+        filename: "portfolio.ditamap",
+        preview: `
+            <h1>Donnacha's Work Samples Portfolio</h1>
+            <p><strong>Author:</strong> Donnacha Bushe &copy; 2025</p>
+            <div class="dita-map-tree">
+                <h3>Table of Contents</h3>
+                <ul>
+                    <li class="topic-head"><strong>Independent DITA Samples</strong>
+                        <ul>
+                            <li><a href="#" onclick="loadDita('task'); return false;">(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</a></li>
+                            <li><a href="#" onclick="loadDita('concept'); return false;">Reuse Features in IXIASOFT CCMS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        `,
+        source: `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-us">
+    <title>Donnacha's Work Samples Portfolio</title>
+    <topicmeta>
+        <author>Donnacha Bushe</author>
+        <copyright>
+            <copyryear year="2025"/>
+            <copyrholder>Donnacha Bushe</copyrholder>
+        </copyright>
+    </topicmeta>
+
+    <keydef keys="product_name">
+        <topicmeta><keywords><keyword>SupplyChain Solutions</keyword></keywords></topicmeta>
+    </keydef>
+
+    <topicref href="tasks/t_linkedin_add_skills.dita" format="dita" type="task">
+        <topicmeta><navtitle>(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</navtitle></topicmeta>
+    </topicref>
+    
+    <topicref href="concepts/c_ixiasoft_reuse.dita" format="dita" type="concept">
+        <topicmeta><navtitle>Reuse Features in IXIASOFT CCMS</navtitle></topicmeta>
+    </topicref>
+
+    <reltable>
+        <relheader>
+            <relcolspec type="task"/>
+            <relcolspec type="concept"/>
+        </relheader>
+        <relrow>
+            <relcell>
+                <topicref href="tasks/t_linkedin_add_skills.dita"/>
+            </relcell>
+            <relcell>
+                </relcell>
+        </relrow>
+    </reltable>
+</map>`
+    },
+    task: {
+        title: "(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts",
+        filename: "t_linkedin_add_skills.dita",
+        preview: `
+            <h1>(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</h1>
+            <p class="dita-compliance">This example complies with the Task Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
+            <p>With a <strong>LinkedIn Premium</strong> subscription, users can tailor their profiles to align with the skills sought by employers in job posts.&nbsp;</p>
+            <p>The <strong>Qualifications</strong> section allows Premium users to complete the following tasks:</p>
+            <ul> <li>Identify the proportion of desired skills that they already have listed on their profiles, which provides an indication of how well they match the job post.</li> <li>Directly add any missing skills that they possess to their profiles, which improves their match with the job post.</li> <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li> </ul>
+            <p>These actions help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
+            
+            <div class="note">
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>A <strong>LinkedIn Premium</strong> subscription is required to access the <strong>Qualifications</strong> section of job advertisements.&nbsp;
+                    <p>This section is unique to <strong>LinkedIn Premium</strong> and provides valuable insights into the skills associated with the job post and additional skills among applicants.</p>
+                    </li>
+                </ul>
+            </div>
+            
+            <h3>Steps</h3>
+            <ol>
+                <li><strong>Navigate to the job advertisement:</strong> Open the job advertisement on LinkedIn.</li>
+                <li><strong>Access the qualifications section:</strong> Scroll down to the <strong>Qualifications</strong> section, which is exclusive to <strong>LinkedIn Premium</strong> users.
+                <p>This section provides a list of skills associated with the job post and additional skills common among applicants.</p>
+                </li>
+                <li><strong>Add skills:</strong> Click <strong>Add Skills</strong> located in the tip box below the list of skills.
+                <p>This action opens the <strong>Qualification details</strong> dialog. A green check mark appears beside each skill that is already listed on your profile.</p>
+                </li>
+                <li><strong>Add missing skills:</strong> If you possess a skill that does not have a green check mark, click the <strong>+ Add</strong> button beside that skill.</li>
+                <li><strong>Showcase your skill:</strong> Respond to the <strong>Show us where you used this skill</strong> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <strong>Save</strong>.</li>
+                <li><strong>Add more skills or exit:</strong> You can continue to add more skills or click the <strong>No thanks</strong> button to exit.</li>
+            </ol>
+        `,
+        source: `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="t_linkedin_add_skills" xml:lang="en-us">
+    <title>(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</title>
+    <shortdesc>With a <tm tmtype="tm">LinkedIn</tm> Premium subscription, users can tailor their profiles to align with the skills sought by employers in job posts.</shortdesc>
+    <taskbody>
+        <context>
+            <p>The <uicontrol>Qualifications</uicontrol> section allows Premium users to complete the following tasks:</p>
+            <ul>
+                <li>Identify the proportion of desired skills that they already have listed on their profiles, which provides an indication of how well they match the job post.</li>
+                <li>Directly add any missing skills that they possess to their profiles, which improves their match with the job post.</li>
+                <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li>
+            </ul>
+            <p>These actions help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
+        </context>
+        <prereq>
+            <p>A <tm tmtype="tm">LinkedIn</tm> Premium subscription is required to access the <uicontrol>Qualifications</uicontrol> section of job advertisements.</p>
+            <note type="note">This section is unique to <tm tmtype="tm">LinkedIn</tm> Premium and provides valuable insights into the skills associated with the job post and additional skills among applicants.</note>
+        </prereq>
+        <steps>
+            <step>
+                <cmd>Navigate to the job advertisement on <tm tmtype="tm">LinkedIn</tm>.</cmd>
+            </step>
+            <step>
+                <cmd>Scroll down to the <uicontrol>Qualifications</uicontrol> section.</cmd>
+                <info>This section provides a list of skills associated with the job post and additional skills common among applicants.</info>
+            </step>
+            <step>
+                <cmd>Click <uicontrol>Add Skills</uicontrol> located in the tip box below the list of skills.</cmd>
+                <stepresult>This action opens the <wintitle>Qualification details</wintitle> dialog. A green check mark appears beside each skill that is already listed on your profile.</stepresult>
+            </step>
+            <step>
+                <cmd>If you possess a skill that does not have a green check mark, click the <uicontrol>+ Add</uicontrol> button beside that skill.</cmd>
+            </step>
+            <step>
+                <cmd>Respond to the <systemoutput>Show us where you used this skill</systemoutput> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <uicontrol>Save</uicontrol>.</cmd>
+            </step>
+            <step>
+                <cmd>You can continue to add more skills or click the <uicontrol>No thanks</uicontrol> button to exit.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>`
+    },
+    concept: {
+        title: "Reuse Features in IXIASOFT CCMS",
+        filename: "c_ixiasoft_reuse.dita",
+        preview: `
+            <h1>Reuse Features in IXIASOFT CCMS</h1>
+            <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
+            <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
+            <p><a href="https://www.ixiasoft.com/" target="_blank" rel="noopener noreferrer"><strong>IXIASOFT CCMS</strong></a> provides the following features designed to streamline this process. Click a feature below to see details.</p>
+            
+            <div class="note">
+                <p>Note</p>
+                <p>Examples provided on this page are based on <span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span>, a company that manages supply chain operations for various clients and often needs to create variant documents.</p>
+            </div>
+            
+            <div class="feature-selector-container">
+                <div class="feature-titles">
+                    <button class="feature-title-button active" onclick="showFeature('conref', this)">Content References (Conref)</button>
+                    <button class="feature-title-button" onclick="showFeature('keyref', this)">Key References (Keyref)</button>
+                    <button class="feature-title-button" onclick="showFeature('profiling', this)">Conditional Processing</button>
+                    <button class="feature-title-button" onclick="showFeature('topic', this)">Topic Reuse</button>
+                </div>
+                <div class="feature-content-pane">
+                    <div id="feature-conref">
+                        <h4>Content References (Conref)</h4>
+                        <p>Content References (<code>Conref</code>) allow you to create segments of content that you can reference across multiple topics in DITA. These segments, which authors often create as <code>ReferableContent</code> topic types, become a part of the topics into which you insert them. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
+                        <div class="example-block"><h4>Example</h4><p><span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span> created a standard shipping policy as a <code>ReferableContent</code> topic in one location. The author inserted the policy into multiple topics using a <code>Conref</code>. The author then included these topics in various maps based on the needs of different clients.</p></div>
+                    </div>
+                    <div id="feature-keyref" style="display:none;">
+                        <h4>Key References (Keyref)</h4>
+                        <p>Key References (<code>Keyref</code>) allow you to create a placeholder for content that you can replace with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
+                        <div class="example-block"><h4>Example</h4><p><span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span> uses a <code>Keyref</code> for the company name of the client, which ensures that the correct name is inserted into the documents of each client at the time of publishing.</p></div>
+                    </div>
+                    <div id="feature-profiling" style="display:none;">
+                        <h4>Conditional Processing (Profiling)</h4>
+                        <p>Conditional Processing allows you to mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions. You can apply these conditions, such as product versions, audience types, or geographic locations, to specific sections within individual topics. This process allows for greater flexibility and precision in content customization.</p>
+                        <div class="example-block"><h4>Example</h4><p><span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span> uses Conditional Processing to include specific sections, such as <strong>Return Policies</strong> or <strong>Warranty Information</strong>, in a topic for one client and exclude the sections for another client who does not require these details.</p></div>
+                    </div>
+                    <div id="feature-topic" style="display:none;">
+                        <h4>Topic Reuse</h4>
+                        <p>Topic Reuse in IXIASOFT CCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.</p>
+                        <div class="example-block"><h4>Example</h4><p><span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span> uses a topic on <strong>Inventory Management</strong> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p></div>
+                    </div>
+                </div>
+            </div>
+        `,
+        source: `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="c_ixiasoft_reuse" xml:lang="en-us">
+    <title>Reuse Features in IXIASOFT CCMS</title>
+    <conbody>
+        <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
+        <p><tm tmtype="tm">IXIASOFT</tm> CCMS provides the following features designed to streamline this process.</p>
+        <note type="note">Examples provided on this page are based on <keyword keyref="product_name"/>, a company that manages supply chain operations for various clients and often needs to create variant documents.</note>
+        
+        <dl>
+            <dlentry>
+                <dt>Content References (Conref)</dt>
+                <dd>
+                    <p>Content References (<codeph>Conref</codeph>) allow you to create segments of content that you can reference across multiple topics in DITA. These segments, which authors often create as <codeph>ReferableContent</codeph> topic types, become a part of the topics into which you insert them. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
+                    <example>
+                        <title>Example</title>
+                        <p><keyword keyref="product_name"/> created a standard shipping policy as a <codeph>ReferableContent</codeph> topic in one location. The author inserted the policy into multiple topics using a <codeph>Conref</codeph>. The author then included these topics in various maps based on the needs of different clients.</p>
+                    </example>
+                </dd>
+            </dlentry>
+            <dlentry>
+                <dt>Key References (Keyref)</dt>
+                <dd>
+                    <p>Key References (<codeph>Keyref</codeph>) allow you to create a placeholder for content that you can replace with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
+                    <example>
+                        <title>Example</title>
+                        <p><keyword keyref="product_name"/> uses a <codeph>Keyref</codeph> for the company name of the client, which ensures that the correct name is inserted into the documents of each client at the time of publishing.</p>
+                    </example>
+                </dd>
+            </dlentry>
+            <dlentry>
+                <dt>Conditional Processing (Profiling)</dt>
+                <dd>
+                    <p>Conditional Processing allows you to mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions. You can apply these conditions, such as product versions, audience types, or geographic locations, to specific sections within individual topics. This process allows for greater flexibility and precision in content customization.</p>
+                    <example>
+                        <title>Example</title>
+                        <p><keyword keyref="product_name"/> uses Conditional Processing to include specific sections, such as <uicontrol>Return Policies</uicontrol> or <uicontrol>Warranty Information</uicontrol>, in a topic for one client and exclude the sections for another client who does not require these details.</p>
+                    </example>
+                </dd>
+            </dlentry>
+            <dlentry>
+                <dt>Topic Reuse</dt>
+                <dd>
+                    <p>Topic Reuse in <tm tmtype="tm">IXIASOFT</tm> CCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.</p>
+                    <example>
+                        <title>Example</title>
+                        <p><keyword keyref="product_name"/> uses a topic on <wintitle>Inventory Management</wintitle> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p>
+                    </example>
+                </dd>
+            </dlentry>
+        </dl>
+    </conbody>
+</concept>`
+    }
+};
+
+window.escapeHtml = function(text) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+window.highlightXml = function(xml) {
+    return escapeHtml(xml)
+        .replace(/(&lt;\!--[\s\S]*?--&gt;)/g, '<span class="xml-comment">$1</span>')
+        .replace(/(&lt;\/?)(\w+)(.*?)(\/?&gt;)/g, function(match, p1, p2, p3, p4) {
+            return '<span class="xml-tag">' + p1 + p2 + '</span>' + 
+                   p3.replace(/(\s+\w+=)(".*?")/g, '<span class="xml-attr">$1</span><span class="xml-string">$2</span>') + 
+                   '<span class="xml-tag">' + p4 + '</span>';
+        });
+}
+
+let currentFile = 'map';
+let currentMode = 'preview';
+
+window.loadDita = function(fileKey) {
+    currentFile = fileKey;
+    updateSidebarLabels(currentMode); 
+    
+    document.querySelectorAll('.dita-file-btn').forEach(btn => btn.classList.remove('active'));
+    const targetBtn = document.querySelector(`.dita-file-btn[data-key="${fileKey}"]`);
+    if(targetBtn) targetBtn.classList.add('active');
+    
+    updateHeader();
+    renderDita();
+}
+
+window.toggleView = function(mode) {
+    currentMode = mode;
+    document.getElementById('btn-preview').classList.toggle('active', mode === 'preview');
+    document.getElementById('btn-source').classList.toggle('active', mode === 'source');
+    document.getElementById('view-preview').classList.toggle('active', mode === 'preview');
+    document.getElementById('view-source').classList.toggle('active', mode === 'source');
+    
+    updateSidebarLabels(mode);
+    updateHeader();
+    renderDita();
+}
+
+function updateSidebarLabels(mode) {
+    document.querySelectorAll('.dita-file-btn').forEach(btn => {
+        const key = btn.getAttribute('data-key');
+        btn.innerText = (mode === 'preview') ? ditaContent[key].title : ditaContent[key].filename;
+    });
+}
+
+function updateHeader() {
+    const content = ditaContent[currentFile];
+    document.getElementById('dita-filename').innerText = (currentMode === 'preview') ? content.title : content.filename;
+}
+
+function renderDita() {
+    const data = ditaContent[currentFile];
+    document.getElementById('view-preview').innerHTML = data.preview;
+    document.getElementById('code-block').innerHTML = highlightXml(data.source);
+}
+
+// Interactive Feature Tabs in DITA Preview
+window.showFeature = function(featureName, btn) {
+    const container = btn.closest('.feature-selector-container');
+    container.querySelectorAll('.feature-title-button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const pane = container.querySelector('.feature-content-pane');
+    pane.querySelectorAll('div[id^="feature-"]').forEach(div => div.style.display = 'none');
+    pane.querySelector('#feature-' + featureName).style.display = 'block';
+};
+</script>
 </body>
 </html>
