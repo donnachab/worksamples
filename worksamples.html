@@ -181,7 +181,6 @@
         color: #3730a3;
         border-bottom: 1px dotted #4f46e5;
         padding: 0 2px;
-        border-radius: 2px;
         cursor: help;
         font-weight: 500;
     }
@@ -306,7 +305,7 @@
 
     <header>
         <div class="header-branding">
-            <img src="profile-pic.jpg" alt="Donnacha Bushe" class="header-profile-pic" onerror="this.style.display='none'">
+            <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe" class="header-profile-pic" onerror="this.style.display='none'">
             <h1>Donnacha's Work Samples</h1>
         </div>
         <div class="header-cv-button">
@@ -351,8 +350,7 @@
 
             <div id="dtone-samples" class="sub-panel" style="display:none;">
                 <h2 style="margin-bottom: 0.5rem;">Work Samples</h2>
-                <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Iterative Template Design</p>
-
+                
                  <p>
                     I collaborated with developers to build a reusable integration template. We iterated on the design by tackling the most divergent use cases first, ensuring the structure could handle any product type while keeping the authoring workflow in Confluence (the developers' preferred tool).
                 </p>
@@ -469,9 +467,9 @@
                 
                 <p>This presentation goes beyond simple prompt lists to explain the underlying architecture of <span class="definition-trigger">Large Language Models<span class="tooltip-text">AI models trained on massive text datasets used to generate human-like text and code.</span></span> (LLMs).</p>
                 <p>Using dramatic visual metaphors, I clarify complex concepts like the 
-                    <span class="hover-trigger" data-img="slide3_context_bucket.png" data-caption="Visualizing Token Limits">Context Bucket</span> 
+                    <span class="hover-trigger" data-img="https://raw.githubusercontent.com/donnachab/worksamples/main/assets/slide3_context_bucket.png" data-caption="Visualizing Token Limits">Context Bucket</span> 
                     and the 
-                    <span class="hover-trigger" data-img="slide3b_prediction_tree.png" data-caption="The Probability Tree">Prediction Engine</span> 
+                    <span class="hover-trigger" data-img="https://raw.githubusercontent.com/donnachab/worksamples/main/assets/slide3b_prediction_tree.png" data-caption="The Probability Tree">Prediction Engine</span> 
                     to show why AI models lose track of instructions.
                 </p>
                 <p>The guide provides a practical strategy for maintaining context and preventing hallucinations, transforming casual users into precise prompt engineers.</p>
@@ -531,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const txt = trigger.getAttribute('data-caption');
             
             if (src) {
-                // Assuming images are in the root for simplicity in this sandbox environment
+                // Use the absolute path provided in the HTML data-img attribute
                 img.src = src; 
                 caption.textContent = txt || '';
                 viewer.style.display = 'block';
@@ -655,7 +653,7 @@ const ditaContent = {
                     <li class="topic-head"><strong>Independent DITA Samples</strong>
                         <ul>
                             <li><a href="#" onclick="loadDita('task'); return false;">(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</a></li>
-                            <li><a href="#" onclick="loadDita('concept'); return false;">Reuse Features in IXIASOFT CCMS</a></li>
+                            <li><a href="#" onclick="loadDita('concept'); return false;">Reuse Concepts in IXIASOFT CCMS</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -682,7 +680,7 @@ const ditaContent = {
     </topicref>
     
     <topicref href="concepts/c_ixiasoft_reuse.dita" format="dita" type="concept">
-        <topicmeta><navtitle>Reuse Features in IXIASOFT CCMS</navtitle></topicmeta>
+        <topicmeta><navtitle>Reuse Concepts in IXIASOFT CCMS</navtitle></topicmeta>
     </topicref>
 
     <reltable>
@@ -782,7 +780,7 @@ const ditaContent = {
         title: "Reuse Concepts in IXIASOFT CCMS",
         filename: "c_ixiasoft_reuse.dita",
         preview: `
-            <h1>Reuse Features in IXIASOFT CCMS</h1>
+            <h1>Reuse Concepts in IXIASOFT CCMS</h1>
             <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
             <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts.</p>
             
@@ -837,7 +835,7 @@ const ditaContent = {
         <div class="feature-selector-container">
             <div class="feature-titles">
                 <button class="feature-title-button active" onclick="showFeature('conref', this)">Content References (Conref)</button>
-                <button class="feature-title-button" onclick="showFeature('keyref', this)">Key References (Keyref)</button>
+                <button class="feature-title-button" onclick="showFeature('keyref', this)">Key References (keyref)</button>
                 <button class="feature-title-button" onclick="showFeature('profiling', this)">Conditional Processing</button>
                 <button class="feature-title-button" onclick="showFeature('topic', this)">Topic Reuse</button>
             </div>
