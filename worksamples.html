@@ -121,6 +121,8 @@
     .styled-list li::before { content: "•"; color: var(--cv-accent); position: absolute; left: 0; font-weight: bold; }
 
     .project-link-buttons { margin-top: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .project-button { display: inline-flex; align-items: center; gap: 0.4em; padding: 0.5rem 1rem; border: 1px solid var(--cv-accent); border-radius: 0.375rem; background-color: var(--cv-bg-main); color: var(--cv-accent); font-weight: 600; font-size: 0.9em; text-decoration: none; transition: all 0.2s ease; cursor: pointer; }
+    .project-button:hover { background-color: var(--cv-accent); color: var(--cv-bg-main); transform: translateY(-2px); box-shadow: 0 4px 8px var(--cv-shadow); }
 
     /* --- TECHNICAL DEMO (DITA VIEWER) --- */
     .dita-viewer-container { display: flex; flex-direction: column; border: 1px solid var(--cv-border); border-radius: 8px; overflow: hidden; background-color: #1e1e1e; color: #d4d4d4; font-family: 'Consolas', 'Monaco', monospace; height: 700px; }
@@ -215,7 +217,7 @@
     /* Component Components (Note) */
     .note strong { color: var(--cv-note-text); }
 
-    /* --- HOVER IMAGE POPUP STYLES --- */
+    /* --- HOVER IMAGE POPUP STYLES (for Presentation) --- */
     .hover-trigger {
         color: var(--cv-accent);
         font-weight: 600;
@@ -231,9 +233,9 @@
 
     /* Floating Image Container */
     #floating-image-viewer {
-        position: absolute; /* Changed to absolute for smoother follow */
+        position: absolute; 
         display: none;
-        pointer-events: none; /* Let mouse pass through */
+        pointer-events: none; 
         z-index: 9999;
         background: white;
         padding: 8px;
@@ -242,7 +244,7 @@
         border: 1px solid var(--cv-border);
         max-width: 400px;
         width: 100%;
-        transform: translate(15px, 15px); /* Offset from cursor */
+        transform: translate(15px, 15px); 
     }
 
     #floating-image-viewer img {
@@ -260,12 +262,40 @@
         font-weight: 500;
     }
     
-    /* Mobile-specific styles for DITA Explorer */
-    @media (max-width: 768px) {
-        .mobile-dita-note {
-            display: block !important;
-            /* Styling handled by unified .note class */
-        }
+    /* Tooltip text styling (for definitions) */
+    .definition-trigger {
+        color: var(--cv-text-dark);
+        font-weight: 600;
+        cursor: help;
+        border-bottom: 1px dashed var(--cv-text-dim);
+        position: relative;
+        white-space: nowrap;
+        display: inline-block;
+    }
+    .definition-trigger .tooltip-text {
+        visibility: hidden;
+        width: 250px;
+        background-color: var(--cv-text-dark);
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 8px 10px;
+        position: absolute;
+        z-index: 100; /* Higher Z-index to cover content */
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%); /* Centered above element */
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.85rem;
+        font-weight: 400;
+        line-height: 1.4;
+        white-space: normal;
+        border: 1px solid var(--cv-accent);
+    }
+    .definition-trigger:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
     }
 </style>
 </head>
@@ -299,20 +329,24 @@
 
             <div id="dtone-overview" class="sub-panel active">
                 <h2 style="margin-bottom: 0.5rem;">DT One Developer Portal</h2>
-                <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Role: Technical Writer & Information Architect</p>
+                <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Role: Technical Writer and Information Architect</p>
 
                 <p>
-                    I replaced unsearchable PowerPoint presentations and bare-bones Swagger specs with searchable, task-based guides. The existing Swagger listed <em>what</em> endpoints existed, but not <em>how</em> to use them for specific integrations.
+                    I replaced unsearchable PowerPoint presentations and bare-bones Swagger specifications with searchable, task-based guides. The existing Swagger listed <em>what</em> endpoints existed, but not <em>how</em> to use them for specific integrations.
                 </p>
                 <p>
-                    I designed a consistent four-tab template to guide developers through the core workflow: discover products, post transactions, and retrieve status. I also enriched the API reference with context and examples, linking it directly to the task guides. This bridged the gap between "how do I integrate airtime?" and "which endpoint do I call?".
+                    I designed a consistent four-tab template to guide developers through the core workflow: discover products, post transactions, and retrieve status. I also enriched the <span class="definition-trigger">Application Programming Interface<span class="tooltip-text">A set of functions that allows software applications to talk to each other, used here for communication between systems.</span></span> (API) reference with context and examples, linking it directly to the task guides. This bridged the gap between "how do I integrate airtime?" and "which endpoint do I call?".
                 </p>
                 <p>
                     The result was accurate, searchable developer documentation that replaced static files and provided a clear path to successful integration.
                 </p>
                 
                 <h3>Enhanced API Reference</h3>
-                <p>I also improved the <a href="https://developers.dtone.com/reference" target="_blank" rel="noopener noreferrer" style="font-weight:600; color: var(--cv-accent-hover);">Swagger and OpenAPI Documentation</a> by adding context, examples, and links to task guides.</p>
+                <p>I also improved the <a href="https://developers.dtone.com/reference" target="_blank" rel="noopener noreferrer" style="font-weight:600; color: var(--cv-accent-hover);">Swagger and OpenAPI Documentation</a> by adding context and examples, linking it directly to the task guides.</p>
+                
+                <div class="note">
+                    <strong>Note:</strong> As a policy, most of my content strategy and structuring work for large clients (including SAP and Ericsson) remains behind strict confidentiality and enterprise firewalls. While the approach was often influenced by user-centric documentation models (like Stripe), the DT One project documentation style, which is <strong>Stripe-influenced</strong> and highly user-centric, serves as a clear, public-facing example of the quality and strategic approach applied across all my enterprise engagements.
+                </div>
             </div>
 
             <div id="dtone-samples" class="sub-panel" style="display:none;">
@@ -374,12 +408,12 @@
                 <h2>DITA XML Explorer</h2>
                 
                 <div class="note">
-                    <strong>Note:</strong> The DITA XML Explorer is best viewed on a desktop screen to fully appreciate the side-by-side code and preview panes.
+                    <strong>Note:</strong> The <span class="definition-trigger">Darwin Information Typing Architecture<span class="tooltip-text">A standard XML architecture used in structured authoring to create content that is highly reusable across multiple formats and products.</span></span> (DITA) XML Explorer is best viewed on a desktop screen to fully appreciate the side-by-side code and preview panes.
                 </div>
                 
-                <p>This custom-built viewer showcases both **user-facing writing** (LinkedIn profile maintenance) and **developer-focused concepts** (CCMS reuse). It demonstrates my ability to tailor content for different audiences while enforcing valid DITA architecture.</p>
+                <p>This custom-built viewer showcases both <strong>user-facing writing</strong> (LinkedIn profile maintenance) and <strong>documenting reuse concepts in <span class="definition-trigger">Component Content Management Systems<span class="tooltip-text">A database system used to store and manage small, granular pieces of content (topics) for reuse in many different publications.</span></span></strong> (CCMS). It demonstrates my ability to tailor content for different audiences and enforce valid DITA architecture.</p>
                 
-                <p>The content covers advanced reuse strategies (<code>conref</code>, <code>keyref</code>) to highlight my expertise in Component Content Management Systems (CCMS). You can toggle between the <strong>Preview</strong> and <strong>Source</strong> views to see how the code renders.</p>
+                <p>The content covers advanced reuse concepts (<code>conref</code>, <code>keyref</code>) to highlight my expertise in CCMS. You can toggle between the <strong>Preview</strong> and <strong>Source</strong> views to see how the code renders.</p>
                 <br>
     
                 <div class="dita-viewer-container">
@@ -387,7 +421,7 @@
                         <div class="dita-sidebar-header">FILE EXPLORER</div>
                         <button class="dita-file-btn active" data-key="map" onclick="loadDita('map')">Portfolio Map</button>
                         <button class="dita-file-btn" data-key="task" onclick="loadDita('task')">(Premium Users) Add Skills...</button>
-                        <button class="dita-file-btn" data-key="concept" onclick="loadDita('concept')">Reuse Features in IXIASOFT...</button>
+                        <button class="dita-file-btn" data-key="concept" onclick="loadDita('concept')">Reuse Concepts in IXIASOFT CCMS</button>
                     </div>
                     <div class="dita-main-area">
                         <div class="dita-toolbar">
@@ -409,17 +443,17 @@
                 <h2>SEAI Grant Guide and Checkers</h2>
                 
                 <p>
-                    I transformed complex government grant rules into clear, interactive guides and eligibility checkers. The project focuses on the home energy grants offered by the Sustainable Energy Authority of Ireland (SEAI).
+                    I transformed complex government grant rules into clear, interactive guides and eligibility checkers. The project focuses on the home energy grants offered by the <span class="definition-trigger">Sustainable Energy Authority of Ireland<span class="tooltip-text">The national agency responsible for promoting and assisting sustainable energy development in Ireland.</span></span> (SEAI).
                 </p>
                 <p>
                     While not traditional software documentation, this project proves core technical communication skills:
                 </p>
                 <ul class="styled-list">
-                    <li><b>Information Architecture:</b> Structured diverse grant information into easily navigable tabs.</li>
-                    <li><b>Content Simplification:</b> Broke down complex criteria into digestible explanations.</li>
-                    <li><b>User Experience (UX):</b> Designed intuitive interfaces (tabs, tooltips, result displays) for self-service.</li>
-                    <li><b>AI Integration:</b> Leveraged AI for content generation and front-end coding (HTML, CSS, JS).</li>
-                    <li><b>Accuracy:</b> Ensured all information links back to official sources.</li>
+                    <li><strong>Information Architecture:</strong> Structured diverse grant information into easily navigable tabs.</li>
+                    <li><strong>Content Simplification:</strong> Broke down complex criteria into digestible explanations.</li>
+                    <li><span class="definition-trigger">User Experience<span class="tooltip-text">The practice of designing products, systems, or services with the goal of improving user satisfaction and usability.</span></span> (UX): Designed intuitive interfaces (tabs, tooltips, result displays) for self-service.</li>
+                    <li><span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Integration: Leveraged AI for content generation and front-end coding (HTML, <span class="definition-trigger">Cascading Style Sheets<span class="tooltip-text">A stylesheet language used to describe the presentation of a document written in a markup language like HTML.</span></span> (CSS), <span class="definition-trigger">JavaScript<span class="tooltip-text">The programming language that enables interactive web pages.</span></span> (JS)).</li>
+                    <li><strong>Accuracy:</strong> Ensured all information links back to official sources.</li>
                 </ul>
                 <p>This was a personal initiative to explore innovative approaches to public information.</p>
                 
@@ -431,9 +465,9 @@
             </div>
             
             <div id="sub-presentation" class="sub-panel" style="display: none;">
-                <h2>Mastering AI Context & Control</h2>
+                <h2>Mastering AI Context and Control</h2>
                 
-                <p>This presentation goes beyond simple prompt lists to explain the underlying architecture of Large Language Models (LLMs).</p>
+                <p>This presentation goes beyond simple prompt lists to explain the underlying architecture of <span class="definition-trigger">Large Language Models<span class="tooltip-text">AI models trained on massive text datasets used to generate human-like text and code.</span></span> (LLMs).</p>
                 <p>Using dramatic visual metaphors, I clarify complex concepts like the 
                     <span class="hover-trigger" data-img="slide3_context_bucket.png" data-caption="Visualizing Token Limits">Context Bucket</span> 
                     and the 
@@ -451,13 +485,13 @@
                 <h2>Template for AI-Generated Digital Books</h2>
                 
                 <div class="note">
-                    <strong>Note:</strong> Please evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content. This template demonstrates prompt engineering and structural governance.
+                    <strong>Note:</strong> Evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content. This template demonstrates prompt engineering and structural governance.
                 </div>
-                <p>This template guides an LLM through a structured authoring process to create complete, navigable digital books. It begins by prompting for a <strong>Title</strong>, <strong>Audience</strong>, and <strong>Goal</strong>, then enforces a predictable, DITA-compliant structure.</p>
+                <p>This template guides an <span class="definition-trigger">Large Language Model<span class="tooltip-text">AI models trained on massive text datasets used to generate human-like text and code.</span></span> (LLM) through a structured authoring process to create complete, navigable digital books. It begins by prompting for a <strong>Title</strong>, <strong>Audience</strong>, and <strong>Goal</strong>, then enforces a predictable, <span class="definition-trigger">Darwin Information Typing Architecture<span class="tooltip-text">A standard XML architecture used in structured authoring to create content that is highly reusable across multiple formats and products.</span></span> (DITA) compliant structure.</p>
                 <p><strong>Key Architectural Features:</strong></p>
                 <ul class="styled-list">
                     <li><strong>Conversational Prompting:</strong> The internal structure acts as a master prompt.</li>
-                    <li><strong>AI Governance:</strong> Enforces a predictable output model (mandatory IDs, specific blocks) to prevent content drift.</li>
+                    <li><span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Governance: Enforces a predictable output model (mandatory IDs, specific blocks) to prevent content drift.</li>
                     <li><strong>Machine Readability:</strong> Uses semantic tagging for high-quality ingestion.</li>
                     <li><strong>Advanced Interactivity:</strong> Integrates Mermaid.js for diagrams from text input.</li>
                     <li><strong>Deployment:</strong> Single-file HTML for seamless portability.</li>
@@ -472,7 +506,7 @@
     </main>
     <footer>
         <p><a href="#page-top">Back to Top</a></p>
-        <p class="colophon"><strong>Technical Note:</strong> This portfolio was built using AI-Assisted Development to rapidly prototype complex information architecture concepts.</p>
+        <p class="colophon"><strong>Technical Note:</strong> This portfolio was built using <span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Assisted Development to rapidly prototype complex information architecture concepts.</p>
     </footer>
 </div>
 </div>
@@ -497,7 +531,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const txt = trigger.getAttribute('data-caption');
             
             if (src) {
-                img.src = src;
+                // Assuming images are in the root for simplicity in this sandbox environment
+                img.src = src; 
                 caption.textContent = txt || '';
                 viewer.style.display = 'block';
             }
@@ -510,13 +545,27 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Basic bounds check to prevent off-screen (simple)
             const rightEdge = x + viewer.offsetWidth;
+            const bottomEdge = y + viewer.offsetHeight;
+
+            let finalX = x;
+            let finalY = y;
+
             if (rightEdge > window.innerWidth) {
-                 viewer.style.left = (e.pageX - viewer.offsetWidth - 15) + 'px';
-            } else {
-                 viewer.style.left = x + 'px';
+                 finalX = e.pageX - viewer.offsetWidth - 15;
             }
-            
-            viewer.style.top = y + 'px';
+            // Check if viewer goes off the bottom of the visible screen and adjust upwards
+            if (bottomEdge > (window.scrollY + window.innerHeight)) {
+                 finalY = e.pageY - viewer.offsetHeight - 15;
+                 // Ensure we don't go off the top of the page either
+                 if (finalY < window.scrollY) {
+                     finalY = window.scrollY + 15; // Stick to top if forced off both ends
+                 }
+            }
+
+
+            viewer.style.left = finalX + 'px';
+            viewer.style.top = finalY + 'px';
+
         });
 
         trigger.addEventListener('mouseleave', () => {
@@ -730,13 +779,12 @@ const ditaContent = {
 </task>`
     },
     concept: {
-        title: "Reuse Features in IXIASOFT CCMS",
+        title: "Reuse Concepts in IXIASOFT CCMS",
         filename: "c_ixiasoft_reuse.dita",
         preview: `
             <h1>Reuse Features in IXIASOFT CCMS</h1>
             <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
-            <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
-            <p><a href="https://www.ixiasoft.com/" target="_blank" rel="noopener noreferrer"><strong>IXIASOFT CCMS</strong></a> provides the following features designed to streamline this process. Click a feature below to see details.</p>
+            <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts.</p>
             
             <div class="note">
                 <p>Note</p>
@@ -779,54 +827,43 @@ const ditaContent = {
 <concept id="c_ixiasoft_reuse" xml:lang="en-us">
     <title>Reuse Features in IXIASOFT CCMS</title>
     <conbody>
-        <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
-        <p><tm tmtype="tm">IXIASOFT</tm> CCMS provides the following features designed to streamline this process.</p>
-        <note type="note">Examples provided on this page are based on <keyword keyref="product_name"/>, a company that manages supply chain operations for various clients and often needs to create variant documents.</note>
+        <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts.</p>
         
-        <dl>
-            <dlentry>
-                <dt>Content References (Conref)</dt>
-                <dd>
-                    <p>Content References (<codeph>Conref</codeph>) allow you to create segments of content that you can reference across multiple topics in DITA. These segments, which authors often create as <codeph>ReferableContent</codeph> topic types, become a part of the topics into which you insert them. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
-                    <example>
-                        <title>Example</title>
-                        <p><keyword keyref="product_name"/> created a standard shipping policy as a <codeph>ReferableContent</codeph> topic in one location. The author inserted the policy into multiple topics using a <codeph>Conref</codeph>. The author then included these topics in various maps based on the needs of different clients.</p>
-                    </example>
-                </dd>
-            </dlentry>
-            <dlentry>
-                <dt>Key References (Keyref)</dt>
-                <dd>
-                    <p>Key References (<codeph>Keyref</codeph>) allow you to create a placeholder for content that you can replace with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
-                    <example>
-                        <title>Example</title>
-                        <p><keyword keyref="product_name"/> uses a <codeph>Keyref</codeph> for the company name of the client, which ensures that the correct name is inserted into the documents of each client at the time of publishing.</p>
-                    </example>
-                </dd>
-            </dlentry>
-            <dlentry>
-                <dt>Conditional Processing (Profiling)</dt>
-                <dd>
+        <div class="note">
+            <p>Note</p>
+            <p>Examples provided on this page are based on <keyword keyref="product_name"/>, a company that manages supply chain operations for various clients and often needs to create variant documents.</p>
+        </div>
+        
+        <div class="feature-selector-container">
+            <div class="feature-titles">
+                <button class="feature-title-button active" onclick="showFeature('conref', this)">Content References (Conref)</button>
+                <button class="feature-title-button" onclick="showFeature('keyref', this)">Key References (Keyref)</button>
+                <button class="feature-title-button" onclick="showFeature('profiling', this)">Conditional Processing</button>
+                <button class="feature-title-button" onclick="showFeature('topic', this)">Topic Reuse</button>
+            </div>
+            <div class="feature-content-pane">
+                <div id="feature-conref">
+                    <h4>Content References (Conref)</h4>
+                    <p>Content References (<code>Conref</code>) allow you to create segments of content that you can reference across multiple topics in DITA. These segments, which authors often create as <code>ReferableContent</code> topic types, become a part of the topics into which you insert them. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
+                    <div class="example-block"><h4>Example</h4><p><keyword keyref="product_name"/> created a standard shipping policy as a <codeph>ReferableContent</codeph> topic in one location. The author inserted the policy into multiple topics using a <codeph>Conref</codeph>. The author then included these topics in various maps based on the needs of different clients.</p></div>
+                </div>
+                <div id="feature-keyref" style="display:none;">
+                    <h4>Key References (Keyref)</h4>
+                    <p>Key References (<code>Keyref</code>) allow you to create a placeholder for content that you can replace with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
+                    <div class="example-block"><h4>Example</h4><p><keyword keyref="product_name"/> uses a <codeph>Keyref</codeph> for the company name of the client, which ensures that the correct name is inserted into the documents of each client at the time of publishing.</p></div>
+                </div>
+                <div id="feature-profiling" style="display:none;">
+                    <h4>Conditional Processing (Profiling)</h4>
                     <p>Conditional Processing allows you to mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions. You can apply these conditions, such as product versions, audience types, or geographic locations, to specific sections within individual topics. This process allows for greater flexibility and precision in content customization.</p>
-                    <example>
-                        <title>Example</title>
-                        <p><keyword keyref="product_name"/> uses Conditional Processing to include specific sections, such as <uicontrol>Return Policies</uicontrol> or <uicontrol>Warranty Information</uicontrol>, in a topic for one client and exclude the sections for another client who does not require these details.</p>
-                    </example>
-                </dd>
-            </dlentry>
-            <dlentry>
-                <dt>Topic Reuse</dt>
-                <dd>
+                    <div class="example-block"><h4>Example</h4><p><keyword keyref="product_name"/> uses Conditional Processing to include specific sections, such as <uicontrol>Return Policies</uicontrol> or <uicontrol>Warranty Information</uicontrol>, in a topic for one client and exclude the sections for another client who does not require these details.</p></div>
+                </div>
+                <div id="feature-topic" style="display:none;">
+                    <h4>Topic Reuse</h4>
                     <p>Topic Reuse in <tm tmtype="tm">IXIASOFT</tm> CCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.</p>
-                    <example>
-                        <title>Example</title>
-                        <p><keyword keyref="product_name"/> uses a topic on <wintitle>Inventory Management</wintitle> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p>
-                    </example>
-                </dd>
-            </dlentry>
-        </dl>
-    </conbody>
-</concept>`
+                    <div class="example-block"><h4>Example</h4><p><keyword keyref="product_name"/> uses a topic on <wintitle>Inventory Management</wintitle> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p></div>
+                </div>
+            </div>
+        `
     }
 };
 
