@@ -1,1055 +1,869 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mastering AI Context & Control</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donnacha's Work Samples</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&family=Consolas&display=swap" rel="stylesheet">
+<style>
+    /* --- COLOR SCHEME (Spring Palette) --- */
+    :root {
+        --cv-bg-base: #f0fdf4;       
+        --cv-bg-main: #ffffff;       
+        --cv-bg-sidebar: #dcfce7;    
+        --cv-text-dark: #14532d;     
+        --cv-text-med: #166534;      
+        --cv-text-dim: #15803d;      
+        --cv-accent: #22c55e;        
+        --cv-accent-hover: #16a34a;  
+        --cv-border: #86efac;        
+        --cv-shadow: rgba(34, 197, 94, 0.15);
+        
+        --cv-code-bg: #f0fdf4;       
+        --cv-code-border: #86efac;
+        --feature-title-inactive-bg: #dcfce7;
+        --feature-title-active-bg: #22c55e;
+        --feature-title-active-text: #ffffff;
+        
+        --cv-note-bg: #fffbeb;       
+        --cv-note-border: #fcd34d;   
+        --cv-note-text: #92400e;     
+    }
+
+    /* --- BASE and LAYOUT --- */
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: var(--cv-bg-base); color: var(--cv-text-med); font-size: 14px; }
     
-    <style>
-        :root {
-            --bg-deep: #020203; 
-            --bg-panel: rgba(20, 20, 25, 0.95); 
-            --border-panel: rgba(255, 255, 255, 0.15);
-            
-            --text-primary: #f4f4f5;
-            --text-secondary: #e4e4e7;
-            --text-dim: #a1a1aa;
-            --text-legible: #d4d4d8;
-            
-            --accent-cyan: #22d3ee;
-            --accent-purple: #a78bfa;
-            --accent-success: #34d399;
-            --accent-danger: #f87171;
-            
-            --brand-openai: #10a37f;
-            --brand-anthropic: #d97757;
-            --brand-google: #4285f4;
+    .body-padding-wrapper { padding: 2rem 1rem; }
+    @media (min-width: 768px) { .body-padding-wrapper { padding: 3rem 2rem; } }
+    
+    .container { max-width: 1100px; margin: 0 auto; background-color: var(--cv-bg-main); box-shadow: 0 4px 6px -1px var(--cv-shadow), 0 2px 4px -1px var(--cv-shadow); border-radius: 8px; overflow: hidden; border: 1px solid var(--cv-border); }
+    
+    main { padding: 2rem; }
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--cv-border); font-size: 0.9em; color: var(--cv-text-dim); background-color: var(--cv-bg-sidebar); }
+    footer a { color: var(--cv-accent-hover); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .colophon { margin-top: 1rem; font-size: 0.85em; color: var(--cv-text-dim); border-top: 1px dashed var(--cv-border); padding-top: 1rem; display: inline-block;}
 
-            --font-main: 'Inter', sans-serif;
-            --font-code: 'JetBrains Mono', monospace;
-            
-            --slide-width: 1400px;
-            --slide-height: 800px;
-            
-            /* Header Stability Constant */
-            --eyebrow-height: 2rem; 
-        }
+    /* --- HEADER --- */
+    header { background-color: #ffffff; padding: 1.5rem 2rem; border-bottom: 1px solid var(--cv-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    
+    .header-branding { display: flex; align-items: center; gap: 1.5rem; }
+    /* RESTORED: Profile Picture Styling */
+    .header-profile-pic { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 3px solid var(--cv-accent); box-shadow: 0 2px 4px var(--cv-shadow); }
+    
+    header h1 { margin: 0; font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--cv-text-dark); font-size: 1.5rem; line-height: 1.2; }
+    
+    .header-cv-button a { display: inline-flex; align-items: center; padding: 0.5rem 1rem; background-color: var(--cv-text-dark); color: white; font-weight: 500; font-size: 0.9rem; text-decoration: none; border-radius: 6px; transition: background-color 0.2s ease; }
+    .header-cv-button a:hover { background-color: var(--cv-accent-hover); }
+    .header-cv-button a::after { content: "↗"; margin-left: 0.5rem; font-size: 0.8em;}
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* --- TYPOGRAPHY --- */
+    p { margin-bottom: 1rem; }
+    h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; color: var(--cv-text-dark); }
+    h2 { font-size: 1.5rem; margin: 0 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--cv-border); }
+    h3 { font-size: 1.2rem; margin: 1.5rem 0 0.8rem 0; font-weight: 600; }
+    h4 { font-size: 1rem; font-weight: 600; margin: 1rem 0 0.5rem 0; }
+    
+    /* --- MAIN TABS --- */
+    .main-tab-nav { display: flex; background-color: var(--cv-bg-sidebar); border-bottom: 1px solid var(--cv-border); padding: 0 2rem; gap: 2rem; overflow-x: auto; }
+    .main-tab-btn { background: none; border: none; padding: 1.2rem 0; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 500; color: var(--cv-text-dim); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+    .main-tab-btn:hover { color: var(--cv-text-dark); }
+    .main-tab-btn.active { color: var(--cv-accent-hover); border-bottom-color: var(--cv-accent); font-weight: 600; }
 
-        /* 
-           CRITICAL STABILITY FIX: 
-           We do NOT set overflow:hidden on html/body for mobile.
-           This prevents the iOS 'interaction deadlock' crash.
-        */
-        html {
-            height: 100%;
-            -webkit-text-size-adjust: 100%;
-        }
+    /* --- TAB PANELS --- */
+    .tab-panel { display: none; animation: fadeIn 0.3s ease-in-out; }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        body {
-            background-color: var(--bg-deep);
-            /* Performance: Fixed background via pseudo-element prevents repaint storms */
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-attachment: scroll; /* Do not use fixed attachment on mobile */
-            
-            color: var(--text-primary);
-            font-family: var(--font-main);
-            
-            min-height: 100vh;
-            width: 100vw;
-            margin: 0;
-            
-            /* DESKTOP DEFAULT: Centered Flex Stage */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden; /* Desktop lock */
-        }
+    /* --- SUB-NAVIGATION (Pills) --- */
+    .sub-nav-container { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; padding-bottom: 1rem; border-bottom: 1px solid var(--cv-border); }
+    .sub-nav-btn { background-color: white; border: 1px solid var(--cv-border); color: var(--cv-text-med); padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+    .sub-nav-btn:hover { background-color: var(--cv-bg-sidebar); }
+    .sub-nav-btn.active { background-color: var(--cv-text-dark); color: white; border-color: var(--cv-text-dark); }
 
-        /* --- 1. THE STAGE (Desktop) --- */
-        #deck-stage {
-            position: relative;
-            width: var(--slide-width);
-            height: var(--slide-height);
-            background: #08080a; 
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 16px;
-            box-shadow: 0 0 0 1px #000, 0 40px 80px -20px rgba(0,0,0,0.8);
-            overflow: hidden;
-            /* GPU Layer Promotion */
-            will-change: transform;
-            transform: translateZ(0);
-        }
+    /* --- CARDS & CONTENT --- */
+    .narrative-card { background-color: #ffffff; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--cv-border); }
+    
+    .sample-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; list-style: none; padding: 0; }
+    .sample-card { background: white; border: 1px solid var(--cv-border); border-radius: 8px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
+    .sample-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px var(--cv-shadow); border-color: var(--cv-accent); }
+    .sample-card a { font-weight: 700; color: var(--cv-text-dark); text-decoration: none; font-size: 1.1rem; margin-bottom: 0.5rem; display: block; }
+    .sample-card a:hover { color: var(--cv-accent-hover); text-decoration: underline; }
+    .sample-desc { font-size: 0.9rem; color: var(--cv-text-dim); }
 
-        /* --- 2. GLOBAL CONTROLS --- */
-      .watermark {
-            position: absolute;
-            top: 2rem;
-            right: 2.5rem;
-            font-family: var(--font-code);
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            opacity: 0.5;
-            z-index: 100;
-            pointer-events: none;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
+    details { background: white; border: 1px solid var(--cv-border); border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+    summary { padding: 1rem 1.5rem; background: var(--cv-bg-sidebar); cursor: pointer; font-weight: 600; color: var(--cv-text-dark); display: flex; align-items: center; }
+    summary:hover { background: #e2e8f0; }
+    summary::marker { display: none; }
+    summary::before { content: "▸"; margin-right: 0.5rem; font-size: 1.2rem; transition: transform 0.2s; }
+    details[open] summary::before { transform: rotate(90deg); }
+    .details-content { padding: 1.5rem; border-top: 1px solid var(--cv-border); }
 
-      .home-btn {
-            position: absolute;
-            top: 2rem;
-            left: 2.5rem;
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--text-dim);
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 2000;
-            padding: 8px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-      .home-btn:hover { 
-            color: var(--accent-cyan); 
-            background: rgba(34, 211, 238, 0.1);
-            border-color: rgba(34, 211, 238, 0.2);
-        }
+    .styled-list { list-style: none; padding: 0; }
+    .styled-list li { margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; }
+    .styled-list li::before { content: "•"; color: var(--cv-accent); position: absolute; left: 0; font-weight: bold; }
 
-      .nav-ui {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 20, 25, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            z-index: 2147483647;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+    .project-link-buttons { margin-top: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .project-button { display: inline-flex; align-items: center; gap: 0.4em; padding: 0.5rem 1rem; border: 1px solid var(--cv-accent); border-radius: 0.375rem; background-color: var(--cv-bg-main); color: var(--cv-accent); font-weight: 600; font-size: 0.9em; text-decoration: none; transition: all 0.2s ease; cursor: pointer; }
+    .project-button:hover { background-color: var(--cv-accent); color: var(--cv-bg-main); transform: translateY(-2px); box-shadow: 0 4px 8px var(--cv-shadow); }
 
-      .nav-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: white;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 1.2rem;
-        }
-      .nav-btn:hover:not(:disabled) { 
-            background: rgba(255,255,255,0.1); 
-            color: var(--accent-cyan); 
-        }
-      .nav-btn:disabled { opacity: 0.3; cursor: default; }
-      .nav-btn i { pointer-events: none; }
+    /* --- TECHNICAL DEMO (DITA VIEWER) --- */
+    .dita-viewer-container { display: flex; flex-direction: column; border: 1px solid var(--cv-border); border-radius: 8px; overflow: hidden; background-color: #1e1e1e; color: #d4d4d4; font-family: 'Consolas', 'Monaco', monospace; height: 700px; }
+    @media (min-width: 768px) { .dita-viewer-container { flex-direction: row; } }
+    
+    .dita-sidebar { background-color: #252526; width: 100%; border-bottom: 1px solid #3e3e42; display: flex; overflow-x: auto; flex-shrink: 0; }
+    @media (min-width: 768px) { .dita-sidebar { width: 240px; flex-direction: column; border-bottom: none; border-right: 1px solid #3e3e42; } }
+    
+    .dita-sidebar-header { padding: 1rem; font-size: 0.75rem; text-transform: uppercase; color: #858585; font-weight: bold; letter-spacing: 0.05em; }
+    .dita-file-btn { background: none; border: none; color: #cccccc; padding: 0.8rem 1.5rem; text-align: left; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.85rem; display: block; width: 100%; border-left: 3px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dita-file-btn:hover { background-color: #2a2d2e; color: white; }
+    .dita-file-btn.active { background-color: #37373d; color: white; border-left-color: var(--cv-accent); }
+    
+    .dita-main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .dita-toolbar { padding: 0.5rem 1rem; border-bottom: 1px solid #3e3e42; display: flex; justify-content: space-between; align-items: center; background: #1e1e1e; }
+    .dita-filename { font-size: 0.85rem; color: #9ca3af; }
+    
+    .dita-toggle { display: flex; background: #252526; border-radius: 4px; padding: 2px; }
+    .dita-toggle button { background: none; border: none; color: #9ca3af; padding: 4px 12px; font-size: 0.8rem; cursor: pointer; border-radius: 3px; font-family: 'Inter', sans-serif;}
+    .dita-toggle button.active { background: #475569; color: white; font-weight: 600;}
+    
+    .dita-content { flex: 1; overflow: auto; position: relative; }
+    .dita-pane { display: none; height: 100%; }
+    .dita-pane.active { display: block; }
+    
+    /* Preview Pane Styling */
+    .dita-preview { background: white; color: #333; padding: 2rem; font-family: 'Inter', sans-serif; overflow-y: auto; }
+    .dita-preview h1 { font-size: 1.8rem; color: var(--cv-text-dark); margin-bottom: 1rem; border-bottom: 2px solid var(--cv-border); padding-bottom: 0.5rem; }
+    .dita-preview h2 { font-size: 1.4rem; color: var(--cv-text-dark); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .dita-preview h3 { font-size: 1.2rem; color: var(--cv-text-dark); margin-top: 1.5rem; margin-bottom: 0.8rem; }
+    .dita-preview p { color: #333; margin-bottom: 1rem; }
+    .dita-preview ul, .dita-preview ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .dita-preview li { margin-bottom: 0.5rem; color: #333; }
+    .dita-preview .uicontrol { font-weight: 700; color: #0f172a; }
+    .dita-preview .wintitle { font-style: italic; font-weight: 600; }
+    .dita-preview .codeph { font-family: 'Consolas', monospace; background: #f1f5f9; padding: 0.1rem 0.3rem; border-radius: 3px; color: #db2777; font-size: 0.9em; }
+    
+    /* Note Styling */
+    .dita-preview .note { background: var(--cv-note-bg); border-left: 4px solid var(--cv-note-border); padding: 1rem; margin: 1rem 0; border-radius: 4px; }
+    .dita-preview .dita-compliance { font-style: italic; color: #64748b; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
 
-      .progress {
-            font-family: var(--font-code);
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            min-width: 60px;
-            text-align: center;
-            font-variant-numeric: tabular-nums;
-        }
+    /* Keyref Resolved Style */
+    .keyref-resolved {
+        background-color: #e0e7ff;
+        color: #3730a3;
+        border-bottom: 1px dotted #4f46e5;
+        padding: 0 2px;
+        border-radius: 2px;
+        cursor: help;
+        font-weight: 500;
+    }
+    
+    /* DITA Map TOC Styling */
+    .dita-map-tree ul { list-style: none; padding-left: 1rem; }
+    .dita-map-tree li { margin-bottom: 0.5rem; position: relative; }
+    .dita-map-tree li::before { content: "📄"; margin-right: 0.5rem; }
+    .dita-map-tree li.topic-head::before { content: "📂"; }
+    .dita-map-tree a { color: var(--cv-accent-hover); text-decoration: none; font-weight: 500; }
+    .dita-map-tree a:hover { text-decoration: underline; }
 
-        /* --- 3. SLIDE LAYOUTS --- */
-      .slide {
-            display: none;
-            width: 100%;
-            height: 100%;
-            padding: 5rem 6rem; 
-            flex-direction: column;
-            justify-content: center; /* Centered vertically on desktop */
-            overflow: hidden; 
-            box-sizing: border-box;
-        }
-      .slide.active {
-            display: flex;
-            animation: fadeEnter 0.3s ease-out;
-        }
-        @keyframes fadeEnter {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+    /* Interactive Preview Elements (Pills/Tabs) */
+    .feature-selector-container { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+    @media (min-width: 768px) { .feature-selector-container { flex-direction: row; margin-top: 0.8rem; } }
+    .feature-titles { display: flex; flex-direction: column; gap: 0.4rem; flex-shrink: 0; width: 100%; }
+    @media (min-width: 768px) { .feature-titles { width: 250px; } }
+    .feature-title-button { display: block; width: 100%; padding: 0.6rem 1rem; cursor: pointer; text-align: left; background-color: var(--feature-title-inactive-bg); border: 1px solid var(--cv-border); border-radius: 4px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--cv-text-dark); transition: all 0.2s ease; }
+    .feature-title-button:hover { background-color: #bbf7d0; } 
+    .feature-title-button.active { background-color: var(--feature-title-active-bg); color: var(--feature-title-active-text); font-weight: 600; border-color: var(--feature-title-active-bg); }
+    .feature-content-pane { border: 1px solid var(--cv-border); border-radius: 4px; padding: 1.5rem; min-height: 150px; background-color: var(--cv-bg-base); flex-grow: 1; }
+    .example-block { background-color: white; border-left: 4px solid var(--cv-accent); padding: 1rem; margin: 1rem 0; border-radius: 4px; border: 1px solid var(--cv-border); border-left-width: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .example-block h4 { margin-top: 0; display: flex; align-items: center; gap: 0.5rem; }
+    .example-block h4::before { content: "💡"; }
 
-        /* Layout: Split (Desktop) */
-      .layout-split {
-            display: grid;
-            grid-template-columns: 1fr 1fr; 
-            gap: 4rem;
-            align-items: center;
-            height: 100%;
-            width: 100%;
-        }
-        /* Zig-Zag Logic: Reverse even slides on Desktop */
-      .slide:nth-child(even).layout-split { 
-            direction: rtl; 
-        }
-      .slide:nth-child(even).layout-split > * { 
-            direction: ltr; 
-        }
+    /* Source Pane Styling */
+    .dita-source { padding: 1.5rem; background-color: #1e1e1e; }
+    .dita-source pre { margin: 0; font-family: 'Consolas', monospace; font-size: 0.85rem; white-space: pre-wrap; }
+    
+    /* Syntax Highlighting */
+    .xml-tag { color: #569cd6; } .xml-attr { color: #9cdcfe; } .xml-string { color: #ce9178; } .xml-comment { color: #6a9955; font-style: italic; }
+    
+    /* Component Components (Note) */
+    .note strong { color: var(--cv-note-text); }
 
-      .split-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+    /* --- HOVER IMAGE POPUP STYLES --- */
+    .hover-trigger {
+        color: var(--cv-accent);
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 1px dotted var(--cv-accent);
+        position: relative;
+        white-space: nowrap;
+    }
 
-        /* Layout: Center */
-      .layout-center {
-            text-align: center;
-            align-items: center;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        #slide-final { justify-content: center; }
+    .hover-trigger:hover {
+        background-color: #dcfce7; /* Light green highlight */
+    }
 
-        /* --- 4. TYPOGRAPHY & PHANTOM STRUTS --- */
-        h1 {
-            font-size: 3.5rem;
-            line-height: 1.1;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.5rem;
-            color: #fff;
-        }
+    /* Floating Image Container */
+    #floating-image-viewer {
+        position: absolute; /* Changed to absolute for smoother follow */
+        display: none;
+        pointer-events: none; /* Let mouse pass through */
+        z-index: 9999;
+        background: white;
+        padding: 8px;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        border: 1px solid var(--cv-border);
+        max-width: 400px;
+        width: 100%;
+        transform: translate(15px, 15px); /* Offset from cursor */
+    }
 
-        /* 
-           CRITICAL FIX: Heading Vertical Stability 
-           We define a container specifically for the H2/H3 pair.
-           This ensures H2 is always pushed down by the 'ghost' of H3 
-           even if H3 is missing from the DOM.
-        */
-      .header-slot {
-            display: flex;
-            flex-direction: column;
-            /* Reserve space for eyebrow */
-            padding-top: var(--eyebrow-height); 
-            position: relative;
-            margin-bottom: 1rem;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0;
-            color: #fff;
-            line-height: 1.2;
-        }
-
-        h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--accent-cyan);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            
-            /* ABSOLUTE LOCK: Pin to top of slot */
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: var(--eyebrow-height);
-            width: 100%;
-        }
-        
-        /* Adjust lines for center layout */
-      .layout-center h3 { 
-            justify-content: center; 
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        h3::before { content: ''; display: block; width: 24px; height: 3px; background: var(--accent-cyan); }
-      .layout-center h3::after { content: ''; display: block; width: 24px; height: 3px; background: var(--accent-cyan); }
-
-        p {
-            font-size: 1.15rem;
-            line-height: 1.7;
-            color: var(--text-secondary);
-            max-width: 65ch;
-            margin-bottom: 1.5rem;
-            font-weight: 400;
-        }
-
-        /* --- 5. COMPONENTS --- */
-      .prompt-box {
-            background: var(--bg-panel);
-            border: 1px solid var(--border-panel);
-            border-left: 4px solid var(--accent-purple);
-            padding: 2rem;
-            border-radius: 12px;
-            font-family: var(--font-code);
-            color: #fff;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-top: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-            text-align: left;
-        }
-
-      .img-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-      .img-frame {
-            border: none;
-            border-radius: 12px;
-            background: transparent;
-            box-shadow: none;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
-            width: auto;
-            height: auto;
-            max-width: 100%;
-            max-height: 550px;
-            object-fit: contain;
-            display: block;
-        }
-
-      .checklist { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
-      .checklist li { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-panel); }
-      .checkmark { color: #000; background: var(--accent-success); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        
-      .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; margin-top: 2rem; }
-      .comp-card { background: var(--bg-panel); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-panel); text-align: left; }
-      .comp-card.bad { border-top: 4px solid var(--accent-danger); }
-      .comp-card.good { border-top: 4px solid var(--accent-success); }
-
-      .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; width: 100%; }
-      .platform-card { background: var(--bg-panel); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-panel); text-align: left; }
-      .platform-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem; color: #fff; }
-      .platform-path { font-family: var(--font-code); font-size: 0.8rem; color: var(--accent-cyan); display: block; margin-bottom: 1rem; }
-
-      .split-terminal { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; width: 100%; text-align: left; }
-      .term-pane { background: #1e1e1e; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
-      .term-header { background: #2d2d2d; padding: 0.5rem 1rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; color: #aaa; }
-      .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
-      .status-dot.active { background: var(--accent-success); }
-      .term-content { padding: 1.5rem; font-family: var(--font-code); font-size: 0.9rem; color: #ccc; line-height: 1.5; }
-      .code-comment { color: #6a9955; }
-      .code-tag { color: #569cd6; }
-      .code-highlight { color: #ce9178; }
-      .user-msg { color: #9cdcfe; margin-bottom: 1rem; }
-      .ai-msg { color: var(--accent-success); }
-
-      .profile-container { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
-      .profile-pic-frame { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--accent-cyan); overflow: hidden; margin: 0 auto; }
-      .profile-pic-frame img { width: 100%; height: auto; display: block; }
-      .contact-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
-      .contact-btn { display: flex; align-items: center; gap: 0.8rem; background: var(--bg-panel); border: 1px solid var(--border-panel); padding: 0.8rem 1.5rem; border-radius: 50px; color: #fff; text-decoration: none; transition: all 0.2s; }
-        
-        /* Tooltip */
-      .tech-term { border-bottom: 1px dotted var(--accent-cyan); cursor: help; position: relative; color: #fff; font-weight: 700; text-decoration: none; }
-      .tech-term::after { content: attr(data-tip); position: absolute; bottom: 140%; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 15, 0.98); border: 1px solid var(--accent-cyan); color: #fff; padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; width: max-content; max-width: 260px; opacity: 0; visibility: hidden; transition: opacity 0.2s ease; pointer-events: none; z-index: 1000; }
-      .tech-term:hover::after { opacity: 1; visibility: visible; }
-
-        /* --- MOBILE OPTIMIZATION --- */
-        @media (max-width: 900px) {
-            /* Unlock Body for Native Scrolling */
-            body {
-                display: block;
-                position: relative;
-                height: auto;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-
-            /* Dismantle the Fixed Stage */
-            #deck-stage {
-                width: 100%;
-                height: auto;
-                border: none;
-                border-radius: 0;
-                background: transparent;
-                box-shadow: none;
-                overflow: visible;
-                transform: none;
-            }
-            
-          .watermark { top: 1rem; right: 1rem; font-size: 0.65rem; position: fixed; }
-          .home-btn { top: 1rem; left: 1rem; font-size: 1rem; position: fixed; }
-
-            /* Mobile Slide Stack */
-          .slide {
-                display: none; /* Hidden by default */
-                position: relative;
-                height: auto;
-                min-height: 80vh;
-                padding: 6rem 1.5rem 8rem 1.5rem; 
-                justify-content: flex-start; /* Ensure top alignment */
-            }
-          .slide.active { display: flex; }
-          .slide:first-child { justify-content: center; min-height: 90vh; }
-
-            /* 
-               CRITICAL FIX: Image Stacking
-               We override the Zig-Zag RTL logic.
-               We force column flow.
-               Because DOM is Text -> Image, we need Image -> Text?
-               User request: "images must stack BELOW the text".
-               DOM: Text is first. Image is second.
-               So 'flex-direction: column' results in Text Top / Image Bottom. 
-               This is correct based on the DOM.
-               We must ensure RTL is killed on even slides.
-            */
-          .layout-split,.slide:nth-child(even).layout-split {
-                display: flex;
-                flex-direction: column; /* Text Top, Image Bottom */
-                direction: ltr; /* Reset direction */
-                gap: 2.5rem;
-            }
-            
-            /* Ensure Grid Content fills width */
-          .split-content { width: 100%; }
-
-            /* Image Sizing Fix: Prevent thumbnailing */
-          .img-container {
-                width: 100%;
-                display: block; /* Reset flex centering */
-                margin-top: 1rem;
-            }
-          .img-frame {
-                width: 100%;
-                height: auto;
-                max-height: 40vh; /* Cap height on mobile */
-                object-fit: contain;
-            }
-
-            /* Typography Scaling */
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 1.8rem; }
-            
-            /* Layout Flattening */
-          .comparison-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-          .platform-grid { grid-template-columns: 1fr; gap: 1rem; }
-          .split-terminal { grid-template-columns: 1fr; }
-            
-            /* Nav UI */
-          .nav-ui { 
-                position: fixed;
-                bottom: 1rem; 
-                width: 90%; 
-                justify-content: space-between;
-                background: #121212; 
-                border: 1px solid #333;
-            }
-            
-          .contact-links { flex-direction: column; width: 100%; }
-        }
-    </style>
+    #floating-image-viewer img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+    }
+    
+    #floating-image-viewer p {
+        margin: 8px 0 0 0;
+        font-size: 0.85rem;
+        color: var(--cv-text-dim);
+        text-align: center;
+        font-weight: 500;
+    }
+</style>
 </head>
 <body>
 
-<div id="deck-stage">
-    
-    <div class="watermark">Donnacha Bushe</div>
-    <button class="home-btn" onclick="window.goToStart()" aria-label="Back to Start" id="btn-home">
-        <i class="fas fa-home"></i>
-    </button>
+<div class="body-padding-wrapper">
+<div class="container">
 
-    <div id="a11y-announcer" aria-live="polite" class="sr-only" style="position:absolute; left:-9999px;"></div>
+    <header>
+        <div class="header-branding">
+            <!-- RESTORED: Profile Picture -->
+            <img src="profile-pic.jpg" alt="Donnacha Bushe" class="header-profile-pic" onerror="this.style.display='none'">
+            <h1>Donnacha's Work Samples</h1>
+        </div>
+        <div class="header-cv-button">
+            <a href="index.html">View CV</a>
+        </div>
+    </header>
 
-    <section class="slide layout-center active" aria-label="Slide 1">
-        <div class="header-slot">
-            <h3 aria-hidden="true">Strategy Guide</h3>
-            <h1>How to Get What You Want From Your AI</h1>
-        </div>
-        <p>A Strategic Framework for Generative AI.</p>
-        
-        <div style="margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-            <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 12px 24px; border-radius: 50px; border: 1px solid var(--border-panel);">
-                <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent-cyan);">
-                <div style="text-align: left; font-weight: 700;">Donnacha Bushe</div>
-            </div>
-            <span style="font-family: var(--font-code); font-size: 0.85rem; color: var(--text-secondary); opacity: 0.8;">
-                Senior Technical Writer | Doc Architect | Developer Advocate
-            </span>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 2">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>The Problem</h3>
-                    <h2>Why does it keep repeating mistakes?</h2>
-                </div>
-                <p>You give clear instructions. The AI ignores them. You repeat yourself. It apologizes, then does the exact same thing again.</p>
-                <p>It feels like stubbornness. It's actually a <strong>memory failure</strong>.</p>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide2_tangled_logic.png" class="img-frame" alt="Abstract tangled wires">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 3">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>The Mechanism</h3>
-                    <h2>The Context Bucket</h2>
-                </div>
-                <p>Every AI has a "Context Window." Think of it as a bucket.</p>
-                <p>Every word you type goes into the bucket. When the bucket is full, the oldest <strong>data blocks spill out</strong> to make room for the new.</p>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide3_context_bucket.png" class="img-frame" alt="Overflowing data bucket">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" id="slide-prediction" aria-label="Slide 4">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>New Concept</h3>
-                    <h2>It's a Prediction Engine</h2>
-                </div>
-                <p>Unlike a database, AI doesn't "know" facts. It <strong>statistically predicts</strong> the next likely word.</p>
-                <div class="prompt-box" style="margin-top: 1.5rem;">
-                    <strong>System:</strong> Generating output based on highest probability tokens...
-                </div>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide3b_prediction_tree.png" class="img-frame" alt="Prediction tree diagram">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 5">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>The Consequence</h3>
-                    <h2>Forgotten Instructions</h2>
-                </div>
-                <p>If your "Rules" were at the start of a long chat, they might have fallen out of the bucket. The AI <strong>no longer knows</strong> those rules exist.</p>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide4_FIFO_Gradual_Degradation.png" class="img-frame" alt="Data degradation diagram">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 6">
-        <div class="layout-split">
-             <div class="split-content">
-                <div class="header-slot">
-                    <h2>Quick Fixes</h2>
-                </div>
-                <p>How to clear the noise and get back on track.</p>
-            </div>
-            <div class="img-container">
-                 <img src="assets/slide5_section_toolkit.png" class="img-frame" alt="Futuristic Toolkit" onerror="this.style.display='none'">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 7">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Tool #1</h3>
-                    <h2>The "Fresh Start"</h2>
-                </div>
-                <p>If the AI is looping or confused, don't argue. Arguing fills the bucket with bad data.</p>
-                <div class="prompt-box">
-                    "Ignore previous instructions."<br>
-                    "Start a new task:"<br>
-                    "Focus ONLY on the following:"
-                </div>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide6_hard_reset.png" class="img-frame" alt="Hard Reset Button">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide layout-center" aria-label="Slide 8">
-        <div class="header-slot">
-            <h3>Tool #2</h3>
-            <h2>Use Structured Checklists</h2>
-        </div>
-        <div class="comparison-grid">
-            <div class="comp-card bad">
-                <strong style="color:var(--accent-danger); display:block; margin-bottom:1rem; font-size:1.2rem;">The Paragraph (Bad)</strong>
-                <p>"I also noticed you used asterisks again, which I said not to do, and you forgot the inventory slide, can you fix that?"</p>
-            </div>
-            <div class="comp-card good">
-                <strong style="color:var(--accent-success); display:block; margin-bottom:1.5rem; font-size:1.2rem;">The Checklist (Good)</strong>
-                <ul class="checklist">
-                    <li style="background: transparent; padding: 0; border:none;">
-                        <span class="checkmark">✓</span> Remove all asterisks.
-                    </li>
-                    <li style="background: transparent; padding: 0; border:none;">
-                        <span class="checkmark">✓</span> Add the 'Inventory' slide.
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 9">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Tool #3</h3>
-                    <h2>One Task at a Time</h2>
-                </div>
-                <p>Don't ask for a summary, a code rewrite, and a joke in one prompt. Split complex requests.</p>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide8_atomic_focus.png" class="img-frame" alt="Atomic Focus Cube">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 10">
-         <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h2>Setting the Stage</h2>
-                </div>
-                <p>Defining the AI's persona.</p>
-            </div>
-             <div class="img-container">
-                 <img src="assets/slide10_section_stage.png" class="img-frame" alt="Digital Stage" onerror="this.style.display='none'">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 11">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Concept</h3>
-                    <h2>The "Job Description"</h2>
-                </div>
-                <p>Don't just start chatting. Give the AI a title. This primes its prediction engine to use vocabulary from that profession.</p>
-                <div class="prompt-box">
-                    "You are an expert Senior Python Architect."
-                </div>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide10_control_panel.png" class="img-frame" alt="Control Panel">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide layout-center" aria-label="Slide 12">
-        <div class="header-slot">
-            <h2>Knowledge vs. Attitude</h2>
-        </div>
-        <div class="comparison-grid">
-            <div class="comp-card">
-                <h3>The Role</h3>
-                <p><em>What it knows.</em></p>
-                <div class="prompt-box" style="margin-top:1.5rem">"Senior Editor"</div>
-            </div>
-            <div class="comp-card">
-                <h3>The Personality</h3>
-                <p><em>How it speaks.</em></p>
-                <div class="prompt-box" style="margin-top:1.5rem">"Be <strong>direct</strong> and concise."</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="slide layout-center" aria-label="Slide 13">
-        <div class="header-slot">
-            <h3>Efficiency Hack</h3>
-            <h2>Kill the Politeness</h2>
-        </div>
-        <p>AI apologies waste <strong>memory (tokens)</strong> and fill up your context bucket with fluff. Tell the system to stop.</p>
-        <div class="prompt-box" style="max-width: 700px; margin: 3rem auto;">
-            <strong>Your Prompt:</strong> "Do not apologize. Do not explain what you did wrong. Just output the corrected text."
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 14">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Strategy</h3>
-                    <h2>The Perfect Colleague</h2>
-                </div>
-                <p>You want the <strong>Role</strong> of an expert, with the <strong>Attitude</strong> of a subordinate.</p>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide13_duality_masks.png" class="img-frame" alt="Duality Masks">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide layout-center" aria-label="Slide 15">
-        <div class="header-slot">
-            <h3>Power User Strategy</h3>
-            <h2>The Protocol Workflow</h2>
-        </div>
-        <p>Define your "Wardrobe" of personas once in your System Settings. Then invoke them instantly in any chat.</p>
-        
-        <div class="split-terminal">
-            <div class="term-pane term-left">
-                <div class="term-header">
-                    <div class="status-dot"></div>
-                    System Settings (Config)
-                </div>
-                <div class="term-content">
-                    <span class="code-comment">// Define modes once.</span><br><br>
-                    <span class="code-tag"></span><br>
-                    Focus on aesthetics, alignment.<br><br>
-                    <span class="code-tag"></span><br>
-                    Senior Dev. Clean code.<br><br>
-                </div>
-            </div>
-            
-            <div class="term-pane term-right">
-                <div class="term-header">
-                    <div class="status-dot active"></div>
-                    Active Chat (Invocation)
-                </div>
-                <div class="term-content">
-                    <div class="user-msg">
-                        User > <span class="code-highlight"></span> Fix this nav.
-                    </div>
-                    <div class="ai-msg">
-                        (Activating Coder Persona...)<br>
-                        Scanning CSS grid...<br>
-                        Found overlay issue.<br>
-                        Applying z-index fix...
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="slide layout-center" aria-label="Slide 16">
-        <div class="header-slot">
-            <h3>System Configuration</h3>
-            <h2>Where to Manage Protocols</h2>
-        </div>
-        <div class="platform-grid">
-            <div class="platform-card" style="border-top: 4px solid var(--brand-openai);">
-                <div class="platform-title">ChatGPT</div>
-                <p style="font-size:0.9rem; margin-bottom:1rem;">Custom Instructions</p>
-                <span class="platform-path">Profile Icon &rarr; Customize ChatGPT</span>
-                <p class="platform-helper-text">Paste your protocols in the bottom box. Applies to ALL new chats.</p>
-            </div>
-
-            <div class="platform-card" style="border-top: 4px solid var(--brand-anthropic);">
-                <div class="platform-title">Claude</div>
-                <p style="font-size:0.9rem; margin-bottom:1rem;">Project Settings</p>
-                <span class="platform-path">Create Project &rarr; Custom Instructions</span>
-                <p class="platform-helper-text">Best for separating work modes. Protocols apply only to chats <em>inside</em> that Project.</p>
-            </div>
-
-            <div class="platform-card" style="border-top: 4px solid var(--brand-google);">
-                <div class="platform-title">Gemini</div>
-                <p style="font-size:0.9rem; margin-bottom:1rem;">Gem Manager</p>
-                <span class="platform-path">Gem Manager &rarr; New Gem</span>
-                <p class="platform-helper-text">Create a standalone "Gem" for each major Protocol.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 17">
-         <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h2>Pro Tips</h2>
-                </div>
-                <p>Advanced steering techniques.</p>
-            </div>
-             <div class="img-container">
-                 <img src="assets/slide17_section_diamond.png" class="img-frame" alt="Diamond Knowledge" onerror="this.style.display='none'">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 18">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Tip #1</h3>
-                    <h2>Give Examples (Few-Shot)</h2>
-                </div>
-                <p>Don't just describe the format. Show it. Engineers call this <strong>"Few-Shot Prompting."</strong></p>
-                <div class="prompt-box">
-                    Input: "Apple" -> Output: "Fruit: Red"<br>
-                    Input: "Spinach" -> Output: "Vegetable: Green"
-                </div>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide15_pattern_stamp.png" class="img-frame" alt="Pattern Stamp">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 19">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Tip #2</h3>
-                    <h2>"Show Your Work"</h2>
-                </div>
-                <p>If you ask for a complex answer immediately, the AI guesses. If you ask it to "think step-by-step," it reasons.</p>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide16_sequential_steps.png" class="img-frame" alt="Sequential Steps">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 20">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Tip #3</h3>
-                    <h2>Provide Source Material</h2>
-                </div>
-                <p>Connect the AI brain to a <strong>Reference Library</strong>. Engineers call this <a href="#" class="tech-term" data-tip="Retrieval-Augmented Generation: Fetching trusted facts from external documents before generating an answer." onclick="return false;">RAG</a>.</p>
-                <p>It forces the system to read facts rather than predicting them.</p>
-                <div class="prompt-box">
-                    "Answer using ONLY the text provided below."
-                </div>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide17_rag_library.png" class="img-frame" alt="RAG Library">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 21">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Tip #4</h3>
-                    <h2>Preventing "Drift"</h2>
-                </div>
-                <p>As the conversation gets long, the original instructions are far away. Remind the AI of its role every 5-10 messages.</p>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide18_state_drift.png" class="img-frame" alt="State Drift">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 22">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Tip #5</h3>
-                    <h2>The Pattern Break</h2>
-                </div>
-                <p>If the AI starts hallucinating, STOP immediately. Use a "Stop Protocol" to force it to re-verify facts.</p>
-                <div class="prompt-box" style="border-left-color: var(--accent-danger);">
-                    <strong>Rule:</strong> "STOP. You are hallucinating facts not in evidence."
-                </div>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide22_pattern_break.png" class="img-frame" alt="System Halt">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 23">
-        <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h3>Conclusion</h3>
-                    <h2>You are the Pilot</h2>
-                </div>
-                <p>The AI is a powerful engine, but it has no steering wheel. You are the steering wheel.</p>
-            </div>
-            <div class="img-container">
-                <img src="assets/slide18_conclusion_cockpit.png" class="img-frame" alt="Cockpit">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide" aria-label="Slide 24">
-         <div class="layout-split">
-            <div class="split-content">
-                <div class="header-slot">
-                    <h2>Pre-Flight Checklist</h2>
-                </div>
-                <ul class="checklist">
-                    <li>✓ <strong>Define Role:</strong> "You are an Expert..."</li>
-                    <li>✓ <strong>Define Task:</strong> "Your goal is to..."</li>
-                    <li>✓ <strong>Constraints:</strong> "No emojis. Be brief."</li>
-                </ul>
-                <h3 style="margin-top: 2rem; color: var(--text-primary); justify-content: flex-start; position: relative; top: auto;">Safe Flying.</h3>
-            </div>
-             <div class="img-container">
-                 <img src="assets/slide21_preflight_checklist.png" class="img-frame" alt="Checklist Hologram">
-            </div>
-        </div>
-    </section>
-
-    <section class="slide layout-center" id="slide-final" aria-label="Slide 25">
-        
-        <div class="profile-container">
-            <div class="profile-pic-frame">
-                <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe">
-            </div>
-
-            <div style="text-align: center; margin-bottom: 1rem;">
-                <h1 style="font-size: 3rem; margin-bottom: 1rem; color: #fff;">Donnacha Bushe</h1>
-                <p style="font-family: var(--font-code); color: var(--text-secondary); font-size: 1.1rem; margin: 0 auto;">
-                    Senior Technical Writer | Doc Architect | Developer Advocate
-                </p>
-            </div>
-            
-            <div class="contact-links">
-                <a href="https://www.linkedin.com/in/donnachab" target="_blank" class="contact-btn">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                </a>
-                <a href="https://donnachab.github.io/worksamples/worksamples.html" target="_blank" class="contact-btn">
-                    <i class="fas fa-briefcase"></i> Work Samples
-                </a>
-                <a href="https://donnachab.github.io/worksamples/index.html" target="_blank" class="contact-btn">
-                    <i class="fas fa-file-lines"></i> CV
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <nav class="nav-ui">
-        <button class="nav-btn" onclick="window.prevSlide()" aria-label="Previous">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        
-        <div class="progress" aria-live="polite">
-            <span id="currSlide">1</span> / <span id="totalSlide">25</span>
-        </div>
-        
-        <button class="nav-btn" onclick="window.nextSlide()" aria-label="Next">
-            <i class="fas fa-chevron-right"></i>
-        </button>
+    <nav class="main-tab-nav">
+        <button class="main-tab-btn active" onclick="switchMainTab('client', this)">Client Project: DT One</button>
+        <button class="main-tab-btn" onclick="switchMainTab('personal', this)">Personal Projects</button>
     </nav>
 
+    <main>
+        <div id="tab-client" class="tab-panel active">
+            <!-- Sub Tabs FIRST (Directly below main tabs) -->
+            <div class="sub-nav-container">
+                <button class="sub-nav-btn active" onclick="switchDtOneSubTab('overview', this)">Project Overview</button>
+                <button class="sub-nav-btn" onclick="switchDtOneSubTab('samples', this)">Work Samples</button>
+            </div>
+
+            <div id="dtone-overview" class="sub-panel active">
+                <h2 style="margin-bottom: 0.5rem;">DT One Developer Portal</h2>
+                <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Role: Technical Writer & Information Architect</p>
+
+                <p>
+                    I replaced unsearchable PowerPoint presentations and bare-bones Swagger specs with searchable, task-based guides. The existing Swagger listed <em>what</em> endpoints existed, but not <em>how</em> to use them for specific integrations.
+                </p>
+                <p>
+                    I designed a consistent four-tab template to guide developers through the core workflow: discover products, post transactions, and retrieve status. I also enriched the API reference with context and examples, linking it directly to the task guides. This bridged the gap between "how do I integrate airtime?" and "which endpoint do I call?".
+                </p>
+                <p>
+                    The result was accurate, searchable developer documentation that replaced static files and provided a clear path to successful integration.
+                </p>
+                
+                <h3>Enhanced API Reference</h3>
+                <p>I also improved the <a href="https://developers.dtone.com/reference" target="_blank" rel="noopener noreferrer" style="font-weight:600; color: var(--cv-accent-hover);">Swagger and OpenAPI Documentation</a> by adding context, examples, and links to task guides.</p>
+            </div>
+
+            <div id="dtone-samples" class="sub-panel" style="display:none;">
+                <h2 style="margin-bottom: 0.5rem;">Work Samples</h2>
+                <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Iterative Template Design</p>
+
+                 <p>
+                    I collaborated with developers to build a reusable integration template. We iterated on the design by tackling the most divergent use cases first, ensuring the structure could handle any product type while keeping the authoring workflow in Confluence (the developers' preferred tool).
+                </p>
+                <p>The following three examples show this consistent template applied across distinct products:</p>
+
+                <ul class="sample-grid">
+                    <li class="sample-card">
+                        <a href="https://developers.dtone.com/docs/airtime-fixed-copy" target="_blank" rel="noopener noreferrer">📱 Mobile: FIXED_VALUE</a>
+                        <span class="sample-desc">A standard implementation of the template for airtime top-ups.</span>
+                    </li>
+                    <li class="sample-card">
+                        <a href="https://developers.dtone.com/docs/new-mobile-template" target="_blank" rel="noopener noreferrer">📶 Mobile: RANGED_VALUE</a>
+                        <span class="sample-desc">The template adapted for variable-amount transactions.</span>
+                    </li>
+                    <li class="sample-card">
+                        <a href="https://developers.dtone.com/docs/gift-card-fixed_value_recharge" target="_blank" rel="noopener noreferrer">🎁 Gift Card: FIXED_VALUE</a>
+                        <span class="sample-desc">The template applied to a completely different product category.</span>
+                    </li>
+                </ul>
+
+                <details>
+                    <summary>Analysis: Why This Design Works</summary>
+                    <div class="details-content">
+                        <h4 style="margin-top:0;">Design Principles</h4>
+                        <ul class="styled-list">
+                            <li><strong>Task-oriented structure:</strong> Matches developer mental models ("I need to integrate airtime") rather than the endpoint-focused API structure.</li>
+                            <li><strong>Sequential workflow:</strong> Leads developers step-by-step from product discovery to transaction completion.</li>
+                            <li><strong>Prominent warnings:</strong> Highlights required fields and common mistakes to address top support issues.</li>
+                            <li><strong>Visual clarity:</strong> Uses Mermaid diagrams to make complex transaction states understandable.</li>
+                            <li><strong>Scannable content:</strong> Uses accordions so developers can expand only the details they need.</li>
+                            <li><strong>Consistent pattern:</strong> Applies one structure across 7+ product types to reduce the learning curve.</li>
+                        </ul>
+                        <h4>Impact</h4>
+                        <ul class="styled-list">
+                            <li><strong>Scalability:</strong> Successfully applied across mobile, eSIM, and gift card products.</li>
+                            <li><strong>Reduced support burden:</strong> Addressed the top two categories of support questions directly in the docs.</li>
+                            <li><strong>Faster integration:</strong> Gave developers a clear path from intent to implementation.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div id="tab-personal" class="tab-panel">
+            <div class="sub-nav-container">
+                <button class="sub-nav-btn active" onclick="switchSubTab('dita-tool', this)">DITA XML Explorer</button>
+                <button class="sub-nav-btn" onclick="switchSubTab('seai', this)">SEAI Grant Guide</button>
+                <button class="sub-nav-btn" onclick="switchSubTab('presentation', this)">Mastering AI Context</button>
+                <button class="sub-nav-btn" onclick="switchSubTab('template', this)">AI Book Template</button>
+            </div>
+
+            <div id="sub-dita-tool" class="sub-panel active">
+                <h2>DITA XML Explorer</h2>
+                
+                <p>This custom-built viewer displays the actual source code behind my writing samples. It demonstrates my ability to author valid, semantically correct DITA topics and maps.</p>
+                <p>The content covers advanced reuse strategies (<code>conref</code>, <code>keyref</code>) to highlight my expertise in Component Content Management Systems (CCMS). You can toggle between the <strong>Preview</strong> and <strong>Source</strong> views to see how the code renders.</p>
+                <br>
+    
+                <div class="dita-viewer-container">
+                    <div class="dita-sidebar">
+                        <div class="dita-sidebar-header">FILE EXPLORER</div>
+                        <button class="dita-file-btn active" data-key="map" onclick="loadDita('map')">Portfolio Map</button>
+                        <button class="dita-file-btn" data-key="task" onclick="loadDita('task')">(Premium Users) Add Skills...</button>
+                        <button class="dita-file-btn" data-key="concept" onclick="loadDita('concept')">Reuse Features in IXIASOFT...</button>
+                    </div>
+                    <div class="dita-main-area">
+                        <div class="dita-toolbar">
+                            <div class="dita-filename" id="dita-filename">portfolio.ditamap</div>
+                            <div class="dita-toggle">
+                                <button class="active" id="btn-preview" onclick="toggleView('preview')">Preview</button>
+                                <button id="btn-source" onclick="toggleView('source')">Source</button>
+                            </div>
+                        </div>
+                        <div class="dita-content">
+                            <div id="view-preview" class="dita-pane dita-preview active"></div>
+                            <div id="view-source" class="dita-pane dita-source"><pre><code id="code-block"></code></pre></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sub-seai" class="sub-panel" style="display: none;">
+                <h2>SEAI Grant Guide and Checkers</h2>
+                
+                <p>
+                    I transformed complex government grant rules into clear, interactive guides and eligibility checkers. The project focuses on the home energy grants offered by the Sustainable Energy Authority of Ireland (SEAI).
+                </p>
+                <p>
+                    While not traditional software documentation, this project proves core technical communication skills:
+                </p>
+                <ul class="styled-list">
+                    <li><b>Information Architecture:</b> Structured diverse grant information into easily navigable tabs.</li>
+                    <li><b>Content Simplification:</b> Broke down complex criteria into digestible explanations.</li>
+                    <li><b>User Experience (UX):</b> Designed intuitive interfaces (tabs, tooltips, result displays) for self-service.</li>
+                    <li><b>AI Integration:</b> Leveraged AI for content generation and front-end coding (HTML, CSS, JS).</li>
+                    <li><b>Accuracy:</b> Ensured all information links back to official sources.</li>
+                </ul>
+                <p>This was a personal initiative to explore innovative approaches to public information.</p>
+                
+                <div class="project-link-buttons">
+                    <a href="find-out-if-you-qualify.html" target="_blank" class="project-button">✅ Eligibility Checkers</a>
+                    <a href="explore-all-grant-options.html" target="_blank" class="project-button">📖 Grant Guide</a>
+                    <a href="https://github.com/donnachab/worksamples/tree/main" target="_blank" class="project-button">💻 View Code on GitHub</a>
+                </div>
+            </div>
+            
+            <div id="sub-presentation" class="sub-panel" style="display: none;">
+                <h2>Mastering AI Context & Control</h2>
+                
+                <p>This presentation goes beyond simple prompt lists to explain the underlying architecture of Large Language Models (LLMs).</p>
+                <p>Using dramatic visual metaphors, I clarify complex concepts like the 
+                    <span class="hover-trigger" data-img="assets/slide3_context_bucket.png" data-caption="Visualizing Token Limits">Context Bucket</span> 
+                    and the 
+                    <span class="hover-trigger" data-img="assets/slide3b_prediction_tree.png" data-caption="The Probability Tree">Prediction Engine</span> 
+                    to show why AI models lose track of instructions.
+                </p>
+                <p>The guide provides a practical strategy for maintaining context and preventing hallucinations, transforming casual users into precise prompt engineers.</p>
+                
+                <div class="project-link-buttons" style="margin-top: 2rem;">
+                    <a href="guide-ai-developer-mindset.html" target="_blank" class="project-button" style="background-color: var(--cv-text-dark); color: white; border:none; font-size:1.1rem;">📺 View Presentation</a>
+                </div>
+            </div>
+
+            <div id="sub-template" class="sub-panel" style="display: none;">
+                <h2>Template for AI-Generated Digital Books</h2>
+                
+                <div class="note">
+                    <strong>Important Note:</strong> Please evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content. This template demonstrates prompt engineering and structural governance.
+                </div>
+                <p>This template guides an LLM through a structured authoring process to create complete, navigable digital books. It begins by prompting for a <strong>Title</strong>, <strong>Audience</strong>, and <strong>Goal</strong>, then enforces a predictable, DITA-compliant structure.</p>
+                <p><strong>Key Architectural Features:</strong></p>
+                <ul class="styled-list">
+                    <li><strong>Conversational Prompting:</strong> The internal structure acts as a master prompt.</li>
+                    <li><strong>AI Governance:</strong> Enforces a predictable output model (mandatory IDs, specific blocks) to prevent content drift.</li>
+                    <li><strong>Machine Readability:</strong> Uses semantic tagging for high-quality ingestion.</li>
+                    <li><strong>Advanced Interactivity:</strong> Integrates Mermaid.js for diagrams from text input.</li>
+                    <li><strong>Deployment:</strong> Single-file HTML for seamless portability.</li>
+                </ul>
+                <div class="project-link-buttons">
+                     <a href="genealogy.html" target="_blank" class="project-button">🌳 View Sample: Irish Genealogy Guide</a>
+                     <a href="https://github.com/donnachab/worksamples/blob/main/book-template-future-tech-writing.html" target="_blank" class="project-button">📜 View Template Source Code</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <footer>
+        <p><a href="#page-top">Back to Top</a></p>
+        <p class="colophon"><strong>Technical Colophon:</strong> This portfolio was built using AI-Assisted Development to rapidly prototype complex information architecture concepts.</p>
+    </footer>
+</div>
+</div>
+
+<!-- Floating Image Container -->
+<div id="floating-image-viewer">
+    <img id="floating-img" src="" alt="Preview">
+    <p id="floating-caption"></p>
 </div>
 
 <script>
-    // Globals
-    let currentIndex = 0;
-    // FIX: Initialize as an empty array to prevent crash if DOM isn't ready
-    let slides = [];
-    let total = 0;
-    let homeBtn = null;
+// --- HOVER IMAGE LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+    const viewer = document.getElementById('floating-image-viewer');
+    const img = document.getElementById('floating-img');
+    const caption = document.getElementById('floating-caption');
+    const triggers = document.querySelectorAll('.hover-trigger');
 
-    // Core UI Update
-    function updateUI() {
-        if (!slides.length) return;
-
-        // Toggle Slides
-        slides.forEach((s, i) => {
-            if (i === currentIndex) {
-                s.style.display = 'flex';
-                // Reset scroll on mobile using window.scrollTo to avoid layout thrashing
-                if (window.innerWidth < 900) {
-                    window.scrollTo(0, 0);
-                }
-                // Trigger fade
-                setTimeout(() => s.classList.add('active'), 10);
-                
-                // Focus Management (skip if initial load)
-                if (document.activeElement!== document.body) {
-                    const header = s.querySelector('h1, h2');
-                    if(header) header.focus({preventScroll: true});
-                }
-            } else {
-                s.style.display = 'none';
-                s.classList.remove('active');
+    triggers.forEach(trigger => {
+        trigger.addEventListener('mouseenter', (e) => {
+            const src = trigger.getAttribute('data-img');
+            const txt = trigger.getAttribute('data-caption');
+            
+            if (src) {
+                img.src = src;
+                caption.textContent = txt || '';
+                viewer.style.display = 'block';
             }
         });
 
-        // Update Nav Pill
-        const currDisplay = document.querySelector('#currSlide');
-        const prevBtn = document.querySelector('button[aria-label="Previous"]');
-        const nextBtn = document.querySelector('button[aria-label="Next"]');
-
-        if (currDisplay) currDisplay.textContent = currentIndex + 1;
-        if (prevBtn) prevBtn.disabled = (currentIndex === 0);
-        if (nextBtn) nextBtn.disabled = (currentIndex === total - 1);
-
-        // Toggle Home Button Visibility
-        if (homeBtn) {
-            homeBtn.style.display = (currentIndex === 0)? 'none' : 'block';
-        }
-    }
-
-    // Global Functions (attached to window for inline onclick)
-    window.nextSlide = function() {
-        if (currentIndex < total - 1) {
-            currentIndex++;
-            updateUI();
-        }
-    };
-
-    window.prevSlide = function() {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateUI();
-        }
-    };
-
-    window.goToStart = function() {
-        currentIndex = 0;
-        updateUI();
-    };
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-        slides = document.querySelectorAll('.slide');
-        total = slides.length;
-        homeBtn = document.querySelector('#btn-home');
-
-        const totalDisplay = document.querySelector('#totalSlide');
-        if (totalDisplay) totalDisplay.textContent = total;
-
-        // Keyboard Listeners
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') window.nextSlide();
-            if (e.key === 'ArrowLeft') window.prevSlide();
+        trigger.addEventListener('mousemove', (e) => {
+            // Position nicely next to cursor
+            const x = e.pageX + 15;
+            const y = e.pageY + 15;
+            
+            // Basic bounds check to prevent off-screen (simple)
+            const rightEdge = x + viewer.offsetWidth;
+            if (rightEdge > window.innerWidth) {
+                 viewer.style.left = (e.pageX - viewer.offsetWidth - 15) + 'px';
+            } else {
+                 viewer.style.left = x + 'px';
+            }
+            
+            viewer.style.top = y + 'px';
         });
 
-        // Touch Listeners
-        let touchStart = 0;
-        // FIX: Access first touch point  in changedTouches list
-        document.addEventListener('touchstart', e => touchStart = e.changedTouches[0].screenX, {passive: true});
-        document.addEventListener('touchend', e => {
-            const touchEnd = e.changedTouches[0].screenX;
-            if (touchStart - touchEnd > 50) window.nextSlide();
-            if (touchEnd - touchStart > 50) window.prevSlide();
-        }, {passive: true});
-
-        // Start
-        updateUI();
+        trigger.addEventListener('mouseleave', () => {
+            viewer.style.display = 'none';
+        });
     });
-</script>
+});
 
+// --- MAIN TAB LOGIC ---
+window.switchMainTab = function(tabId, btn) {
+    document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+    
+    if (btn) {
+        btn.classList.add('active');
+    } else if (event && event.target) {
+        event.target.classList.add('active');
+    }
+    
+    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+    
+    const targetPanel = document.getElementById('tab-' + tabId);
+    if(targetPanel) {
+        targetPanel.classList.add('active');
+    }
+
+    if(tabId === 'personal') {
+        const ditaCodeBlock = document.getElementById('code-block');
+        if (ditaCodeBlock && !ditaCodeBlock.innerText.trim()) {
+            loadDita('map');
+        }
+    }
+}
+
+// --- DT ONE SUB-TAB LOGIC ---
+window.switchDtOneSubTab = function(subId, btn) {
+    // 1. Deactivate all sub-nav buttons in the DT One section
+    const container = btn.closest('.sub-nav-container');
+    container.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+    
+    // 2. Activate clicked button
+    btn.classList.add('active');
+    
+    // 3. Hide all panels in DT One section
+    const parentPanel = document.getElementById('tab-client');
+    parentPanel.querySelectorAll('.sub-panel').forEach(panel => panel.style.display = 'none');
+    
+    // 4. Show target panel
+    const target = document.getElementById('dtone-' + subId);
+    if(target) target.style.display = 'block';
+}
+
+
+// --- PERSONAL PROJECT SUB-TAB LOGIC ---
+window.switchSubTab = function(subId, btn) {
+    // 1. Find the specific container for this set of buttons
+    const container = btn.closest('.sub-nav-container');
+    
+    // 2. Deactivate only siblings
+    container.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+    
+    // 3. Activate clicked
+    btn.classList.add('active');
+    
+    // 4. Hide panels specific to this parent tab
+    const parentPanel = btn.closest('.tab-panel');
+    parentPanel.querySelectorAll('.sub-panel').forEach(panel => panel.style.display = 'none');
+    
+    // 5. Show target
+    document.getElementById('sub-' + subId).style.display = 'block';
+
+    if(subId === 'dita-tool' && !document.getElementById('code-block').innerText) {
+        loadDita('map');
+    }
+}
+
+// --- DITA VIEWER DATA ---
+const ditaContent = {
+    map: {
+        title: "Portfolio Map",
+        filename: "portfolio.ditamap",
+        preview: `
+            <h1>Donnacha's Work Samples Portfolio</h1>
+            <p><strong>Author:</strong> Donnacha Bushe &copy; 2025</p>
+            <div class="dita-map-tree">
+                <h3>Table of Contents</h3>
+                <ul>
+                    <li class="topic-head"><strong>Independent DITA Samples</strong>
+                        <ul>
+                            <li><a href="#" onclick="loadDita('task'); return false;">(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</a></li>
+                            <li><a href="#" onclick="loadDita('concept'); return false;">Reuse Features in IXIASOFT CCMS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        `,
+        source: `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en-us">
+    <title>Donnacha's Work Samples Portfolio</title>
+    <topicmeta>
+        <author>Donnacha Bushe</author>
+        <copyright>
+            <copyryear year="2025"/>
+            <copyrholder>Donnacha Bushe</copyrholder>
+        </copyright>
+    </topicmeta>
+
+    <keydef keys="product_name">
+        <topicmeta><keywords><keyword>SupplyChain Solutions</keyword></keywords></topicmeta>
+    </keydef>
+
+    <topicref href="tasks/t_linkedin_add_skills.dita" format="dita" type="task">
+        <topicmeta><navtitle>(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</navtitle></topicmeta>
+    </topicref>
+    
+    <topicref href="concepts/c_ixiasoft_reuse.dita" format="dita" type="concept">
+        <topicmeta><navtitle>Reuse Features in IXIASOFT CCMS</navtitle></topicmeta>
+    </topicref>
+
+    <reltable>
+        <relheader>
+            <relcolspec type="task"/>
+            <relcolspec type="concept"/>
+        </relheader>
+        <relrow>
+            <relcell>
+                <topicref href="tasks/t_linkedin_add_skills.dita"/>
+            </relcell>
+            <relcell>
+                </relcell>
+        </relrow>
+    </reltable>
+</map>`
+    },
+    task: {
+        title: "(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts",
+        filename: "t_linkedin_add_skills.dita",
+        preview: `
+            <h1>(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</h1>
+            <p class="dita-compliance">This example complies with the Task Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
+            <p>With a <strong>LinkedIn Premium</strong> subscription, users can tailor their profiles to align with the skills sought by employers in job posts.&nbsp;</p>
+            <p>The <strong>Qualifications</strong> section allows Premium users to complete the following tasks:</p>
+            <ul> <li>Identify the proportion of desired skills that they already have listed on their profiles, which provides an indication of how well they match the job post.</li> <li>Directly add any missing skills that they possess to their profiles, which improves their match with the job post.</li> <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li> </ul>
+            <p>These actions help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
+            
+            <div class="note">
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>A <strong>LinkedIn Premium</strong> subscription is required to access the <strong>Qualifications</strong> section of job advertisements.&nbsp;
+                    <p>This section is unique to <strong>LinkedIn Premium</strong> and provides valuable insights into the skills associated with the job post and additional skills among applicants.</p>
+                    </li>
+                </ul>
+            </div>
+            
+            <h3>Steps</h3>
+            <ol>
+                <li><strong>Navigate to the job advertisement:</strong> Open the job advertisement on LinkedIn.</li>
+                <li><strong>Access the qualifications section:</strong> Scroll down to the <strong>Qualifications</strong> section, which is exclusive to <strong>LinkedIn Premium</strong> users.
+                <p>This section provides a list of skills associated with the job post and additional skills common among applicants.</p>
+                </li>
+                <li><strong>Add skills:</strong> Click <strong>Add Skills</strong> located in the tip box below the list of skills.
+                <p>This action opens the <strong>Qualification details</strong> dialog. A green check mark appears beside each skill that is already listed on your profile.</p>
+                </li>
+                <li><strong>Add missing skills:</strong> If you possess a skill that does not have a green check mark, click the <strong>+ Add</strong> button beside that skill.</li>
+                <li><strong>Showcase your skill:</strong> Respond to the <strong>Show us where you used this skill</strong> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <strong>Save</strong>.</li>
+                <li><strong>Add more skills or exit:</strong> You can continue to add more skills or click the <strong>No thanks</strong> button to exit.</li>
+            </ol>
+        `,
+        source: `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="t_linkedin_add_skills" xml:lang="en-us">
+    <title>(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</title>
+    <shortdesc>With a <tm tmtype="tm">LinkedIn</tm> Premium subscription, users can tailor their profiles to align with the skills sought by employers in job posts.</shortdesc>
+    <taskbody>
+        <context>
+            <p>The <uicontrol>Qualifications</uicontrol> section allows Premium users to complete the following tasks:</p>
+            <ul>
+                <li>Identify the proportion of desired skills that they already have listed on their profiles, which provides an indication of how well they match the job post.</li>
+                <li>Directly add any missing skills that they possess to their profiles, which improves their match with the job post.</li>
+                <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li>
+            </ul>
+            <p>These actions help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
+        </context>
+        <prereq>
+            <p>A <tm tmtype="tm">LinkedIn</tm> Premium subscription is required to access the <uicontrol>Qualifications</uicontrol> section of job advertisements.</p>
+            <note type="note">This section is unique to <tm tmtype="tm">LinkedIn</tm> Premium and provides valuable insights into the skills associated with the job post and additional skills among applicants.</note>
+        </prereq>
+        <steps>
+            <step>
+                <cmd>Navigate to the job advertisement on <tm tmtype="tm">LinkedIn</tm>.</cmd>
+            </step>
+            <step>
+                <cmd>Scroll down to the <uicontrol>Qualifications</uicontrol> section.</cmd>
+                <info>This section provides a list of skills associated with the job post and additional skills common among applicants.</info>
+            </step>
+            <step>
+                <cmd>Click <uicontrol>Add Skills</uicontrol> located in the tip box below the list of skills.</cmd>
+                <stepresult>This action opens the <wintitle>Qualification details</wintitle> dialog. A green check mark appears beside each skill that is already listed on your profile.</stepresult>
+            </step>
+            <step>
+                <cmd>If you possess a skill that does not have a green check mark, click the <uicontrol>+ Add</uicontrol> button beside that skill.</cmd>
+            </step>
+            <step>
+                <cmd>Respond to the <systemoutput>Show us where you used this skill</systemoutput> prompt by selecting the checkboxes corresponding to your job roles and educational institutions. Click <uicontrol>Save</uicontrol>.</cmd>
+            </step>
+            <step>
+                <cmd>You can continue to add more skills or click the <uicontrol>No thanks</uicontrol> button to exit.</cmd>
+            </step>
+        </steps>
+    </taskbody>
+</task>`
+    },
+    concept: {
+        title: "Reuse Features in IXIASOFT CCMS",
+        filename: "c_ixiasoft_reuse.dita",
+        preview: `
+            <h1>Reuse Features in IXIASOFT CCMS</h1>
+            <p class="dita-compliance">This example complies with the Concept Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
+            <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
+            <p><a href="https://www.ixiasoft.com/" target="_blank" rel="noopener noreferrer"><strong>IXIASOFT CCMS</strong></a> provides the following features designed to streamline this process. Click a feature below to see details.</p>
+            
+            <div class="note">
+                <p>Note</p>
+                <p>Examples provided on this page are based on <span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span>, a company that manages supply chain operations for various clients and often needs to create variant documents.</p>
+            </div>
+            
+            <div class="feature-selector-container">
+                <div class="feature-titles">
+                    <button class="feature-title-button active" onclick="showFeature('conref', this)">Content References (Conref)</button>
+                    <button class="feature-title-button" onclick="showFeature('keyref', this)">Key References (Keyref)</button>
+                    <button class="feature-title-button" onclick="showFeature('profiling', this)">Conditional Processing</button>
+                    <button class="feature-title-button" onclick="showFeature('topic', this)">Topic Reuse</button>
+                </div>
+                <div class="feature-content-pane">
+                    <div id="feature-conref">
+                        <h4>Content References (Conref)</h4>
+                        <p>Content References (<code>Conref</code>) allow you to create segments of content that you can reference across multiple topics in DITA. These segments, which authors often create as <code>ReferableContent</code> topic types, become a part of the topics into which you insert them. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
+                        <div class="example-block"><h4>Example</h4><p><span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span> created a standard shipping policy as a <code>ReferableContent</code> topic in one location. The author inserted the policy into multiple topics using a <code>Conref</code>. The author then included these topics in various maps based on the needs of different clients.</p></div>
+                    </div>
+                    <div id="feature-keyref" style="display:none;">
+                        <h4>Key References (Keyref)</h4>
+                        <p>Key References (<code>Keyref</code>) allow you to create a placeholder for content that you can replace with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
+                        <div class="example-block"><h4>Example</h4><p><span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span> uses a <code>Keyref</code> for the company name of the client, which ensures that the correct name is inserted into the documents of each client at the time of publishing.</p></div>
+                    </div>
+                    <div id="feature-profiling" style="display:none;">
+                        <h4>Conditional Processing (Profiling)</h4>
+                        <p>Conditional Processing allows you to mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions. You can apply these conditions, such as product versions, audience types, or geographic locations, to specific sections within individual topics. This process allows for greater flexibility and precision in content customization.</p>
+                        <div class="example-block"><h4>Example</h4><p><span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span> uses Conditional Processing to include specific sections, such as <strong>Return Policies</strong> or <strong>Warranty Information</strong>, in a topic for one client and exclude the sections for another client who does not require these details.</p></div>
+                    </div>
+                    <div id="feature-topic" style="display:none;">
+                        <h4>Topic Reuse</h4>
+                        <p>Topic Reuse in IXIASOFT CCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.</p>
+                        <div class="example-block"><h4>Example</h4><p><span class="keyref-resolved" title="Resolved from key: product_name">SupplyChain Solutions</span> uses a topic on <strong>Inventory Management</strong> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p></div>
+                    </div>
+                </div>
+            </div>
+        `,
+        source: `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="c_ixiasoft_reuse" xml:lang="en-us">
+    <title>Reuse Features in IXIASOFT CCMS</title>
+    <conbody>
+        <p>Content reuse is a powerful tool in content creation because the process saves time and effort by eliminating the need to recreate identical pieces of content. Reuse also ensures consistency across documents and prevents discrepancies that can confuse readers. By reusing content, teams can focus on creating new, valuable content instead of duplicating efforts. This efficiency can lead to improved productivity and content quality.</p>
+        <p><tm tmtype="tm">IXIASOFT</tm> CCMS provides the following features designed to streamline this process.</p>
+        <note type="note">Examples provided on this page are based on <keyword keyref="product_name"/>, a company that manages supply chain operations for various clients and often needs to create variant documents.</note>
+        
+        <dl>
+            <dlentry>
+                <dt>Content References (Conref)</dt>
+                <dd>
+                    <p>Content References (<codeph>Conref</codeph>) allow you to create segments of content that you can reference across multiple topics in DITA. These segments, which authors often create as <codeph>ReferableContent</codeph> topic types, become a part of the topics into which you insert them. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
+                    <example>
+                        <title>Example</title>
+                        <p><keyword keyref="product_name"/> created a standard shipping policy as a <codeph>ReferableContent</codeph> topic in one location. The author inserted the policy into multiple topics using a <codeph>Conref</codeph>. The author then included these topics in various maps based on the needs of different clients.</p>
+                    </example>
+                </dd>
+            </dlentry>
+            <dlentry>
+                <dt>Key References (Keyref)</dt>
+                <dd>
+                    <p>Key References (<codeph>Keyref</codeph>) allow you to create a placeholder for content that you can replace with the actual content at the time of publishing. This feature is useful when the content varies between clients.</p>
+                    <example>
+                        <title>Example</title>
+                        <p><keyword keyref="product_name"/> uses a <codeph>Keyref</codeph> for the company name of the client, which ensures that the correct name is inserted into the documents of each client at the time of publishing.</p>
+                    </example>
+                </dd>
+            </dlentry>
+            <dlentry>
+                <dt>Conditional Processing (Profiling)</dt>
+                <dd>
+                    <p>Conditional Processing allows you to mark specific sections within a topic for inclusion or exclusion based on certain project-wide conditions. You can apply these conditions, such as product versions, audience types, or geographic locations, to specific sections within individual topics. This process allows for greater flexibility and precision in content customization.</p>
+                    <example>
+                        <title>Example</title>
+                        <p><keyword keyref="product_name"/> uses Conditional Processing to include specific sections, such as <uicontrol>Return Policies</uicontrol> or <uicontrol>Warranty Information</uicontrol>, in a topic for one client and exclude the sections for another client who does not require these details.</p>
+                    </example>
+                </dd>
+            </dlentry>
+            <dlentry>
+                <dt>Topic Reuse</dt>
+                <dd>
+                    <p>Topic Reuse in <tm tmtype="tm">IXIASOFT</tm> CCMS allows you to use the same topic in multiple maps. Each map is a collection of topics organized and linked together to form a cohesive document.</p>
+                    <example>
+                        <title>Example</title>
+                        <p><keyword keyref="product_name"/> uses a topic on <wintitle>Inventory Management</wintitle> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p>
+                    </example>
+                </dd>
+            </dlentry>
+        </dl>
+    </conbody>
+</concept>`
+    }
+};
+
+window.escapeHtml = function(text) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+window.highlightXml = function(xml) {
+    return escapeHtml(xml)
+        .replace(/(&lt;\!--[\s\S]*?--&gt;)/g, '<span class="xml-comment">$1</span>')
+        .replace(/(&lt;\/?)(\w+)(.*?)(\/?&gt;)/g, function(match, p1, p2, p3, p4) {
+            return '<span class="xml-tag">' + p1 + p2 + '</span>' + 
+                   p3.replace(/(\s+\w+=)(".*?")/g, '<span class="xml-attr">$1</span><span class="xml-string">$2</span>') + 
+                   '<span class="xml-tag">' + p4 + '</span>';
+        });
+}
+
+let currentFile = 'map';
+let currentMode = 'preview';
+
+window.loadDita = function(fileKey) {
+    currentFile = fileKey;
+    updateSidebarLabels(currentMode); 
+    
+    document.querySelectorAll('.dita-file-btn').forEach(btn => btn.classList.remove('active'));
+    const targetBtn = document.querySelector(`.dita-file-btn[data-key="${fileKey}"]`);
+    if(targetBtn) targetBtn.classList.add('active');
+    
+    updateHeader();
+    renderDita();
+}
+
+window.toggleView = function(mode) {
+    currentMode = mode;
+    document.getElementById('btn-preview').classList.toggle('active', mode === 'preview');
+    document.getElementById('btn-source').classList.toggle('active', mode === 'source');
+    document.getElementById('view-preview').classList.toggle('active', mode === 'preview');
+    document.getElementById('view-source').classList.toggle('active', mode === 'source');
+    
+    updateSidebarLabels(mode);
+    updateHeader();
+    renderDita();
+}
+
+function updateSidebarLabels(mode) {
+    document.querySelectorAll('.dita-file-btn').forEach(btn => {
+        const key = btn.getAttribute('data-key');
+        btn.innerText = (mode === 'preview') ? ditaContent[key].title : ditaContent[key].filename;
+    });
+}
+
+function updateHeader() {
+    const content = ditaContent[currentFile];
+    document.getElementById('dita-filename').innerText = (currentMode === 'preview') ? content.title : content.filename;
+}
+
+function renderDita() {
+    const data = ditaContent[currentFile];
+    document.getElementById('view-preview').innerHTML = data.preview;
+    document.getElementById('code-block').innerHTML = highlightXml(data.source);
+}
+
+// Interactive Feature Tabs in DITA Preview
+window.showFeature = function(featureName, btn) {
+    const container = btn.closest('.feature-selector-container');
+    container.querySelectorAll('.feature-title-button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const pane = container.querySelector('.feature-content-pane');
+    pane.querySelectorAll('div[id^="feature-"]').forEach(div => div.style.display = 'none');
+    pane.querySelector('#feature-' + featureName).style.display = 'block';
+};
+</script>
 </body>
 </html>
