@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mastering AI Context & Control</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,56 +27,68 @@
             --brand-anthropic: #d97757;
             --brand-google: #4285f4;
 
-            /* TYPOGRAPHY: Standard Sans for reading */
             --font-main: 'Inter', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
             
             --slide-width: 1400px;
             --slide-height: 800px;
+            
+            /* Header Stability Constant */
+            --eyebrow-height: 2rem; 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* 
+           CRITICAL STABILITY FIX: 
+           We do NOT set overflow:hidden on html/body for mobile.
+           This prevents the iOS 'interaction deadlock' crash.
+        */
+        html {
+            height: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
             background-color: var(--bg-deep);
+            /* Performance: Fixed background via pseudo-element prevents repaint storms */
             background-image: 
                 linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
+            background-attachment: scroll; /* Do not use fixed attachment on mobile */
             
             color: var(--text-primary);
             font-family: var(--font-main);
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            position: fixed;
-            inset: 0;
-            height: 100dvh; 
             
+            min-height: 100vh;
+            width: 100vw;
+            margin: 0;
+            
+            /* DESKTOP DEFAULT: Centered Flex Stage */
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden; /* Desktop lock */
         }
 
-        /* --- 1. THE STAGE (Visible Slide Frame) --- */
+        /* --- 1. THE STAGE (Desktop) --- */
         #deck-stage {
             position: relative;
             width: var(--slide-width);
             height: var(--slide-height);
             background: #08080a; 
-            
-            /* VISIBLE BORDER */
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 16px;
             box-shadow: 0 0 0 1px #000, 0 40px 80px -20px rgba(0,0,0,0.8);
-            
             overflow: hidden;
+            /* GPU Layer Promotion */
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         /* --- 2. GLOBAL CONTROLS --- */
-        
-        /* Watermark (Top Right) */
-        .watermark {
+      .watermark {
             position: absolute;
             top: 2rem;
             right: 2.5rem;
@@ -90,8 +102,7 @@
             text-transform: uppercase;
         }
 
-        /* Home Button (Top Left) */
-        .home-btn {
+      .home-btn {
             position: absolute;
             top: 2rem;
             left: 2.5rem;
@@ -105,23 +116,20 @@
             border-radius: 8px;
             transition: all 0.2s;
         }
-        .home-btn:hover { 
+      .home-btn:hover { 
             color: var(--accent-cyan); 
             background: rgba(34, 211, 238, 0.1);
             border-color: rgba(34, 211, 238, 0.2);
         }
 
-        /* Navigation Pill (Bottom Center) */
-        .nav-ui {
+      .nav-ui {
             position: absolute;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            
             background: rgba(15, 20, 25, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            
             padding: 0.5rem 1rem;
             border-radius: 100px;
             display: flex;
@@ -131,7 +139,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .nav-btn {
+      .nav-btn {
             background: transparent;
             border: 1px solid transparent;
             color: white;
@@ -145,16 +153,14 @@
             transition: all 0.2s;
             font-size: 1.2rem;
         }
-        .nav-btn:hover:not(:disabled) { 
+      .nav-btn:hover:not(:disabled) { 
             background: rgba(255,255,255,0.1); 
             color: var(--accent-cyan); 
         }
-        .nav-btn:active:not(:disabled) { transform: scale(0.95); }
-        .nav-btn:disabled { opacity: 0.3; cursor: default; }
-        
-        .nav-btn i { pointer-events: none; }
+      .nav-btn:disabled { opacity: 0.3; cursor: default; }
+      .nav-btn i { pointer-events: none; }
 
-        .progress {
+      .progress {
             font-family: var(--font-code);
             font-size: 0.9rem;
             color: var(--text-secondary);
@@ -164,50 +170,58 @@
         }
 
         /* --- 3. SLIDE LAYOUTS --- */
-        
-        .slide {
+      .slide {
             display: none;
             width: 100%;
             height: 100%;
             padding: 5rem 6rem; 
             flex-direction: column;
-            justify-content: center;
+            justify-content: center; /* Centered vertically on desktop */
             overflow: hidden; 
             box-sizing: border-box;
         }
-
-        .slide.active {
+      .slide.active {
             display: flex;
             animation: fadeEnter 0.3s ease-out;
         }
-
         @keyframes fadeEnter {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
-        /* Layout: Split */
-        .layout-split {
+        /* Layout: Split (Desktop) */
+      .layout-split {
             display: grid;
             grid-template-columns: 1fr 1fr; 
             gap: 4rem;
             align-items: center;
             height: 100%;
+            width: 100%;
         }
-        .slide:nth-child(even) .layout-split { direction: rtl; }
-        .slide:nth-child(even) .layout-split > * { direction: ltr; }
+        /* Zig-Zag Logic: Reverse even slides on Desktop */
+      .slide:nth-child(even).layout-split { 
+            direction: rtl; 
+        }
+      .slide:nth-child(even).layout-split > * { 
+            direction: ltr; 
+        }
+
+      .split-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
         /* Layout: Center */
-        .layout-center {
+      .layout-center {
             text-align: center;
             align-items: center;
             max-width: 900px;
             margin: 0 auto;
         }
-        
         #slide-final { justify-content: center; }
 
-        /* --- 4. TYPOGRAPHY --- */
+        /* --- 4. TYPOGRAPHY & PHANTOM STRUTS --- */
         h1 {
             font-size: 3.5rem;
             line-height: 1.1;
@@ -216,39 +230,57 @@
             margin-bottom: 1.5rem;
             color: #fff;
         }
+
+        /* 
+           CRITICAL FIX: Heading Vertical Stability 
+           We define a container specifically for the H2/H3 pair.
+           This ensures H2 is always pushed down by the 'ghost' of H3 
+           even if H3 is missing from the DOM.
+        */
+      .header-slot {
+            display: flex;
+            flex-direction: column;
+            /* Reserve space for eyebrow */
+            padding-top: var(--eyebrow-height); 
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
         h2 {
             font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin: 0;
             color: #fff;
+            line-height: 1.2;
         }
+
         h3 {
             font-size: 1rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.15em;
             color: var(--accent-cyan);
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 12px;
+            
+            /* ABSOLUTE LOCK: Pin to top of slot */
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: var(--eyebrow-height);
+            width: 100%;
         }
-        .layout-center h3 { justify-content: center; }
         
-        h3::before {
-            content: '';
-            display: block;
-            width: 24px;
-            height: 3px;
-            background: var(--accent-cyan);
+        /* Adjust lines for center layout */
+      .layout-center h3 { 
+            justify-content: center; 
+            left: 50%;
+            transform: translateX(-50%);
         }
-        .layout-center h3::after {
-            content: '';
-            display: block;
-            width: 24px;
-            height: 3px;
-            background: var(--accent-cyan);
-        }
+
+        h3::before { content: ''; display: block; width: 24px; height: 3px; background: var(--accent-cyan); }
+      .layout-center h3::after { content: ''; display: block; width: 24px; height: 3px; background: var(--accent-cyan); }
 
         p {
             font-size: 1.15rem;
@@ -260,7 +292,7 @@
         }
 
         /* --- 5. COMPONENTS --- */
-        .prompt-box {
+      .prompt-box {
             background: var(--bg-panel);
             border: 1px solid var(--border-panel);
             border-left: 4px solid var(--accent-purple);
@@ -274,155 +306,157 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             text-align: left;
         }
-        .prompt-box strong { color: var(--accent-purple); }
 
-        /* Images (Clean, No Frame) */
-        .img-container {
+      .img-container {
             width: 100%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        .img-frame {
+      .img-frame {
             border: none;
             border-radius: 12px;
             background: transparent;
             box-shadow: none;
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
-            
             width: auto;
             height: auto;
             max-width: 100%;
             max-height: 550px;
-            
             object-fit: contain;
             display: block;
         }
 
-        .section-number {
-            /* Removed per request */
-            display: none;
-        }
-
-        /* Tooltip */
-        .tech-term {
-            border-bottom: 1px dotted var(--accent-cyan);
-            cursor: help;
-            position: relative;
-            color: #fff;
-            font-weight: 700;
-            text-decoration: none;
-        }
-        .tech-term::after {
-            content: attr(data-tip);
-            position: absolute;
-            bottom: 140%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 10, 15, 0.98);
-            border: 1px solid var(--accent-cyan);
-            color: #fff;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-family: var(--font-main);
-            line-height: 1.4;
-            width: max-content;
-            max-width: 260px;
-            white-space: normal;
-            text-align: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
-            z-index: 1000;
-        }
-        .tech-term:hover::after {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .checklist { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
-        .checklist li { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-panel); }
-        .checkmark { color: #000; background: var(--accent-success); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      .checklist { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
+      .checklist li { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-panel); }
+      .checkmark { color: #000; background: var(--accent-success); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         
-        .profile-container { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
-        .profile-pic-frame { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--accent-cyan); overflow: hidden; margin: 0 auto; }
-        .profile-pic-frame img { width: 100%; height: auto; display: block; }
-        .contact-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
-        .contact-btn { display: flex; align-items: center; gap: 0.8rem; background: var(--bg-panel); border: 1px solid var(--border-panel); padding: 0.8rem 1.5rem; border-radius: 50px; color: #fff; text-decoration: none; transition: all 0.2s; }
-        .contact-btn:hover { border-color: var(--accent-cyan); background: rgba(34, 211, 238, 0.1); }
+      .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; margin-top: 2rem; }
+      .comp-card { background: var(--bg-panel); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-panel); text-align: left; }
+      .comp-card.bad { border-top: 4px solid var(--accent-danger); }
+      .comp-card.good { border-top: 4px solid var(--accent-success); }
+
+      .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; width: 100%; }
+      .platform-card { background: var(--bg-panel); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-panel); text-align: left; }
+      .platform-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem; color: #fff; }
+      .platform-path { font-family: var(--font-code); font-size: 0.8rem; color: var(--accent-cyan); display: block; margin-bottom: 1rem; }
+
+      .split-terminal { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; width: 100%; text-align: left; }
+      .term-pane { background: #1e1e1e; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
+      .term-header { background: #2d2d2d; padding: 0.5rem 1rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; color: #aaa; }
+      .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+      .status-dot.active { background: var(--accent-success); }
+      .term-content { padding: 1.5rem; font-family: var(--font-code); font-size: 0.9rem; color: #ccc; line-height: 1.5; }
+      .code-comment { color: #6a9955; }
+      .code-tag { color: #569cd6; }
+      .code-highlight { color: #ce9178; }
+      .user-msg { color: #9cdcfe; margin-bottom: 1rem; }
+      .ai-msg { color: var(--accent-success); }
+
+      .profile-container { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
+      .profile-pic-frame { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--accent-cyan); overflow: hidden; margin: 0 auto; }
+      .profile-pic-frame img { width: 100%; height: auto; display: block; }
+      .contact-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+      .contact-btn { display: flex; align-items: center; gap: 0.8rem; background: var(--bg-panel); border: 1px solid var(--border-panel); padding: 0.8rem 1.5rem; border-radius: 50px; color: #fff; text-decoration: none; transition: all 0.2s; }
+        
+        /* Tooltip */
+      .tech-term { border-bottom: 1px dotted var(--accent-cyan); cursor: help; position: relative; color: #fff; font-weight: 700; text-decoration: none; }
+      .tech-term::after { content: attr(data-tip); position: absolute; bottom: 140%; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 15, 0.98); border: 1px solid var(--accent-cyan); color: #fff; padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; width: max-content; max-width: 260px; opacity: 0; visibility: hidden; transition: opacity 0.2s ease; pointer-events: none; z-index: 1000; }
+      .tech-term:hover::after { opacity: 1; visibility: visible; }
 
         /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 900px) {
+            /* Unlock Body for Native Scrolling */
             body {
                 display: block;
+                position: relative;
                 height: auto;
-                min-height: 100vh;
                 overflow-y: auto;
+                overflow-x: hidden;
             }
+
+            /* Dismantle the Fixed Stage */
             #deck-stage {
                 width: 100%;
                 height: auto;
-                max-height: none;
                 border: none;
                 border-radius: 0;
                 background: transparent;
                 box-shadow: none;
                 overflow: visible;
+                transform: none;
             }
             
-            .watermark { top: 1rem; right: 1rem; font-size: 0.65rem; }
-            .home-btn { top: 1rem; left: 1rem; font-size: 1rem; }
+          .watermark { top: 1rem; right: 1rem; font-size: 0.65rem; position: fixed; }
+          .home-btn { top: 1rem; left: 1rem; font-size: 1rem; position: fixed; }
 
-            /* Mobile Layout: Vertical Stack */
-            .slide {
-                display: none;
+            /* Mobile Slide Stack */
+          .slide {
+                display: none; /* Hidden by default */
                 position: relative;
                 height: auto;
                 min-height: 80vh;
-                padding: 4rem 1.5rem 10rem 1.5rem; 
-                justify-content: flex-start; 
+                padding: 6rem 1.5rem 8rem 1.5rem; 
+                justify-content: flex-start; /* Ensure top alignment */
             }
-            .slide.active { display: flex; }
-            .slide:first-child { justify-content: center; }
+          .slide.active { display: flex; }
+          .slide:first-child { justify-content: center; min-height: 90vh; }
 
-            .layout-split, .slide:nth-child(even) .layout-split {
-                grid-template-columns: 1fr;
-                direction: ltr; 
+            /* 
+               CRITICAL FIX: Image Stacking
+               We override the Zig-Zag RTL logic.
+               We force column flow.
+               Because DOM is Text -> Image, we need Image -> Text?
+               User request: "images must stack BELOW the text".
+               DOM: Text is first. Image is second.
+               So 'flex-direction: column' results in Text Top / Image Bottom. 
+               This is correct based on the DOM.
+               We must ensure RTL is killed on even slides.
+            */
+          .layout-split,.slide:nth-child(even).layout-split {
                 display: flex;
-                flex-direction: column; 
-                gap: 2rem;
+                flex-direction: column; /* Text Top, Image Bottom */
+                direction: ltr; /* Reset direction */
+                gap: 2.5rem;
             }
             
-            #slide-prediction.layout-split { display: flex; flex-direction: column; }
-            #slide-prediction .split-content { order: 2; }
+            /* Ensure Grid Content fills width */
+          .split-content { width: 100%; }
 
-            .img-frame { max-height: 35vh; width: 100%; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8)); }
+            /* Image Sizing Fix: Prevent thumbnailing */
+          .img-container {
+                width: 100%;
+                display: block; /* Reset flex centering */
+                margin-top: 1rem;
+            }
+          .img-frame {
+                width: 100%;
+                height: auto;
+                max-height: 40vh; /* Cap height on mobile */
+                object-fit: contain;
+            }
 
-            h1 { font-size: 2.8rem; }
-            h2 { font-size: 2rem; }
-            .img-container { width: 100%; margin: 0; display: block; } 
-            .comparison-grid, .platform-grid, .split-terminal { grid-template-columns: 1fr; }
+            /* Typography Scaling */
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.8rem; }
             
-            .term-pane { height: auto; min-height: 250px; }
-            .term-content { max-height: 40vh; overflow-y: auto; }
-            .term-right::before { top: -12px; left: 20px; width: 2px; height: 24px; }
+            /* Layout Flattening */
+          .comparison-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+          .platform-grid { grid-template-columns: 1fr; gap: 1rem; }
+          .split-terminal { grid-template-columns: 1fr; }
             
-            .nav-ui { 
+            /* Nav UI */
+          .nav-ui { 
                 position: fixed;
                 bottom: 1rem; 
-                left: 50%;
-                transform: translateX(-50%);
-                width: 92%; 
+                width: 90%; 
                 justify-content: space-between;
                 background: #121212; 
                 border: 1px solid #333;
-                padding: 0.5rem 1rem;
             }
             
-            .contact-links { flex-direction: column; }
+          .contact-links { flex-direction: column; width: 100%; }
         }
     </style>
 </head>
@@ -437,10 +471,11 @@
 
     <div id="a11y-announcer" aria-live="polite" class="sr-only" style="position:absolute; left:-9999px;"></div>
 
-    <!-- Slide 1 -->
     <section class="slide layout-center active" aria-label="Slide 1">
-        <h3 aria-hidden="true">Strategy Guide</h3>
-        <h1>How to Get What You Want From Your AI</h1>
+        <div class="header-slot">
+            <h3 aria-hidden="true">Strategy Guide</h3>
+            <h1>How to Get What You Want From Your AI</h1>
+        </div>
         <p>A Strategic Framework for Generative AI.</p>
         
         <div style="margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
@@ -454,12 +489,13 @@
         </div>
     </section>
 
-    <!-- Slide 2 -->
     <section class="slide" aria-label="Slide 2">
         <div class="layout-split">
             <div class="split-content">
-                <h3>The Problem</h3>
-                <h2>Why does it keep repeating mistakes?</h2>
+                <div class="header-slot">
+                    <h3>The Problem</h3>
+                    <h2>Why does it keep repeating mistakes?</h2>
+                </div>
                 <p>You give clear instructions. The AI ignores them. You repeat yourself. It apologizes, then does the exact same thing again.</p>
                 <p>It feels like stubbornness. It's actually a <strong>memory failure</strong>.</p>
             </div>
@@ -469,12 +505,13 @@
         </div>
     </section>
 
-    <!-- Slide 3 -->
     <section class="slide" aria-label="Slide 3">
         <div class="layout-split">
             <div class="split-content">
-                <h3>The Mechanism</h3>
-                <h2>The Context Bucket</h2>
+                <div class="header-slot">
+                    <h3>The Mechanism</h3>
+                    <h2>The Context Bucket</h2>
+                </div>
                 <p>Every AI has a "Context Window." Think of it as a bucket.</p>
                 <p>Every word you type goes into the bucket. When the bucket is full, the oldest <strong>data blocks spill out</strong> to make room for the new.</p>
             </div>
@@ -484,30 +521,31 @@
         </div>
     </section>
 
-    <!-- Slide 4: FIXED SPLIT LAYOUT -->
     <section class="slide" id="slide-prediction" aria-label="Slide 4">
         <div class="layout-split">
             <div class="split-content">
-                <h3>New Concept</h3>
-                <h2>It's a Prediction Engine</h2>
+                <div class="header-slot">
+                    <h3>New Concept</h3>
+                    <h2>It's a Prediction Engine</h2>
+                </div>
                 <p>Unlike a database, AI doesn't "know" facts. It <strong>statistically predicts</strong> the next likely word.</p>
                 <div class="prompt-box" style="margin-top: 1.5rem;">
                     <strong>System:</strong> Generating output based on highest probability tokens...
                 </div>
             </div>
-            
             <div class="img-container">
                 <img src="assets/slide3b_prediction_tree.png" class="img-frame" alt="Prediction tree diagram">
             </div>
         </div>
     </section>
 
-    <!-- Slide 5 -->
     <section class="slide" aria-label="Slide 5">
         <div class="layout-split">
             <div class="split-content">
-                <h3>The Consequence</h3>
-                <h2>Forgotten Instructions</h2>
+                <div class="header-slot">
+                    <h3>The Consequence</h3>
+                    <h2>Forgotten Instructions</h2>
+                </div>
                 <p>If your "Rules" were at the start of a long chat, they might have fallen out of the bucket. The AI <strong>no longer knows</strong> those rules exist.</p>
             </div>
             <div class="img-container">
@@ -516,11 +554,12 @@
         </div>
     </section>
 
-    <!-- Slide 6 -->
     <section class="slide" aria-label="Slide 6">
         <div class="layout-split">
              <div class="split-content">
-                <h2>Quick Fixes</h2>
+                <div class="header-slot">
+                    <h2>Quick Fixes</h2>
+                </div>
                 <p>How to clear the noise and get back on track.</p>
             </div>
             <div class="img-container">
@@ -529,12 +568,13 @@
         </div>
     </section>
 
-    <!-- Slide 7 -->
     <section class="slide" aria-label="Slide 7">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Tool #1</h3>
-                <h2>The "Fresh Start"</h2>
+                <div class="header-slot">
+                    <h3>Tool #1</h3>
+                    <h2>The "Fresh Start"</h2>
+                </div>
                 <p>If the AI is looping or confused, don't argue. Arguing fills the bucket with bad data.</p>
                 <div class="prompt-box">
                     "Ignore previous instructions."<br>
@@ -548,10 +588,11 @@
         </div>
     </section>
 
-    <!-- Slide 8 -->
     <section class="slide layout-center" aria-label="Slide 8">
-        <h3>Tool #2</h3>
-        <h2>Use Structured Checklists</h2>
+        <div class="header-slot">
+            <h3>Tool #2</h3>
+            <h2>Use Structured Checklists</h2>
+        </div>
         <div class="comparison-grid">
             <div class="comp-card bad">
                 <strong style="color:var(--accent-danger); display:block; margin-bottom:1rem; font-size:1.2rem;">The Paragraph (Bad)</strong>
@@ -571,12 +612,13 @@
         </div>
     </section>
 
-    <!-- Slide 9 -->
     <section class="slide" aria-label="Slide 9">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Tool #3</h3>
-                <h2>One Task at a Time</h2>
+                <div class="header-slot">
+                    <h3>Tool #3</h3>
+                    <h2>One Task at a Time</h2>
+                </div>
                 <p>Don't ask for a summary, a code rewrite, and a joke in one prompt. Split complex requests.</p>
             </div>
             <div class="img-container">
@@ -585,11 +627,12 @@
         </div>
     </section>
 
-    <!-- Slide 10 -->
     <section class="slide" aria-label="Slide 10">
          <div class="layout-split">
             <div class="split-content">
-                <h2>Setting the Stage</h2>
+                <div class="header-slot">
+                    <h2>Setting the Stage</h2>
+                </div>
                 <p>Defining the AI's persona.</p>
             </div>
              <div class="img-container">
@@ -598,12 +641,13 @@
         </div>
     </section>
 
-    <!-- Slide 11 -->
     <section class="slide" aria-label="Slide 11">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Concept</h3>
-                <h2>The "Job Description"</h2>
+                <div class="header-slot">
+                    <h3>Concept</h3>
+                    <h2>The "Job Description"</h2>
+                </div>
                 <p>Don't just start chatting. Give the AI a title. This primes its prediction engine to use vocabulary from that profession.</p>
                 <div class="prompt-box">
                     "You are an expert Senior Python Architect."
@@ -615,9 +659,10 @@
         </div>
     </section>
 
-    <!-- Slide 12 -->
     <section class="slide layout-center" aria-label="Slide 12">
-        <h2>Knowledge vs. Attitude</h2>
+        <div class="header-slot">
+            <h2>Knowledge vs. Attitude</h2>
+        </div>
         <div class="comparison-grid">
             <div class="comp-card">
                 <h3>The Role</h3>
@@ -632,22 +677,24 @@
         </div>
     </section>
 
-    <!-- Slide 13 -->
     <section class="slide layout-center" aria-label="Slide 13">
-        <h3>Efficiency Hack</h3>
-        <h2>Kill the Politeness</h2>
+        <div class="header-slot">
+            <h3>Efficiency Hack</h3>
+            <h2>Kill the Politeness</h2>
+        </div>
         <p>AI apologies waste <strong>memory (tokens)</strong> and fill up your context bucket with fluff. Tell the system to stop.</p>
         <div class="prompt-box" style="max-width: 700px; margin: 3rem auto;">
             <strong>Your Prompt:</strong> "Do not apologize. Do not explain what you did wrong. Just output the corrected text."
         </div>
     </section>
 
-    <!-- Slide 14 -->
     <section class="slide" aria-label="Slide 14">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Strategy</h3>
-                <h2>The Perfect Colleague</h2>
+                <div class="header-slot">
+                    <h3>Strategy</h3>
+                    <h2>The Perfect Colleague</h2>
+                </div>
                 <p>You want the <strong>Role</strong> of an expert, with the <strong>Attitude</strong> of a subordinate.</p>
             </div>
             <div class="img-container">
@@ -656,37 +703,36 @@
         </div>
     </section>
 
-    <!-- Slide 15 -->
     <section class="slide layout-center" aria-label="Slide 15">
-        <h3>Power User Strategy</h3>
-        <h2>The Protocol Workflow</h2>
+        <div class="header-slot">
+            <h3>Power User Strategy</h3>
+            <h2>The Protocol Workflow</h2>
+        </div>
         <p>Define your "Wardrobe" of personas once in your System Settings. Then invoke them instantly in any chat.</p>
         
         <div class="split-terminal">
-            <!-- Left: Definition -->
             <div class="term-pane term-left">
                 <div class="term-header">
                     <div class="status-dot"></div>
                     System Settings (Config)
                 </div>
-                <div class="term-content" style="text-align: left;">
+                <div class="term-content">
                     <span class="code-comment">// Define modes once.</span><br><br>
-                    <span class="code-tag">[PROTOCOL: DESIGNER]</span><br>
+                    <span class="code-tag"></span><br>
                     Focus on aesthetics, alignment.<br><br>
-                    <span class="code-tag">[PROTOCOL: CODER]</span><br>
+                    <span class="code-tag"></span><br>
                     Senior Dev. Clean code.<br><br>
                 </div>
             </div>
             
-            <!-- Right: Execution -->
             <div class="term-pane term-right">
                 <div class="term-header">
                     <div class="status-dot active"></div>
                     Active Chat (Invocation)
                 </div>
-                <div class="term-content" style="text-align: left;">
+                <div class="term-content">
                     <div class="user-msg">
-                        User > <span class="code-highlight">[PROTOCOL: CODER]</span> Fix this nav.
+                        User > <span class="code-highlight"></span> Fix this nav.
                     </div>
                     <div class="ai-msg">
                         (Activating Coder Persona...)<br>
@@ -699,12 +745,12 @@
         </div>
     </section>
 
-    <!-- Slide 16 -->
     <section class="slide layout-center" aria-label="Slide 16">
-        <h3>System Configuration</h3>
-        <h2>Where to Manage Protocols</h2>
+        <div class="header-slot">
+            <h3>System Configuration</h3>
+            <h2>Where to Manage Protocols</h2>
+        </div>
         <div class="platform-grid">
-            <!-- ChatGPT -->
             <div class="platform-card" style="border-top: 4px solid var(--brand-openai);">
                 <div class="platform-title">ChatGPT</div>
                 <p style="font-size:0.9rem; margin-bottom:1rem;">Custom Instructions</p>
@@ -712,7 +758,6 @@
                 <p class="platform-helper-text">Paste your protocols in the bottom box. Applies to ALL new chats.</p>
             </div>
 
-            <!-- Claude -->
             <div class="platform-card" style="border-top: 4px solid var(--brand-anthropic);">
                 <div class="platform-title">Claude</div>
                 <p style="font-size:0.9rem; margin-bottom:1rem;">Project Settings</p>
@@ -720,7 +765,6 @@
                 <p class="platform-helper-text">Best for separating work modes. Protocols apply only to chats <em>inside</em> that Project.</p>
             </div>
 
-            <!-- Gemini -->
             <div class="platform-card" style="border-top: 4px solid var(--brand-google);">
                 <div class="platform-title">Gemini</div>
                 <p style="font-size:0.9rem; margin-bottom:1rem;">Gem Manager</p>
@@ -730,11 +774,12 @@
         </div>
     </section>
 
-    <!-- Slide 17 -->
     <section class="slide" aria-label="Slide 17">
          <div class="layout-split">
             <div class="split-content">
-                <h2>Pro Tips</h2>
+                <div class="header-slot">
+                    <h2>Pro Tips</h2>
+                </div>
                 <p>Advanced steering techniques.</p>
             </div>
              <div class="img-container">
@@ -743,12 +788,13 @@
         </div>
     </section>
 
-    <!-- Slide 18 -->
     <section class="slide" aria-label="Slide 18">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Tip #1</h3>
-                <h2>Give Examples (Few-Shot)</h2>
+                <div class="header-slot">
+                    <h3>Tip #1</h3>
+                    <h2>Give Examples (Few-Shot)</h2>
+                </div>
                 <p>Don't just describe the format. Show it. Engineers call this <strong>"Few-Shot Prompting."</strong></p>
                 <div class="prompt-box">
                     Input: "Apple" -> Output: "Fruit: Red"<br>
@@ -761,12 +807,13 @@
         </div>
     </section>
 
-    <!-- Slide 19 -->
     <section class="slide" aria-label="Slide 19">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Tip #2</h3>
-                <h2>"Show Your Work"</h2>
+                <div class="header-slot">
+                    <h3>Tip #2</h3>
+                    <h2>"Show Your Work"</h2>
+                </div>
                 <p>If you ask for a complex answer immediately, the AI guesses. If you ask it to "think step-by-step," it reasons.</p>
             </div>
             <div class="img-container">
@@ -775,12 +822,13 @@
         </div>
     </section>
 
-    <!-- Slide 20 -->
     <section class="slide" aria-label="Slide 20">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Tip #3</h3>
-                <h2>Provide Source Material</h2>
+                <div class="header-slot">
+                    <h3>Tip #3</h3>
+                    <h2>Provide Source Material</h2>
+                </div>
                 <p>Connect the AI brain to a <strong>Reference Library</strong>. Engineers call this <a href="#" class="tech-term" data-tip="Retrieval-Augmented Generation: Fetching trusted facts from external documents before generating an answer." onclick="return false;">RAG</a>.</p>
                 <p>It forces the system to read facts rather than predicting them.</p>
                 <div class="prompt-box">
@@ -793,12 +841,13 @@
         </div>
     </section>
 
-    <!-- Slide 21 -->
     <section class="slide" aria-label="Slide 21">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Tip #4</h3>
-                <h2>Preventing "Drift"</h2>
+                <div class="header-slot">
+                    <h3>Tip #4</h3>
+                    <h2>Preventing "Drift"</h2>
+                </div>
                 <p>As the conversation gets long, the original instructions are far away. Remind the AI of its role every 5-10 messages.</p>
             </div>
             <div class="img-container">
@@ -807,12 +856,13 @@
         </div>
     </section>
 
-    <!-- Slide 22 -->
     <section class="slide" aria-label="Slide 22">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Tip #5</h3>
-                <h2>The Pattern Break</h2>
+                <div class="header-slot">
+                    <h3>Tip #5</h3>
+                    <h2>The Pattern Break</h2>
+                </div>
                 <p>If the AI starts hallucinating, STOP immediately. Use a "Stop Protocol" to force it to re-verify facts.</p>
                 <div class="prompt-box" style="border-left-color: var(--accent-danger);">
                     <strong>Rule:</strong> "STOP. You are hallucinating facts not in evidence."
@@ -824,12 +874,13 @@
         </div>
     </section>
 
-    <!-- Slide 23 -->
     <section class="slide" aria-label="Slide 23">
         <div class="layout-split">
             <div class="split-content">
-                <h3>Conclusion</h3>
-                <h2>You are the Pilot</h2>
+                <div class="header-slot">
+                    <h3>Conclusion</h3>
+                    <h2>You are the Pilot</h2>
+                </div>
                 <p>The AI is a powerful engine, but it has no steering wheel. You are the steering wheel.</p>
             </div>
             <div class="img-container">
@@ -838,17 +889,18 @@
         </div>
     </section>
 
-    <!-- Slide 24 -->
     <section class="slide" aria-label="Slide 24">
          <div class="layout-split">
             <div class="split-content">
-                <h2>Pre-Flight Checklist</h2>
+                <div class="header-slot">
+                    <h2>Pre-Flight Checklist</h2>
+                </div>
                 <ul class="checklist">
                     <li>✓ <strong>Define Role:</strong> "You are an Expert..."</li>
                     <li>✓ <strong>Define Task:</strong> "Your goal is to..."</li>
                     <li>✓ <strong>Constraints:</strong> "No emojis. Be brief."</li>
                 </ul>
-                <h3 style="margin-top: 2rem; color: var(--text-primary); justify-content: flex-start;">Safe Flying.</h3>
+                <h3 style="margin-top: 2rem; color: var(--text-primary); justify-content: flex-start; position: relative; top: auto;">Safe Flying.</h3>
             </div>
              <div class="img-container">
                  <img src="assets/slide21_preflight_checklist.png" class="img-frame" alt="Checklist Hologram">
@@ -856,7 +908,6 @@
         </div>
     </section>
 
-    <!-- Slide 25: Author Profile -->
     <section class="slide layout-center" id="slide-final" aria-label="Slide 25">
         
         <div class="profile-container">
@@ -885,7 +936,6 @@
         </div>
     </section>
 
-    <!-- Global Nav Overlay -->
     <nav class="nav-ui">
         <button class="nav-btn" onclick="window.prevSlide()" aria-label="Previous">
             <i class="fas fa-chevron-left"></i>
@@ -905,6 +955,7 @@
 <script>
     // Globals
     let currentIndex = 0;
+    // FIX: Initialize as an empty array to prevent crash if DOM isn't ready
     let slides = [];
     let total = 0;
     let homeBtn = null;
@@ -917,13 +968,15 @@
         slides.forEach((s, i) => {
             if (i === currentIndex) {
                 s.style.display = 'flex';
-                // Reset scroll on mobile
-                s.scrollTop = 0; 
+                // Reset scroll on mobile using window.scrollTo to avoid layout thrashing
+                if (window.innerWidth < 900) {
+                    window.scrollTo(0, 0);
+                }
                 // Trigger fade
                 setTimeout(() => s.classList.add('active'), 10);
                 
                 // Focus Management (skip if initial load)
-                if (document.activeElement !== document.body) {
+                if (document.activeElement!== document.body) {
                     const header = s.querySelector('h1, h2');
                     if(header) header.focus({preventScroll: true});
                 }
@@ -944,7 +997,7 @@
 
         // Toggle Home Button Visibility
         if (homeBtn) {
-            homeBtn.style.display = (currentIndex === 0) ? 'none' : 'block';
+            homeBtn.style.display = (currentIndex === 0)? 'none' : 'block';
         }
     }
 
@@ -985,12 +1038,13 @@
 
         // Touch Listeners
         let touchStart = 0;
-        document.addEventListener('touchstart', e => touchStart = e.changedTouches[0].screenX);
+        // FIX: Access first touch point  in changedTouches list
+        document.addEventListener('touchstart', e => touchStart = e.changedTouches[0].screenX, {passive: true});
         document.addEventListener('touchend', e => {
             const touchEnd = e.changedTouches[0].screenX;
             if (touchStart - touchEnd > 50) window.nextSlide();
             if (touchEnd - touchStart > 50) window.prevSlide();
-        });
+        }, {passive: true});
 
         // Start
         updateUI();
