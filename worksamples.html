@@ -896,18 +896,42 @@ details[open] summary::before {
 .xml-comment { color: #6a9955; font-style: italic; }
 
 /* --- HOVER IMAGE POPUP STYLES (for Presentation) --- */
-.hover-trigger {
-    color: var(--cv-accent);
-    font-weight: 600;
-    cursor: pointer;
-    border-bottom: 1px dotted var(--cv-accent);
-    position: relative;
-    white-space: nowrap;
-}
-.hover-trigger:hover {
-    background-color: #dcfce7;
+
+/* Mobile: Remove hover styling since popups are disabled */
+@media (max-width: 767px) {
+    .hover-trigger {
+        cursor: default;
+        border-bottom: none;
+        font-weight: 500;
+        color: var(--cv-text-dark);
+        position: relative;
+        white-space: nowrap;
+    }
+    
+    .hover-trigger:hover {
+        background-color: transparent;
+    }
+    
+    #floating-image-viewer {
+        display: none !important;
+    }
 }
 
+/* Desktop: Keep hover effects */
+@media (min-width: 768px) {
+    .hover-trigger {
+        color: var(--cv-accent);
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 1px dotted var(--cv-accent);
+        position: relative;
+        white-space: nowrap;
+    }
+    
+    .hover-trigger:hover {
+        background-color: #dcfce7;
+    }
+}
 /* Floating Image Container - MOBILE OPTIMIZED */
 #floating-image-viewer {
     position: absolute;
@@ -1224,15 +1248,24 @@ details[open] summary::before {
 </div>
 
 <script>
-// --- HOVER IMAGE LOGIC ---
+
+// --- HOVER IMAGE LOGIC (Desktop Only) ---
 document.addEventListener('DOMContentLoaded', () => {
     const viewer = document.getElementById('floating-image-viewer');
     const img = document.getElementById('floating-img');
     const caption = document.getElementById('floating-caption');
     const triggers = document.querySelectorAll('.hover-trigger');
     
+    // Check if device is desktop (768px or wider)
+    function isDesktop() {
+        return window.matchMedia('(min-width: 768px)').matches;
+    }
+    
     triggers.forEach(trigger => {
         trigger.addEventListener('mouseenter', (e) => {
+            // Only activate on desktop
+            if (!isDesktop()) return;
+            
             const src = trigger.getAttribute('data-img');
             const txt = trigger.getAttribute('data-caption');
             
@@ -1244,6 +1277,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         trigger.addEventListener('mousemove', (e) => {
+            // Only activate on desktop
+            if (!isDesktop()) return;
+            
             const x = e.pageX + 15;
             const y = e.pageY + 15;
             
@@ -1270,8 +1306,25 @@ document.addEventListener('DOMContentLoaded', () => {
         trigger.addEventListener('mouseleave', () => {
             viewer.style.display = 'none';
         });
+        
+        // Mobile: Convert hover triggers to regular text on tap
+        trigger.addEventListener('touchstart', (e) => {
+            if (!isDesktop()) {
+                // On mobile, just show the text normally without popup
+                e.preventDefault();
+            }
+        });
+    });
+    
+    
+    // Hide viewer when window is resized to mobile
+    window.addEventListener('resize', () => {
+        if (!isDesktop()) {
+            viewer.style.display = 'none';
+        }
     });
 });
+
 
 // --- MAIN TAB LOGIC ---
 window.switchMainTab = function(tabId, btn) {
