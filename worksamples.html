@@ -8,511 +8,1212 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&family=Consolas&display=swap" rel="stylesheet">
 <style>
-    /* --- COLOR SCHEME (Spring Palette) --- */
-    :root {
-        --cv-bg-base: #f0fdf4;       
-        --cv-bg-main: #ffffff;       
-        --cv-bg-sidebar: #dcfce7;    
-        --cv-text-dark: #14532d;     
-        --cv-text-med: #166534;      
-        --cv-text-dim: #15803d;      
-        --cv-accent: #22c55e;        
-        --cv-accent-hover: #16a34a;  
-        --cv-border: #86efac;        
-        --cv-shadow: rgba(34, 197, 94, 0.15);
-        
-        --cv-code-bg: #f0fdf4;       
-        --cv-code-border: #86efac;
-        --feature-title-inactive-bg: #dcfce7;
-        --feature-title-active-bg: #22c55e;
-        --feature-title-active-text: #ffffff;
-        
-        /* UNIFIED NOTE COLORS */
-        --cv-note-bg: #fffbeb;       /* Light Amber */
-        --cv-note-border: #fcd34d;   /* Amber Border */
-        --cv-note-text: #92400e;     /* Dark Amber Text */
+/* --- COLOR SCHEME (Spring Palette) --- */
+:root {
+    --cv-bg-base: #f0fdf4;
+    --cv-bg-main: #ffffff;
+    --cv-bg-sidebar: #dcfce7;
+    --cv-text-dark: #14532d;
+    --cv-text-med: #166534;
+    --cv-text-dim: #15803d;
+    --cv-accent: #22c55e;
+    --cv-accent-hover: #16a34a;
+    --cv-border: #86efac;
+    --cv-shadow: rgba(34, 197, 94, 0.15);
+    --cv-code-bg: #f0fdf4;
+    --cv-code-border: #86efac;
+    --feature-title-inactive-bg: #dcfce7;
+    --feature-title-active-bg: #22c55e;
+    --feature-title-active-text: #ffffff;
+    --cv-note-bg: #fffbeb;
+    --cv-note-border: #fcd34d;
+    --cv-note-text: #92400e;
+}
+
+/* --- BASE and LAYOUT --- */
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: var(--cv-bg-base);
+    color: var(--cv-text-med);
+    font-size: 14px;
+}
+
+.body-padding-wrapper {
+    padding: 0.5rem;
+}
+@media (min-width: 768px) {
+    .body-padding-wrapper {
+        padding: 3rem 2rem;
     }
+}
 
-    /* --- BASE and LAYOUT --- */
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: var(--cv-bg-base); color: var(--cv-text-med); font-size: 14px; }
-    
-    .body-padding-wrapper { padding: 2rem 1rem; }
-    @media (min-width: 768px) { .body-padding-wrapper { padding: 3rem 2rem; } }
-    
-    .container { max-width: 1100px; margin: 0 auto; background-color: var(--cv-bg-main); box-shadow: 0 4px 6px -1px var(--cv-shadow), 0 2px 4px -1px var(--cv-shadow); border-radius: 8px; overflow: hidden; border: 1px solid var(--cv-border); }
-    
-    main { padding: 2rem; }
-    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--cv-border); font-size: 0.9em; color: var(--cv-text-dim); background-color: var(--cv-bg-sidebar); }
-    footer a { color: var(--cv-accent-hover); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-    .technical-note { margin-top: 1rem; font-size: 0.85em; color: var(--cv-text-dim); border-top: 1px dashed var(--cv-border); padding-top: 1rem; display: inline-block;}
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background-color: var(--cv-bg-main);
+    box-shadow: 0 4px 6px -1px var(--cv-shadow), 0 2px 4px -1px var(--cv-shadow);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--cv-border);
+}
 
-    /* --- HEADER --- */
-    header { background-color: #ffffff; padding: 1.5rem 2rem; border-bottom: 1px solid var(--cv-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    
-    .header-branding { display: flex; align-items: center; gap: 1.5rem; }
-    .header-profile-pic { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 3px solid var(--cv-accent); box-shadow: 0 2px 4px var(--cv-shadow); }
-    
-    header h1 { margin: 0; font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--cv-text-dark); font-size: 1.5rem; line-height: 1.2; }
-    
-    /* Unified Button Style */
-    .btn-primary { 
-        display: inline-flex; 
-        align-items: center; 
-        padding: 0.5rem 1rem; 
-        background-color: var(--cv-text-dark); 
-        color: white; 
-        font-weight: 500; 
-        font-size: 0.9rem; 
-        text-decoration: none; 
-        border-radius: 6px; 
-        transition: background-color 0.2s ease; 
-        border: none; 
-        cursor: pointer;
+main {
+    padding: 1rem;
+}
+@media (min-width: 768px) {
+    main {
+        padding: 2rem;
     }
-    .btn-primary:hover { background-color: var(--cv-accent-hover); }
-    .btn-primary::after { content: "↗"; margin-left: 0.5rem; font-size: 0.8em; opacity: 0.8;}
+}
 
-    /* --- TYPOGRAPHY --- */
-    p { margin-bottom: 1rem; }
-    h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; color: var(--cv-text-dark); }
-    h2 { font-size: 1.5rem; margin: 0 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--cv-border); }
-    h3 { font-size: 1.2rem; margin: 1.5rem 0 0.8rem 0; font-weight: 600; }
-    h4 { font-size: 1rem; font-weight: 600; margin: 1rem 0 0.5rem 0; }
-    
-    /* --- MAIN TABS --- */
-    .main-tab-nav { display: flex; background-color: var(--cv-bg-sidebar); border-bottom: 1px solid var(--cv-border); padding: 0 2rem; gap: 2rem; overflow-x: auto; }
-    .main-tab-btn { background: none; border: none; padding: 1.2rem 0; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 500; color: var(--cv-text-dim); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
-    .main-tab-btn:hover { color: var(--cv-text-dark); }
-    .main-tab-btn.active { color: var(--cv-accent-hover); border-bottom-color: var(--cv-accent); font-weight: 600; }
+footer {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-top: 1px solid var(--cv-border);
+    font-size: 0.9em;
+    color: var(--cv-text-dim);
+    background-color: var(--cv-bg-sidebar);
+}
+footer a {
+    color: var(--cv-accent-hover);
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
 
-    /* --- TAB PANELS --- */
-    .tab-panel { display: none; animation: fadeIn 0.3s ease-in-out; }
-    .tab-panel.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.technical-note {
+    margin-top: 1rem;
+    font-size: 0.85em;
+    color: var(--cv-text-dim);
+    border-top: 1px dashed var(--cv-border);
+    padding-top: 1rem;
+    display: inline-block;
+}
 
-    /* --- SUB-NAVIGATION (Pills) --- */
-    .sub-nav-container { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; padding-bottom: 1rem; border-bottom: 1px solid var(--cv-border); }
-    .sub-nav-btn { background-color: white; border: 1px solid var(--cv-border); color: var(--cv-text-med); padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
-    .sub-nav-btn:hover { background-color: var(--cv-bg-sidebar); }
-    .sub-nav-btn.active { background-color: var(--cv-text-dark); color: white; border-color: var(--cv-text-dark); }
-
-    /* --- CARDS & CONTENT --- */
-    .narrative-card { background-color: #ffffff; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--cv-border); }
-    
-    .sample-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; list-style: none; padding: 0; }
-    .sample-card { background: white; border: 1px solid var(--cv-border); border-radius: 8px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
-    .sample-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px var(--cv-shadow); border-color: var(--cv-accent); }
-    .sample-card a { font-weight: 700; color: var(--cv-text-dark); text-decoration: none; font-size: 1.1rem; margin-bottom: 0.5rem; display: block; }
-    .sample-card a:hover { color: var(--cv-accent-hover); text-decoration: underline; }
-    .sample-desc { font-size: 0.9rem; color: var(--cv-text-dim); }
-
-    details { background: white; border: 1px solid var(--cv-border); border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
-    summary { padding: 1rem 1.5rem; background: var(--cv-bg-sidebar); cursor: pointer; font-weight: 600; color: var(--cv-text-dark); display: flex; align-items: center; }
-    summary:hover { background: #e2e8f0; }
-    summary::marker { display: none; }
-    summary::before { content: "▸"; margin-right: 0.5rem; font-size: 1.2rem; transition: transform 0.2s; }
-    details[open] summary::before { transform: rotate(90deg); }
-    .details-content { padding: 1.5rem; border-top: 1px solid var(--cv-border); }
-
-    .styled-list { list-style: none; padding: 0; }
-    .styled-list li { margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; }
-    .styled-list li::before { content: "•"; color: var(--cv-accent); position: absolute; left: 0; font-weight: bold; }
-
-    .project-link-buttons { margin-top: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
-    .project-button { display: inline-flex; align-items: center; gap: 0.4em; padding: 0.5rem 1rem; border: 1px solid var(--cv-accent); border-radius: 0.375rem; background-color: var(--cv-bg-main); color: var(--cv-accent); font-weight: 600; font-size: 0.9em; text-decoration: none; transition: all 0.2s ease; cursor: pointer; }
-    .project-button:hover { background-color: var(--cv-accent); color: var(--cv-bg-main); transform: translateY(-2px); box-shadow: 0 4px 8px var(--cv-shadow); }
-
-    /* --- TECHNICAL DEMO (DITA VIEWER) --- */
-    .dita-viewer-container { display: flex; flex-direction: column; border: 1px solid var(--cv-border); border-radius: 8px; overflow: hidden; background-color: #1e1e1e; color: #d4d4d4; font-family: 'Consolas', 'Monaco', monospace; height: 700px; }
-    @media (min-width: 768px) { .dita-viewer-container { flex-direction: row; } }
-    
-    .dita-sidebar { background-color: #252526; width: 100%; border-bottom: 1px solid #3e3e42; display: flex; overflow-x: auto; flex-shrink: 0; }
-    @media (min-width: 768px) { .dita-sidebar { width: 240px; flex-direction: column; border-bottom: none; border-right: 1px solid #3e3e42; } }
-    
-    .dita-sidebar-header { padding: 1rem; font-size: 0.75rem; text-transform: uppercase; color: #858585; font-weight: bold; letter-spacing: 0.05em; }
-    .dita-file-btn { background: none; border: none; color: #cccccc; padding: 0.8rem 1.5rem; text-align: left; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.85rem; display: block; width: 100%; border-left: 3px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dita-file-btn:hover { background-color: #2a2d2e; color: white; }
-    .dita-file-btn.active { background-color: #37373d; color: white; border-left-color: var(--cv-accent); }
-    
-    .dita-main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-    .dita-toolbar { padding: 0.5rem 1rem; border-bottom: 1px solid #3e3e42; display: flex; justify-content: space-between; align-items: center; background: #1e1e1e; }
-    .dita-filename { font-size: 0.85rem; color: #9ca3af; }
-    
-    .dita-toggle { display: flex; background: #252526; border-radius: 4px; padding: 2px; }
-    .dita-toggle button { background: none; border: none; color: #9ca3af; padding: 4px 12px; font-size: 0.8rem; cursor: pointer; border-radius: 3px; font-family: 'Inter', sans-serif;}
-    .dita-toggle button.active { background: #475569; color: white; font-weight: 600;}
-    
-    .dita-content { flex: 1; overflow: auto; position: relative; }
-    .dita-pane { display: none; height: 100%; }
-    .dita-pane.active { display: block; }
-    
-    /* Preview Pane Styling */
-    .dita-preview { background: white; color: #333; padding: 2rem; font-family: 'Inter', sans-serif; overflow-y: auto; }
-    .dita-preview h1 { font-size: 1.8rem; color: var(--cv-text-dark); margin-bottom: 1rem; border-bottom: 2px solid var(--cv-border); padding-bottom: 0.5rem; }
-    .dita-preview h2 { font-size: 1.4rem; color: var(--cv-text-dark); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
-    .dita-preview h3 { font-size: 1.2rem; color: var(--cv-text-dark); margin-top: 1.5rem; margin-bottom: 0.8rem; }
-    .dita-preview p { color: #333; margin-bottom: 1rem; }
-    .dita-preview ul, .dita-preview ol { margin-bottom: 1rem; padding-left: 1.5rem; }
-    .dita-preview li { margin-bottom: 0.5rem; color: #333; }
-    .dita-preview .uicontrol { font-weight: 700; color: #0f172a; }
-    .dita-preview .wintitle { font-style: italic; font-weight: 600; }
-    .dita-preview .codeph { font-family: 'Consolas', monospace; background: #f1f5f9; padding: 0.1rem 0.3rem; border-radius: 3px; color: #db2777; font-size: 0.9em; }
-    
-    /* UNIFIED NOTE STYLING */
-    .note, .mobile-dita-note, .dita-preview .note { 
-        background: var(--cv-note-bg); 
-        border-left: 4px solid var(--cv-note-border); 
-        padding: 1rem; 
-        margin: 1rem 0; 
-        border-radius: 4px; 
-        color: var(--cv-note-text);
+/* --- HEADER --- */
+header {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-bottom: 1px solid var(--cv-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+@media (min-width: 768px) {
+    header {
+        padding: 1.5rem 2rem;
     }
-    .note strong {
-        color: var(--cv-note-text); 
+}
+
+.header-branding {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+@media (min-width: 768px) {
+    .header-branding {
+        gap: 1.5rem;
     }
+}
 
-    .dita-preview .dita-compliance { font-style: italic; color: #64748b; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
-
-    /* Keyref Resolved Style */
-    .keyref-resolved {
-        background-color: #e0e7ff;
-        color: #3730a3;
-        border-bottom: 1px dotted #4f46e5;
-        padding: 0 2px;
-        cursor: help;
-        font-weight: 500;
+.header-profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--cv-accent);
+    box-shadow: 0 2px 4px var(--cv-shadow);
+}
+@media (min-width: 768px) {
+    .header-profile-pic {
+        width: 64px;
+        height: 64px;
     }
-    
-    /* DITA Map TOC Styling */
-    .dita-map-tree ul { list-style: none; padding-left: 1rem; }
-    .dita-map-tree li { margin-bottom: 0.5rem; position: relative; }
-    .dita-map-tree li::before { content: "📄"; margin-right: 0.5rem; }
-    .dita-map-tree li.topic-head::before { content: "📂"; }
-    .dita-map-tree a { color: var(--cv-accent-hover); text-decoration: none; font-weight: 500; }
-    .dita-map-tree a:hover { text-decoration: underline; }
+}
 
-    /* Interactive Preview Elements (Pills/Tabs) */
-    .feature-selector-container { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
-    @media (min-width: 768px) { .feature-selector-container { flex-direction: row; margin-top: 0.8rem; } }
-    .feature-titles { display: flex; flex-direction: column; gap: 0.4rem; flex-shrink: 0; width: 100%; }
-    @media (min-width: 768px) { .feature-titles { width: 250px; } }
-    .feature-title-button { display: block; width: 100%; padding: 0.6rem 1rem; cursor: pointer; text-align: left; background-color: var(--feature-title-inactive-bg); border: 1px solid var(--cv-border); border-radius: 4px; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--cv-text-dark); transition: all 0.2s ease; }
-    .feature-title-button:hover { background-color: #bbf7d0; } 
-    .feature-title-button.active { background-color: var(--feature-title-active-bg); color: var(--feature-title-active-text); font-weight: 600; border-color: var(--feature-title-active-bg); }
-    .feature-content-pane { border: 1px solid var(--cv-border); border-radius: 4px; padding: 1.5rem; min-height: 150px; background-color: var(--cv-bg-base); flex-grow: 1; }
-    .example-block { background-color: white; border-left: 4px solid var(--cv-accent); padding: 1rem; margin: 1rem 0; border-radius: 4px; border: 1px solid var(--cv-border); border-left-width: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .example-block h4 { margin-top: 0; display: flex; align-items: center; gap: 0.5rem; }
-    .example-block h4::before { content: "💡"; }
-
-    /* Source Pane Styling */
-    .dita-source { padding: 1.5rem; background-color: #1e1e1e; }
-    .dita-source pre { margin: 0; font-family: 'Consolas', monospace; font-size: 0.85rem; white-space: pre-wrap; }
-    
-    /* Syntax Highlighting */
-    .xml-tag { color: #569cd6; } .xml-attr { color: #9cdcfe; } .xml-string { color: #ce9178; } .xml-comment { color: #6a9955; font-style: italic; }
-    
-    /* Component Components (Note) */
-    .note strong { color: var(--cv-note-text); }
-
-    /* --- HOVER IMAGE POPUP STYLES (for Presentation) --- */
-    .hover-trigger {
-        color: var(--cv-accent);
-        font-weight: 600;
-        cursor: pointer;
-        border-bottom: 1px dotted var(--cv-accent);
-        position: relative;
-        white-space: nowrap;
+header h1 {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--cv-text-dark);
+    font-size: 1.1rem;
+    line-height: 1.2;
+}
+@media (min-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
     }
+}
 
-    .hover-trigger:hover {
-        background-color: #dcfce7; /* Light green highlight */
+/* Unified Button Style */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.8rem;
+    background-color: var(--cv-text-dark);
+    color: white;
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+@media (min-width: 768px) {
+    .btn-primary {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
     }
+}
+.btn-primary:hover {
+    background-color: var(--cv-accent-hover);
+}
+.btn-primary::after {
+    content: "↗";
+    margin-left: 0.5rem;
+    font-size: 0.8em;
+    opacity: 0.8;
+}
 
-    /* Floating Image Container */
+/* --- TYPOGRAPHY --- */
+p {
+    margin-bottom: 1rem;
+}
+h1, h2, h3, h4, h5 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--cv-text-dark);
+}
+h2 {
+    font-size: 1.3rem;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--cv-border);
+}
+@media (min-width: 768px) {
+    h2 {
+        font-size: 1.5rem;
+    }
+}
+h3 {
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.8rem 0;
+    font-weight: 600;
+}
+@media (min-width: 768px) {
+    h3 {
+        font-size: 1.2rem;
+    }
+}
+h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem 0;
+}
+
+/* --- MAIN TABS --- */
+.main-tab-nav {
+    display: flex;
+    background-color: var(--cv-bg-sidebar);
+    border-bottom: 1px solid var(--cv-border);
+    padding: 0 0.5rem;
+    gap: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+@media (min-width: 768px) {
+    .main-tab-nav {
+        padding: 0 2rem;
+        gap: 2rem;
+    }
+}
+.main-tab-btn {
+    background: none;
+    border: none;
+    padding: 1rem 0.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--cv-text-dim);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+@media (min-width: 768px) {
+    .main-tab-btn {
+        padding: 1.2rem 0;
+        font-size: 0.95rem;
+    }
+}
+.main-tab-btn:hover {
+    color: var(--cv-text-dark);
+}
+.main-tab-btn.active {
+    color: var(--cv-accent-hover);
+    border-bottom-color: var(--cv-accent);
+    font-weight: 600;
+}
+
+/* --- TAB PANELS --- */
+.tab-panel {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+.tab-panel.active {
+    display: block;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- SUB-NAVIGATION (Pills) --- */
+.sub-nav-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--cv-border);
+}
+@media (min-width: 768px) {
+    .sub-nav-container {
+        margin-bottom: 2rem;
+    }
+}
+.sub-nav-btn {
+    background-color: white;
+    border: 1px solid var(--cv-border);
+    color: var(--cv-text-med);
+    padding: 0.5rem 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+@media (min-width: 768px) {
+    .sub-nav-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+.sub-nav-btn:hover {
+    background-color: var(--cv-bg-sidebar);
+}
+.sub-nav-btn.active {
+    background-color: var(--cv-text-dark);
+    color: white;
+    border-color: var(--cv-text-dark);
+}
+
+/* --- CARDS & CONTENT --- */
+.narrative-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--cv-border);
+}
+@media (min-width: 768px) {
+    .narrative-card {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+}
+
+.sample-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    list-style: none;
+    padding: 0;
+}
+@media (min-width: 640px) {
+    .sample-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+}
+.sample-card {
+    background: white;
+    border: 1px solid var(--cv-border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+@media (min-width: 768px) {
+    .sample-card {
+        padding: 1.5rem;
+    }
+}
+.sample-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px var(--cv-shadow);
+    border-color: var(--cv-accent);
+}
+.sample-card a {
+    font-weight: 700;
+    color: var(--cv-text-dark);
+    text-decoration: none;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+@media (min-width: 768px) {
+    .sample-card a {
+        font-size: 1.1rem;
+    }
+}
+.sample-card a:hover {
+    color: var(--cv-accent-hover);
+    text-decoration: underline;
+}
+.sample-desc {
+    font-size: 0.9rem;
+    color: var(--cv-text-dim);
+}
+
+details {
+    background: white;
+    border: 1px solid var(--cv-border);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+summary {
+    padding: 1rem;
+    background: var(--cv-bg-sidebar);
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--cv-text-dark);
+    display: flex;
+    align-items: center;
+}
+@media (min-width: 768px) {
+    summary {
+        padding: 1rem 1.5rem;
+    }
+}
+summary:hover {
+    background: #e2e8f0;
+}
+summary::marker {
+    display: none;
+}
+summary::before {
+    content: "▸";
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+}
+details[open] summary::before {
+    transform: rotate(90deg);
+}
+.details-content {
+    padding: 1rem;
+    border-top: 1px solid var(--cv-border);
+}
+@media (min-width: 768px) {
+    .details-content {
+        padding: 1.5rem;
+    }
+}
+
+.styled-list {
+    list-style: none;
+    padding: 0;
+}
+.styled-list li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+.styled-list li::before {
+    content: "•";
+    color: var(--cv-accent);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.project-link-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+.project-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--cv-accent);
+    border-radius: 0.375rem;
+    background-color: var(--cv-bg-main);
+    color: var(--cv-accent);
+    font-weight: 600;
+    font-size: 0.9em;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.project-button:hover {
+    background-color: var(--cv-accent);
+    color: var(--cv-bg-main);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--cv-shadow);
+}
+
+/* --- TECHNICAL DEMO (DITA VIEWER) --- */
+.dita-viewer-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--cv-border);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'Consolas', 'Monaco', monospace;
+    height: 500px;
+}
+@media (min-width: 768px) {
+    .dita-viewer-container {
+        flex-direction: row;
+        height: 700px;
+    }
+}
+
+.dita-sidebar {
+    background-color: #252526;
+    width: 100%;
+    border-bottom: 1px solid #3e3e42;
+    display: flex;
+    overflow-x: auto;
+    flex-shrink: 0;
+    -webkit-overflow-scrolling: touch;
+}
+@media (min-width: 768px) {
+    .dita-sidebar {
+        width: 240px;
+        flex-direction: column;
+        border-bottom: none;
+        border-right: 1px solid #3e3e42;
+        overflow-x: visible;
+        overflow-y: auto;
+    }
+}
+
+.dita-sidebar-header {
+    padding: 0.75rem 1rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #858585;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    display: none;
+}
+@media (min-width: 768px) {
+    .dita-sidebar-header {
+        display: block;
+        padding: 1rem;
+        font-size: 0.75rem;
+    }
+}
+.dita-file-btn {
+    background: none;
+    border: none;
+    color: #cccccc;
+    padding: 0.8rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    display: block;
+    width: auto;
+    border-left: 3px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+}
+@media (min-width: 768px) {
+    .dita-file-btn {
+        width: 100%;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.85rem;
+    }
+}
+.dita-file-btn:hover {
+    background-color: #2a2d2e;
+    color: white;
+}
+.dita-file-btn.active {
+    background-color: #37373d;
+    color: white;
+    border-left-color: var(--cv-accent);
+}
+
+.dita-main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.dita-toolbar {
+    padding: 0.5rem;
+    border-bottom: 1px solid #3e3e42;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e1e1e;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+@media (min-width: 768px) {
+    .dita-toolbar {
+        padding: 0.5rem 1rem;
+    }
+}
+.dita-filename {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+@media (min-width: 768px) {
+    .dita-filename {
+        font-size: 0.85rem;
+    }
+}
+
+.dita-toggle {
+    display: flex;
+    background: #252526;
+    border-radius: 4px;
+    padding: 2px;
+}
+.dita-toggle button {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+}
+@media (min-width: 768px) {
+    .dita-toggle button {
+        padding: 4px 12px;
+        font-size: 0.8rem;
+    }
+}
+.dita-toggle button.active {
+    background: #475569;
+    color: white;
+    font-weight: 600;
+}
+
+.dita-content {
+    flex: 1;
+    overflow: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+}
+.dita-pane {
+    display: none;
+    height: 100%;
+}
+.dita-pane.active {
+    display: block;
+}
+
+/* Preview Pane Styling */
+.dita-preview {
+    background: white;
+    color: #333;
+    padding: 1rem;
+    font-family: 'Inter', sans-serif;
+    overflow-y: auto;
+}
+@media (min-width: 768px) {
+    .dita-preview {
+        padding: 2rem;
+    }
+}
+.dita-preview h1 {
+    font-size: 1.4rem;
+    color: var(--cv-text-dark);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--cv-border);
+    padding-bottom: 0.5rem;
+}
+@media (min-width: 768px) {
+    .dita-preview h1 {
+        font-size: 1.8rem;
+    }
+}
+.dita-preview h2 {
+    font-size: 1.2rem;
+    color: var(--cv-text-dark);
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+}
+@media (min-width: 768px) {
+    .dita-preview h2 {
+        font-size: 1.4rem;
+    }
+}
+.dita-preview h3 {
+    font-size: 1.1rem;
+    color: var(--cv-text-dark);
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+}
+@media (min-width: 768px) {
+    .dita-preview h3 {
+        font-size: 1.2rem;
+    }
+}
+.dita-preview p {
+    color: #333;
+    margin-bottom: 1rem;
+}
+.dita-preview ul, .dita-preview ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+.dita-preview li {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+.dita-preview .uicontrol {
+    font-weight: 700;
+    color: #0f172a;
+}
+.dita-preview .wintitle {
+    font-style: italic;
+    font-weight: 600;
+}
+.dita-preview .codeph {
+    font-family: 'Consolas', monospace;
+    background: #f1f5f9;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    color: #db2777;
+    font-size: 0.9em;
+}
+
+/* UNIFIED NOTE STYLING */
+.note, .mobile-dita-note, .dita-preview .note {
+    background: var(--cv-note-bg);
+    border-left: 4px solid var(--cv-note-border);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    color: var(--cv-note-text);
+}
+.note strong {
+    color: var(--cv-note-text);
+}
+.dita-preview .dita-compliance {
+    font-style: italic;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1rem;
+}
+
+/* Keyref Resolved Style */
+.keyref-resolved {
+    background-color: #e0e7ff;
+    color: #3730a3;
+    border-bottom: 1px dotted #4f46e5;
+    padding: 0 2px;
+    cursor: help;
+    font-weight: 500;
+}
+
+/* DITA Map TOC Styling */
+.dita-map-tree ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+.dita-map-tree li {
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+.dita-map-tree li::before {
+    content: "📄";
+    margin-right: 0.5rem;
+}
+.dita-map-tree li.topic-head::before {
+    content: "📂";
+}
+.dita-map-tree a {
+    color: var(--cv-accent-hover);
+    text-decoration: none;
+    font-weight: 500;
+}
+.dita-map-tree a:hover {
+    text-decoration: underline;
+}
+
+/* Interactive Preview Elements (Pills/Tabs) */
+.feature-selector-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+@media (min-width: 768px) {
+    .feature-selector-container {
+        flex-direction: row;
+        margin-top: 0.8rem;
+    }
+}
+.feature-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    width: 100%;
+}
+@media (min-width: 768px) {
+    .feature-titles {
+        width: 250px;
+    }
+}
+.feature-title-button {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    text-align: left;
+    background-color: var(--feature-title-inactive-bg);
+    border: 1px solid var(--cv-border);
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--cv-text-dark);
+    transition: all 0.2s ease;
+}
+@media (min-width: 768px) {
+    .feature-title-button {
+        font-size: 0.9rem;
+    }
+}
+.feature-title-button:hover {
+    background-color: #bbf7d0;
+}
+.feature-title-button.active {
+    background-color: var(--feature-title-active-bg);
+    color: var(--feature-title-active-text);
+    font-weight: 600;
+    border-color: var(--feature-title-active-bg);
+}
+.feature-content-pane {
+    border: 1px solid var(--cv-border);
+    border-radius: 4px;
+    padding: 1rem;
+    min-height: 150px;
+    background-color: var(--cv-bg-base);
+    flex-grow: 1;
+}
+@media (min-width: 768px) {
+    .feature-content-pane {
+        padding: 1.5rem;
+    }
+}
+.example-block {
+    background-color: white;
+    border-left: 4px solid var(--cv-accent);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    border: 1px solid var(--cv-border);
+    border-left-width: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.example-block h4 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.example-block h4::before {
+    content: "💡";
+}
+
+/* Source Pane Styling */
+.dita-source {
+    padding: 1rem;
+    background-color: #1e1e1e;
+}
+@media (min-width: 768px) {
+    .dita-source {
+        padding: 1.5rem;
+    }
+}
+.dita-source pre {
+    margin: 0;
+    font-family: 'Consolas', monospace;
+    font-size: 0.75rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+@media (min-width: 768px) {
+    .dita-source pre {
+        font-size: 0.85rem;
+    }
+}
+
+/* Syntax Highlighting */
+.xml-tag { color: #569cd6; }
+.xml-attr { color: #9cdcfe; }
+.xml-string { color: #ce9178; }
+.xml-comment { color: #6a9955; font-style: italic; }
+
+/* --- HOVER IMAGE POPUP STYLES (for Presentation) --- */
+.hover-trigger {
+    color: var(--cv-accent);
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 1px dotted var(--cv-accent);
+    position: relative;
+    white-space: nowrap;
+}
+.hover-trigger:hover {
+    background-color: #dcfce7;
+}
+
+/* Floating Image Container - MOBILE OPTIMIZED */
+#floating-image-viewer {
+    position: absolute;
+    display: none;
+    pointer-events: none;
+    z-index: 9999;
+    background: white;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: 1px solid var(--cv-border);
+    max-width: 90vw;
+    width: 300px;
+}
+@media (min-width: 768px) {
     #floating-image-viewer {
-        position: absolute; 
-        display: none;
-        pointer-events: none; 
-        z-index: 9999;
-        background: white;
-        padding: 8px;
-        border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        border: 1px solid var(--cv-border);
         max-width: 400px;
         width: 100%;
-        transform: translate(15px, 15px); 
     }
+}
+#floating-image-viewer img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+}
 
-    #floating-image-viewer img {
-        width: 100%;
-        height: auto;
-        border-radius: 4px;
-        display: block;
-    }
-    
-    #floating-image-viewer p {
-        margin: 8px 0 0 0;
-        font-size: 0.85rem;
-        color: var(--cv-text-dim);
-        text-align: center;
-        font-weight: 500;
-    }
-    
-    /* Tooltip text styling (for definitions) */
-    .definition-trigger {
-        color: var(--cv-text-dark);
-        font-weight: 600;
-        cursor: help;
-        border-bottom: 1px dashed var(--cv-text-dim);
-        position: relative;
-        white-space: nowrap;
-        display: inline-block;
-    }
+#floating-image-viewer p {
+    margin: 8px 0 0 0;
+    font-size: 0.85rem;
+    color: var(--cv-text-dim);
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Tooltip text styling (for definitions) */
+.definition-trigger {
+    color: var(--cv-text-dark);
+    font-weight: 600;
+    cursor: help;
+    border-bottom: 1px dashed var(--cv-text-dim);
+    position: relative;
+    white-space: nowrap;
+    display: inline-block;
+}
+.definition-trigger .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--cv-text-dark);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 10px;
+    position: absolute;
+    z-index: 100;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.4;
+    white-space: normal;
+    border: 1px solid var(--cv-accent);
+}
+@media (min-width: 768px) {
     .definition-trigger .tooltip-text {
-        visibility: hidden;
         width: 250px;
-        background-color: var(--cv-text-dark);
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 8px 10px;
-        position: absolute;
-        z-index: 100; /* Higher Z-index to cover content */
-        bottom: 125%;
-        left: 50%;
-        transform: translateX(-50%); /* Centered above element */
-        opacity: 0;
-        transition: opacity 0.3s;
         font-size: 0.85rem;
-        font-weight: 400;
-        line-height: 1.4;
-        white-space: normal;
-        border: 1px solid var(--cv-accent);
     }
-    .definition-trigger:hover .tooltip-text {
-        visibility: visible;
-        opacity: 1;
+}
+.definition-trigger:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Portfolio Introduction Section Responsive */
+.portfolio-intro {
+    padding: 1rem;
+    background-color: var(--cv-bg-main);
+}
+@media (min-width: 768px) {
+    .portfolio-intro {
+        padding: 2rem 2rem 0 2rem;
     }
+}
+.portfolio-intro p {
+    font-size: 1rem;
+    color: var(--cv-text-dark);
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--cv-accent);
+    padding-left: 1rem;
+}
+@media (min-width: 768px) {
+    .portfolio-intro p {
+        font-size: 1.1em;
+        margin-bottom: 2.5rem;
+    }
+}
 </style>
 </head>
 <body>
-
 <div class="body-padding-wrapper">
 <div class="container">
-
-    <header>
-        <div class="header-branding">
-            <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe" class="header-profile-pic" onerror="this.style.display='none'">
-            <h1>Donnacha's Work Samples</h1>
-        </div>
-        <div class="header-cv-button">
-            <a href="index.html" class="btn-primary">View CV</a>
-        </div>
-    </header>
-
-    <!-- Portfolio Introduction Section (Now above main tabs) -->
-    <div style="padding: 2rem 2rem 0 2rem; background-color: var(--cv-bg-main);">
-        <p style="font-size: 1.1em; color: var(--cv-text-dark); margin-bottom: 2.5rem; border-left: 4px solid var(--cv-accent); padding-left: 1rem;">
-            My 25+ year career in technical communication lies primarily behind client firewalls (SAP, Ericsson), where the bulk of my work followed established enterprise standards. The <strong>Personal Projects</strong> section below represents a recent, focused <strong>R&D effort</strong> (all created in 2025) undertaken to master modern <span class="definition-trigger">User Experience<span class="tooltip-text">The practice of designing products, systems, or services with the goal of improving user satisfaction and usability.</span></span> (UX) standards, content architecture, and the integration of <span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) into technical communication workflows.
-        </p>
+<header>
+    <div class="header-branding">
+        <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe" class="header-profile-pic" onerror="this.style.display='none'">
+        <h1>Donnacha's Work Samples</h1>
     </div>
+    <div class="header-cv-button">
+        <a href="index.html" class="btn-primary">View CV</a>
+    </div>
+</header>
 
-    <nav class="main-tab-nav">
-        <button class="main-tab-btn active" onclick="switchMainTab('client', this)">Client Project: DT One</button>
-        <button class="main-tab-btn" onclick="switchMainTab('personal', this)">Personal Projects</button>
-    </nav>
+<!-- Portfolio Introduction Section (Now above main tabs) -->
+<div class="portfolio-intro">
+    <p>
+        My 25+ year career in technical communication lies primarily behind client firewalls (SAP, Ericsson), where the bulk of my work followed established enterprise standards. The <strong>Personal Projects</strong> section below represents a recent, focused <strong>R&D effort</strong> (all created in 2025) undertaken to master modern <span class="definition-trigger">User Experience<span class="tooltip-text">The practice of designing products, systems, or services with the goal of improving user satisfaction and usability.</span></span> (UX) standards, content architecture, and the integration of <span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) into technical communication workflows.
+    </p>
+</div>
 
-    <main>
-        <div id="tab-client" class="tab-panel active">
-            <!-- Sub Tabs FIRST (Directly below main tabs) -->
-            <div class="sub-nav-container">
-                <button class="sub-nav-btn active" onclick="switchDtOneSubTab('overview', this)">Project Overview</button>
-                <button class="sub-nav-btn" onclick="switchDtOneSubTab('samples', this)">Work Samples</button>
-            </div>
+<nav class="main-tab-nav">
+    <button class="main-tab-btn active" onclick="switchMainTab('client', this)">Client Project: DT One</button>
+    <button class="main-tab-btn" onclick="switchMainTab('personal', this)">Personal Projects</button>
+</nav>
 
-            <div id="dtone-overview" class="sub-panel active">
-                <h2 style="margin-bottom: 0.5rem;">DT One Developer Portal</h2>
-                <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Role: Technical Writer and Information Architect</p>
-
-                <p>
-                    I replaced unsearchable PowerPoint presentations and bare-bones Swagger specifications with searchable, task-based guides. The existing Swagger listed <em>what</em> endpoints existed, but not <em>how</em> to use them for specific integrations.
-                </p>
-                <p>
-                    I designed a consistent four-tab template to guide developers through the core workflow: discover products, post transactions, and retrieve status. I also enriched the <span class="definition-trigger">Application Programming Interface<span class="tooltip-text">A set of functions that allows software applications to talk to each other, used here for communication between systems.</span></span> (API) reference with context and examples, linking it directly to the task guides. This bridged the gap between "how do I integrate airtime?" and "which endpoint do I call?".
-                </p>
-                <p>
-                    The result was accurate, searchable developer documentation that replaced static files and provided a clear path to successful integration.
-                </p>
-                
-                <h3>Enhanced API Reference</h3>
-                <p>I also improved the <a href="https://developers.dtone.com/reference" target="_blank" rel="noopener noreferrer" style="font-weight:600; color: var(--cv-accent-hover);">Swagger and OpenAPI Documentation</a> by adding context and examples, linking it directly to the task guides.</p>
-                
-                <div class="note">
-                    <strong>Note:</strong> The DT One project was an <strong>assignment from intive</strong>, not voluntary personal development. As a policy, most of my content strategy and structuring work for large clients (including SAP and Ericsson) remains behind strict confidentiality and enterprise firewalls. The DT One documentation style, which is <strong>Stripe-influenced</strong> and highly user-centric, serves as a clear, public-facing example of the quality and strategic approach applied across all my enterprise engagements.
-                </div>
-            </div>
-
-            <div id="dtone-samples" class="sub-panel" style="display:none;">
-                <h2 style="margin-bottom: 0.5rem;">Work Samples</h2>
-
-                 <p>
-                    I collaborated with developers to build a reusable integration template. We iterated on the design by tackling the most divergent use cases first, ensuring the structure could handle any product type while keeping the authoring workflow in Confluence (the developers' preferred tool).
-                </p>
-                <p>The following three examples show this consistent template applied across distinct products:</p>
-
-                <ul class="sample-grid">
-                    <li class="sample-card">
-                        <a href="https://developers.dtone.com/docs/airtime-fixed-copy" target="_blank" rel="noopener noreferrer">📱 Mobile: FIXED_VALUE</a>
-                        <span class="sample-desc">A standard implementation of the template for airtime top-ups.</span>
-                    </li>
-                    <li class="sample-card">
-                        <a href="https://developers.dtone.com/docs/new-mobile-template" target="_blank" rel="noopener noreferrer">📶 Mobile: RANGED_VALUE</a>
-                        <span class="sample-desc">The template adapted for variable-amount transactions.</span>
-                    </li>
-                    <li class="sample-card">
-                        <a href="https://developers.dtone.com/docs/gift-card-fixed_value_recharge" target="_blank" rel="noopener noreferrer">🎁 Gift Card: FIXED_VALUE</a>
-                        <span class="sample-desc">The template applied to a completely different product category.</span>
-                    </li>
-                </ul>
-
-                <details>
-                    <summary>Analysis: Why This Design Works</summary>
-                    <div class="details-content">
-                        <h4 style="margin-top:0;">Design Principles</h4>
-                        <ul class="styled-list">
-                            <li><strong>Task-oriented structure:</strong> Matches developer mental models ("I need to integrate airtime") rather than the endpoint-focused API structure.</li>
-                            <li><strong>Sequential workflow:</strong> Leads developers step-by-step from product discovery to transaction completion.</li>
-                            <li><strong>Prominent warnings:</strong> Highlights required fields and common mistakes to address top support issues.</li>
-                            <li><strong>Visual clarity:</strong> Uses Mermaid diagrams to make complex transaction states understandable.</li>
-                            <li><strong>Scannable content:</strong> Uses accordions so developers can expand only the details they need.</li>
-                            <li><strong>Consistent pattern:</strong> Applies one structure across 7+ product types to reduce the learning curve.</li>
-                        </ul>
-                        <h4>Impact</h4>
-                        <ul class="styled-list">
-                            <li><strong>Scalability:</strong> Successfully applied across mobile, eSIM, and gift card products.</li>
-                            <li><strong>Reduced support burden:</strong> Addressed the top two categories of support questions directly in the docs.</li>
-                            <li><strong>Faster integration:</strong> Gave developers a clear path from intent to implementation.</li>
-                        </ul>
-                    </div>
-                </details>
+<main>
+    <div id="tab-client" class="tab-panel active">
+        <!-- Sub Tabs FIRST (Directly below main tabs) -->
+        <div class="sub-nav-container">
+            <button class="sub-nav-btn active" onclick="switchDtOneSubTab('overview', this)">Project Overview</button>
+            <button class="sub-nav-btn" onclick="switchDtOneSubTab('samples', this)">Work Samples</button>
+        </div>
+        <div id="dtone-overview" class="sub-panel active">
+            <h2 style="margin-bottom: 0.5rem;">DT One Developer Portal</h2>
+            <p style="color: var(--cv-text-dim); margin-bottom: 2rem;">Role: Technical Writer and Information Architect</p>
+            <p>
+                I replaced unsearchable PowerPoint presentations and bare-bones Swagger specifications with searchable, task-based guides. The existing Swagger listed <em>what</em> endpoints existed, but not <em>how</em> to use them for specific integrations.
+            </p>
+            <p>
+                I designed a consistent four-tab template to guide developers through the core workflow: discover products, post transactions, and retrieve status. I also enriched the <span class="definition-trigger">Application Programming Interface<span class="tooltip-text">A set of functions that allows software applications to talk to each other, used here for communication between systems.</span></span> (API) reference with context and examples, linking it directly to the task guides. This bridged the gap between "how do I integrate airtime?" and "which endpoint do I call?".
+            </p>
+            <p>
+                The result was accurate, searchable developer documentation that replaced static files and provided a clear path to successful integration.
+            </p>
+            
+            <h3>Enhanced API Reference</h3>
+            <p>I also improved the <a href="https://developers.dtone.com/reference" target="_blank" rel="noopener noreferrer" style="font-weight:600; color: var(--cv-accent-hover);">Swagger and OpenAPI Documentation</a> by adding context and examples, linking it directly to the task guides.</p>
+            
+            <div class="note">
+                <strong>Note:</strong> The DT One project was an <strong>assignment from intive</strong>, not voluntary personal development. As a policy, most of my content strategy and structuring work for large clients (including SAP and Ericsson) remains behind strict confidentiality and enterprise firewalls. The DT One documentation style, which is <strong>Stripe-influenced</strong> and highly user-centric, serves as a clear, public-facing example of the quality and strategic approach applied across all my enterprise engagements.
             </div>
         </div>
-
-        <div id="tab-personal" class="tab-panel">
-            <div class="sub-nav-container">
-                <button class="sub-nav-btn active" onclick="switchSubTab('dita-tool', this)">DITA XML Explorer</button>
-                <button class="sub-nav-btn" onclick="switchSubTab('seai', this)">SEAI Grant Guide</button>
-                <button class="sub-nav-btn" onclick="switchSubTab('presentation', this)">Mastering AI Context</button>
-                <button class="sub-nav-btn" onclick="switchSubTab('template', this)">AI Book Template</button>
-            </div>
-
-            <div id="sub-dita-tool" class="sub-panel active">
-                <h2>DITA XML Explorer</h2>
-                
-                <div class="note">
-                    <strong>Note:</strong> The <span class="definition-trigger">Darwin Information Typing Architecture<span class="tooltip-text">A standard XML architecture used in structured authoring to create content that is highly reusable across multiple formats and products.</span></span> (DITA) XML Explorer is best viewed on a desktop screen to fully appreciate the side-by-side code and preview panes.
+        <div id="dtone-samples" class="sub-panel" style="display:none;">
+            <h2 style="margin-bottom: 0.5rem;">Work Samples</h2>
+            
+            <p>
+                I collaborated with developers to build a reusable integration template. We iterated on the design by tackling the most divergent use cases first, ensuring the structure could handle any product type while keeping the authoring workflow in Confluence (the developers' preferred tool).
+            </p>
+            <p>The following three examples show this consistent template applied across distinct products:</p>
+            <ul class="sample-grid">
+                <li class="sample-card">
+                    <a href="https://developers.dtone.com/docs/airtime-fixed-copy" target="_blank" rel="noopener noreferrer">📱 Mobile: FIXED_VALUE</a>
+                    <span class="sample-desc">A standard implementation of the template for airtime top-ups.</span>
+                </li>
+                <li class="sample-card">
+                    <a href="https://developers.dtone.com/docs/new-mobile-template" target="_blank" rel="noopener noreferrer">📶 Mobile: RANGED_VALUE</a>
+                    <span class="sample-desc">The template adapted for variable-amount transactions.</span>
+                </li>
+                <li class="sample-card">
+                    <a href="https://developers.dtone.com/docs/gift-card-fixed_value_recharge" target="_blank" rel="noopener noreferrer">🎁 Gift Card: FIXED_VALUE</a>
+                    <span class="sample-desc">The template applied to a completely different product category.</span>
+                </li>
+            </ul>
+            <details>
+                <summary>Analysis: Why This Design Works</summary>
+                <div class="details-content">
+                    <h4 style="margin-top:0;">Design Principles</h4>
+                    <ul class="styled-list">
+                        <li><strong>Task-oriented structure:</strong> Matches developer mental models ("I need to integrate airtime") rather than the endpoint-focused API structure.</li>
+                        <li><strong>Sequential workflow:</strong> Leads developers step-by-step from product discovery to transaction completion.</li>
+                        <li><strong>Prominent warnings:</strong> Highlights required fields and common mistakes to address top support issues.</li>
+                        <li><strong>Visual clarity:</strong> Uses Mermaid diagrams to make complex transaction states understandable.</li>
+                        <li><strong>Scannable content:</strong> Uses accordions so developers can expand only the details they need.</li>
+                        <li><strong>Consistent pattern:</strong> Applies one structure across 7+ product types to reduce the learning curve.</li>
+                    </ul>
+                    <h4>Impact</h4>
+                    <ul class="styled-list">
+                        <li><strong>Scalability:</strong> Successfully applied across mobile, eSIM, and gift card products.</li>
+                        <li><strong>Reduced support burden:</strong> Addressed the top two categories of support questions directly in the docs.</li>
+                        <li><strong>Faster integration:</strong> Gave developers a clear path from intent to implementation.</li>
+                    </ul>
                 </div>
-                
-                <p>This custom-built viewer showcases both <strong>user-facing writing</strong> (LinkedIn profile maintenance) and <strong>documenting reuse concepts in <span class="definition-trigger">Component Content Management Systems<span class="tooltip-text">A database system used to store and manage small, granular pieces of content (topics) for reuse in many different publications.</span></span></strong> (CCMS). It demonstrates my ability to tailor content for different audiences and enforce valid DITA architecture.</p>
-                
-                <p>The content covers advanced reuse concepts (<code>conref</code>, <code>keyref</code>) to highlight my expertise in CCMS. You can toggle between the <strong>Preview</strong> and <strong>Source</strong> views to see how the code renders.</p>
-                <br>
-    
-                <div class="dita-viewer-container">
-                    <div class="dita-sidebar">
-                        <div class="dita-sidebar-header">FILE EXPLORER</div>
-                        <button class="dita-file-btn active" data-key="map" onclick="loadDita('map')">Portfolio Map</button>
-                        <button class="dita-file-btn" data-key="task" onclick="loadDita('task')">(Premium Users) Add Skills...</button>
-                        <button class="dita-file-btn" data-key="concept" onclick="loadDita('concept')">Reuse Concepts in IXIASOFT CCMS</button>
-                    </div>
-                    <div class="dita-main-area">
-                        <div class="dita-toolbar">
-                            <div class="dita-filename" id="dita-filename">portfolio.ditamap</div>
-                            <div class="dita-toggle">
-                                <button class="active" id="btn-preview" onclick="toggleView('preview')">Preview</button>
-                                <button id="btn-source" onclick="toggleView('source')">Source</button>
-                            </div>
-                        </div>
-                        <div class="dita-content">
-                            <div id="view-preview" class="dita-pane dita-preview active"></div>
-                            <div id="view-source" class="dita-pane dita-source"><pre><code id="code-block"></code></pre></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="sub-seai" class="sub-panel" style="display: none;">
-                <h2>SEAI Grant Guide and Checkers</h2>
-                
-                <p>
-                    I transformed complex government grant rules into clear, interactive guides and eligibility checkers. The project focuses on the home energy grants offered by the <span class="definition-trigger">Sustainable Energy Authority of Ireland<span class="tooltip-text">The national agency responsible for promoting and assisting sustainable energy development in Ireland.</span></span> (SEAI).
-                </p>
-                <p>
-                    While not traditional software documentation, this project proves core technical communication skills:
-                </p>
-                <ul class="styled-list">
-                    <li><strong>Information Architecture:</strong> Structured diverse grant information into easily navigable tabs.</li>
-                    <li><strong>Content Simplification:</strong> Broke down complex criteria into digestible explanations.</li>
-                    <li><span class="definition-trigger">User Experience<span class="tooltip-text">The practice of designing products, systems, or services with the goal of improving user satisfaction and usability.</span></span> (UX): Designed intuitive interfaces (tabs, tooltips, result displays) for self-service.</li>
-                    <li><span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Integration: Leveraged AI for content generation and front-end coding (HTML, <span class="definition-trigger">Cascading Style Sheets<span class="tooltip-text">A stylesheet language used to describe the presentation of a document written in a markup language like HTML.</span></span> (CSS), <span class="definition-trigger">JavaScript<span class="tooltip-text">The programming language that enables interactive web pages.</span></span> (JS)).</li>
-                    <li><strong>Accuracy:</strong> Ensured all information links back to official sources.</li>
-                </ul>
-                <p>This was a personal initiative to explore innovative approaches to public information.</p>
-                
-                <div class="project-link-buttons">
-                    <a href="find-out-if-you-qualify.html" target="_blank" class="btn-primary">✅ Eligibility Checkers</a>
-                    <a href="explore-all-grant-options.html" target="_blank" class="btn-primary">📖 Grant Guide</a>
-                    <a href="https://github.com/donnachab/worksamples/tree/main" target="_blank" class="btn-primary">💻 View Code on GitHub</a>
-                </div>
+            </details>
+        </div>
+    </div>
+    <div id="tab-personal" class="tab-panel">
+        <div class="sub-nav-container">
+            <button class="sub-nav-btn active" onclick="switchSubTab('dita-tool', this)">DITA XML Explorer</button>
+            <button class="sub-nav-btn" onclick="switchSubTab('seai', this)">SEAI Grant Guide</button>
+            <button class="sub-nav-btn" onclick="switchSubTab('presentation', this)">Mastering AI Context</button>
+            <button class="sub-nav-btn" onclick="switchSubTab('template', this)">AI Book Template</button>
+        </div>
+        <div id="sub-dita-tool" class="sub-panel active">
+            <h2>DITA XML Explorer</h2>
+            
+            <div class="note">
+                <strong>Note:</strong> The <span class="definition-trigger">Darwin Information Typing Architecture<span class="tooltip-text">A standard XML architecture used in structured authoring to create content that is highly reusable across multiple formats and products.</span></span> (DITA) XML Explorer is best viewed on a desktop screen to fully appreciate the side-by-side code and preview panes.
             </div>
             
-            <div id="sub-presentation" class="sub-panel" style="display: none;">
-                <h2>Mastering AI Context and Control</h2>
-                
-                <p>This presentation goes beyond simple prompt lists to explain the underlying architecture of <span class="definition-trigger">Large Language Models<span class="tooltip-text">AI models trained on massive text datasets used to generate human-like text and code.</span></span> (LLMs).</p>
-                <p>Using dramatic visual metaphors, I clarify complex concepts like the 
-                    <span class="hover-trigger" data-img="https://raw.githubusercontent.com/donnachab/worksamples/main/assets/slide3_context_bucket.png" data-caption="Visualizing Token Limits">Context Bucket</span> 
-                    and the 
-                    <span class="hover-trigger" data-img="https://raw.githubusercontent.com/donnachab/worksamples/main/assets/slide3b_prediction_tree.png" data-caption="The Probability Tree">Prediction Engine</span> 
-                    to show why AI models lose track of instructions.
-                </p>
-                <p>The guide provides a practical strategy for maintaining context and preventing hallucinations, transforming casual users into precise prompt engineers.</p>
-                
-                <div class="project-link-buttons" style="margin-top: 2rem;">
-                    <a href="how-to-get-what-you-want-from-your-ai.html" target="_blank" class="btn-primary">📺 View Presentation</a>
+            <p>This custom-built viewer showcases both <strong>user-facing writing</strong> (LinkedIn profile maintenance) and <strong>documenting reuse concepts in <span class="definition-trigger">Component Content Management Systems<span class="tooltip-text">A database system used to store and manage small, granular pieces of content (topics) for reuse in many different publications.</span></span></strong> (CCMS). It demonstrates my ability to tailor content for different audiences and enforce valid DITA architecture.</p>
+            
+            <p>The content covers advanced reuse concepts (<code>conref</code>, <code>keyref</code>) to highlight my expertise in CCMS. You can toggle between the <strong>Preview</strong> and <strong>Source</strong> views to see how the code renders.</p>
+            <br>
+            
+            <div class="dita-viewer-container">
+                <div class="dita-sidebar">
+                    <div class="dita-sidebar-header">FILE EXPLORER</div>
+                    <button class="dita-file-btn active" data-key="map" onclick="loadDita('map')">Portfolio Map</button>
+                    <button class="dita-file-btn" data-key="task" onclick="loadDita('task')">(Premium Users) Add Skills...</button>
+                    <button class="dita-file-btn" data-key="concept" onclick="loadDita('concept')">Reuse Concepts in IXIASOFT CCMS</button>
                 </div>
-            </div>
-
-            <div id="sub-template" class="sub-panel" style="display: none;">
-                <h2>Template for AI-Generated Digital Books</h2>
-                
-                <div class="note">
-                    <strong>Note:</strong> Evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content. This template demonstrates prompt engineering and structural governance.
-                </div>
-                <p>This template guides an <span class="definition-trigger">Large Language Model<span class="tooltip-text">AI models trained on massive text datasets used to generate human-like text and code.</span></span> (LLM) through a structured authoring process to create complete, navigable digital books. It begins by prompting for a <strong>Title</strong>, <strong>Audience</strong>, and <strong>Goal</strong>, then enforces a predictable, <span class="definition-trigger">Darwin Information Typing Architecture<span class="tooltip-text">A standard XML architecture used in structured authoring to create content that is highly reusable across multiple formats and products.</span></span> (DITA) compliant structure.</p>
-                <p><strong>Key Architectural Features:</strong></p>
-                <ul class="styled-list">
-                    <li><strong>Conversational Prompting:</strong> The internal structure acts as a master prompt.</li>
-                    <li><span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Governance: Enforces a predictable output model (mandatory IDs, specific blocks) to prevent content drift.</li>
-                    <li><strong>Machine Readability:</strong> Uses semantic tagging for high-quality ingestion.</li>
-                    <li><strong>Advanced Interactivity:</strong> Integrates Mermaid.js for diagrams from text input.</li>
-                    <li><strong>Deployment:</strong> Single-file HTML for seamless portability.</li>
-                </ul>
-                <div class="project-link-buttons">
-                     <a href="genealogy.html" target="_blank" class="btn-primary">🌳 View Sample: Irish Genealogy Guide</a>
-                     <a href="https://github.com/donnachab/worksamples/blob/main/book-template-future-tech-writing.html" target="_blank" class="btn-primary">📜 View Template Source Code</a>
+                <div class="dita-main-area">
+                    <div class="dita-toolbar">
+                        <div class="dita-filename" id="dita-filename">portfolio.ditamap</div>
+                        <div class="dita-toggle">
+                            <button class="active" id="btn-preview" onclick="toggleView('preview')">Preview</button>
+                            <button id="btn-source" onclick="toggleView('source')">Source</button>
+                        </div>
+                    </div>
+                    <div class="dita-content">
+                        <div id="view-preview" class="dita-pane dita-preview active"></div>
+                        <div id="view-source" class="dita-pane dita-source"><pre><code id="code-block"></code></pre></div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div id="sub-seai" class="sub-panel" style="display: none;">
+            <h2>SEAI Grant Guide and Checkers</h2>
+            
+            <p>
+                I transformed complex government grant rules into clear, interactive guides and eligibility checkers. The project focuses on the home energy grants offered by the <span class="definition-trigger">Sustainable Energy Authority of Ireland<span class="tooltip-text">The national agency responsible for promoting and assisting sustainable energy development in Ireland.</span></span> (SEAI).
+            </p>
+            <p>
+                While not traditional software documentation, this project proves core technical communication skills:
+            </p>
+            <ul class="styled-list">
+                <li><strong>Information Architecture:</strong> Structured diverse grant information into easily navigable tabs.</li>
+                <li><strong>Content Simplification:</strong> Broke down complex criteria into digestible explanations.</li>
+                <li><span class="definition-trigger">User Experience<span class="tooltip-text">The practice of designing products, systems, or services with the goal of improving user satisfaction and usability.</span></span> (UX): Designed intuitive interfaces (tabs, tooltips, result displays) for self-service.</li>
+                <li><span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Integration: Leveraged AI for content generation and front-end coding (HTML, <span class="definition-trigger">Cascading Style Sheets<span class="tooltip-text">A stylesheet language used to describe the presentation of a document written in a markup language like HTML.</span></span> (CSS), <span class="definition-trigger">JavaScript<span class="tooltip-text">The programming language that enables interactive web pages.</span></span> (JS)).</li>
+                <li><strong>Accuracy:</strong> Ensured all information links back to official sources.</li>
+            </ul>
+            <p>This was a personal initiative to explore innovative approaches to public information.</p>
+            
+            <div class="project-link-buttons">
+                <a href="find-out-if-you-qualify.html" target="_blank" class="btn-primary">✅ Eligibility Checkers</a>
+                <a href="explore-all-grant-options.html" target="_blank" class="btn-primary">📖 Grant Guide</a>
+                <a href="https://github.com/donnachab/worksamples/tree/main" target="_blank" class="btn-primary">💻 View Code on GitHub</a>
+            </div>
+        </div>
+        
+        <div id="sub-presentation" class="sub-panel" style="display: none;">
+            <h2>Mastering AI Context and Control</h2>
+            
+            <p>This presentation goes beyond simple prompt lists to explain the underlying architecture of <span class="definition-trigger">Large Language Models<span class="tooltip-text">AI models trained on massive text datasets used to generate human-like text and code.</span></span> (LLMs).</p>
+            <p>Using dramatic visual metaphors, I clarify complex concepts like the 
+                <span class="hover-trigger" data-img="https://raw.githubusercontent.com/donnachab/worksamples/main/assets/slide3_context_bucket.png" data-caption="Visualizing Token Limits">Context Bucket</span>
+                and the 
+                <span class="hover-trigger" data-img="https://raw.githubusercontent.com/donnachab/worksamples/main/assets/slide3b_prediction_tree.png" data-caption="The Probability Tree">Prediction Engine</span>
+                to show why AI models lose track of instructions.
+            </p>
+            <p>The guide provides a practical strategy for maintaining context and preventing hallucinations, transforming casual users into precise prompt engineers.</p>
+            
+            <div class="project-link-buttons" style="margin-top: 2rem;">
+                <a href="how-to-get-what-you-want-from-your-ai.html" target="_blank" class="btn-primary">📺 View Presentation</a>
+            </div>
+        </div>
+        <div id="sub-template" class="sub-panel" style="display: none;">
+            <h2>Template for AI-Generated Digital Books</h2>
+            
+            <div class="note">
+                <strong>Note:</strong> Evaluate this project based on its <strong>structural integrity, architectural governance, and generation speed</strong>, not the quality of the final editorial content. This template demonstrates prompt engineering and structural governance.
+            </div>
+            <p>This template guides an <span class="definition-trigger">Large Language Model<span class="tooltip-text">AI models trained on massive text datasets used to generate human-like text and code.</span></span> (LLM) through a structured authoring process to create complete, navigable digital books. It begins by prompting for a <strong>Title</strong>, <strong>Audience</strong>, and <strong>Goal</strong>, then enforces a predictable, <span class="definition-trigger">Darwin Information Typing Architecture<span class="tooltip-text">A standard XML architecture used in structured authoring to create content that is highly reusable across multiple formats and products.</span></span> (DITA) compliant structure.</p>
+            <p><strong>Key Architectural Features:</strong></p>
+            <ul class="styled-list">
+                <li><strong>Conversational Prompting:</strong> The internal structure acts as a master prompt.</li>
+                <li><span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Governance: Enforces a predictable output model (mandatory IDs, specific blocks) to prevent content drift.</li>
+                <li><strong>Machine Readability:</strong> Uses semantic tagging for high-quality ingestion.</li>
+                <li><strong>Advanced Interactivity:</strong> Integrates Mermaid.js for diagrams from text input.</li>
+                <li><strong>Deployment:</strong> Single-file HTML for seamless portability.</li>
+            </ul>
+            <div class="project-link-buttons">
+                <a href="genealogy.html" target="_blank" class="btn-primary">🌳 View Sample: Irish Genealogy Guide</a>
+                <a href="https://github.com/donnachab/worksamples/blob/main/book-template-future-tech-writing.html" target="_blank" class="btn-primary">📜 View Template Source Code</a>
+            </div>
+        </div>
+    </div>
+</main>
 
-    </main>
-    <footer>
-        <p><a href="#page-top">Back to Top</a></p>
-        <p class="colophon"><strong>Technical Note:</strong> This portfolio was built using <span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Assisted Development to rapidly prototype complex information architecture concepts.</p>
-    </footer>
+<footer>
+    <p><a href="#page-top">Back to Top</a></p>
+    <p class="colophon"><strong>Technical Note:</strong> This portfolio was built using <span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) Assisted Development to rapidly prototype complex information architecture concepts.</p>
+</footer>
 </div>
 </div>
 
@@ -529,50 +1230,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const img = document.getElementById('floating-img');
     const caption = document.getElementById('floating-caption');
     const triggers = document.querySelectorAll('.hover-trigger');
-
+    
     triggers.forEach(trigger => {
         trigger.addEventListener('mouseenter', (e) => {
             const src = trigger.getAttribute('data-img');
             const txt = trigger.getAttribute('data-caption');
             
             if (src) {
-                // Use the absolute path provided in the HTML data-img attribute
-                img.src = src; 
+                img.src = src;
                 caption.textContent = txt || '';
                 viewer.style.display = 'block';
             }
         });
-
+        
         trigger.addEventListener('mousemove', (e) => {
-            // Position nicely next to cursor
             const x = e.pageX + 15;
             const y = e.pageY + 15;
             
-            // Basic bounds check to prevent off-screen (simple)
             const rightEdge = x + viewer.offsetWidth;
             const bottomEdge = y + viewer.offsetHeight;
-
             let finalX = x;
             let finalY = y;
-
+            
             if (rightEdge > window.innerWidth) {
-                 finalX = e.pageX - viewer.offsetWidth - 15;
+                finalX = e.pageX - viewer.offsetWidth - 15;
             }
-            // Check if viewer goes off the bottom of the visible screen and adjust upwards
+            
             if (bottomEdge > (window.scrollY + window.innerHeight)) {
-                 finalY = e.pageY - viewer.offsetHeight - 15;
-                 // Ensure we don't go off the top of the page either
-                 if (finalY < window.scrollY) {
-                     finalY = window.scrollY + 15; // Stick to top if forced off both ends
-                 }
+                finalY = e.pageY - viewer.offsetHeight - 15;
+                if (finalY < window.scrollY) {
+                    finalY = window.scrollY + 15;
+                }
             }
-
-
+            
             viewer.style.left = finalX + 'px';
             viewer.style.top = finalY + 'px';
-
         });
-
+        
         trigger.addEventListener('mouseleave', () => {
             viewer.style.display = 'none';
         });
@@ -582,7 +1276,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- MAIN TAB LOGIC ---
 window.switchMainTab = function(tabId, btn) {
     document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
-    
     if (btn) {
         btn.classList.add('active');
     } else if (event && event.target) {
@@ -595,7 +1288,7 @@ window.switchMainTab = function(tabId, btn) {
     if(targetPanel) {
         targetPanel.classList.add('active');
     }
-
+    
     if(tabId === 'personal') {
         const ditaCodeBlock = document.getElementById('code-block');
         if (ditaCodeBlock && !ditaCodeBlock.innerText.trim()) {
@@ -606,41 +1299,31 @@ window.switchMainTab = function(tabId, btn) {
 
 // --- DT ONE SUB-TAB LOGIC ---
 window.switchDtOneSubTab = function(subId, btn) {
-    // 1. Deactivate all sub-nav buttons in the DT One section
     const container = btn.closest('.sub-nav-container');
     container.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
     
-    // 2. Activate clicked button
     btn.classList.add('active');
     
-    // 3. Hide all panels in DT One section
     const parentPanel = document.getElementById('tab-client');
     parentPanel.querySelectorAll('.sub-panel').forEach(panel => panel.style.display = 'none');
     
-    // 4. Show target panel
     const target = document.getElementById('dtone-' + subId);
     if(target) target.style.display = 'block';
 }
 
-
 // --- PERSONAL PROJECT SUB-TAB LOGIC ---
 window.switchSubTab = function(subId, btn) {
-    // 1. Find the specific container for this set of buttons
     const container = btn.closest('.sub-nav-container');
     
-    // 2. Deactivate only siblings
     container.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
     
-    // 3. Activate clicked
     btn.classList.add('active');
     
-    // 4. Hide panels specific to this parent tab
     const parentPanel = btn.closest('.tab-panel');
     parentPanel.querySelectorAll('.sub-panel').forEach(panel => panel.style.display = 'none');
     
-    // 5. Show target
     document.getElementById('sub-' + subId).style.display = 'block';
-
+    
     if(subId === 'dita-tool' && !document.getElementById('code-block').innerText) {
         loadDita('map');
     }
@@ -677,11 +1360,9 @@ const ditaContent = {
             <copyrholder>Donnacha Bushe</copyrholder>
         </copyright>
     </topicmeta>
-
     <keydef keys="product_name">
         <topicmeta><keywords><keyword>SupplyChain Solutions</keyword></keywords></topicmeta>
     </keydef>
-
     <topicref href="tasks/t_linkedin_add_skills.dita" format="dita" type="task">
         <topicmeta><navtitle>(Premium Users) Add Skills to Your LinkedIn Profile in Response to Job Posts</navtitle></topicmeta>
     </topicref>
@@ -689,7 +1370,7 @@ const ditaContent = {
     <topicref href="concepts/c_ixiasoft_reuse.dita" format="dita" type="concept">
         <topicmeta><navtitle>Reuse Concepts in IXIASOFT CCMS</navtitle></topicmeta>
     </topicref>
-
+    
     <reltable>
         <relheader>
             <relcolspec type="task"/>
@@ -700,7 +1381,7 @@ const ditaContent = {
                 <topicref href="tasks/t_linkedin_add_skills.dita"/>
             </relcell>
             <relcell>
-                </relcell>
+            </relcell>
         </relrow>
     </reltable>
 </map>`
@@ -713,7 +1394,11 @@ const ditaContent = {
             <p class="dita-compliance">This example complies with the Task Template defined by the Darwin Information Typing Architecture (DITA) standard.</p>
             <p>With a <strong>LinkedIn Premium</strong> subscription, users can tailor their profiles to align with the skills sought by employers in job posts.&nbsp;</p>
             <p>The <strong>Qualifications</strong> section allows Premium users to complete the following tasks:</p>
-            <ul> <li>Identify the proportion of desired skills that they already have listed on their profiles, which provides an indication of how well they match the job post.</li> <li>Directly add any missing skills that they possess to their profiles, which improves their match with the job post.</li> <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li> </ul>
+            <ul>
+                <li>Identify the proportion of desired skills that they already have listed on their profiles, which provides an indication of how well they match the job post.</li>
+                <li>Directly add any missing skills that they possess to their profiles, which improves their match with the job post.</li>
+                <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li>
+            </ul>
             <p>These actions help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
             
             <div class="note">
@@ -752,7 +1437,8 @@ const ditaContent = {
                 <li>Directly add any missing skills that they possess to their profiles, which improves their match with the job post.</li>
                 <li>Discover and, if applicable, incorporate skills that are popular among other applicants.</li>
             </ul>
-            <p>These actions help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
+            <p>These actions
+help users enhance their profiles to better reflect their qualifications and increase their appeal to potential employers.</p>
         </context>
         <prereq>
             <p>A <tm tmtype="tm">LinkedIn</tm> Premium subscription is required to access the <uicontrol>Qualifications</uicontrol> section of job advertisements.</p>
@@ -849,7 +1535,7 @@ const ditaContent = {
             <div class="feature-content-pane">
                 <div id="feature-conref">
                     <h4>Content References (Conref)</h4>
-                    <p>Content References (<code>Conref</code>) allow you to create segments of content that you can reference across multiple topics in DITA. These segments, which authors often create as <code>ReferableContent</code> topic types, become a part of the topics into which you insert them. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
+                    <p>Content References (<code>Conref</code>) allow you to create segments of content that you can reference across multiple topics in DITA. These segments, which authors often create as <codeph>ReferableContent</codeph> topic types, become a part of the topics into which you insert them. These enriched topics can be included in the same map (a collection of topics organized and linked together) or in different maps.</p>
                     <div class="example-block"><h4>Example</h4><p><keyword keyref="product_name"/> created a standard shipping policy as a <codeph>ReferableContent</codeph> topic in one location. The author inserted the policy into multiple topics using a <codeph>Conref</codeph>. The author then included these topics in various maps based on the needs of different clients.</p></div>
                 </div>
                 <div id="feature-keyref" style="display:none;">
@@ -868,20 +1554,26 @@ const ditaContent = {
                     <div class="example-block"><h4>Example</h4><p><keyword keyref="product_name"/> uses a topic on <wintitle>Inventory Management</wintitle> that is relevant to multiple clients. Instead of duplicating this topic for each client, you can create it once and reuse it in multiple maps.</p></div>
                 </div>
             </div>
-        `
+        </div>
+    </conbody>
+</concept>`
     }
 };
 
 window.escapeHtml = function(text) {
-    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    return text.replace(/&/g, "&amp;")
+               .replace(/</g, "&lt;")
+               .replace(/>/g, "&gt;")
+               .replace(/"/g, "&quot;")
+               .replace(/'/g, "&#039;");
 }
 
 window.highlightXml = function(xml) {
     return escapeHtml(xml)
-        .replace(/(&lt;\!--[\s\S]*?--&gt;)/g, '<span class="xml-comment">$1</span>')
-        .replace(/(&lt;\/?)(\w+)(.*?)(\/?&gt;)/g, function(match, p1, p2, p3, p4) {
-            return '<span class="xml-tag">' + p1 + p2 + '</span>' + 
-                   p3.replace(/(\s+\w+=)(".*?")/g, '<span class="xml-attr">$1</span><span class="xml-string">$2</span>') + 
+        .replace(/(<!--[\s\S]*?-->)/g, '<span class="xml-comment">$1</span>')
+        .replace(/(<\/?)([\w]+)(.*?)(\/?>)/g, function(match, p1, p2, p3, p4) {
+            return '<span class="xml-tag">' + p1 + p2 + '</span>' +
+                   p3.replace(/(\s+[\w]+=)(".*?")/g, '<span class="xml-attr">$1</span><span class="xml-string">$2</span>') +
                    '<span class="xml-tag">' + p4 + '</span>';
         });
 }
@@ -891,7 +1583,7 @@ let currentMode = 'preview';
 
 window.loadDita = function(fileKey) {
     currentFile = fileKey;
-    updateSidebarLabels(currentMode); 
+    updateSidebarLabels(currentMode);
     
     document.querySelectorAll('.dita-file-btn').forEach(btn => btn.classList.remove('active'));
     const targetBtn = document.querySelector(`.dita-file-btn[data-key="${fileKey}"]`);
