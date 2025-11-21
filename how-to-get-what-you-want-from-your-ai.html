@@ -4,51 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mastering AI Context & Control</title>
+    <!-- Cleaned up non-standard URL wrappers -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+        
     <style>
         :root {
             --bg-deep: #020203; 
             --bg-panel: rgba(20, 20, 25, 0.95); 
             --border-panel: rgba(255, 255, 255, 0.15);
-            
+                        
             --text-primary: #f4f4f5;
             --text-secondary: #e4e4e7;
             --text-dim: #a1a1aa;
             --text-legible: #d4d4d8;
-            
+                        
             --accent-cyan: #22d3ee;
             --accent-purple: #a78bfa;
             --accent-success: #34d399;
             --accent-danger: #f87171;
-            
+                        
             --brand-openai: #10a37f;
             --brand-anthropic: #d97757;
             --brand-google: #4285f4;
 
             --font-main: 'Inter', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
-            
+                        
             --slide-width: 1400px;
             --slide-height: 800px;
-            
+                        
             /* Header Stability Constant */
-            --eyebrow-height: 2rem; 
+            --eyebrow-height: 2rem;         
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        /* 
-           CRITICAL STABILITY FIX: 
-           We do NOT set overflow:hidden on html/body for mobile.
-           This prevents the iOS 'interaction deadlock' crash.
-        */
+        
+        /* CRITICAL STABILITY FIX:            We do NOT set overflow:hidden on html/body for mobile.           This prevents the iOS 'interaction deadlock' crash.        */
         html {
             height: 100%;
             -webkit-text-size-adjust: 100%;
         }
-
+        
         body {
             background-color: var(--bg-deep);
             /* Performance: Fixed background via pseudo-element prevents repaint storms */
@@ -57,21 +53,21 @@
                 linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
             background-attachment: scroll; /* Do not use fixed attachment on mobile */
-            
+                        
             color: var(--text-primary);
             font-family: var(--font-main);
-            
+                        
             min-height: 100vh;
             width: 100vw;
             margin: 0;
-            
+                        
             /* DESKTOP DEFAULT: Centered Flex Stage */
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden; /* Desktop lock */
         }
-
+        
         /* --- 1. THE STAGE (Desktop) --- */
         #deck-stage {
             position: relative;
@@ -86,7 +82,7 @@
             will-change: transform;
             transform: translateZ(0);
         }
-
+        
         /* --- 2. GLOBAL CONTROLS --- */
       .watermark {
             position: absolute;
@@ -101,7 +97,6 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
-
       .home-btn {
             position: absolute;
             top: 2rem;
@@ -117,11 +112,10 @@
             transition: all 0.2s;
         }
       .home-btn:hover { 
-            color: var(--accent-cyan); 
-            background: rgba(34, 211, 238, 0.1);
+             color: var(--accent-cyan); 
+             background: rgba(34, 211, 238, 0.1);
             border-color: rgba(34, 211, 238, 0.2);
         }
-
       .nav-ui {
             position: absolute;
             bottom: 2rem;
@@ -138,7 +132,6 @@
             z-index: 2147483647;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
       .nav-btn {
             background: transparent;
             border: 1px solid transparent;
@@ -154,12 +147,11 @@
             font-size: 1.2rem;
         }
       .nav-btn:hover:not(:disabled) { 
-            background: rgba(255,255,255,0.1); 
-            color: var(--accent-cyan); 
-        }
+             background: rgba(255,255,255,0.1); 
+             color: var(--accent-cyan); 
+         }
       .nav-btn:disabled { opacity: 0.3; cursor: default; }
       .nav-btn i { pointer-events: none; }
-
       .progress {
             font-family: var(--font-code);
             font-size: 0.9rem;
@@ -168,7 +160,7 @@
             text-align: center;
             font-variant-numeric: tabular-nums;
         }
-
+        
         /* --- 3. SLIDE LAYOUTS --- */
       .slide {
             display: none;
@@ -188,7 +180,7 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
+        
         /* Layout: Split (Desktop) */
       .layout-split {
             display: grid;
@@ -200,18 +192,18 @@
         }
         /* Zig-Zag Logic: Reverse even slides on Desktop */
       .slide:nth-child(even).layout-split { 
-            direction: rtl; 
-        }
+             direction: rtl; 
+         }
       .slide:nth-child(even).layout-split > * { 
-            direction: ltr; 
-        }
-
+             direction: ltr; 
+         }
+        
       .split-content {
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-
+        
         /* Layout: Center */
       .layout-center {
             text-align: center;
@@ -220,7 +212,7 @@
             margin: 0 auto;
         }
         #slide-final { justify-content: center; }
-
+        
         /* --- 4. TYPOGRAPHY & PHANTOM STRUTS --- */
         h1 {
             font-size: 3.5rem;
@@ -230,13 +222,8 @@
             margin-bottom: 1.5rem;
             color: #fff;
         }
-
-        /* 
-           CRITICAL FIX: Heading Vertical Stability 
-           We define a container specifically for the H2/H3 pair.
-           This ensures H2 is always pushed down by the 'ghost' of H3 
-           even if H3 is missing from the DOM.
-        */
+        
+        /* CRITICAL FIX: Heading Vertical Stability            We define a container specifically for the H2/H3 pair.           This ensures H2 is always pushed down by the 'ghost' of H3            even if H3 is missing from the DOM.        */
       .header-slot {
             display: flex;
             flex-direction: column;
@@ -245,7 +232,7 @@
             position: relative;
             margin-bottom: 1rem;
         }
-
+        
         h2 {
             font-size: 2.5rem;
             font-weight: 700;
@@ -253,7 +240,7 @@
             color: #fff;
             line-height: 1.2;
         }
-
+        
         h3 {
             font-size: 1rem;
             font-weight: 600;
@@ -263,7 +250,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            
+                        
             /* ABSOLUTE LOCK: Pin to top of slot */
             position: absolute;
             top: 0;
@@ -271,17 +258,17 @@
             height: var(--eyebrow-height);
             width: 100%;
         }
-        
+                
         /* Adjust lines for center layout */
       .layout-center h3 { 
-            justify-content: center; 
-            left: 50%;
+             justify-content: center; 
+             left: 50%;
             transform: translateX(-50%);
         }
-
+        
         h3::before { content: ''; display: block; width: 24px; height: 3px; background: var(--accent-cyan); }
       .layout-center h3::after { content: ''; display: block; width: 24px; height: 3px; background: var(--accent-cyan); }
-
+        
         p {
             font-size: 1.15rem;
             line-height: 1.7;
@@ -290,7 +277,7 @@
             margin-bottom: 1.5rem;
             font-weight: 400;
         }
-
+        
         /* --- 5. COMPONENTS --- */
       .prompt-box {
             background: var(--bg-panel);
@@ -306,7 +293,7 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             text-align: left;
         }
-
+      
       .img-container {
             width: 100%;
             height: 100%;
@@ -327,21 +314,21 @@
             object-fit: contain;
             display: block;
         }
-
+      
       .checklist { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
       .checklist li { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-panel); }
-      .checkmark { color: #000; background: var(--accent-success); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        
+      .checkmark { color: #000; background: var(--accent-success); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }              
+      
       .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; margin-top: 2rem; }
       .comp-card { background: var(--bg-panel); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-panel); text-align: left; }
       .comp-card.bad { border-top: 4px solid var(--accent-danger); }
       .comp-card.good { border-top: 4px solid var(--accent-success); }
-
+      
       .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; width: 100%; }
       .platform-card { background: var(--bg-panel); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-panel); text-align: left; }
       .platform-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem; color: #fff; }
       .platform-path { font-family: var(--font-code); font-size: 0.8rem; color: var(--accent-cyan); display: block; margin-bottom: 1rem; }
-
+      
       .split-terminal { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; width: 100%; text-align: left; }
       .term-pane { background: #1e1e1e; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
       .term-header { background: #2d2d2d; padding: 0.5rem 1rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; color: #aaa; }
@@ -353,19 +340,19 @@
       .code-highlight { color: #ce9178; }
       .user-msg { color: #9cdcfe; margin-bottom: 1rem; }
       .ai-msg { color: var(--accent-success); }
-
+      
       .profile-container { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
       .profile-pic-frame { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--accent-cyan); overflow: hidden; margin: 0 auto; }
       .profile-pic-frame img { width: 100%; height: auto; display: block; }
       .contact-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
-      .contact-btn { display: flex; align-items: center; gap: 0.8rem; background: var(--bg-panel); border: 1px solid var(--border-panel); padding: 0.8rem 1.5rem; border-radius: 50px; color: #fff; text-decoration: none; transition: all 0.2s; }
-        
-        /* Tooltip */
+      .contact-btn { display: flex; align-items: center; gap: 0.8rem; background: var(--bg-panel); border: 1px solid var(--border-panel); padding: 0.8rem 1.5rem; border-radius: 50px; color: #fff; text-decoration: none; transition: all 0.2s; }                
+      
+      /* Tooltip */
       .tech-term { border-bottom: 1px dotted var(--accent-cyan); cursor: help; position: relative; color: #fff; font-weight: 700; text-decoration: none; }
       .tech-term::after { content: attr(data-tip); position: absolute; bottom: 140%; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 15, 0.98); border: 1px solid var(--accent-cyan); color: #fff; padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; width: max-content; max-width: 260px; opacity: 0; visibility: hidden; transition: opacity 0.2s ease; pointer-events: none; z-index: 1000; }
       .tech-term:hover::after { opacity: 1; visibility: visible; }
-
-        /* --- MOBILE OPTIMIZATION --- */
+        
+        /* --- MOBILE OPTIMIZATION --- */        
         @media (max-width: 900px) {
             /* Unlock Body for Native Scrolling */
             body {
@@ -375,7 +362,7 @@
                 overflow-y: auto;
                 overflow-x: hidden;
             }
-
+            
             /* Dismantle the Fixed Stage */
             #deck-stage {
                 width: 100%;
@@ -387,10 +374,10 @@
                 overflow: visible;
                 transform: none;
             }
-            
-          .watermark { top: 1rem; right: 1rem; font-size: 0.65rem; position: fixed; }
+                      
+            .watermark { top: 1rem; right: 1rem; font-size: 0.65rem; position: fixed; }
           .home-btn { top: 1rem; left: 1rem; font-size: 1rem; position: fixed; }
-
+            
             /* Mobile Slide Stack */
           .slide {
                 display: none; /* Hidden by default */
@@ -402,28 +389,18 @@
             }
           .slide.active { display: flex; }
           .slide:first-child { justify-content: center; min-height: 90vh; }
-
-            /* 
-               CRITICAL FIX: Image Stacking
-               We override the Zig-Zag RTL logic.
-               We force column flow.
-               Because DOM is Text -> Image, we need Image -> Text?
-               User request: "images must stack BELOW the text".
-               DOM: Text is first. Image is second.
-               So 'flex-direction: column' results in Text Top / Image Bottom. 
-               This is correct based on the DOM.
-               We must ensure RTL is killed on even slides.
-            */
+            
+            /* CRITICAL FIX: Image Stacking               We override the Zig-Zag RTL logic.               We force column flow.               Because DOM is Text -> Image, we need Image -> Text?               User request: "images must stack BELOW the text".               DOM: Text is first. Image is second.               So 'flex-direction: column' results in Text Top / Image Bottom.                This is correct based on the DOM.               We must ensure RTL is killed on even slides.            */
           .layout-split,.slide:nth-child(even).layout-split {
                 display: flex;
                 flex-direction: column; /* Text Top, Image Bottom */
                 direction: ltr; /* Reset direction */
                 gap: 2.5rem;
             }
-            
+                        
             /* Ensure Grid Content fills width */
           .split-content { width: 100%; }
-
+            
             /* Image Sizing Fix: Prevent thumbnailing */
           .img-container {
                 width: 100%;
@@ -436,26 +413,34 @@
                 max-height: 40vh; /* Cap height on mobile */
                 object-fit: contain;
             }
-
+            
             /* Typography Scaling */
             h1 { font-size: 2.5rem; }
             h2 { font-size: 1.8rem; }
-            
+                        
             /* Layout Flattening */
           .comparison-grid { grid-template-columns: 1fr; gap: 1.5rem; }
           .platform-grid { grid-template-columns: 1fr; gap: 1rem; }
           .split-terminal { grid-template-columns: 1fr; }
-            
-            /* Nav UI */
+                        
+            /* Nav UI FIX: Remove "position: fixed" to prevent overlap. */
           .nav-ui { 
-                position: fixed;
-                bottom: 1rem; 
-                width: 90%; 
-                justify-content: space-between;
-                background: #121212; 
-                border: 1px solid #333;
+                 position: relative; /* Sits naturally in the flow */
+                 bottom: auto;       /* Reset bottom constraint */
+                 left: auto; right: auto; 
+                 
+                 margin: 3rem auto 4rem auto; /* Add space above/below to let user scroll to it */
+                 width: fit-content; 
+                 max-width: 90%;
+                 
+                 justify-content: center; 
+                 gap: 1.5rem; 
+                 background: #121212; 
+                 border: 1px solid #333;
+                 transform: none;
+                 padding: 0.5rem 1.5rem; 
             }
-            
+                      
           .contact-links { flex-direction: column; width: 100%; }
         }
     </style>
@@ -463,23 +448,24 @@
 <body>
 
 <div id="deck-stage">
-    
-    <div class="watermark">Donnacha Bushe</div>
+        <div class="watermark">Donnacha Bushe</div>
     <button class="home-btn" onclick="window.goToStart()" aria-label="Back to Start" id="btn-home">
         <i class="fas fa-home"></i>
     </button>
 
     <div id="a11y-announcer" aria-live="polite" class="sr-only" style="position:absolute; left:-9999px;"></div>
-
+    
+    <!-- Slide 1 -->
     <section class="slide layout-center active" aria-label="Slide 1">
         <div class="header-slot">
             <h3 aria-hidden="true">Strategy Guide</h3>
             <h1>How to Get What You Want From Your AI</h1>
         </div>
         <p>A Strategic Framework for Generative AI.</p>
-        
+                
         <div style="margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
             <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 12px 24px; border-radius: 50px; border: 1px solid var(--border-panel);">
+                <!-- Cleaned up non-standard URL wrappers -->
                 <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent-cyan);">
                 <div style="text-align: left; font-weight: 700;">Donnacha Bushe</div>
             </div>
@@ -489,6 +475,7 @@
         </div>
     </section>
 
+    <!-- Slide 2 -->
     <section class="slide" aria-label="Slide 2">
         <div class="layout-split">
             <div class="split-content">
@@ -505,6 +492,7 @@
         </div>
     </section>
 
+    <!-- Slide 3 -->
     <section class="slide" aria-label="Slide 3">
         <div class="layout-split">
             <div class="split-content">
@@ -521,6 +509,7 @@
         </div>
     </section>
 
+    <!-- Slide 4 -->
     <section class="slide" id="slide-prediction" aria-label="Slide 4">
         <div class="layout-split">
             <div class="split-content">
@@ -539,6 +528,7 @@
         </div>
     </section>
 
+    <!-- Slide 5 -->
     <section class="slide" aria-label="Slide 5">
         <div class="layout-split">
             <div class="split-content">
@@ -554,20 +544,22 @@
         </div>
     </section>
 
+    <!-- Slide 6 -->
     <section class="slide" aria-label="Slide 6">
-        <div class="layout-split">
+        <div class="layout-split"> 
              <div class="split-content">
                 <div class="header-slot">
                     <h2>Quick Fixes</h2>
                 </div>
                 <p>How to clear the noise and get back on track.</p>
             </div>
-            <div class="img-container">
+            <div class="img-container"> 
                  <img src="assets/slide5_section_toolkit.png" class="img-frame" alt="Futuristic Toolkit" onerror="this.style.display='none'">
             </div>
         </div>
     </section>
 
+    <!-- Slide 7 -->
     <section class="slide" aria-label="Slide 7">
         <div class="layout-split">
             <div class="split-content">
@@ -588,6 +580,7 @@
         </div>
     </section>
 
+    <!-- Slide 8 -->
     <section class="slide layout-center" aria-label="Slide 8">
         <div class="header-slot">
             <h3>Tool #2</h3>
@@ -612,6 +605,7 @@
         </div>
     </section>
 
+    <!-- Slide 9 -->
     <section class="slide" aria-label="Slide 9">
         <div class="layout-split">
             <div class="split-content">
@@ -627,7 +621,8 @@
         </div>
     </section>
 
-    <section class="slide" aria-label="Slide 10">
+    <!-- Slide 10 -->
+    <section class="slide" aria-label="Slide 10"> 
          <div class="layout-split">
             <div class="split-content">
                 <div class="header-slot">
@@ -635,12 +630,13 @@
                 </div>
                 <p>Defining the AI's persona.</p>
             </div>
-             <div class="img-container">
+             <div class="img-container"> 
                  <img src="assets/slide10_section_stage.png" class="img-frame" alt="Digital Stage" onerror="this.style.display='none'">
             </div>
         </div>
     </section>
 
+    <!-- Slide 11 -->
     <section class="slide" aria-label="Slide 11">
         <div class="layout-split">
             <div class="split-content">
@@ -659,6 +655,7 @@
         </div>
     </section>
 
+    <!-- Slide 12 -->
     <section class="slide layout-center" aria-label="Slide 12">
         <div class="header-slot">
             <h2>Knowledge vs. Attitude</h2>
@@ -677,6 +674,7 @@
         </div>
     </section>
 
+    <!-- Slide 13 -->
     <section class="slide layout-center" aria-label="Slide 13">
         <div class="header-slot">
             <h3>Efficiency Hack</h3>
@@ -688,6 +686,7 @@
         </div>
     </section>
 
+    <!-- Slide 14 -->
     <section class="slide" aria-label="Slide 14">
         <div class="layout-split">
             <div class="split-content">
@@ -703,14 +702,27 @@
         </div>
     </section>
 
-    <section class="slide layout-center" aria-label="Slide 15">
-        <div class="header-slot">
-            <h3>Power User Strategy</h3>
-            <h2>The Protocol Workflow</h2>
+    <!-- Slide 15: FIX: Content in split-terminal corrected -->
+    <section class="slide" aria-label="Slide 15">
+        <div class="layout-split">
+            <div class="split-content">
+                <div class="header-slot">
+                    <h3>Power User Strategy</h3>
+                    <h2>Permanent System Protocols</h2>
+                </div>
+                <p>Define your "Hat Stand" of personas, style guides, and constraints once in your System Settings (<strong>Custom Instructions / System Prompt</strong>). Then invoke them instantly in any chat.</p>
+                
+            </div>
+            <div class="img-container">
+                <!-- Placeholder for the Wardrobe/Costumes analogy -->
+                <!-- Cleaned up non-standard URL wrappers -->
+                <!-- Added transform to scale image slightly to hide watermarks on edges -->
+                <img src="assets/slide15_ai-persona-hatstand.png" class="img-frame" style="transform: scale(1.08);" alt="A digital hat stand showing hats for different AI personas: Academic, Engineer, and Graphic Designer.">
+            </div>
         </div>
-        <p>Define your "Wardrobe" of personas once in your System Settings. Then invoke them instantly in any chat.</p>
-        
-        <div class="split-terminal">
+
+        <!-- The terminal example is kept below the main content in a mobile-friendly stack -->
+        <div class="split-terminal" style="margin-top: 3rem;">
             <div class="term-pane term-left">
                 <div class="term-header">
                     <div class="status-dot"></div>
@@ -718,13 +730,15 @@
                 </div>
                 <div class="term-content">
                     <span class="code-comment">// Define modes once.</span><br><br>
-                    <span class="code-tag"></span><br>
+                    <span class="code-tag">Graphic Designer</span><br>
                     Focus on aesthetics, alignment.<br><br>
-                    <span class="code-tag"></span><br>
-                    Senior Dev. Clean code.<br><br>
+                    <span class="code-tag">Engineer</span><br>
+                    Structural integrity, clean code.<br><br>
+                    <span class="code-tag">Academic</span><br>
+                    Rigorous citations, formal tone.<br><br>
                 </div>
             </div>
-            
+                        
             <div class="term-pane term-right">
                 <div class="term-header">
                     <div class="status-dot active"></div>
@@ -732,10 +746,10 @@
                 </div>
                 <div class="term-content">
                     <div class="user-msg">
-                        User > <span class="code-highlight"></span> Fix this nav.
+                        User &gt; <span class="code-highlight">Act as Graphic Designer.</span> Fix this nav.
                     </div>
                     <div class="ai-msg">
-                        (Activating Coder Persona...)<br>
+                        (Putting on Beret...)<br>
                         Scanning CSS grid...<br>
                         Found overlay issue.<br>
                         Applying z-index fix...
@@ -745,6 +759,7 @@
         </div>
     </section>
 
+    <!-- Slide 16 -->
     <section class="slide layout-center" aria-label="Slide 16">
         <div class="header-slot">
             <h3>System Configuration</h3>
@@ -757,14 +772,14 @@
                 <span class="platform-path">Profile Icon &rarr; Customize ChatGPT</span>
                 <p class="platform-helper-text">Paste your protocols in the bottom box. Applies to ALL new chats.</p>
             </div>
-
+            
             <div class="platform-card" style="border-top: 4px solid var(--brand-anthropic);">
                 <div class="platform-title">Claude</div>
                 <p style="font-size:0.9rem; margin-bottom:1rem;">Project Settings</p>
                 <span class="platform-path">Create Project &rarr; Custom Instructions</span>
                 <p class="platform-helper-text">Best for separating work modes. Protocols apply only to chats <em>inside</em> that Project.</p>
             </div>
-
+            
             <div class="platform-card" style="border-top: 4px solid var(--brand-google);">
                 <div class="platform-title">Gemini</div>
                 <p style="font-size:0.9rem; margin-bottom:1rem;">Gem Manager</p>
@@ -774,7 +789,8 @@
         </div>
     </section>
 
-    <section class="slide" aria-label="Slide 17">
+    <!-- Slide 17 -->
+    <section class="slide" aria-label="Slide 17"> 
          <div class="layout-split">
             <div class="split-content">
                 <div class="header-slot">
@@ -782,12 +798,13 @@
                 </div>
                 <p>Advanced steering techniques.</p>
             </div>
-             <div class="img-container">
+             <div class="img-container"> 
                  <img src="assets/slide17_section_diamond.png" class="img-frame" alt="Diamond Knowledge" onerror="this.style.display='none'">
             </div>
         </div>
     </section>
 
+    <!-- Slide 18 -->
     <section class="slide" aria-label="Slide 18">
         <div class="layout-split">
             <div class="split-content">
@@ -797,8 +814,8 @@
                 </div>
                 <p>Don't just describe the format. Show it. Engineers call this <strong>"Few-Shot Prompting."</strong></p>
                 <div class="prompt-box">
-                    Input: "Apple" -> Output: "Fruit: Red"<br>
-                    Input: "Spinach" -> Output: "Vegetable: Green"
+                    Input: "Apple" -&gt; Output: "Fruit: Red"<br>
+                    Input: "Spinach" -&gt; Output: "Vegetable: Green"
                 </div>
             </div>
             <div class="img-container">
@@ -807,6 +824,7 @@
         </div>
     </section>
 
+    <!-- Slide 19 -->
     <section class="slide" aria-label="Slide 19">
         <div class="layout-split">
             <div class="split-content">
@@ -822,6 +840,7 @@
         </div>
     </section>
 
+    <!-- Slide 20 -->
     <section class="slide" aria-label="Slide 20">
         <div class="layout-split">
             <div class="split-content">
@@ -841,6 +860,7 @@
         </div>
     </section>
 
+    <!-- Slide 21 -->
     <section class="slide" aria-label="Slide 21">
         <div class="layout-split">
             <div class="split-content">
@@ -856,6 +876,7 @@
         </div>
     </section>
 
+    <!-- Slide 22 -->
     <section class="slide" aria-label="Slide 22">
         <div class="layout-split">
             <div class="split-content">
@@ -874,6 +895,7 @@
         </div>
     </section>
 
+    <!-- Slide 23 -->
     <section class="slide" aria-label="Slide 23">
         <div class="layout-split">
             <div class="split-content">
@@ -889,7 +911,8 @@
         </div>
     </section>
 
-    <section class="slide" aria-label="Slide 24">
+    <!-- Slide 24 -->
+    <section class="slide" aria-label="Slide 24"> 
          <div class="layout-split">
             <div class="split-content">
                 <div class="header-slot">
@@ -902,27 +925,29 @@
                 </ul>
                 <h3 style="margin-top: 2rem; color: var(--text-primary); justify-content: flex-start; position: relative; top: auto;">Safe Flying.</h3>
             </div>
-             <div class="img-container">
+             <div class="img-container"> 
                  <img src="assets/slide21_preflight_checklist.png" class="img-frame" alt="Checklist Hologram">
             </div>
         </div>
     </section>
 
+    <!-- Slide 25 -->
     <section class="slide layout-center" id="slide-final" aria-label="Slide 25">
-        
-        <div class="profile-container">
+                <div class="profile-container">
             <div class="profile-pic-frame">
+                <!-- Cleaned up non-standard URL wrappers -->
                 <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe">
             </div>
-
+            
             <div style="text-align: center; margin-bottom: 1rem;">
                 <h1 style="font-size: 3rem; margin-bottom: 1rem; color: #fff;">Donnacha Bushe</h1>
                 <p style="font-family: var(--font-code); color: var(--text-secondary); font-size: 1.1rem; margin: 0 auto;">
                     Senior Technical Writer | Doc Architect | Developer Advocate
                 </p>
             </div>
-            
+                        
             <div class="contact-links">
+                <!-- Cleaned up non-standard URL wrappers -->
                 <a href="https://www.linkedin.com/in/donnachab" target="_blank" class="contact-btn">
                     <i class="fab fa-linkedin"></i> LinkedIn
                 </a>
@@ -935,34 +960,66 @@
             </div>
         </div>
     </section>
-
+    
     <nav class="nav-ui">
         <button class="nav-btn" onclick="window.prevSlide()" aria-label="Previous">
             <i class="fas fa-chevron-left"></i>
         </button>
-        
+                
         <div class="progress" aria-live="polite">
             <span id="currSlide">1</span> / <span id="totalSlide">25</span>
         </div>
-        
+                
         <button class="nav-btn" onclick="window.nextSlide()" aria-label="Next">
             <i class="fas fa-chevron-right"></i>
         </button>
     </nav>
-
 </div>
-
 <script>
     // Globals
     let currentIndex = 0;
-    // FIX: Initialize as an empty array to prevent crash if DOM isn't ready
     let slides = [];
     let total = 0;
     let homeBtn = null;
 
-    // Core UI Update
+    // --- CRITICAL FIX: GLOBAL NAVIGATOR FUNCTIONS ---
+    // Defined immediately and globally to ensure 'onclick' handlers work instantly, resolving the TypeError.
+
+    window.nextSlide = function() {
+        console.debug(`[NAV] Attempting Next Slide. Current Index: ${currentIndex}, Total Slides: ${total}`);
+        // Only proceed if not on the last slide
+        if (currentIndex < total - 1) {
+            currentIndex++;
+            updateUI();
+            console.debug(`[NAV] Successfully moved to index: ${currentIndex + 1}`);
+        } else {
+            console.debug(`[NAV] Already at last slide (${total}). Next button disabled.`);
+        }
+    };
+
+    window.prevSlide = function() {
+        console.debug(`[NAV] Attempting Previous Slide. Current Index: ${currentIndex}`);
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateUI();
+            console.debug(`[NAV] Successfully moved to index: ${currentIndex + 1}`);
+        } else {
+            console.debug(`[NAV] Already at first slide. Previous button disabled.`);
+        }
+    };
+
+    window.goToStart = function() {
+        console.debug(`[NAV] Returning to Start (Index 0).`);
+        currentIndex = 0;
+        updateUI();
+    };
+
+    // Core UI Update function (moved slightly higher for logical grouping, but doesn't need to be global)
     function updateUI() {
         if (!slides.length) return;
+        
+        // ** DEBUG: Log UI Update Event **
+        console.debug(`[UI] Rendering Slide ${currentIndex + 1}/${total}`);
 
         // Toggle Slides
         slides.forEach((s, i) => {
@@ -974,7 +1031,7 @@
                 }
                 // Trigger fade
                 setTimeout(() => s.classList.add('active'), 10);
-                
+                                
                 // Focus Management (skip if initial load)
                 if (document.activeElement!== document.body) {
                     const header = s.querySelector('h1, h2');
@@ -993,7 +1050,8 @@
 
         if (currDisplay) currDisplay.textContent = currentIndex + 1;
         if (prevBtn) prevBtn.disabled = (currentIndex === 0);
-        if (nextBtn) nextBtn.disabled = (currentIndex === total - 1);
+        // Ensure the Next button is disabled only on the very last slide index (total - 1)
+        if (nextBtn) nextBtn.disabled = (currentIndex === total - 1); 
 
         // Toggle Home Button Visibility
         if (homeBtn) {
@@ -1001,27 +1059,7 @@
         }
     }
 
-    // Global Functions (attached to window for inline onclick)
-    window.nextSlide = function() {
-        if (currentIndex < total - 1) {
-            currentIndex++;
-            updateUI();
-        }
-    };
-
-    window.prevSlide = function() {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateUI();
-        }
-    };
-
-    window.goToStart = function() {
-        currentIndex = 0;
-        updateUI();
-    };
-
-    // Initialize
+    // Initialize - Runs AFTER the DOM is fully loaded
     document.addEventListener('DOMContentLoaded', () => {
         slides = document.querySelectorAll('.slide');
         total = slides.length;
@@ -1029,6 +1067,9 @@
 
         const totalDisplay = document.querySelector('#totalSlide');
         if (totalDisplay) totalDisplay.textContent = total;
+        
+        // ** DEBUG: Log Initialization **
+        console.debug(`[INIT] Slide Deck Initialized. Total Slides: ${total}.`);
 
         // Keyboard Listeners
         document.addEventListener('keydown', (e) => {
@@ -1038,18 +1079,30 @@
 
         // Touch Listeners
         let touchStart = 0;
-        // FIX: Access first touch point  in changedTouches list
         document.addEventListener('touchstart', e => touchStart = e.changedTouches[0].screenX, {passive: true});
+
+        // CRITICAL FIX for iOS flicking issue (flicking to top) AND preventing conflict with button clicks
         document.addEventListener('touchend', e => {
             const touchEnd = e.changedTouches[0].screenX;
-            if (touchStart - touchEnd > 50) window.nextSlide();
-            if (touchEnd - touchStart > 50) window.prevSlide();
-        }, {passive: true});
+            const diff = touchStart - touchEnd;
+            
+            if (Math.abs(diff) > 50) {
+                // If a valid swipe occurred, prevent default browser scrolling behavior.
+                e.preventDefault(); 
+                
+                if (diff > 50) {
+                    console.debug(`[SWIPE] Detected left swipe (Next)`);
+                    window.nextSlide();
+                } else if (diff < -50) {
+                    console.debug(`[SWIPE] Detected right swipe (Previous)`);
+                    window.prevSlide();
+                }
+            }
+        }, {passive: false}); // passive: false is required to use e.preventDefault()
 
-        // Start
+        // Start initial UI state
         updateUI();
     });
 </script>
-
 </body>
 </html>
