@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocBuilder - Knowledge Graph Architect Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Segoe+UI:wght@300;400;600;700&display=swap" rel-stylesheet">
+    
+    <style>
+        :root {
+            /* Brand Colors */
+            --primary: #00285F; --primary-light: #0079C9; --accent: #E21776;
+            
+            /* UI Colors */
+            --bg: #F3F3F3; --border: #D1D5DB; --text: #1A1A1A; --text-sub: #6B7280;
+            
+            /* Status Colors */
+            --success: #10B981; --danger: #DC2626; --warning: #F59E0B; --diff-bg: #d1fae5;
+            
+            /* Semantic Colors */
+            --note-bg: #EFF6FF; --note-border: #BFDBFE; --note-text: #1E40AF;
+            --code-bg: #1E293B; --code-text: #E2E8F0;
+
+            /* Git Status Colors */
+            --git-clean: #10B981; --git-dirty: #F59E0B;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+        /* --- HEADER --- */
+        .ide-header {
+            height: 64px; 
+            background: white; 
+            border-bottom: 1px solid var(--border);
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 24px; 
+            flex-shrink: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .ide-title { font-weight: 700; color: var(--primary); font-size: 1.2rem; gap: 12px; display: flex; align-items: center; }
+        .repo-badge { background: #F3F4F6; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: var(--text-sub); font-weight: 400; transition: all 0.3s; }
+        .repo-badge.active { background: #E0E7FF; color: var(--primary); border: 1px solid #C7D2FE; font-weight: 600; }
+
+        /* --- GIT STATUS BAR --- */
+        .git-status-bar {
+            display: none; /* Hidden until connect */
+            align-items: center; gap: 12px; background: #F8FAFC; 
+            padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; border: 1px solid var(--border);
+            margin-right: auto; margin-left: 24px;
+        }
+        .git-branch { display: flex; gap: 6px; align-items: center; color: var(--text); font-weight: 600; }
+        .git-indicator { width: 8px; height: 8px; border-radius: 50%; background: #9CA3AF; transition: background 0.3s; }
+        .git-indicator.clean { background: var(--git-clean); box-shadow: 0 0 4px var(--git-clean); }
+        .git-indicator.dirty { background: var(--git-dirty); box-shadow: 0 0 4px var(--git-dirty); }
+
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border); background: white;
+            font-size: 0.85rem; font-weight: 600; color: #555; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; transition: all 0.2s; white-space: nowrap; user-select: none;
+        }
+        .btn:hover:not(:disabled) { background: #F3F4F6; border-color: var(--primary-light); color: var(--primary-light); transform: translateY(-1px); }
+        .btn.primary { background: var(--primary-light); color: white; border-color: var(--primary-light); }
+        .btn.primary:hover:not(:disabled) { background: #0060A0; color: white; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        
+        .btn-about {
+            background: #4F46E5; color: white; border: none; margin-left: 12px;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+        }
+        .btn-about:hover { background: #4338CA; transform: translateY(-1px); }
+
+        /* --- LAYOUT --- */
+        .ide-body { display: grid; grid-template-columns: 320px 350px 1fr; flex: 1; overflow: hidden; }
+        .pane { border-right: 1px solid var(--border); display: flex; flex-direction: column; background: #FAFAFA; min-height: 0; }
+        .pane:last-child { border-right: none; background: white; }
+        .pane-header { padding: 12px 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-sub); border-bottom: 1px solid var(--border); background: #F3F4F6; flex-shrink: 0; }
+        .pane-content { flex: 1; overflow-y: auto; padding: 16px; }
+
+        /* --- LEFT PANE: CONTEXT --- */
+        .config-group { margin-bottom: 16px; }
+        .config-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+        .config-select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; background: white; color: var(--text); transition: border-color 0.2s; }
+        .config-select:focus { border-color: var(--primary-light); }
+        .config-select:disabled { background: #F3F4F6; color: #9CA3AF; cursor: not-allowed; }
+
+        .source-card { 
+            background: white; border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 8px; 
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative; overflow: hidden; font-size: 0.85rem;
+            opacity: 0.5; grayscale: 100%; transform: scale(0.98); 
+        }
+        .source-card.connected { opacity: 1; grayscale: 0%; transform: scale(1); border-left: 4px solid var(--success); background: #F0FDF4; border-color: #bbf7d0; }
+        .source-card.connected::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 12px; top: 12px; color: var(--success); }
+        .source-card.context-active { border-color: var(--primary-light); background: #EFF6FF; box-shadow: 0 0 15px rgba(0, 121, 201, 0.2); transform: translateX(5px); border-left: 4px solid var(--primary-light); }
+        .source-icon { width: 20px; display: inline-block; text-align: center; margin-right: 8px; }
+        
+        .var-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+        .var-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 4px 8px; background: #EFF6FF; border-radius: 4px; color: var(--primary); font-family: 'JetBrains Mono', monospace; opacity: 0; transform: translateY(10px); animation: slideIn 0.3s forwards; margin-bottom: 4px; }
+        .var-key { color: #6B7280; font-weight: 600; }
+        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- MIDDLE PANE: TREE --- */
+        .tree-section-header { font-size: 0.75rem; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 24px; margin-bottom: 8px; padding-left: 8px; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; }
+        .tree-section-header:first-child { margin-top: 0; }
+        
+        ul[id^="tree-"] { min-height: 40px; transition: background 0.2s; border-radius: 4px; }
+        ul[id^="tree-"].drag-over { background: #E0F2FE; border: 2px dashed var(--primary-light); }
+
+        .tree-node { padding: 8px; margin-bottom: 2px; border-radius: 4px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; opacity: 0; animation: fadeUpNode 0.4s forwards; user-select: none; }
+        @keyframes fadeUpNode { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .tree-node.level-0 { font-weight: 600; color: var(--primary); }
+        .tree-node.level-1 { margin-left: 20px; border-left: 2px solid var(--border); font-size: 0.85rem; color: var(--text); }
+        .tree-node:hover { background: #E0F2FE; }
+        .tree-node.selected { background: #EFF6FF; border-color: var(--primary-light); }
+        .tree-node.selected.level-1 { border-left-color: var(--primary-light); }
+        .tree-node.dragging { opacity: 0.5; background: #F3F4F6; border: 1px dashed #9CA3AF; }
+        
+        /* Git Modified Marker */
+        .mod-marker { font-size: 0.7rem; color: #F59E0B; font-weight: 700; margin-left: 6px; }
+
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-left: auto; }
+        .status-draft { background-color: #D1D5DB; }
+        .status-review { background-color: var(--warning); box-shadow: 0 0 4px var(--warning); }
+        .status-approved { background-color: var(--success); }
+
+        .type-concept { color: var(--primary-light); }
+        .type-task { color: var(--success); }
+        .type-ref { color: #9333EA; }
+        .type-trouble { color: #DC2626; }
+        .type-note { color: #64748B; }
+        
+        .node-actions { display: none; margin-left: 8px; }
+        .tree-node:hover .node-actions { display: flex; }
+        .node-btn-trash { color: #94A3B8; font-size: 0.8rem; padding: 4px; }
+        .node-btn-trash:hover { color: var(--danger); }
+        .lock-icon { font-size: 0.7rem; color: #94A3B8; margin-left: 8px; }
+
+        /* --- RIGHT PANE: EDITOR --- */
+        .editor-toolbar { padding: 10px 24px; border-bottom: 1px solid var(--border); background: #F8FAFC; display: flex; justify-content: space-between; align-items: center; height: 56px; flex-shrink: 0; }
+        
+        .view-switch { display: flex; background: #F3F4F6; border-radius: 6px; padding: 2px; border: 1px solid var(--border); margin-right: 12px; }
+        .view-option { padding: 6px 12px; font-size: 0.8rem; cursor: pointer; border-radius: 4px; font-weight: 600; color: #6B7280; display: flex; gap: 6px; align-items: center; }
+        .view-option.active { background: white; color: var(--primary); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+
+        .editor-area { flex: 1; padding: 40px; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; line-height: 1.6; color: var(--text); outline: none; overflow-y: auto; white-space: pre-wrap; transition: opacity 0.3s; }
+        .editor-area.blur { opacity: 0.5; filter: blur(1px); }
+
+        /* --- NEW: KNOWLEDGE GRAPH SCHEMA CARD --- */
+        .node-schema-card {
+            background: #FAFAFA;
+            border: 1px solid #E5E7EB;
+            border-left: 4px solid var(--primary);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            user-select: none;
+        }
+
+        .node-schema-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #E5E7EB; padding-bottom: 8px; margin-bottom: 12px;
+        }
+
+        .node-id-badge {
+            background: #EEF2FF; color: var(--primary); 
+            padding: 2px 8px; border-radius: 4px; border: 1px solid #C7D2FE;
+            font-weight: 600; font-size: 0.75rem; display: flex; align-items: center; gap: 6px;
+        }
+
+        .schema-grid {
+            display: grid; grid-template-columns: 1fr 1.5fr; gap: 12px 24px;
+        }
+
+        .schema-row { display: flex; align-items: baseline; gap: 8px; }
+        .schema-key { color: #6B7280; font-weight: 500; min-width: 85px; text-align: right; }
+        .schema-val { color: #1F2937; font-weight: 600; }
+        .schema-val.tag { background: #E5E7EB; padding: 1px 6px; border-radius: 4px; color: #374151; font-size: 0.75rem; }
+        .schema-val.rel { color: var(--primary-light); text-decoration: underline; cursor: pointer; }
+        .schema-val.warn { color: #D97706; background: #FEF3C7; padding: 1px 6px; border-radius: 4px; font-size: 0.75rem; }
+
+        .gov-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #D1D5DB; }
+        .gov-dot.valid { background: var(--success); box-shadow: 0 0 4px var(--success); }
+
+        /* Standard MD styling */
+        .md-h1 { font-size: 1.6em; font-weight: 700; color: var(--primary); margin-bottom: 0.5em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; display: block; }
+        .md-h2 { font-size: 1.3em; font-weight: 600; color: #1E3A8A; margin-top: 1.5em; margin-bottom: 0.5em; display: block; }
+        .md-shortdesc { font-style: italic; color: #4B5563; border-left: 3px solid #CBD5E1; padding-left: 12px; margin-bottom: 2em; display: block; }
+        
+        .md-code { background: #F1F5F9; color: #DB2777; padding: 2px 4px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; }
+        .md-code-block { background: var(--code-bg); color: var(--code-text); padding: 16px; border-radius: 6px; display: block; margin: 8px 0 16px 0; font-size: 0.85rem; overflow-x: auto; white-space: pre; border-left: 4px solid var(--accent); }
+        .md-code-inline { background: #F1F5F9; color: #DB2777; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; }
+        
+        .md-note { background: var(--note-bg); border-left: 4px solid var(--note-text); color: #1e3a8a; padding: 12px; margin: 12px 0; font-size: 0.9rem; display: block; border-radius: 0 4px 4px 0; }
+        .md-note-title { font-weight: 700; color: var(--note-text); text-transform: uppercase; font-size: 0.75rem; display: block; margin-bottom: 4px; }
+        .md-result { color: #6B7280; font-style: italic; display: block; margin-top: 4px; margin-left: 20px; font-size: 0.85rem; }
+
+        /* --- PREVIEW STYLING --- */
+        .preview-area { flex: 1; padding: 40px 60px; font-family: 'Segoe UI', sans-serif; font-size: 1rem; line-height: 1.7; color: #333; overflow-y: auto; display: block; }
+        .preview-area h1 { color: var(--primary); border-bottom: 1px solid #E5E7EB; padding-bottom: 10px; margin-bottom: 20px; font-size: 2em; }
+        .preview-area h2 { color: #1E3A8A; margin-top: 30px; margin-bottom: 15px; font-size: 1.4em; }
+        .preview-area p { margin-bottom: 16px; }
+        .preview-area ol, .preview-area ul { padding-left: 20px; margin-bottom: 20px; }
+        .preview-area li { margin-bottom: 8px; color: #374151; }
+        
+        .preview-code-wrapper { position: relative; margin-top: 10px; margin-bottom: 20px; }
+        .preview-area pre { background: var(--code-bg); color: var(--code-text); padding: 12px 16px; border-radius: 6px; overflow-x: auto; margin-top: 10px; font-weight: 400; border-left: 4px solid var(--accent); display: block; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 4px 8px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+        .copy-btn i { margin-right: 4px; }
+
+        .preview-area code { background: #F1F5F9; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; color: #C026D3; }
+        .preview-area pre code { background: transparent; color: inherit; padding: 0; border-radius: 0; }
+        .preview-area .note { background: #EFF6FF; border: 1px solid #BFDBFE; border-left: 4px solid #1E40AF; padding: 16px; margin: 16px 0; border-radius: 4px; font-weight: 400; color: #1E3A8A; }
+        .preview-area .result-text { color: #4B5563; font-size: 0.85rem; margin-top: 8px; display: block; font-weight: 400; background: #F9FAFB; padding: 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+        .preview-area table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; }
+        .preview-area th { background: #F3F4F6; text-align: left; padding: 12px; border: 1px solid #E5E7EB; font-weight: 700; }
+        .preview-area td { padding: 12px; border: 1px solid #E5E7EB; vertical-align: top; }
+        .preview-area strong { font-weight: 700; color: #111; }
+
+        /* Highlights */
+        .context-highlight { background: #EFF6FF; color: #1E40AF; padding: 2px 4px; border-radius: 4px; border: 1px solid #BFDBFE; }
+        ins { background-color: var(--diff-bg); color: var(--diff-text); text-decoration: none; border-bottom: 2px solid #10B981; animation: pulseIns 2s infinite; }
+        @keyframes pulseIns { 0% { background-color: #d1fae5; } 50% { background-color: #a7f3d0; } 100% { background-color: #d1fae5; } }
+        varname { color: #E21776; background: #FFF0F5; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.85rem; border: 1px dashed #E21776; display: inline-block; cursor: help; position: relative; }
+        varname:hover::after { content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; white-space: nowrap; z-index: 10; pointer-events: none; }
+        .unresolved-var { color: #9CA3AF; background: #F3F4F6; border: 1px dashed #9CA3AF; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+        .ai-badge { display:inline-block; font-size:0.7rem; background:#E0E7FF; color:#4338CA; padding:2px 6px; border-radius:10px; border:1px solid #C7D2FE; margin-bottom:10px; }
+
+        /* Toast/Modal/Tabs */
+        .toast-container { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; }
+        .toast { background: #1F2937; color: white; padding: 12px 24px; border-radius: 6px; display: flex; gap: 16px; align-items: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); animation: slideUp 0.3s; }
+        .toast-btn { background: transparent; border: 1px solid #4B5563; color: white; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(2px); }
+        .modal { background: white; width: 800px; max-width: 95vw; max-height: 90vh; padding: 24px; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 16px; animation: floatIn 0.3s; }
+        .config-input { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; }
+        
+        .commit-input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; font-family: 'Segoe UI', sans-serif; resize: vertical; min-height: 80px; }
+        .file-list { border: 1px solid var(--border); border-radius: 6px; max-height: 200px; overflow-y: auto; background:#F9FAFB; }
+        .file-row { padding: 8px 12px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; font-size: 0.85rem; align-items: center; }
+        .file-row:last-child { border-bottom: none; }
+
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 10px; }
+        .about-card { background: #F3F4F6; padding: 16px; border-radius: 6px; border: 1px solid #E5E7EB; }
+        .about-card h4 { color: var(--primary); margin-bottom: 8px; font-size: 0.95rem; display:flex; align-items:center; gap:8px; }
+        .about-card p { font-size: 0.9rem; color: #4B5563; line-height: 1.5; }
+        .about-card i { color: var(--accent); }
+
+        .hidden { display: none !important; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fa-spin { animation: spin 1s linear infinite; }
+    </style>
+</head>
+<body>
+
+<div class="toast-container" id="toast-container"></div>
+
+<div class="modal-overlay hidden" id="modal-about">
+    <div class="modal" style="width: 700px; height: auto;">
+        <h3 style="border-bottom:1px solid #E5E7EB; padding-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fa-solid fa-layer-group" style="color:var(--primary)"></i> DocBuilder: Concept Prototype</span>
+            <i class="fa-solid fa-xmark" style="cursor:pointer; color:#9CA3AF;" onclick="app.closeModal('modal-about')"></i>
+        </h3>
+
+        <p style="color:#374151; font-size:1rem; line-height:1.6;">
+            This proof-of-concept demonstrates a <strong>"Knowledge Graph" approach to Technical Documentation</strong>. 
+            It visualizes a workflow where documentation is treated as a database of semantic nodes rather than flat text files.
+        </p>
+
+        <div class="about-grid">
+            <div class="about-card">
+                <h4><i class="fa-solid fa-project-diagram"></i> Schema-First Architecture</h4>
+                <p>
+                    Every topic is wrapped in a governance schema defining its identity, owner, and graph edges. This ensures content is machine-readable and "AI-Ready" at the source.
+                </p>
+            </div>
+            <div class="about-card">
+                <h4><i class="fa-solid fa-shield-halved"></i> Automated Governance</h4>
+                <p>
+                    Simulates a "Docs-as-Code" pipeline where compliance and structural integrity are enforced before commitment, ensuring a "Single Source of Truth."
+                </p>
+            </div>
+        </div>
+
+        <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:6px; font-size:0.9rem; color:#1E3A8A; display:flex; gap:10px; align-items:start; margin-top:20px;">
+            <i class="fa-brands fa-github" style="margin-top:2px;"></i>
+            <div>
+                <strong>Architecture Note:</strong> This prototype uses vanilla JS/CSS to demonstrate the UI/UX concepts of a "Knowledge Writer's IDE" without backend dependencies.
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+            <button class="btn primary" onclick="app.closeModal('modal-about')">Close</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-topic">
+    <div class="modal" style="width: 500px; height: auto;">
+        <h3>Add New Topic</h3>
+        <div>
+            <label class="config-label">Title</label>
+            <input type="text" id="new-topic-title" class="config-input" placeholder="e.g. Rollback Procedure">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button class="btn" onclick="app.closeModal('modal-topic')">Cancel</button>
+            <button class="btn primary" onclick="app.confirmNewTopic()">Create</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-commit">
+    <div class="modal" style="width: 500px; height: auto;">
+        <h3 style="border-bottom:1px solid #E5E7EB; padding-bottom:10px; margin-bottom:10px; display:flex; justify-content:space-between;">
+            <span><i class="fa-solid fa-code-commit"></i> Commit Changes</span>
+            <i class="fa-solid fa-xmark" style="cursor:pointer; color:#ccc;" onclick="app.closeModal('modal-commit')"></i>
+        </h3>
+        <div>
+            <label class="config-label">Staged Files (Auto-Add)</label>
+            <div class="file-list" id="staged-files"></div>
+        </div>
+        <div>
+            <label class="config-label" style="margin-top:16px;">Commit Message</label>
+            <textarea id="commit-msg" class="commit-input" placeholder="feat: update documentation structure..."></textarea>
+        </div>
+        <div style="font-size:0.8rem; color:#6B7280; margin-top:4px;">
+            <i class="fa-solid fa-info-circle"></i> Pushing to <strong>origin/main</strong>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+            <button class="btn" onclick="app.closeModal('modal-commit')">Cancel</button>
+            <button class="btn primary" id="btn-confirm-push" onclick="app.confirmPush()">Push & Sync</button>
+        </div>
+    </div>
+</div>
+
+<header class="ide-header">
+    <div class="ide-title">
+        <i class="fa-solid fa-cube"></i> DocBuilder 
+        <span class="repo-badge" id="header-repo-badge">/repos/...</span>
+    </div>
+
+    <div class="git-status-bar" id="git-bar">
+        <div class="git-branch"><i class="fa-solid fa-code-branch"></i> <span>main</span></div>
+        <div style="width:1px; height:16px; background:#D1D5DB; margin:0 4px;"></div>
+        <div style="display:flex; align-items:center; gap:6px;">
+            <div class="git-indicator clean" id="git-dot"></div>
+            <span id="git-text" style="color:#374151; font-weight:500;">Up to date</span>
+        </div>
+    </div>
+
+    <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn" id="btn-pull" onclick="app.pull()" disabled><i class="fa-brands fa-git-alt"></i> Pull Origin</button>
+        <button class="btn" id="btn-ingest" onclick="app.ingest()" disabled><i class="fa-solid fa-bolt"></i> Ingest Context</button>
+        <div style="width:1px; background:var(--border); margin:0 5px; height: 24px;"></div>
+        <button class="btn primary" id="btn-propose" onclick="app.propose()" disabled><i class="fa-solid fa-sitemap"></i> Propose Structure</button>
+        <button class="btn manual" onclick="app.openModal('modal-topic')"><i class="fa-solid fa-plus"></i> New Topic</button>
+        <button class="btn" id="btn-push" onclick="app.openCommitModal()" disabled><i class="fa-solid fa-arrows-rotate"></i> Push Origin</button>
+        
+        <button class="btn btn-about" onclick="app.openModal('modal-about')"><i class="fa-solid fa-circle-question"></i> About this Prototype</button>
+    </div>
+</header>
+
+<div class="ide-body">
+    <div class="pane">
+        <div class="pane-header">Project Context</div>
+        <div class="pane-content">
+            <div class="config-group">
+                <label class="config-label">Source Repository</label>
+                <select id="repo-select" class="config-select" onchange="app.onRepoSelect()">
+                    <option value="">Select a Repo...</option>
+                    <option value="fraud-shield">fraud-shield</option>
+                    <option value="payment-gateway">payment-gateway</option>
+                </select>
+            </div>
+            <div class="config-group">
+                <label class="config-label">Target Persona</label>
+                <select id="config-persona" class="config-select">
+                    <option value="internal">Internal (DevOps)</option>
+                    <option value="external">External (Partner)</option>
+                </select>
+            </div>
+            <div class="config-section">
+                <label class="config-label">Connected Sources</label>
+                <div class="source-card" id="src-code"><span class="source-icon" style="color:#24292f"><i class="fa-brands fa-github"></i></span> <strong>Codebase</strong></div>
+                <div class="source-card" id="src-jira"><span class="source-icon" style="color:#0052CC"><i class="fa-brands fa-jira"></i></span> <strong>Jira Issues</strong></div>
+                <div class="source-card" id="src-teams"><span class="source-icon" style="color:#6264A7"><i class="fa-solid fa-people-group"></i></span> <strong>Teams/Slack</strong></div>
+            </div>
+            <div style="border-top: 1px solid var(--border); margin: 20px 0;"></div>
+            <div class="config-section">
+                <label class="config-label">Detected Variables</label>
+                <div id="vars-container" style="color:#9CA3AF; font-size:0.8rem; font-style:italic;">Waiting for analysis...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pane">
+        <div class="pane-header">Structure (Navigation)</div>
+        <div class="pane-content">
+            <div id="tree-empty" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#9CA3AF;">
+                <i class="fa-solid fa-sitemap" style="font-size:3rem; opacity:0.2; margin-bottom:16px;"></i>
+                <p>Map is empty.</p>
+            </div>
+            <div id="tree-wrapper" class="hidden">
+                <div class="tree-section-header">Core (Locked)</div>
+                <ul id="tree-core" ondragover="app.allowDrop(event)" ondrop="app.drop(event, 'core')" style="list-style:none; padding:0; margin:0;"></ul>
+                <div class="tree-section-header">Proposed (Drafts)</div>
+                <ul id="tree-proposed" ondragover="app.allowDrop(event)" ondrop="app.drop(event, 'proposed')" style="list-style:none; padding:0; margin:0;"></ul>
+                <div class="tree-section-header">Rough Notes</div>
+                <ul id="tree-drafts" ondragover="app.allowDrop(event)" ondrop="app.drop(event, 'drafts')" style="list-style:none; padding:0; margin:0;"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="pane">
+        <div class="editor-toolbar">
+            <div id="editor-filename" style="font-weight:600; font-size:0.9rem; color:#444;">No Selection</div>
+            <div class="view-switch">
+                <div class="view-option" id="view-code" onclick="app.toggleView('code')"><i class="fa-solid fa-code"></i> Code</div>
+                <div class="view-option active" id="view-preview" onclick="app.toggleView('preview')"><i class="fa-solid fa-eye"></i> Preview</div>
+            </div>
+            <div id="editor-actions" class="hidden" style="display:flex; gap:8px;">
+                <button class="btn" onclick="app.enhance()"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent)"></i> Enhance</button>
+            </div>
+            <div id="review-actions" class="hidden" style="display:flex; gap:8px;">
+                <button class="btn danger" onclick="app.discard()">Discard</button>
+                <button class="btn primary" onclick="app.approve()">Approve</button>
+            </div>
+        </div>
+        <div class="editor-area" id="editor-area" style="display:none;"></div>
+        <div class="preview-area" id="preview-area" style="display:block;"></div>
+    </div>
+</div>
+
+<script>
+const app = {
+    state: { 
+        ingested: false, proposed: false, nodes: [], selectedId: null, lastDeleted: null, idCounter: 100, 
+        view: 'preview', persona: 'internal', repo: null, git: { modified: [], branch: 'main' }
+    },
+    
+    repoData: {
+        'fraud-shield': {
+            service_name: "Fraud Shield",
+            service_desc: "The Fraud Shield service analyzes transaction payloads in real-time to assign risk scores and prevent fraudulent activities via heuristic modeling.",
+            repo_url: "git.internal/fraud-shield",
+            chart_name: "fraud-engine",
+            port: "9090",
+            namespace: "sec-ops",
+            inputs: [
+                { name: "device_fingerprint", type: "string", req: "true", raw_desc: "// id of the device from client", ai_desc: "Unique hardware identifier generated by the client SDK. Must match regex `^dev_[a-z0-9]{16}$`." },
+                { name: "txn_amount", type: "float64", req: "true", raw_desc: "// value of trans", ai_desc: "The total monetary value of the transaction in cents." }
+            ],
+            outputs: [ { name: "risk_score", type: "int", desc: "0-100 probability of fraud." }, { name: "verdict", type: "enum", desc: "ALLOW, BLOCK, CHALLENGE" } ],
+            config: [ { key: "PCI_MODE", type: "bool", default: "true", desc: "Enables strict logging masking for PII." }, { key: "MAX_CONNS", type: "int", default: "2000", desc: "Max concurrent redis connections." } ],
+            trouble_title: "Redis Pool Exhaustion",
+            trouble_desc: "Diagnose and resolve upstream connection failures caused by Redis connection pool exhaustion during traffic bursts.",
+            trouble_jira: "FRD-99",
+            trouble_body: `
+<span class="md-h2">## Symptoms</span>
+<ins>
+- **User Impact:** API calls return <strong>HTTP 502 Bad Gateway</strong>.
+- **Logs:** The application logs show connection timeouts:
+</ins>
+<div class="md-code-block">
+[ERROR] redis_client: pool exhausted (active: 1000, max: 1000)
+dial tcp 10.0.2.5:6379: connect: operation timed out
+</div>
+
+<span class="md-h2">## Diagnosis</span>
+<ins>
+1. Check the active connection count against the configured limit using Prometheus:
+<div class="md-code-block">sum(redis_connected_clients) by (pod)</div>
+2. If the graph plateaus at 1000, the pool is saturated.
+</ins>
+
+<span class="md-h2">## Remedy</span>
+<ins>
+1. Increase the <strong>max_active</strong> parameter in the config map to accommodate burst traffic:
+<div class="md-code-block">
+redis:
+  pool:
+    max_active: 2000 # Increased from 1000
+    idle_timeout: 240s
+</div>
+2. Restart the pods to apply changes:
+<div class="md-code-block">kubectl rollout restart deployment fraud-engine</div>
+</ins>`
+        },
+        'payment-gateway': {
+            service_name: "Payment Gateway",
+            service_desc: "The Payment Gateway handles PCI-DSS compliant credit card processing, switching transactions to upstream banking partners.",
+            repo_url: "git.internal/payment-gateway",
+            chart_name: "payment-gw",
+            port: "8080",
+            namespace: "pci-zone",
+            inputs: [
+                { name: "pan_token", type: "string", req: "true", raw_desc: "// tokenized card number", ai_desc: "The vaulted token representing the Primary Account Number (PAN)." },
+                { name: "cvv", type: "string", req: "true", raw_desc: "// card security code", ai_desc: "The 3 or 4 digit security code. Never stored, only forwarded." }
+            ],
+            outputs: [ { name: "auth_code", type: "string", desc: "6-character authorization code from the bank." }, { name: "gateway_ref", type: "uuid", desc: "Unique reference for reconciliation." } ],
+            config: [ { key: "BANK_TIMEOUT_MS", type: "int", default: "5000", desc: "Max time to wait for upstream response." }, { key: "ENABLE_3DS", type: "bool", default: "true", desc: "Force 3D Secure challenges." } ],
+            trouble_title: "Upstream Acquirer Timeout",
+            trouble_desc: "Troubleshoot 504 Gateway Timeouts occurring when the upstream acquiring bank fails to respond within the SLA.",
+            trouble_jira: "PAY-404",
+            trouble_body: `
+<span class="md-h2">## Symptoms</span>
+<ins>
+- **User Impact:** Transactions hang for 30s and then fail with <strong>HTTP 504</strong>.
+- **Logs:** The gateway logs indicate upstream non-response:
+<div class="md-code-block">
+[WARN] acquirer_client: request timed out after 30000ms
+[ERROR] tx_manager: upstream_reset (peer: global-bank-api)
+</div>
+</ins>
+
+<span class="md-h2">## Diagnosis</span>
+<ins>
+1. Verify outbound connectivity to the bank API from the pci-zone:
+<div class="md-code-block">curl -v https://api.global-bank.com/health</div>
+2. Check the circuit breaker status in the admin dashboard.
+</ins>
+
+<span class="md-h2">## Remedy</span>
+<ins>
+1. If the bank is down, manually trip the circuit breaker to failover to the secondary acquirer:
+<div class="md-code-block">
+POST /admin/circuit-breaker/trip
+{ "target": "primary-acquirer", "reason": "incident-123" }
+</div>
+2. Monitor the <strong>tx_success_rate</strong> metric to ensure traffic flows to the secondary.
+</ins>`
+        }
+    },
+    context: null,
+    templates: {
+        overview_root: { 
+            id: 'overview_root', title: 'Overview', type: 'Concept', level: 0, section: 'core', status: 'draft', source: 'src-code',
+            getSkeleton: function(ctx) {
+                return `${app.frontMatter({id:'concept-overview',type:'Concept',audience:app.state.persona,status:'draft',owner:'tech-lead',compliance:'Public',relations:'<span class="schema-val rel">api-ref</span>'})}
+<span class="md-h1"># Overview</span>
+<span class="md-shortdesc">High-level purpose of <span class="unresolved-var">{{service_name}}</span>.</span>
+<span class="md-h2">## Raw Notes</span>
+<span class="unresolved-var">{{service_desc}}</span>`;
+            },
+            getFull: function(ctx) {
+                return `${app.frontMatter({id:'concept-overview',type:'Concept',audience:app.state.persona,status:'review',owner:'tech-lead',compliance:'Public',relations:'<span class="schema-val rel">api-ref</span>, <span class="schema-val rel">deploy-root</span>'})}
+<span class="md-h1"># Overview</span>
+<ins><span class="md-shortdesc">${ctx.context.service_desc}</span></ins>
+
+<ins>Critical component in the transaction flow, handling high-throughput requests with < 50ms latency requirements.</ins>`;
+            }
+        },
+        api_root: { 
+            id: 'api_root', title: 'API Reference', type: 'Concept', level: 0, section: 'core', status: 'draft', source: 'src-code',
+            getSkeleton: function(ctx) { return `# API Reference\n\nEndpoint definitions derived from code.`; },
+            getFull: function(ctx) { return `${app.frontMatter({id:'ref-api-root',type:'Reference',audience:'external',status:'review',owner:'api-team',compliance:'PCI-DSS',relations:'<span class="schema-val rel">auth-guide</span>'})}
+<span class="md-h1"># API Reference</span>
+<ins><span class="md-shortdesc">Technical specifications for the gRPC/REST endpoints.</span></ins>`; } 
+        },
+        inputs: { 
+            id: 'inputs', title: 'Input Parameters', type: 'Reference', level: 1, section: 'core', status: 'draft', source: 'src-code',
+            getSkeleton: function(ctx) { return `${app.frontMatter({id:'ref-inputs',type:'Reference',audience:'dev',status:'draft',owner:'api-team',compliance:'PCI-DSS'})}
+<span class="md-h1"># Input Parameters</span>
+<div class="ai-badge"><i class="fa-solid fa-code"></i> Raw Scrape</div>
+<div class="md-code-block">// Detected ${ctx.context.inputs.length} inputs</div>`; }, 
+            getFull: function(ctx) { 
+                const rows = ctx.context.inputs.map(i => `| <span class="md-code-inline">${i.name}</span> | ${i.type} | ${i.req} | <ins>${i.ai_desc}</ins> |`).join('\n'); 
+                return `${app.frontMatter({id:'ref-inputs',type:'Reference',audience:'dev',status:'review',owner:'api-team',compliance:'PCI-DSS',relations:'<span class="schema-val rel">ref-outputs</span>'})}
+<span class="md-h1"># Input Parameters</span>
+<span class="md-shortdesc">Required parameters for the transaction endpoint.</span>
+<span class="md-h2">## Definitions</span>
+<ins>| Name | Type | Required | Description |\n|---|---|---|---|\n${rows}</ins>
+
+<div class="md-note">
+<span class="md-note-title"><i class="fa-solid fa-triangle-exclamation"></i> Validation</span>
+Ensure <strong>device_fingerprint</strong> is not spoofed. The engine performs a secondary lookup against the blacklisted MAC address table.
+</div>`; } 
+        },
+        outputs: { 
+            id: 'outputs', title: 'Output Parameters', type: 'Reference', level: 1, section: 'core', status: 'draft', source: 'src-code',
+            getSkeleton: function(ctx) { return `${app.frontMatter({id:'ref-outputs',type:'Reference',audience:'dev',status:'draft',owner:'api-team',compliance:'PCI-DSS'})}<span class="md-h1"># Output Parameters</span><div class="md-code-block">// Detected ${ctx.context.outputs.length} outputs</div>`; }, 
+            getFull: function(ctx) {
+                const rows = ctx.context.outputs.map(i => `| <span class="md-code-inline">${i.name}</span> | ${i.type} | <ins>${i.desc.replace(/\|/g, ', ')}</ins> |`).join('\n'); 
+                return `${app.frontMatter({id:'ref-outputs',type:'Reference',audience:'dev',status:'review',owner:'api-team',compliance:'PCI-DSS'})}
+<span class="md-h1"># Output Parameters</span>
+<span class="md-shortdesc">The response payload returned after processing.</span>
+<span class="md-h2">## Response Fields</span>
+<ins>| Name | Type | Description |\n|---|---|---|\n${rows}</ins>`; }
+        },
+        config_ref: { 
+            id: 'config_ref', title: 'Configuration Reference', type: 'Reference', level: 1, section: 'core', status: 'draft', source: 'src-code',
+            getSkeleton: function(ctx) { return `${app.frontMatter({id:'ref-config',type:'Reference',audience:'devops',status:'draft',owner:'sre-team',compliance:'Internal'})}<span class="md-h1"># Configuration Reference</span><span class="md-shortdesc">Config map variables found.</span>`; },
+            getFull: function(ctx) {
+                const rows = ctx.context.config.map(c => `| <span class="md-code-inline">${c.key}</span> | ${c.type} | ${c.default} | <ins>${c.desc}</ins> |`).join('\n');
+                return `${app.frontMatter({id:'ref-config',type:'Reference',audience:'devops',status:'review',owner:'sre-team',compliance:'Internal'})}
+<span class="md-h1"># Configuration Reference</span><ins><span class="md-shortdesc">Complete reference of environment variables.</span></ins><span class="md-h2">## Environment Variables</span><ins>| Key | Type | Default | Description |\n|---|---|---|---|\n${rows}</ins>`; }
+        },
+        deploy_root: { 
+            id: 'deploy_root', title: 'Deployment', type: 'Concept', level: 0, section: 'core', status: 'draft', source: 'src-code',
+            getSkeleton: function(ctx) { return `${app.frontMatter({id:'concept-deploy',type:'Concept',audience:'devops',status:'draft',owner:'sre-team',compliance:'Internal',relations:'<span class="schema-val rel">task-helm</span>'})}
+<span class="md-h1"># Deployment Overview</span>
+<span class="md-shortdesc">Instructions for deploying the <span class="unresolved-var">{{service_name}}</span> service.</span>`; },
+            getFull: function(ctx) { return `${app.frontMatter({id:'concept-deploy',type:'Concept',audience:'devops',status:'review',owner:'sre-team',compliance:'Internal',relations:'<span class="schema-val rel">task-helm</span>'})}
+<span class="md-h1"># Deployment Overview</span>
+<ins><span class="md-shortdesc">Prerequisites and high-level steps for deploying the ${ctx.context.service_name} service to Kubernetes.</span></ins>`; }
+        },
+        trouble_root: { 
+            id: 'trouble_root', title: 'Troubleshooting', type: 'Concept', level: 0, section: 'core', status: 'draft', source: 'src-jira',
+            getSkeleton: function(ctx) { return `${app.frontMatter({id:'concept-trouble',type:'Concept',audience:'support',status:'draft',owner:'support-eng',compliance:'Internal'})}
+<span class="md-h1"># Troubleshooting</span>
+<span class="md-shortdesc">List of common issues and troubleshooting flows.</span>`; }, 
+            getFull: function(ctx) { return `${app.frontMatter({id:'concept-trouble',type:'Concept',audience:'support',status:'review',owner:'support-eng',compliance:'Internal'})}
+<span class="md-h1"># Troubleshooting</span><ins><span class="md-shortdesc">Common issues and resolutions derived from support tickets.</span></ins>`; }
+        },
+        latency: { 
+            id: 'latency', title: 'Common Error', type: 'Troubleshooting', level: 1, section: 'proposed', status: 'draft', source: 'src-jira',
+            getSkeleton: function(ctx) { return `${app.frontMatter({id:'trouble-latency',type:'Troubleshooting',audience:'support',status:'draft',owner:'support-eng',compliance:'Internal',relations:'<span class="schema-val rel">ref-config</span>'})}<span class="md-h1"># ${ctx.context.trouble_title}</span><span class="context-highlight">JIRA: "${ctx.context.trouble_jira}"</span>`; },
+            getFull: function(ctx) { return `${app.frontMatter({id:'trouble-latency',type:'Troubleshooting',audience:'support',status:'review',owner:'support-eng',compliance:'Internal',relations:'<span class="schema-val rel">ref-config</span>'})}<span class="md-h1"># ${ctx.context.trouble_title}</span><ins><span class="md-shortdesc">${ctx.context.trouble_desc}</span></ins>${ctx.context.trouble_body}`; }
+        },
+        auth: { 
+            id: 'auth', title: 'API Keys', type: 'Concept', level: 0, section: 'proposed', status: 'draft', source: 'src-teams',
+            getSkeleton: function(ctx) { return `${app.frontMatter({id:'concept-auth',type:'Concept',audience:'dev',status:'draft',owner:'sec-team',compliance:'PCI-DSS'})}<span class="md-h1"># API Keys</span><span class="md-h2">## Source Context (Teams)</span><span class="context-highlight">"Ops: New fraud keys rotate every 24h."</span>`; },
+            getFull: function(ctx) { return `${app.frontMatter({id:'concept-auth',type:'Concept',audience:'dev',status:'review',owner:'sec-team',compliance:'PCI-DSS'})}<span class="md-h1"># API Keys</span><ins>Fraud Shield API keys must be rotated every 24 hours. Automation is handled by the HashiCorp Vault sidecar injector.</ins>`; }
+        },
+        k8s_deploy: { 
+            id: 'k8s_deploy', title: 'Deploying with Helm', type: 'Task', level: 1, section: 'core', status: 'draft', source: 'src-code',
+            getSkeleton: function(ctx) {
+                return `${app.frontMatter({id:'task-helm',type:'Task',audience:'devops',status:'draft',owner:'sre-team',compliance:'Internal'})}
+<span class="md-h1"># Deploying with Helm</span>
+<span class="md-shortdesc">Use the Helm package manager to deploy the engine to the <span class="unresolved-var">{{target_namespace}}</span> namespace.</span>
+
+<span class="md-h2">## Procedure</span>
+1. Register the internal chart repository to ensure access to signed artifacts:
+<div class="md-code-block">helm repo add internal <span class="unresolved-var">{{repo_url}}</span></div>
+2. Create a \`values.yaml\` file with specific overrides for production stability:
+<div class="md-code-block">
+# Generated from Production Defaults
+replicaCount: 2
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: <span class="unresolved-var">{{port}}</span>
+</div>
+3. Install the release using the upgrade command for idempotency:
+<div class="md-code-block">helm upgrade --install <span class="unresolved-var">{{chart_name}}</span> internal/<span class="unresolved-var">{{chart_name}}</span> -f values.yaml</div>
+4. Verify pod status and wait for sidecar injection:
+<div class="md-code-block">kubectl get pods -l app=<span class="unresolved-var">{{chart_name}}</span></div>
+
+<div class="md-note">
+<span class="md-note-title"><i class="fa-solid fa-circle-info"></i> Sidecar Initialization</span>
+The Istio sidecar may take up to 60 seconds to initialize. If you see 1/2 Ready, wait for the health probe to pass.
+</div>`;
+            },
+            getFull: function(ctx) {
+                return `${app.frontMatter({id:'task-helm',type:'Task',audience:'devops',status:'review',owner:'sre-team',compliance:'Internal'})}
+<span class="md-h1"># Deploying with Helm</span>
+<ins><span class="md-shortdesc">Use the Helm package manager to deploy the engine to the <varname data-tooltip="Context: Namespace">${ctx.context.namespace}</varname> namespace.</span></ins>
+
+<span class="md-h2">## Procedure</span>
+<ins>1. Register the internal chart repository to ensure access to signed artifacts:
+<div class="md-code-block">helm repo add internal https://${ctx.context.repo_url}</div>
+<span class="md-result">"internal" has been added to your repositories</span>
+
+2. Create a \`values.yaml\` file with specific overrides for production stability:
+<div class="md-code-block">
+# Generated from Production Defaults
+replicaCount: 2
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: ${ctx.context.port}
+</div>
+
+3. Install the release using the upgrade command for idempotency:
+<div class="md-code-block">helm upgrade --install ${ctx.context.chart_name} internal/${ctx.context.chart_name} -f values.yaml</div>
+<span class="md-result">Release "${ctx.context.chart_name}" does not exist. Installing it now.</span>
+
+4. Verify pod status and wait for sidecar injection:
+<div class="md-code-block">kubectl get pods -l app=${ctx.context.chart_name}</div>
+<span class="md-result">NAME                            READY   STATUS    RESTARTS   AGE
+${ctx.context.chart_name}-5f78c9-q2w3e       2/2     Running   0          45s</span>
+Ensure the \`READY\` column shows \`2/2\` (app + sidecar) and \`STATUS\` is \`Running\`.
+
+<div class="md-note">
+<span class="md-note-title"><i class="fa-solid fa-circle-info"></i> Sidecar Initialization</span>
+The Istio sidecar may take up to 60 seconds to initialize. If you see 1/2 Ready, wait for the health probe to pass.
+</div></ins>`;
+            }
+        }
+    },
+
+    frontMatter: function(data) {
+        const relations = data.relations ? data.relations : '<span style="color:#9CA3AF; font-style:italic;">None defined</span>';
+        const compliance = data.compliance || "Standard";
+        const complianceClass = compliance === "PCI-DSS" ? "warn" : "tag";
+        return `
+        <div class="node-schema-card">
+            <div class="node-schema-header">
+                <div class="node-id-badge"><i class="fa-solid fa-circle-nodes"></i> NODE: ${data.id}</div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <span style="color:#6B7280; font-size:0.7rem;">SCHEMA VALID</span>
+                    <div class="gov-dot valid"></div>
+                </div>
+            </div>
+            <div class="schema-grid">
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div class="schema-row"><span class="schema-key">type:</span><span class="schema-val" style="color:var(--accent)">${data.type}</span></div>
+                    <div class="schema-row"><span class="schema-key">audience:</span><span class="schema-val">${data.audience}</span></div>
+                    <div class="schema-row"><span class="schema-key">status:</span><span class="schema-val tag">${data.status}</span></div>
+                    <div class="schema-row"><span class="schema-key">owner:</span><span class="schema-val">@${data.owner || 'unassigned'}</span></div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div class="schema-row"><span class="schema-key">product:</span><span class="schema-val">${app.context ? app.context.service_name : 'Unknown'}</span></div>
+                    <div class="schema-row"><span class="schema-key">compliance:</span><span class="schema-val ${complianceClass}">${compliance}</span></div>
+                    <div class="schema-row"><span class="schema-key">relates_to:</span><span class="schema-val">${relations}</span></div>
+                </div>
+            </div>
+        </div>`;
+    },
+
+    onRepoSelect: function() {
+        const select = document.getElementById('repo-select');
+        this.state.repo = select.value;
+        const btn = document.getElementById('btn-pull');
+        ['src-code', 'src-jira', 'src-teams'].forEach(id => {
+            const card = document.getElementById(id);
+            card.classList.remove('connected'); card.classList.remove('context-active');
+            card.querySelector('strong').innerText = "Waiting...";
+        });
+        if (this.state.repo) {
+            btn.disabled = false; btn.classList.add('primary');
+            document.getElementById('header-repo-badge').innerText = '/repos/' + this.state.repo;
+        } else {
+            btn.disabled = true; btn.classList.remove('primary');
+            document.getElementById('header-repo-badge').innerText = '/repos/...';
+        }
+    },
+
+    pull: function() {
+        const btn = document.getElementById('btn-pull');
+        this.context = this.repoData[this.state.repo];
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Pulling...';
+        document.getElementById('config-persona').disabled = true; document.getElementById('repo-select').disabled = true;
+        setTimeout(() => {
+            document.getElementById('git-bar').style.display = 'flex';
+            const card = document.getElementById('src-code');
+            card.classList.add('connected');
+            card.querySelector('strong').innerText = this.context.chart_name + ".go";
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Pulled'; btn.classList.remove('primary'); btn.style.color = 'var(--success)'; btn.style.borderColor = 'var(--success)'; btn.disabled = true;
+            document.getElementById('btn-ingest').disabled = false; document.getElementById('btn-ingest').classList.add('primary');
+        }, 1000);
+    },
+
+    ingest: function() {
+        const btn = document.getElementById('btn-ingest');
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...';
+        setTimeout(() => {
+            ['src-jira', 'src-teams'].forEach(id => {
+                const card = document.getElementById(id); card.classList.add('connected');
+                if(id === 'src-jira') card.querySelector('strong').innerText = "Jira: " + this.context.trouble_jira;
+                if(id === 'src-teams') card.querySelector('strong').innerText = "Teams: DevOps";
+            });
+            const varContainer = document.getElementById('vars-container'); varContainer.innerHTML = '';
+            const vars = [ {k:'chart', v:this.context.chart_name}, {k:'namespace', v:this.context.namespace}, {k:'inputs', v:this.context.inputs.length + ' detected'}, {k:'outputs', v:this.context.outputs.length + ' detected'} ];
+            vars.forEach((v, i) => setTimeout(() => varContainer.innerHTML += `<div class="var-item" style="animation-delay:${i*0.1}s"><span class="var-key">${v.k}</span> <span>${v.v}</span></div>`, i * 300));
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Ingested'; btn.classList.remove('primary'); btn.style.color = 'var(--success)'; btn.style.borderColor = 'var(--success)'; btn.disabled = true;
+                document.getElementById('btn-propose').disabled = false; this.state.ingested = true;
+            }, 1200);
+        }, 800);
+    },
+
+    propose: function() {
+        const btn = document.getElementById('btn-propose');
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Building Map...';
+        setTimeout(() => {
+            document.getElementById('tree-empty').classList.add('hidden'); document.getElementById('tree-wrapper').classList.remove('hidden');
+            this.templates.overview_root.title = "Overview of " + this.context.service_name;
+            this.templates.latency.title = this.context.trouble_title;
+            this.state.nodes = [
+                this.templates.overview_root, this.templates.api_root, this.templates.inputs, this.templates.outputs,
+                this.templates.config_ref, this.templates.deploy_root, this.templates.k8s_deploy, 
+                this.templates.trouble_root, this.templates.latency, this.templates.auth
+            ];
+            this.state.nodes.forEach(n => this.state.git.modified.push(n.id));
+            this.updateGitStatus(); this.renderTree();
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Structure Ready';
+            this.state.proposed = true; this.selectNode('overview_root'); 
+        }, 1200);
+    },
+
+    renderTree: function() {
+        const coreUl = document.getElementById('tree-core'); const propUl = document.getElementById('tree-proposed'); const draftUl = document.getElementById('tree-drafts');
+        coreUl.innerHTML = ''; propUl.innerHTML = ''; draftUl.innerHTML = '';
+        this.state.nodes.forEach((node, idx) => {
+            if (!node || !node.id) return;
+            const li = document.createElement('li');
+            const isSelected = this.state.selectedId === node.id ? 'selected' : '';
+            const isMod = this.state.git.modified.includes(node.id);
+            li.draggable = (node.section !== 'core');
+            if (li.draggable) { li.ondragstart = (e) => { e.dataTransfer.setData('text/plain', node.id); e.target.classList.add('dragging'); }; li.ondragend = (e) => { e.target.classList.remove('dragging'); }; }
+            let icon = 'fa-book-open'; let color = 'type-concept';
+            if (node.type === 'Task') { icon = 'fa-list-check'; color = 'type-task'; } else if (node.type === 'Reference') { icon = 'fa-table-list'; color = 'type-ref'; } else if (node.type === 'Troubleshooting') { icon = 'fa-screwdriver-wrench'; color = 'type-trouble'; } else if (node.type === 'Note') { icon = 'fa-sticky-note'; color = 'type-note'; }
+            let action = node.section === 'core' ? '<i class="fa-solid fa-lock lock-icon"></i>' : `<div class="node-actions"><i class="fa-solid fa-trash node-btn-trash" onclick="app.deleteNode('${node.id}', event)"></i></div>`;
+            let levelClass = `level-${node.level}`; let statusColor = node.status === 'review' ? 'status-review' : (node.status === 'approved' ? 'status-approved' : 'status-draft'); let modMarker = isMod ? '<span class="mod-marker">M</span>' : '';
+            li.innerHTML = `<div class="tree-node ${levelClass} ${isSelected}" data-id="${node.id}"><span class="${color}"><i class="fa-solid ${icon}"></i></span><span style="flex:1">${node.title}</span>${modMarker}<div class="status-dot ${statusColor}" title="Status: ${node.status}"></div>${action}</div>`;
+            li.querySelector('.tree-node').addEventListener('click', (e) => app.selectNode(e.currentTarget.getAttribute('data-id')));
+            if (node.section === 'core') coreUl.appendChild(li); else if (node.section === 'proposed') propUl.appendChild(li); else draftUl.appendChild(li);
+        });
+    },
+
+    markModified: function(id) {
+        if(!this.state.git.modified.includes(id)) { this.state.git.modified.push(id); this.updateGitStatus(); this.renderTree(); }
+        document.getElementById('btn-push').disabled = false; document.getElementById('btn-push').classList.add('primary');
+    },
+
+    updateGitStatus: function() {
+        const count = this.state.git.modified.length; const dot = document.getElementById('git-dot'); const text = document.getElementById('git-text');
+        if(count > 0) { dot.className = 'git-indicator dirty'; text.innerText = `${count} uncommitted change${count !== 1 ? 's' : ''}`; } else { dot.className = 'git-indicator clean'; text.innerText = 'Up to date'; }
+    },
+
+    openCommitModal: function() {
+        const list = document.getElementById('staged-files'); list.innerHTML = '';
+        if(this.state.git.modified.length === 0) { list.innerHTML = '<div style="padding:10px; color:#666; font-style:italic;">No changes to commit.</div>'; } 
+        else { this.state.git.modified.forEach(id => { const node = this.state.nodes.find(n => n.id === id); if(node) { list.innerHTML += `<div class="file-row"><span class="mod-marker">M</span><span>docs/${node.title.replace(/\s+/g, '_').toLowerCase()}.dita</span></div>`; } }); }
+        document.getElementById('modal-commit').classList.remove('hidden');
+    },
+
+    confirmPush: function() {
+        const btn = document.getElementById('btn-confirm-push'); btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Pushing...';
+        setTimeout(() => {
+            this.state.git.modified = []; this.updateGitStatus(); this.renderTree(); this.closeModal('modal-commit'); btn.innerHTML = 'Push & Sync'; this.showToast("Successfully pushed to origin/main");
+            document.getElementById('btn-push').disabled = true; document.getElementById('btn-push').classList.remove('primary');
+        }, 1500);
+    },
+
+    allowDrop: function(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); },
+    drop: function(e, section) {
+        e.preventDefault(); document.querySelectorAll('ul').forEach(ul => ul.classList.remove('drag-over'));
+        const id = e.dataTransfer.getData('text/plain'); const node = this.state.nodes.find(n => n.id === id);
+        if (node && node.section !== 'core') { node.section = section; if (section === 'proposed' && node.type === 'Note') { node.type = 'Concept'; } this.markModified(node.id); } else { app.showToast("Cannot move Core items", "OK", null); }
+    },
+
+    selectNode: function(id) {
+        const node = this.state.nodes.find(n => n.id === id); if (!node) return;
+        this.state.selectedId = id; this.renderTree();
+        document.querySelectorAll('.source-card').forEach(c => c.classList.remove('context-active'));
+        if(node && node.source) document.getElementById(node.source).classList.add('context-active');
+        const area = document.getElementById('editor-area'); const editorActions = document.getElementById('editor-actions'); const reviewActions = document.getElementById('review-actions');
+        document.getElementById('editor-filename').innerText = node.title + '.dita';
+        area.style.opacity = 0;
+        setTimeout(() => {
+            if(node.status === 'draft') { area.innerHTML = node.getSkeleton(this); editorActions.classList.remove('hidden'); reviewActions.classList.add('hidden'); } 
+            else { area.innerHTML = node.getFull(this); editorActions.classList.add('hidden'); reviewActions.classList.remove('hidden'); }
+            if (this.state.view === 'preview') { this.toggleView('preview'); } else { document.getElementById('editor-area').style.display = 'block'; document.getElementById('preview-area').style.display = 'none'; }
+            area.style.opacity = 1;
+        }, 150);
+    },
+
+    enhance: function() {
+        const area = document.getElementById('editor-area'); area.classList.add('blur');
+        setTimeout(() => { const node = this.state.nodes.find(n => n.id === this.state.selectedId); node.status = 'review'; this.markModified(node.id); this.selectNode(node.id); area.classList.remove('blur'); }, 500);
+    },
+
+    toggleView: function(mode) {
+        this.state.view = mode;
+        const codeBtn = document.getElementById('view-code'); const prevBtn = document.getElementById('view-preview');
+        const codeArea = document.getElementById('editor-area'); const prevArea = document.getElementById('preview-area');
+
+        if(mode === 'code') {
+            codeBtn.classList.add('active'); prevBtn.classList.remove('active'); codeArea.style.display = 'block'; prevArea.style.display = 'none';
+        } else {
+            codeBtn.classList.remove('active'); prevBtn.classList.add('active');
+            let cleanHtml = codeArea.innerHTML;
+
+            // Remove Frontmatter for processing but keep it to re-add later
+            const originalFrontMatterMatch = cleanHtml.match(/<div class="node-schema-card">[\s\S]*?<\/div>/);
+            const frontMatterHtml = originalFrontMatterMatch ? originalFrontMatterMatch[0] : '';
+            cleanHtml = cleanHtml.replace(/<div class="node-schema-card">[\s\S]*?<\/div>/, '');
+
+            // Protect Code Blocks
+            cleanHtml = cleanHtml.replace(/<div class="md-code-block">([\s\S]*?)<\/div>/g, 
+                '<div class="preview-code-wrapper"><button class="copy-btn" onclick="document.execCommand(\'copy\')"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>$1</code></pre></div>');
+
+            // Handle Markdown BOLD **text** -> <strong>text</strong>
+            cleanHtml = cleanHtml.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            // Handle Headers & Metadata
+            cleanHtml = cleanHtml.replace(/<span class="md-h1"># (.*?)<\/span>/g, '<h1>$1</h1>');
+            cleanHtml = cleanHtml.replace(/<span class="md-h2">## (.*?)<\/span>/g, '<h2>$1</h2>');
+            cleanHtml = cleanHtml.replace(/<span class="md-shortdesc">(.*?)<\/span>/g, '<p style="font-size:1.1em; color:#4B5563; font-style:italic;">$1</p>');
+            cleanHtml = cleanHtml.replace(/<span class="md-code-inline">(.*?)<\/span>/g, '<code>$1</code>');
+            cleanHtml = cleanHtml.replace(/<span class="md-result">([\s\S]*?)<\/span>/g, '<span class="result-text">$1</span>');
+            cleanHtml = cleanHtml.replace(/<div class="md-note">([\s\S]*?)<\/div>/g, '<div class="note">$1</div>');
+            cleanHtml = cleanHtml.replace(/<span class="md-note-title">(.*?)<\/span>/g, '<strong>$1</strong><br>');
+
+            // Handle Lists (Numbered and Bulleted)
+            const lines = cleanHtml.split('\n');
+            let res = []; let inList = false; let listType = ''; 
+            
+            lines.forEach(line => {
+                let trimmed = line.trim();
+                if(trimmed.match(/^\d+\.\s/)) {
+                    if(!inList) { res.push('<ol>'); inList = true; listType = 'ol'; }
+                    else if(listType === 'ul') { res.push('</ul><ol>'); listType = 'ol'; }
+                    res.push(`<li>${trimmed.replace(/^\d+\.\s/, '')}</li>`);
+                } 
+                else if(trimmed.match(/^-\s/) || trimmed.match(/^\*\s/)) {
+                    if(!inList) { res.push('<ul>'); inList = true; listType = 'ul'; }
+                    else if(listType === 'ol') { res.push('</ol><ul>'); listType = 'ul'; }
+                    res.push(`<li>${trimmed.replace(/^-\s|^\*\s/, '')}</li>`);
+                }
+                else {
+                    if(inList) { res.push(`</${listType}>`); inList = false; }
+                    res.push(line);
+                }
+            });
+            if(inList) res.push(`</${listType}>`);
+            cleanHtml = res.join('\n');
+
+            // Handle Tables
+            if(cleanHtml.includes('|')) {
+                const lines = cleanHtml.split('\n');
+                let tableHtml = ''; let res = []; let inTable = false; let headerFound = false;
+                lines.forEach(line => {
+                    if (line.includes('|') && !line.includes('---')) {
+                        let cells = line.substring(line.indexOf('|') + 1, line.lastIndexOf('|')).split('|').map(c => c.trim()).filter(c => c !== '');
+                        if (!inTable) { inTable = true; tableHtml = '<table>'; headerFound = false; }
+                        if (cells.length === 0) return;
+                        if (!headerFound) {
+                            tableHtml += '<thead><tr>'; cells.forEach(c => tableHtml += `<th>${c}</th>`); tableHtml += '</tr></thead><tbody>'; headerFound = true;
+                        } else {
+                            tableHtml += '<tr>'; cells.forEach(c => tableHtml += `<td>${c}</td>`); tableHtml += '</tr>';
+                        }
+                    } else if (line.includes('---')) {
+                        if (inTable && !headerFound) headerFound = true; return;
+                    } else {
+                        if (inTable) { tableHtml += '</tbody></table>'; res.push(tableHtml); inTable = false; headerFound = false; }
+                        res.push(line);
+                    }
+                });
+                if (inTable) { tableHtml += '</tbody></table>'; res.push(tableHtml); }
+                cleanHtml = res.join('\n');
+            }
+
+            // Handle Newlines (FIXED)
+            cleanHtml = cleanHtml.replace(/(?<!>)\n/g, '<br>');
+
+            // Re-Add Frontmatter
+            cleanHtml = frontMatterHtml + cleanHtml;
+
+            prevArea.innerHTML = cleanHtml;
+            codeArea.style.display = 'none'; prevArea.style.display = 'block';
+        }
+    },
+
+    discard: function() { const node = this.state.nodes.find(n => n.id === this.state.selectedId); node.status = 'draft'; this.selectNode(node.id); this.showToast("Reverted to Draft"); },
+    approve: function() { const node = this.state.nodes.find(n => n.id === this.state.selectedId); node.status = 'approved'; this.markModified(node.id); this.renderTree(); this.showToast("Topic Approved"); },
+    deleteNode: function(id, e) { if(e) e.stopPropagation(); const idx = this.state.nodes.findIndex(n => n.id === id); const deleted = this.state.nodes[idx]; this.state.lastDeleted = { node: deleted, index: idx }; this.state.nodes.splice(idx, 1); this.markModified(id); this.renderTree(); if(this.state.selectedId === id) { this.state.selectedId = null; document.getElementById('editor-area').innerHTML = ''; } this.showToast(`Deleted ${deleted.title}`, "Undo", () => this.undoDelete()); },
+    undoDelete: function() { if(!this.state.lastDeleted) return; this.state.nodes.splice(this.state.lastDeleted.index, 0, this.state.lastDeleted.node); this.renderTree(); document.getElementById('toast-container').innerHTML = ''; },
+    showToast: function(msg, btnText, btnAction) { const con = document.getElementById('toast-container'); con.innerHTML = `<div class="toast"><span>${msg}</span>${btnText ? `<button class="toast-btn" onclick="app.callUndo()">${btnText}</button>` : ''}</div>`; app.callUndo = btnAction; setTimeout(() => con.innerHTML = '', 4000); },
+    openModal: function(id) { document.getElementById(id).classList.remove('hidden'); },
+    closeModal: function(id) { document.getElementById(id).classList.add('hidden'); },
+    confirmNewTopic: function() { const title = document.getElementById('new-topic-title').value || "New Topic"; const newNode = { id: 'n_' + this.state.idCounter++, title: title, type: 'Note', section: 'drafts', status: 'draft', level: 0, getSkeleton: () => `# ${title}\n\nStart typing...`, getFull: () => `...` }; this.state.nodes.push(newNode); this.markModified(newNode.id); this.renderTree(); this.selectNode(newNode.id); this.closeModal('modal-topic'); }
+};
+</script>
+</body>
+</html>
