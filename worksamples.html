@@ -1016,7 +1016,6 @@ details[open] summary::before {
     </div>
 </header>
 
-<!-- Portfolio Introduction Section (Now above main tabs) -->
 <div class="portfolio-intro">
     <p>
         My 25+ year career in technical communication lies primarily behind client firewalls (SAP, Ericsson), where the bulk of my work followed established enterprise standards. The <strong>Personal Projects</strong> section below represents a recent, focused <strong>R&D effort</strong> (all created in 2025) undertaken to master modern <span class="definition-trigger">User Experience<span class="tooltip-text">The practice of designing products, systems, or services with the goal of improving user satisfaction and usability.</span></span> (UX) standards, content architecture, and the integration of <span class="definition-trigger">Artificial Intelligence<span class="tooltip-text">The use of computer systems to perform tasks that typically require human intelligence, such as learning and problem-solving.</span></span> (AI) into technical communication workflows.
@@ -1030,7 +1029,6 @@ details[open] summary::before {
 
 <main>
 <div id="tab-client" class="tab-panel active">
-    <!-- Sub Tabs FIRST (Directly below main tabs) -->
     <div class="sub-nav-container">
         <button class="sub-nav-btn active" onclick="switchDtOneSubTab('overview', this)">Project Overview</button>
         <button class="sub-nav-btn" onclick="switchDtOneSubTab('samples', this)">Work Samples</button>
@@ -1101,12 +1099,27 @@ details[open] summary::before {
 
 <div id="tab-personal" class="tab-panel">
     <div class="sub-nav-container">
-        <button class="sub-nav-btn active" onclick="switchSubTab('dita-tool', this)">DITA XML Explorer</button>
+        <button class="sub-nav-btn active" onclick="switchSubTab('doc-builder', this)">DocBuilder</button>
+        <button class="sub-nav-btn" onclick="switchSubTab('dita-tool', this)">DITA XML Explorer</button>
         <button class="sub-nav-btn" onclick="switchSubTab('seai', this)">SEAI Grant Guide</button>
         <button class="sub-nav-btn" onclick="switchSubTab('presentation', this)">Mastering AI Context</button>
         <button class="sub-nav-btn" onclick="switchSubTab('template', this)">AI Book Template</button>
     </div>
-    <div id="sub-dita-tool" class="sub-panel active">
+    
+    <div id="sub-doc-builder" class="sub-panel active">
+        <h2>DocBuilder</h2>
+        <div class="note">
+            <strong>Note:</strong> The DocBuilder prototype is best viewed on a desktop screen to fully appreciate the multi-pane writing environment.
+        </div>
+        <p>DocBuilder is a prototype of a modern writing environment for technical documentation. Instead of viewing documents as simple text files, this tool treats them as a "Knowledge Graph"—a web of connected information.</p>
+        <p>This structure ensures that every piece of information is properly labeled, easy to find, and ready for AI tools to understand and use correctly. It is designed to bridge the gap between human-written guides and machine-readable data.</p>
+        
+        <div class="project-link-buttons">
+            <a href="prototype-of-ai-enhanced-docu-environment.html" target="_blank" class="btn-primary">Launch DocBuilder Prototype</a>
+        </div>
+    </div>
+
+    <div id="sub-dita-tool" class="sub-panel" style="display: none;">
         <h2>DITA XML Explorer</h2>
         
         <div class="note">
@@ -1211,7 +1224,6 @@ details[open] summary::before {
 </div>
 </div>
 
-<!-- Floating Image Container -->
 <div id="floating-image-viewer">
     <img id="floating-img" src="" alt="Preview">
     <p id="floating-caption"></p>
@@ -1339,8 +1351,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// --- STATE MANAGEMENT ---
+let currentMainTabId = 'client';
+let currentSubTabIds = {
+    'client': 'overview',
+    'personal': 'doc-builder'
+};
+
+function updateUrlHash() {
+    window.location.hash = `${currentMainTabId}/${currentSubTabIds[currentMainTabId]}`;
+}
+
 // --- MAIN TAB LOGIC ---
 window.switchMainTab = function(tabId, btn) {
+    currentMainTabId = tabId;
+    
     document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
     if (btn) {
         btn.classList.add('active');
@@ -1361,10 +1386,14 @@ window.switchMainTab = function(tabId, btn) {
             loadDita('map');
         }
     }
+    
+    updateUrlHash();
 }
 
 // --- DT ONE SUB-TAB LOGIC ---
 window.switchDtOneSubTab = function(subId, btn) {
+    currentSubTabIds['client'] = subId;
+    
     const container = btn.closest('.sub-nav-container');
     container.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
     
@@ -1375,10 +1404,14 @@ window.switchDtOneSubTab = function(subId, btn) {
     
     const target = document.getElementById('dtone-' + subId);
     if(target) target.style.display = 'block';
+    
+    updateUrlHash();
 }
 
 // --- PERSONAL PROJECT SUB-TAB LOGIC ---
 window.switchSubTab = function(subId, btn) {
+    currentSubTabIds['personal'] = subId;
+    
     const container = btn.closest('.sub-nav-container');
     
     container.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
@@ -1393,7 +1426,41 @@ window.switchSubTab = function(subId, btn) {
     if(subId === 'dita-tool' && !document.getElementById('code-block').innerText) {
         loadDita('map');
     }
+    
+    updateUrlHash();
 }
+
+// --- DEEP LINKING INITIALIZATION ---
+window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+        const parts = hash.split('/');
+        const main = parts[0];
+        const sub = parts[1];
+
+        if (main === 'client' || main === 'personal') {
+            const mainBtns = document.querySelectorAll('.main-tab-btn');
+            mainBtns.forEach(b => {
+                if (b.getAttribute('onclick').includes(`'${main}'`)) {
+                    switchMainTab(main, b);
+                }
+            });
+
+            if (sub) {
+                const subBtns = document.querySelectorAll('.sub-nav-btn');
+                subBtns.forEach(b => {
+                    if (b.getAttribute('onclick').includes(`'${sub}'`)) {
+                        if (main === 'client') {
+                            switchDtOneSubTab(sub, b);
+                        } else {
+                            switchSubTab(sub, b);
+                        }
+                    }
+                });
+            }
+        }
+    }
+});
 
 // --- DITA VIEWER DATA ---
 const ditaContent = {
@@ -1678,19 +1745,25 @@ window.toggleView = function(mode) {
 function updateSidebarLabels(mode) {
     document.querySelectorAll('.dita-file-btn').forEach(btn => {
         const key = btn.getAttribute('data-key');
-        btn.innerText = (mode === 'preview') ? ditaContent[key].title : ditaContent[key].filename;
+        if (ditaContent[key]) {
+            btn.innerText = (mode === 'preview') ? ditaContent[key].title : ditaContent[key].filename;
+        }
     });
 }
 
 function updateHeader() {
     const content = ditaContent[currentFile];
-    document.getElementById('dita-filename').innerText = (currentMode === 'preview') ? content.title : content.filename;
+    if (content) {
+        document.getElementById('dita-filename').innerText = (currentMode === 'preview') ? content.title : content.filename;
+    }
 }
 
 function renderDita() {
     const data = ditaContent[currentFile];
-    document.getElementById('view-preview').innerHTML = data.preview;
-    document.getElementById('code-block').innerHTML = highlightXml(data.source);
+    if (data) {
+        document.getElementById('view-preview').innerHTML = data.preview;
+        document.getElementById('code-block').innerHTML = highlightXml(data.source);
+    }
 }
 
 // Interactive Feature Tabs in DITA Preview
