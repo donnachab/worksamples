@@ -45,7 +45,7 @@
                         {
                             title: "Project: DT One",
                             bullets: [
-                                "<strong>Portal Overhaul:</strong> Redesigned the developer portal, turning unsearchable enterprise data into a searchable, task-based integration guide focused on the developer's experience."
+                                "<strong>Portal Overhaul:</strong> Redesigned the developer portal, overhauling unsearchable enterprise data into a searchable, task-based integration guide focused on the developer's experience."
                             ]
                         }
                     ]
@@ -56,9 +56,9 @@
                     role: "Senior Information Developer",
                     bullets: [
                         "Promoted from Information Developer to Specialist to Senior in four years.",
-                        "<strong>Help Portal Strategy (Design Thinking):</strong> Collaborated on a global initiative with leads in Bulgaria and the US to redesign the SAP Help Portal. Conducted US field research and online sessions to advocate for a <strong>'role and installation-aware'</strong> model. While technical hitches limited immediate implementation, the project established the architectural blueprint for user-centric discovery that eventually aligned with <strong>SAP Fiori</strong>.",
-                        "<strong>KTP CMS & Operational Leadership:</strong> Managed the first user guide for the <strong>Knowledge Transfer Platform (KTP) CMS</strong> in a prematurely productive, highly volatile environment. Built a centralized triage system and self-service troubleshooting repository on Confluence to handle cross-departmental support. <strong>Managed a pool of interns</strong> to execute pre-release testing and migration, providing the QA bridge necessary for a successful handover to the support organization.",
-                        "<strong>ITSAM Architecture & Logic:</strong> Established the documentation architecture for <strong>IT System and Application Management (ITSAM)</strong>. Designed standardized resolution templates for the System and Application Management work centers to ensure global service delivery readiness.",
+                        "<strong>Help Portal Strategy & Navigation Optimization:</strong> Led a global initiative to redesign the SAP Help Portal using <strong>Design Thinking</strong>. Facilitated US field research and online sessions to advocate for a <strong>'role and installation-aware'</strong> model. Despite political and technical friction within the legacy monolith, delivered high-value navigation restructuring that reduced 'click-debt' and established the architectural blueprint later adopted in <strong>SAP Fiori</strong>.",
+                        "<strong>KTP CMS & Operational Leadership:</strong> Managed the first user guide for the <strong>Knowledge Transfer Platform (KTP) CMS</strong> in a prematurely productive environment. Established a centralized triage system and self-service repository on Confluence to manage ad-hoc support across the organization. <strong>Managed a pool of interns</strong> to execute pre-release testing and migration, providing the QA bridge necessary for a successful handover to the support organization.",
+                        "<strong>ITSAM Architecture & Logic:</strong> Established the documentation architecture for <strong>IT System and Application Management (ITSAM)</strong> during the foundational development of A1S. Designed standardized resolution templates for the <strong>System Management</strong> and <strong>Application Management</strong> work centers to ensure global service delivery readiness.",
                         "<strong>Interface Simplification:</strong> Resolved stakeholder deadlocks by replacing complex technical jargon with business-focused labels (e.g., simplified <em>'Entity Attribute Change Relevance Indicator'</em> to <strong>'Governed'</strong>)."
                     ]
                 },
@@ -132,7 +132,6 @@
         .badge { background: #ffffff; border: 1px solid #86efac; color: #14532d; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 600; display: inline-block; margin: 1px; }
         .timeline-item { position: relative; padding-left: 1.2rem; border-left: 2px solid #86efac; margin-bottom: 1.5rem; }
         .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: #22c55e; border: 2px solid white; }
-        .example-block { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 10px 14px; margin: 12px 0; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -185,7 +184,6 @@
                                 </div>
                             `).join('') : ''}
                             ${job.bullets ? `<ul class="list-disc ml-5 space-y-1 text-[13px] text-cv-text-med print:text-black">${job.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
-                            ${job.example ? `<div class="example-block"><p class="font-bold text-[10px] uppercase text-cv-accent mb-1 print:text-black">${job.example.label}</p><p class="italic text-cv-text-dark print:text-black">${job.example.content}</p></div>` : ''}
                         </div>
                     `).join('')}
                 </main>
