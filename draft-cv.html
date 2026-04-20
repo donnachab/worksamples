@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft CV: Donnacha Bushe - Senior Technical Writer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        const registry = {
+            identity: {
+                name: "DONNACHA BUSHE",
+                title: "Senior Technical Writer | PSM I",
+                photo: "profile-pic.jpg",
+                summary: `<strong>Senior technical writer with 25 years of experience.</strong> Recently selected as the top candidate for a Tier 1 role (paused by a hiring freeze). The team highlighted my proactive leadership in <strong>"restructuring inconsistent content"</strong> and my <strong>"resilience to drive projects forward even in complex environments."</strong>`
+            },
+            contact: {
+                address: "92 Sceilg Ard, Galway",
+                phone: "+353 85 7071293",
+                email: "donnachab@gmail.com",
+                linkedin: "linkedin.com/in/donnachab"
+            },
+            expertise: ["Technical Information Architecture", "Content Reuse (DITA/Git)", "API Strategy (OpenAPI)", "UX Writing", "Agile Leadership (PSM I)", "Quality Metrics"],
+            toolbox: ["IXIASOFT", "DITA XML", "Git", "Markdown", "Jira", "Swagger", "Backstage", "ABAP", "COBOL"],
+            experience: [
+                {
+                    company: "intive",
+                    period: "2017 – Present",
+                    role: "Senior Technical Writer",
+                    subSections: [
+                        {
+                            title: "Ericsson: Pipeline Orchestrator",
+                            bullets: [
+                                "<strong>Portal Redesign & Technical Rescue:</strong> Led the complete redesign of the developer portal on a Hugo-based Docs-as-Code platform while embedded within <strong>3 Scrum teams</strong>. Audited and restructured a legacy 'best-effort' jumble of task and concept content, re-architecting the information model around job-specific roles to transform fragmented developer notes into a high-integrity technical suite."
+                            ]
+                        },
+                        {
+                            title: "Ericsson: Network Manager (ENM)",
+                            bullets: [
+                                "<strong>Product Description Ownership:</strong> Orchestrated the delivery of the foundational high-level Product Description guide, coordinating technical inputs from <strong>50+ distributed development teams</strong>. Rebuilt the structure to align with the product UI and implemented a <strong>'negative consent'</strong> review workflow to hit global launch milestones.",
+                                "<strong>API Workflow Pilot:</strong> Overcame institutional resistance to pilot an automated Swagger-to-Git sync, ensuring 100% data accuracy by allowing writers to operate directly within the codebase."
+                            ]
+                        },
+                        {
+                            title: "Project: DT One",
+                            bullets: [
+                                "<strong>Portal Overhaul:</strong> Redesigned the developer portal, turning unsearchable enterprise data into a searchable, task-based integration guide focused on the developer's experience."
+                            ]
+                        }
+                    ]
+                },
+                {
+                    company: "SAP",
+                    period: "2005 – 2015",
+                    role: "Senior Information Developer",
+                    bullets: [
+                        "Promoted from Information Developer to Specialist to Senior in four years.",
+                        "<strong>Help Portal Strategy (Design Thinking):</strong> Collaborated on a global initiative with leads in Bulgaria and the US to redesign the SAP Help Portal. Conducted US field research and online sessions to advocate for a <strong>'role and installation-aware'</strong> model. While technical hitches limited immediate implementation, the project established the architectural blueprint for user-centric discovery that eventually aligned with <strong>SAP Fiori</strong>.",
+                        "<strong>KTP CMS & Operational Leadership:</strong> Managed the first user guide for the <strong>Knowledge Transfer Platform (KTP) CMS</strong> in a prematurely productive, highly volatile environment. Built a centralized triage system and self-service troubleshooting repository on Confluence to handle cross-departmental support. <strong>Managed a pool of interns</strong> to execute pre-release testing and migration, providing the QA bridge necessary for a successful handover to the support organization.",
+                        "<strong>ITSAM Architecture & Logic:</strong> Established the documentation architecture for <strong>IT System and Application Management (ITSAM)</strong>. Designed standardized resolution templates for the System and Application Management work centers to ensure global service delivery readiness.",
+                        "<strong>Interface Simplification:</strong> Resolved stakeholder deadlocks by replacing complex technical jargon with business-focused labels (e.g., simplified <em>'Entity Attribute Change Relevance Indicator'</em> to <strong>'Governed'</strong>)."
+                    ]
+                },
+                {
+                    company: "Skillsoft",
+                    period: "2001 – 2005",
+                    role: "Technical Writer",
+                    bullets: [
+                        "Developed technical courses for IT certification. Designed articles, software simulations, and testing protocols to manage cognitive load and facilitate technical onboarding."
+                    ]
+                },
+                {
+                    company: "Aviva",
+                    period: "1997 – 2001",
+                    role: "Programmer",
+                    bullets: [
+                        "Wrote and optimized business-critical code in <strong>COBOL</strong> and <strong>ABAP</strong>.",
+                        "Maintained infrastructure stability through daily health checks of the insurance network."
+                    ]
+                }
+            ],
+            education: [
+                { degree: "HDip IT (Hons)", school: "NUI Maynooth" },
+                { degree: "BA French & History (Hons)", school: "Trinity College Dublin" }
+            ],
+            certifications: ["PSM I", "SAP Train the Trainer"],
+            languages: ["French (Full Professional)"]
+        };
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Poppins', 'sans-serif'] },
+                    colors: { 'cv-bg-sidebar': '#dcfce7', 'cv-text-dark': '#14532d', 'cv-accent': '#22c55e', 'cv-border': '#86efac' }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { background-color: #f0fdf4; color: #166534; -webkit-font-smoothing: antialiased; }
+        .header-print { display: none; }
+
+        @media (min-width: 1024px) {
+            .master-layout { display: grid !important; grid-template-columns: 280px 1fr; grid-template-areas: "aside main"; max-width: 1000px; margin: 40px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+            aside { grid-area: aside; background: #dcfce7; padding: 40px; border-right: 1px solid #86efac; }
+            main { grid-area: main; padding: 40px 50px; }
+            .profile-img { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #22c55e; margin: 0 auto 20px auto; display: block; object-fit: cover; }
+            .header-mobile { display: none; }
+        }
+        @media (max-width: 1023px) {
+            .master-layout { display: flex; flex-direction: column; background: white; }
+            .header-mobile { display: block; padding: 30px; text-align: center; border-bottom: 1px solid #dcfce7; }
+            main { padding: 30px; order: 1; } aside { padding: 30px; background: #f0fdf4; order: 2; } 
+            .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #22c55e; margin: 0 auto 15px auto; object-fit: cover; }
+            .header-desktop { display: none; }
+        }
+        @media print {
+            @page { size: A4; margin: 10mm; }
+            body { background: white; color: black !important; font-size: 9pt; }
+            .no-print { display: none !important; }
+            .master-layout { display: block; }
+            main { padding: 0 !important; }
+            aside { display: block; border-top: 1pt solid #ddd; margin-top: 20pt; padding-top: 10pt; background: transparent !important; }
+            .header-print { display: block !important; border-bottom: 2pt solid #14532d; padding-bottom: 12pt; margin-bottom: 20pt; }
+            .header-desktop, .header-mobile, .profile-img { display: none !important; }
+            .summary-box { border: none !important; padding: 0 !important; margin-bottom: 15pt !important; }
+            .timeline-item { page-break-inside: avoid !important; margin-bottom: 15pt !important; }
+        }
+        .section-title { border-bottom: 2px solid #22c55e; text-transform: uppercase; font-size: 10pt; margin-bottom: 10pt; padding-bottom: 2pt; font-weight: 700; color: #14532d; }
+        .badge { background: #ffffff; border: 1px solid #86efac; color: #14532d; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 600; display: inline-block; margin: 1px; }
+        .timeline-item { position: relative; padding-left: 1.2rem; border-left: 2px solid #86efac; margin-bottom: 1.5rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: #22c55e; border: 2px solid white; }
+        .example-block { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 10px 14px; margin: 12px 0; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="max-w-4xl mx-auto mt-4 no-print flex justify-end px-4">
+        <button onclick="window.print()" class="bg-cv-text-dark text-white px-4 py-2 rounded font-bold text-xs shadow hover:opacity-90">Save PDF</button>
+    </div>
+    <div id="cv-root" class="master-layout"></div>
+
+    <script>
+        function render() {
+            const d = registry;
+            const root = document.getElementById('cv-root');
+            root.innerHTML = `
+                <div class="header-print">
+                    <h1 class="text-4xl font-bold uppercase text-cv-text-dark">${d.identity.name}</h1>
+                    <p class="text-lg text-cv-accent font-semibold">${d.identity.title}</p>
+                    <div class="flex gap-6 mt-2 text-xs font-bold text-cv-text-dark">
+                        <span>${d.contact.email}</span>
+                        <span>${d.contact.phone}</span>
+                        <span>Galway, Ireland</span>
+                    </div>
+                </div>
+
+                <header class="header-mobile">
+                    <img src="${d.identity.photo}" alt="Profile" class="profile-img">
+                    <h1 class="text-2xl font-bold uppercase text-cv-text-dark">${d.identity.name}</h1>
+                    <p class="text-sm text-cv-accent font-semibold">${d.identity.title}</p>
+                </header>
+
+                <main>
+                    <div class="header-desktop mb-6">
+                        <h1 class="text-4xl font-bold uppercase text-cv-text-dark">${d.identity.name}</h1>
+                        <p class="text-lg text-cv-accent font-semibold">${d.identity.title}</p>
+                    </div>
+                    <div class="summary-box border-t border-cv-border pt-4 mb-8 text-[14px] leading-relaxed text-cv-text-med">
+                        <p>${d.identity.summary}</p>
+                    </div>
+                    <h2 class="section-title">Experience</h2>
+                    ${d.experience.map(job => `
+                        <div class="timeline-item">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h3 class="text-lg font-bold text-cv-text-dark">${job.company}</h3>
+                                <span class="text-xs font-semibold text-gray-500 print:text-black">${job.period}</span>
+                            </div>
+                            <p class="text-[10px] font-bold uppercase text-cv-accent mb-2">${job.role}</p>
+                            ${job.subSections ? job.subSections.map(sub => `
+                                <div class="mb-4">
+                                    <h4 class="text-xs font-bold border-l-2 border-cv-accent pl-2 mb-1 uppercase text-cv-text-dark">${sub.title}</h4>
+                                    <ul class="list-disc ml-5 space-y-1 text-[13px] text-cv-text-med print:text-black">${sub.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+                                </div>
+                            `).join('') : ''}
+                            ${job.bullets ? `<ul class="list-disc ml-5 space-y-1 text-[13px] text-cv-text-med print:text-black">${job.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+                            ${job.example ? `<div class="example-block"><p class="font-bold text-[10px] uppercase text-cv-accent mb-1 print:text-black">${job.example.label}</p><p class="italic text-cv-text-dark print:text-black">${job.example.content}</p></div>` : ''}
+                        </div>
+                    `).join('')}
+                </main>
+                <aside>
+                    <div class="header-desktop"><img src="${d.identity.photo}" alt="Profile" class="profile-img"></div>
+                    <section class="mb-8"><h2 class="section-title">Contact</h2><div class="text-xs space-y-1 text-cv-text-dark"><p>${d.contact.address}</p><p>${d.contact.phone}</p><p class="font-bold underline">${d.contact.email}</p></div></section>
+                    <section class="mb-8"><h2 class="section-title">Expertise</h2><ul class="text-xs space-y-1 font-medium text-cv-text-dark">${d.expertise.map(s => `<li>• ${s}</li>`).join('')}</ul></section>
+                    <section class="mb-8"><h2 class="section-title">Toolbox</h2><div class="flex flex-wrap gap-1">${d.toolbox.map(t => `<span class="badge">${t}</span>`).join('')}</div></section>
+                    <section class="mb-8"><h2 class="section-title">Education</h2><div class="text-xs space-y-2 text-cv-text-dark">${d.education.map(e => `<div><p class="font-bold">${e.degree}</p><p class="opacity-75">${e.school}</p></div>`).join('')}</div></section>
+                </aside>
+            `;
+        }
+        document.addEventListener('DOMContentLoaded', render);
+    </script>
+</body>
+</html>
