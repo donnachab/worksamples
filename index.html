@@ -46,14 +46,14 @@
                 phone: "+353 85 7071293",
                 email: "donnachab@gmail.com",
                 linkedin: "linkedin.com/in/donnachab",
-                portfolio: "donnachab.github.io/worksamples/worksamples.html"
+                portfolio: "https://donnachab.github.io/worksamples/worksamples.html",
+                onlineCV: "https://donnachab.github.io/worksamples/index.html"
             },
             experience: [
                 {
                     company: "intive",
                     period: "July 2017 – December 2025 (8 years 6 months)",
                     role: "Senior Technical Writer and Writing Consultant",
-                    location: "Dublin, Ireland · Remote",
                     bullets: [
                         "<strong>Client: DT One — Developer Portal</strong>: Rebuilt the developer portal in three months, replacing unsearchable PowerPoints and raw Swagger files with a coherent, developer‑oriented site. Designed a consistent integration structure that added the context, flows, and examples developers needed to onboard independently.",
                         "<strong>Client: Ericsson — ENM Product Description (DITA Architecture & Governance)</strong>: Rebuilt the ENM Product Description during the Confluence‑to‑Ixiasoft migration, resolving navigation and content gaps, standardizing chapter depth, aligning structure with the portal UI, applying reuse (RCO/conref/keyref), and cleaning automated conversion output. Worked with a Senior Architect to set a firm review deadline, enabling approved changes to move into production across 50 distributed teams.",
@@ -70,10 +70,10 @@
                     period: "March 2005 – July 2015 (10 years 5 months)",
                     role: "Senior Information Developer",
                     bullets: [
-                        "Promoted twice in four years: Information Developer → Specialist → Senior.",
+                        "Promoted twice in four years: Information Developer → Specialist → Senior",
                         "<strong>Help Portal Strategy & User Research</strong>: Redesigned the SAP Help Portal by conducting on‑site user research in Kentucky and collaborating with a lead in Bulgaria. Advocated for context‑aware, role‑based navigation grounded in direct customer feedback, influencing principles later reflected in the SAP Fiori user experience.",
                         "<strong>System Stability Initiative (Knowledge Transfer Platform)</strong>: Assigned to document the new KTP CMS but found it too unstable for reliable authoring. Established a public triage page for workarounds, authored a repeatable Test Plan executed for every release, and led an intern team to run repeated test cases until stability improved.",
-                        "<strong>Linguistic Standardization (Master Data Governance)</strong>: Resolved terminology deadlocks in MDG by standardizing governance vocabulary and renaming user‑hostile UI labels to concise terms, replacing “Entity Attribute Change Relevance Indicator” with “Governed.”",
+                        "<strong>Linguistic Standardization (Master Data Governance)</strong>: Resolved terminology deadlocks in MDG by standardizing governance vocabulary and renaming long, user‑hostile UI labels to concise terms, replacing “Entity Attribute Change Relevance Indicator” with “Governed.”",
                         "<strong>Documentation Architecture (A1S / Business ByDesign)</strong>: Designed the documentation architecture for the IT System and Application Management component of A1S. Built standardized resolution templates for global support centers, establishing the baseline support strategy ahead of the product’s first market release."
                     ],
                     skills: ["Information Architecture", "User Research", "Design Thinking", "Linguistic Standardization", "CMS Strategy", "System Stability", "Terminology Management", "Global Collaboration"]
@@ -111,31 +111,90 @@
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f0fdf4; color: #166534; -webkit-font-smoothing: antialiased; }
-        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
+        :root { --accent: #22c55e; --dark: #14532d; }
         
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f0fdf4; 
+            color: #166534; 
+            -webkit-font-smoothing: antialiased;
+        }
+
         @media (min-width: 1024px) {
-            .grid-lg { display: grid !important; grid-template-columns: 280px 1fr; grid-template-areas: "aside main"; max-width: 1000px; margin: 40px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-            .grid-lg > main { grid-column: 2 / 3; order: 2; width: auto; padding: 40px 50px; }
-            .grid-lg > aside { grid-column: 1 / 2; order: 1; width: auto; background: #dcfce7; padding: 40px; border-right: 1px solid #86efac; }
+            .grid-lg { display: grid !important; grid-template-columns: 320px 1fr; grid-template-areas: "aside main"; max-width: 1200px; margin: 40px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
+            .grid-lg > main { grid-column: 2 / 3; order: 2; padding: 40px 60px; }
+            .grid-lg > aside { grid-column: 1 / 2; order: 1; background: #dcfce7; padding: 40px; border-right: 1px solid #86efac; }
         }
 
         .timeline-item { position: relative; padding-left: 1.5rem; border-left: 2px solid #86efac; margin-bottom: 2.5rem; }
-        .badge { background-color: #ffffff; border: 1px solid #86efac; color: #14532d; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; display: inline-block; margin: 2px; }
+        .badge { background-color: #ffffff; border: 1px solid #86efac; color: #14532d; font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; display: inline-block; margin: 2px; }
+        
         .skill-hidden { display: none; }
-        .skill-toggle-btn { color: #22c55e; cursor: pointer; font-size: 0.7rem; font-weight: bold; margin-left: 5px; }
+        .skill-toggle-btn { color: #22c55e; cursor: pointer; font-size: 0.75rem; font-weight: 700; }
 
         @media print {
-            @page { size: A4; margin: 10mm; }
-            body { background: white !important; color: black !important; font-size: 9pt; }
+            /* 1. STRICT MARGINS: Keeps text completely away from page edges */
+            @page { size: A4; margin: 15mm 20mm; } 
+            
+            /* 2. INTEGER FONT SIZES & STRIPPED OVERRIDES: Prevents Chrome's PDF renderer from wobbling text */
+            body { 
+                background: white !important; 
+                color: #000000 !important; 
+                font-size: 10pt !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+            }
+            
+            * {
+                -webkit-transition: none !important;
+                transition: none !important;
+                -webkit-transform: none !important;
+                transform: none !important;
+                text-shadow: none !important;
+                box-shadow: none !important;
+            }
+
+            /* Prevent opacity from forcing the browser to rasterize the text (causing blur/wobble) */
+            .opacity-80 { opacity: 1 !important; color: #374151 !important; }
+
             .no-print { display: none !important; }
-            .grid-lg { display: block !important; box-shadow: none !important; }
-            aside { display: block; border-top: 1pt solid #ddd; margin-top: 20pt; padding: 10pt 0 !important; background: transparent !important; }
+            .grid-lg { display: block !important; width: 100% !important; margin: 0 !important; border-radius: 0 !important; border: none !important; }
+            
+            /* 3. CONTAINED BANNER: Will not cut off or truncate */
+            header { 
+                background-color: #dcfce7 !important; 
+                padding: 15pt 25pt !important; 
+                border-radius: 8px !important;
+                border: 1px solid #86efac !important;
+                border-bottom: 3px solid #22c55e !important;
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+                margin-bottom: 20pt !important;
+            }
+
+            .header-photo { display: block !important; width: 70px; height: 70px; border-radius: 50%; border: 3px solid white; }
+            
             main { padding: 0 !important; }
-            /* ALLOW BLOCKS TO BREAK NATURALLY */
-            .timeline-item { page-break-inside: auto !important; border-left: none !important; padding-left: 0 !important; }
+            
+            /* 4. SURGICAL PAGE BREAKS */
+            h2, h3 { break-after: avoid; page-break-after: avoid; margin-top: 15pt; margin-bottom: 8pt; }
+            .timeline-item { break-inside: auto; page-break-inside: auto; border-left: none !important; padding-left: 0 !important; margin-bottom: 15pt !important; }
+            
+            /* NEVER split a single bullet across a page break */
+            li { break-inside: avoid !important; page-break-inside: avoid !important; margin-bottom: 8pt !important; }
+            
+            /* Keep headers locked to their content */
+            .timeline-item h3 + p, .timeline-item h3 + ul { break-before: avoid; }
+            
+            aside { display: block; border-top: 1.5pt solid #86efac; margin-top: 25pt !important; padding: 15pt 0 !important; background: transparent !important; }
+            .small-job, .edu-section, .interest-section { page-break-inside: avoid; break-inside: avoid; }
+            
             .skill-hidden { display: inline-block !important; }
-            h3, h4 { page-break-after: avoid !important; }
+            a { color: #166534 !important; text-decoration: underline !important; font-weight: 700; }
         }
     </style>
 </head>
@@ -144,16 +203,19 @@
     <div class="max-w-6xl mx-auto flex flex-col grid-lg">
 
         <main class="w-full bg-white">
-            <header class="mb-8 border-b border-cv-border pb-6 no-print">
-                <div class="flex flex-wrap justify-between items-start gap-4">
-                    <div class="text-left">
-                        <h1 class="text-3xl font-bold font-heading text-cv-text-dark uppercase tracking-tight">DONNACHA BUSHE</h1>
-                        <p class="text-sm font-semibold text-cv-accent mt-1 uppercase">Senior Technical Writer | PSM I Certified</p>
+            <header class="mb-8 border-b border-cv-border pb-6 flex justify-between items-center">
+                <div class="text-left">
+                    <h1 class="text-3xl font-bold font-heading text-cv-text-dark uppercase tracking-tight">DONNACHA BUSHE</h1>
+                    <p class="text-sm font-semibold text-cv-accent mt-1 uppercase">Senior Technical Writer | PSM I Certified</p>
+                    <div class="hidden print:flex flex-col gap-1 mt-3">
+                        <a href="https://donnachab.github.io/worksamples/index.html" class="text-[10pt]">View Online Interactive CV</a>
+                        <a href="https://donnachab.github.io/worksamples/worksamples.html" class="text-[10pt]">View Work Samples Portfolio</a>
                     </div>
-                    <div class="flex gap-2">
-                         <a href="https://donnachab.github.io/worksamples/worksamples.html" target="_blank" class="px-5 py-2.5 border border-cv-accent text-xs font-bold rounded text-white bg-cv-accent hover:bg-cv-accent-hover transition-all shadow-md">WORK SAMPLES</a>
-                         <button onclick="printCV()" class="px-5 py-2.5 border border-cv-accent text-xs font-bold rounded text-white bg-cv-accent hover:bg-cv-accent-hover transition-all shadow-md">PRINT TO PDF</button>
-                    </div>
+                </div>
+                <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" class="header-photo hidden print:block w-20 h-20 rounded-full border-4 border-cv-accent object-cover">
+                <div class="flex gap-2 no-print">
+                     <a href="https://donnachab.github.io/worksamples/worksamples.html" target="_blank" class="px-5 py-2.5 border border-cv-accent text-xs font-bold rounded text-white bg-cv-accent hover:bg-cv-accent-hover transition-all shadow-md">WORK SAMPLES</a>
+                     <button onclick="printCV()" class="px-5 py-2.5 border border-cv-accent text-xs font-bold rounded text-white bg-cv-accent hover:bg-cv-accent-hover transition-all shadow-md">PRINT TO PDF</button>
                 </div>
             </header>
 
@@ -166,16 +228,12 @@
         </main>
 
         <aside class="w-full">
-            <div class="no-print mb-8 text-center"><img src="profile-pic.jpg" alt="Donnacha Bushe" class="w-24 h-24 rounded-full mx-auto border-4 border-cv-accent object-cover bg-white shadow-sm"></div>
+            <div class="no-print mb-8 text-center">
+                <img src="https://raw.githubusercontent.com/donnachab/worksamples/main/profile-pic.jpg" alt="Donnacha Bushe" class="w-24 h-24 rounded-full mx-auto border-4 border-cv-accent object-cover bg-white shadow-sm">
+            </div>
             
             <section class="mb-8"><h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Contact</h2>
-                <div class="text-xs space-y-1 text-cv-text-dark italic">
-                    <p>Galway, Ireland</p>
-                    <p class="font-bold underline">+353 85 7071293</p>
-                    <p class="underline">donnachab@gmail.com</p>
-                    <a href="https://linkedin.com/in/donnachab" target="_blank" class="block font-bold hover:text-cv-accent">linkedin.com/in/donnachab</a>
-                    <a href="https://donnachab.github.io/worksamples/worksamples.html" target="_blank" class="block font-bold text-cv-accent underline mt-2">Work Samples Portfolio</a>
-                </div>
+                <div id="sidebar-contact" class="text-xs space-y-1 text-cv-text-dark italic"></div>
             </section>
 
             <section class="mb-8"><h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Top Skills</h2>
@@ -186,11 +244,11 @@
                 <div id="sidebar-toolbox" class="flex flex-wrap gap-1"></div>
             </section>
 
-            <section class="mb-8"><h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Education</h2>
+            <section class="mb-8 edu-section"><h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Education</h2>
                 <div id="sidebar-education" class="text-xs space-y-3"></div>
             </section>
 
-            <section class="mb-8"><h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Interests</h2>
+            <section class="mb-8 interest-section"><h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Interests</h2>
                 <ul id="sidebar-interests" class="text-xs space-y-1 font-medium"></ul>
             </section>
         </aside>
@@ -201,24 +259,29 @@
         function toggleSkills(id) {
             const el = document.getElementById(id);
             const btn = el.nextElementSibling;
-            if (el.style.display === 'inline-block') {
-                el.style.display = 'none';
-                btn.innerText = '...and more';
-            } else {
-                el.style.display = 'inline-block';
-                btn.innerText = 'Show less';
-            }
+            const isHidden = el.style.display === 'none' || el.style.display === '';
+            el.style.display = isHidden ? 'inline-block' : 'none';
+            btn.innerText = isHidden ? 'Show less' : '...and more';
         }
 
         function render() {
             const d = registry;
             document.getElementById('summary-content').innerHTML = d.identity.summary;
+            document.getElementById('sidebar-contact').innerHTML = `
+                <p>${d.contact.location}</p>
+                <p class="font-bold underline">${d.contact.phone}</p>
+                <p class="underline">${d.contact.email}</p>
+                <a href="https://${d.contact.linkedin}" target="_blank" class="block underline">LinkedIn Profile</a>
+                <a href="${d.contact.portfolio}" target="_blank" class="block font-bold text-cv-accent underline mt-1">Work Samples Portfolio</a>
+            `;
 
             document.getElementById('experience-content').innerHTML = d.experience.map((job, idx) => {
+                const isSmall = job.bullets.length < 4;
                 const visibleSkills = job.skills ? job.skills.slice(0, 5) : [];
                 const hiddenSkills = job.skills ? job.skills.slice(5) : [];
+                
                 return `
-                    <div class="timeline-item">
+                    <div class="timeline-item ${isSmall ? 'small-job' : ''}">
                         <div class="flex justify-between items-baseline mb-1">
                             <h3 class="text-md font-bold text-cv-text-dark">${job.company}</h3>
                             <span class="text-[10px] font-bold text-cv-text-dim uppercase tracking-wider">${job.period}</span>
@@ -234,7 +297,7 @@
                             ${hiddenSkills.length > 0 ? `<span class="skill-toggle-btn" onclick="toggleSkills('skills-${idx}')">...and more</span>` : ''}
                         </div>
                         <div class="hidden print:block mt-2">
-                             <p class="text-[8pt] font-bold text-cv-text-dark uppercase italic">Skills: ${job.skills.join(', ')}</p>
+                             <p class="text-[8.5pt] font-bold text-cv-text-dark uppercase italic">Skills: ${job.skills.join(', ')}</p>
                         </div>` : ''}
                     </div>
                 `;
