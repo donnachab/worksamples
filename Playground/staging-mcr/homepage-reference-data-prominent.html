@@ -61,12 +61,37 @@
     color: var(--blue);
     letter-spacing: -0.02em;
   }
+  nav {
+    display: flex;
+    align-items: center;
+  }
   nav a {
     margin-left: 24px;
     font-weight: 600;
     font-size: 0.9rem;
     color: var(--blue);
   }
+  nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .lang-toggle {
+    margin-left: 24px;
+    display: inline-flex;
+    gap: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--blue);
+    align-items: center;
+  }
+  .lang-toggle [role="button"]:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .lang-toggle span { user-select: none; }
+  .lang-toggle .divider { pointer-events: none; color: var(--muted); }
 
   .page {
     max-width: var(--container-max);
@@ -165,6 +190,7 @@
     letter-spacing: 0.08em;
     margin-bottom: 12px;
     color: var(--muted);
+    line-height: 1.5;
   }
   .story-hook p {
     font-size: 1rem;
@@ -188,6 +214,7 @@
     margin-bottom: 12px;
     display: inline-block;
     align-self: flex-start;
+    line-height: 1.5;
   }
 
   .solution-block h3 {
@@ -258,7 +285,7 @@
     color: var(--navy);
     user-select: none;
     background: #fafbfc;
-    list-style: none; /* removes default arrow in some browsers */
+    list-style: none;
     transition: background 0.2s;
   }
   summary.accordion-header::-webkit-details-marker {
@@ -288,6 +315,15 @@
   .accordion .solution-tag.consulting { color: var(--gold); }
   .accordion .solution-tag.training { color: var(--navy-soft); }
 
+  /* Cleaner Switch Architecture using CSS Attributes to avoid JS layout side effects */
+  html[lang="en"] .de { display: none !important; }
+  html[lang="de"] .en { display: none !important; }
+  
+  /* Ensure inline nodes toggle correctly */
+  span.en, span.de { display: inline !important; }
+  html[lang="en"] span.de { display: none !important; }
+  html[lang="de"] span.en { display: none !important; }
+
   @media (max-width: 900px) {
     .content-split { flex-direction: column; }
     .story-hook { border-right: none; border-bottom: 1px solid var(--line); }
@@ -295,6 +331,15 @@
     summary.accordion-header { font-size: 1.1rem; padding: 20px; }
   }
 </style>
+
+<script>
+  function setLang(lang) {
+    document.documentElement.lang = lang;
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    setLang('en');
+  });
+</script>
 </head>
 
 <body>
@@ -303,10 +348,16 @@
   <div class="nav">
     <div class="logo">Itego logo</div>
     <nav>
-      <a href="#offerings">Product</a>
-      <a href="#offerings">Consulting</a>
-      <a href="#offerings">Resources</a>
-      <a href="#">Talk to us</a>
+      <a href="#offerings"><span class="en">Product</span><span class="de">Produkt</span></a>
+      <a href="#offerings"><span class="en">Consulting</span><span class="de">Consulting</span></a>
+      <a href="#offerings"><span class="en">Resources</span><span class="de">Ressourcen</span></a>
+      <a href="#"><span class="en">Talk to us</span><span class="de">Kontakt aufnehmen</span></a>
+
+      <span class="lang-toggle" aria-label="Language switch">
+        <span role="button" tabindex="0" onclick="setLang('en')" onkeydown="if(event.key==='Enter')setLang('en')">EN</span>
+        <span class="divider" aria-hidden="true">|</span>
+        <span role="button" tabindex="0" onclick="setLang('de')" onkeydown="if(event.key==='Enter')setLang('de')">DE</span>
+      </span>
     </nav>
   </div>
 </header>
@@ -314,69 +365,116 @@
 <main class="page">
   
   <div class="intro-section">
-    <div class="intro-eyebrow">SAP Master Data Governance</div>
-    <h1 class="intro-title">Your SAP landscape relies on master data.<br>Are you governing all of it?</h1>
-    <p class="intro-sub">We secure your operational integrity across master and reference data.</p>
+    <div class="intro-eyebrow en">SAP Master Data Governance</div>
+    <div class="intro-eyebrow de">SAP Master Data Governance</div>
+    
+    <h1 class="intro-title en">Your SAP landscape relies on master data.<br>Are you governing all of it?</h1>
+    <h1 class="intro-title de">Ihre SAP‑Landschaft basiert auf Stammdaten.<br>Werden wirklich alle davon gesteuert?</h1>
+    
+    <p class="intro-sub en">We secure your operational integrity across master and reference data.</p>
+    <p class="intro-sub de">Wir sichern Ihre operative Integrität über Stamm‑ und Referenzdaten hinweg.</p>
   </div>
 
   <div class="stats-container">
     <div class="stat-item">
       <div class="stat-number">15+</div>
-      <div class="stat-label">Years in SAP MDG</div>
+      <div class="stat-label en">Years in SAP MDG</div>
+      <div class="stat-label de">Jahre SAP‑MDG‑Erfahrung</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">150+</div>
-      <div class="stat-label">Tables Governed</div>
+      <div class="stat-label en">Tables Governed</div>
+      <div class="stat-label de">Gesteuerte Tabellen</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">Days</div>
-      <div class="stat-label">To Go Live</div>
+      <div class="stat-number"><span class="en">Days</span><span class="de">Tage</span></div>
+      <div class="stat-label en">To Go Live</div>
+      <div class="stat-label de">Bis zum Go‑Live</div>
     </div>
   </div>
 
   <div id="offerings" class="architecture-container">
     
+    <!-- FLAGSHIP CARD -->
     <div class="flagship-card content-split">
       <div class="story-hook">
-        <div class="story-eyebrow">When things get overlooked</div>
-        <p>You acquire a business in Poland. Someone adds the new Polish Zloty and VAT rules. Because configuration tables often sit outside standard governance cycles, these values are maintained manually across local systems—leading to <strong>subtle, costly discrepancies</strong> in downstream consolidation reports.</p>
+        <div class="story-eyebrow en">When things get overlooked</div>
+        <div class="story-eyebrow de">Wenn Dinge übersehen werden</div>
+        
+        <p class="en">You acquire a business in Poland. Someone adds the new Polish Zloty and VAT rules. Because configuration tables often sit outside standard governance cycles, these values are maintained manually across local systems—leading to <strong>subtle, costly discrepancies</strong> in downstream consolidation reports.</p>
+        <p class="de">Sie übernehmen ein Unternehmen in Polen. Jemand ergänzt den neuen Złoty und die entsprechenden Mehrwertsteuerregeln. Da Konfigurationstabellen häufig außerhalb der regulären Governance‑Zyklen gepflegt werden, werden diese Werte manuell in lokalen Systemen aktualisiert — was zu <strong>subtilen, teuren Abweichungen</strong> in nachgelagerten Konsolidierungsberichten führt.</p>
       </div>
       <div class="solution-block">
-        <div class="solution-tag">Flagship Product Add-On</div>
-        <h3>Reference Data Governance</h3>
-        <p>An SAP-certified add-on that seamlessly extends standard SAP MDG workflows to your reference data and configuration tables. It introduces formal change-request processing and automated distribution, ensuring your foundational lookup data matches the integrity of your core master data.</p>
-        <a href="#">Explore the product &rarr;</a>
+        <div class="solution-tag en">Flagship Product Add-On</div>
+        <div class="solution-tag de">Flaggschiff‑Produkt‑Add‑On</div>
+        
+        <h3 class="en">Reference Data Governance</h3>
+        <h3 class="de">Reference Data Governance</h3>
+        
+        <p class="en">An SAP-certified add-on that seamlessly extends standard SAP MDG workflows to your reference data and configuration tables. It introduces formal change-request processing and automated distribution, ensuring your foundational lookup data matches the integrity of your core master data.</p>
+        <p class="de">Ein SAP‑zertifiziertes Add‑On, das die Standard‑SAP‑MDG‑Workflows nahtlos auf Ihre Referenz‑ und Konfigurationstabellen erweitert. Es führt formale Änderungsanträge und automatisierte Verteilung ein, sodass Ihre grundlegenden Nachschlagedaten dieselbe Integrität aufweisen wie Ihre zentralen Stammdaten.</p>
+        
+        <a href="#" class="en">Explore the product &rarr;</a>
+        <a href="#" class="de">Produkt entdecken &rarr;</a>
       </div>
     </div>
 
+    <!-- ACCORDION 1: CONSULTING -->
     <details class="accordion">
-      <summary class="accordion-header">Consulting: SAP MDG Implementation</summary>
+      <summary class="accordion-header">
+        <span class="en">Consulting: SAP MDG Implementation</span>
+        <span class="de">Consulting: SAP‑MDG‑Implementierung</span>
+      </summary>
       <div class="content-split">
         <div class="story-hook">
-          <div class="story-eyebrow">When complexity slows the programme</div>
-          <p>An S/4HANA migration or global transformation is underway. While the infrastructure is ready, aligning <strong>complex domain data</strong> (Finance, Business Partner, or Material) across legacy landscapes introduces architectural deadlocks that threaten the critical path to cutover.</p>
+          <div class="story-eyebrow en">When complexity slows the programme</div>
+          <div class="story-eyebrow de">Wenn Komplexität das Programm verlangsamt</div>
+          
+          <p class="en">An S/4HANA migration or global transformation is underway. While the infrastructure is ready, aligning <strong>complex domain data</strong> (Finance, Business Partner, or Material) across legacy landscapes introduces architectural deadlocks that threaten the critical path to cutover.</p>
+          <p class="de">Eine S/4HANA‑Migration oder globale Transformation läuft. Obwohl die Infrastruktur bereit ist, führt die Harmonisierung <strong>komplexer Domänendaten</strong> (Finanzen, Geschäftspartner oder Material) über Altsysteme hinweg zu architektonischen Blockaden, die den kritischen Pfad bis zum Cutover gefährden.</p>
         </div>
         <div class="solution-block">
-          <div class="solution-tag consulting">Implementation Services</div>
-          <h3>Architecting the Data Layer</h3>
-          <p>Comprehensive implementation services backed by 15+ years of experience deploying SAP MDG for complex global landscapes. We design robust operating models, define data ownership, and establish stable governance structures tailored to your specific business processes.</p>
-          <a href="#">Speak with a consultant &rarr;</a>
+          <div class="solution-tag consulting en">Implementation Services</div>
+          <div class="solution-tag consulting de">Implementierungsservices</div>
+          
+          <h3 class="en">Architecting the Data Layer</h3>
+          <h3 class="de">Architektur der Datenebene</h3>
+          
+          <p class="en">Comprehensive implementation services backed by 15+ years of experience deploying SAP MDG for complex global landscapes. We design robust operating models, define data ownership, and establish stable governance structures tailored to your specific business processes.</p>
+          <p class="de">Umfassende Implementierungsservices basierend auf über 15 Jahren Erfahrung in der Einführung von SAP MDG in komplexen globalen Landschaften. Wir entwerfen robuste Operating Models, definieren Datenverantwortlichkeiten und etablieren stabile Governance‑Strukturen, die auf Ihre Geschäftsprozesse zugeschnitten sind.</p>
+          
+          <a href="#" class="en">Speak with a consultant &rarr;</a>
+          <a href="#" class="de">Mit einem Consultant sprechen &rarr;</a>
         </div>
       </div>
     </details>
 
+    <!-- ACCORDION 2: TRAINING -->
     <details class="accordion">
-      <summary class="accordion-header">Training: Build Governance Capability</summary>
+      <summary class="accordion-header">
+        <span class="en">Training: Build Governance Capability</span>
+        <span class="de">Training: Governance‑Fähigkeiten aufbauen</span>
+      </summary>
       <div class="content-split">
         <div class="story-hook">
-          <div class="story-eyebrow">When adoption doesn’t follow implementation</div>
-          <p>The technical implementation of SAP MDG is complete, but user adoption is lagging. Data stewards find the standard out-of-the-box user interfaces complex for their daily volume, leading them to search for <strong>offline workarounds that bypass governance checks.</strong></p>
+          <div class="story-eyebrow en">When adoption doesn’t follow implementation</div>
+          <div class="story-eyebrow de">Wenn die Adoption der Implementierung nicht folgt</div>
+          
+          <p class="en">The technical implementation of SAP MDG is complete, but user adoption is lagging. Data stewards find the standard out-of-the-box user interfaces complex for their daily volume, leading them to search for <strong>offline workarounds that bypass governance checks.</strong></p>
+          <p class="de">Die technische Implementierung von SAP MDG ist abgeschlossen, aber die Benutzerakzeptanz bleibt zurück. Data Stewards empfinden die Standard‑Oberflächen als zu komplex für ihr tägliches Arbeitsvolumen und greifen daher zu <strong>Offline‑Workarounds, die Governance‑Kontrollen umgehen.</strong></p>
         </div>
         <div class="solution-block">
-          <div class="solution-tag training">Workshops & Enablement</div>
-          <h3>System Adoption & Process Design</h3>
-          <p>Tailored training, system reviews, and user-centric Design Thinking workshops. We optimize standard UIs and design intuitive, role-specific steward workflows that increase system adoption, ensuring your governance processes map perfectly to human workflows.</p>
-          <a href="#">View training modules &rarr;</a>
+          <div class="solution-tag training en">Workshops & Enablement</div>
+          <div class="solution-tag training de">Workshops & Enablement</div>
+          
+          <h3 class="en">System Adoption & Process Design</h3>
+          <h3 class="de">Systemadoption & Prozessdesign</h3>
+          
+          <p class="en">Tailored training, system reviews, and user-centric Design Thinking workshops. We optimize standard UIs and design intuitive, role-specific steward workflows that increase system adoption, ensuring your governance processes map perfectly to human workflows.</p>
+          <p class="de">Maßgeschneiderte Trainings, Systemreviews und nutzerzentrierte Design‑Thinking‑Workshops. Wir optimieren Standard‑UIs und gestalten intuitive, rollenspezifische Steward‑Workflows, die die Systemadoption erhöhen und sicherstellen, dass Ihre Governance‑Prozesse nahtlos zu den menschlichen Arbeitsabläufen passen.</p>
+          
+          <a href="#" class="en">View training modules &rarr;</a>
+          <a href="#" class="de">Trainingsmodule ansehen &rarr;</a>
         </div>
       </div>
     </details>
