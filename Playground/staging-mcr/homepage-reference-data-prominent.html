@@ -127,44 +127,28 @@
     letter-spacing: 0.05em;
   }
 
-  /* Modified Grid for Prominent Layout */
-  .offerings-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-  
-  .offering-card {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  /* Accordion Architecture Layout */
+  .architecture-container {
+    max-width: 1000px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    gap: 16px;
   }
 
-  /* Featured Full-Width Card */
-  .offering-card.featured {
-    grid-column: 1 / -1;
+  /* Shared Flex Layout for Content */
+  .content-split {
+    display: flex;
     flex-direction: row;
-    border: 2px solid var(--blue);
-    box-shadow: 0 8px 32px rgba(11, 102, 178, 0.08);
-  }
-  .offering-card.featured .story-hook {
-    flex: 1;
-    border-bottom: none;
-    border-right: 1px solid var(--line);
-  }
-  .offering-card.featured .solution-block {
-    flex: 1;
+    align-items: stretch;
   }
 
   .story-hook {
+    flex: 1;
     background: #fafbfc;
     padding: 32px;
-    border-bottom: 1px solid var(--line);
     position: relative;
+    border-right: 1px solid var(--line);
   }
   .story-hook::before {
     content: '';
@@ -174,10 +158,6 @@
     bottom: 0;
     width: 4px;
   }
-  .card-product .story-hook::before { background: var(--blue); }
-  .card-consulting .story-hook::before { background: var(--gold); }
-  .card-training .story-hook::before { background: var(--navy-soft); }
-
   .story-eyebrow {
     font-size: 0.75rem;
     font-weight: 700;
@@ -194,10 +174,11 @@
   .story-hook strong { font-weight: 700; }
 
   .solution-block {
+    flex: 1.2;
     padding: 32px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    background: #fff;
   }
   .solution-tag {
     font-size: 0.75rem;
@@ -205,22 +186,17 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 12px;
+    display: inline-block;
+    align-self: flex-start;
   }
-  .card-product .solution-tag { color: var(--blue); }
-  .card-consulting .solution-tag { color: var(--gold); }
-  .card-training .solution-tag { color: var(--navy-soft); }
 
   .solution-block h3 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--navy);
     margin-bottom: 12px;
     line-height: 1.3;
   }
-  .offering-card.featured .solution-block h3 {
-    font-size: 1.75rem;
-  }
-  
   .solution-block p {
     font-size: 0.95rem;
     color: var(--muted);
@@ -236,12 +212,87 @@
     align-items: center;
     gap: 4px;
   }
+  .solution-block a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* The Flagship Card */
+  .flagship-card {
+    border: 2px solid var(--blue);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(11, 102, 178, 0.08);
+    margin-bottom: 24px;
+  }
+  .flagship-card .story-hook::before { background: var(--blue); }
+  .flagship-card .solution-tag {
+    background: var(--blue);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .flagship-card .solution-block h3 { font-size: 1.75rem; }
+
+  /* Interactive Accordions */
+  details.accordion {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    transition: box-shadow 0.2s ease;
+  }
+  details.accordion:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  }
+  
+  summary.accordion-header {
+    padding: 24px 32px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--navy);
+    user-select: none;
+    background: #fafbfc;
+    list-style: none; /* removes default arrow in some browsers */
+    transition: background 0.2s;
+  }
+  summary.accordion-header::-webkit-details-marker {
+    display: none;
+  }
+  summary.accordion-header:hover {
+    background: #f0f9ff;
+  }
+  summary.accordion-header::after {
+    content: '+';
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--blue);
+    line-height: 1;
+  }
+  details[open].accordion summary.accordion-header::after {
+    content: '−';
+  }
+  details[open].accordion summary.accordion-header {
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
+
+  .accordion .story-hook::before { background: var(--gold); }
+  .accordion:last-child .story-hook::before { background: var(--navy-soft); }
+
+  .accordion .solution-tag.consulting { color: var(--gold); }
+  .accordion .solution-tag.training { color: var(--navy-soft); }
 
   @media (max-width: 900px) {
-    .offerings-grid { grid-template-columns: 1fr; }
-    .offering-card.featured { flex-direction: column; }
-    .offering-card.featured .story-hook { border-right: none; border-bottom: 1px solid var(--line); }
+    .content-split { flex-direction: column; }
+    .story-hook { border-right: none; border-bottom: 1px solid var(--line); }
     .stats-container { gap: 40px; }
+    summary.accordion-header { font-size: 1.1rem; padding: 20px; }
   }
 </style>
 </head>
@@ -283,9 +334,9 @@
     </div>
   </div>
 
-  <div id="offerings" class="offerings-grid">
+  <div id="offerings" class="architecture-container">
     
-    <div class="offering-card card-product featured">
+    <div class="flagship-card content-split">
       <div class="story-hook">
         <div class="story-eyebrow">When things get overlooked</div>
         <p>You acquire a business in Poland. Someone adds the new Polish Zloty and VAT rules. Because configuration tables often sit outside standard governance cycles, these values are maintained manually across local systems—leading to <strong>subtle, costly discrepancies</strong> in downstream consolidation reports.</p>
@@ -298,31 +349,37 @@
       </div>
     </div>
 
-    <div class="offering-card card-consulting">
-      <div class="story-hook">
-        <div class="story-eyebrow">When complexity slows the programme</div>
-        <p>An S/4HANA migration or global transformation is underway. While the infrastructure is ready, aligning <strong>complex domain data</strong> across legacy landscapes introduces architectural deadlocks.</p>
+    <details class="accordion">
+      <summary class="accordion-header">Consulting: SAP MDG Implementation</summary>
+      <div class="content-split">
+        <div class="story-hook">
+          <div class="story-eyebrow">When complexity slows the programme</div>
+          <p>An S/4HANA migration or global transformation is underway. While the infrastructure is ready, aligning <strong>complex domain data</strong> (Finance, Business Partner, or Material) across legacy landscapes introduces architectural deadlocks that threaten the critical path to cutover.</p>
+        </div>
+        <div class="solution-block">
+          <div class="solution-tag consulting">Implementation Services</div>
+          <h3>Architecting the Data Layer</h3>
+          <p>Comprehensive implementation services backed by 15+ years of experience deploying SAP MDG for complex global landscapes. We design robust operating models, define data ownership, and establish stable governance structures tailored to your specific business processes.</p>
+          <a href="#">Speak with a consultant &rarr;</a>
+        </div>
       </div>
-      <div class="solution-block">
-        <div class="solution-tag">Consulting</div>
-        <h3>SAP MDG Implementation</h3>
-        <p>Comprehensive implementation services backed by 15+ years of experience deploying SAP MDG. We establish stable governance structures tailored to your specific business processes.</p>
-        <a href="#">Speak with a consultant &rarr;</a>
-      </div>
-    </div>
+    </details>
 
-    <div class="offering-card card-training">
-      <div class="story-hook">
-        <div class="story-eyebrow">When adoption doesn’t follow implementation</div>
-        <p>The technical implementation is complete, but user adoption is lagging. Data stewards bypass governance checks because the standard interfaces do not map to human workflows.</p>
+    <details class="accordion">
+      <summary class="accordion-header">Training: Build Governance Capability</summary>
+      <div class="content-split">
+        <div class="story-hook">
+          <div class="story-eyebrow">When adoption doesn’t follow implementation</div>
+          <p>The technical implementation of SAP MDG is complete, but user adoption is lagging. Data stewards find the standard out-of-the-box user interfaces complex for their daily volume, leading them to search for <strong>offline workarounds that bypass governance checks.</strong></p>
+        </div>
+        <div class="solution-block">
+          <div class="solution-tag training">Workshops & Enablement</div>
+          <h3>System Adoption & Process Design</h3>
+          <p>Tailored training, system reviews, and user-centric Design Thinking workshops. We optimize standard UIs and design intuitive, role-specific steward workflows that increase system adoption, ensuring your governance processes map perfectly to human workflows.</p>
+          <a href="#">View training modules &rarr;</a>
+        </div>
       </div>
-      <div class="solution-block">
-        <div class="solution-tag">Training & Workshops</div>
-        <h3>Build Governance Capability</h3>
-        <p>Tailored training, system reviews, and user-centric Design Thinking workshops designed to align user interfaces with human workflows, ensuring adoption.</p>
-        <a href="#">View training modules &rarr;</a>
-      </div>
-    </div>
+    </details>
 
   </div>
 
