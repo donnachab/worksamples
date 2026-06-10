@@ -1,1 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Itego — SAP Master Data Governance</title>
 
+<style>
+  :root {
+    --bg: #ffffff;
+    --navy: #0f2b44;
+    --navy-soft: #123a5a;
+    --blue: #0b66b2;
+    --blue-soft: rgba(11,102,178,0.08);
+    --gold: #f0ab00;
+    --muted: #5b6770;
+    --line: rgba(0,0,0,0.06);
+
+    --page-pad: 32px;
+    --container-max: 1200px;
+    --radius: 12px;
+
+    --base: 16px;
+    --h1: 2.5rem;
+    --h2: 1.5rem;
+    --lead: 1.05rem;
+    --stat: 3rem;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: var(--base);
+    color: var(--navy);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  header {
+    background: #fff;
+    padding: 24px var(--page-pad);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: -0.02em;
+  }
+  nav a {
+    margin-left: 24px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--blue);
+  }
+
+  .page {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 60px var(--page-pad) 100px;
+  }
+
+  .intro-section {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px;
+  }
+  .intro-eyebrow {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    background: var(--blue-soft);
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+  .intro-title {
+    font-size: var(--h1);
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.15;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+  .intro-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    margin-bottom: 80px;
+    flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-number {
+    font-size: var(--stat);
+    font-weight: 800;
+    color: var(--navy-soft);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Modified Grid for Prominent Layout */
+  .offerings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  
+  .offering-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Featured Full-Width Card */
+  .offering-card.featured {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    border: 2px solid var(--blue);
+    box-shadow: 0 8px 32px rgba(11, 102, 178, 0.08);
+  }
+  .offering-card.featured .story-hook {
+    flex: 1;
+    border-bottom: none;
+    border-right: 1px solid var(--line);
+  }
+  .offering-card.featured .solution-block {
+    flex: 1;
+  }
+
+  .story-hook {
+    background: #fafbfc;
+    padding: 32px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .story-hook::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+  }
+  .card-product .story-hook::before { background: var(--blue); }
+  .card-consulting .story-hook::before { background: var(--gold); }
+  .card-training .story-hook::before { background: var(--navy-soft); }
+
+  .story-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    color: var(--muted);
+  }
+  .story-hook p {
+    font-size: 1rem;
+    color: var(--navy);
+    line-height: 1.6;
+  }
+  .story-hook strong { font-weight: 700; }
+
+  .solution-block {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .solution-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .card-product .solution-tag { color: var(--blue); }
+  .card-consulting .solution-tag { color: var(--gold); }
+  .card-training .solution-tag { color: var(--navy-soft); }
+
+  .solution-block h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .offering-card.featured .solution-block h3 {
+    font-size: 1.75rem;
+  }
+  
+  .solution-block p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+  .solution-block a {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--blue);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  @media (max-width: 900px) {
+    .offerings-grid { grid-template-columns: 1fr; }
+    .offering-card.featured { flex-direction: column; }
+    .offering-card.featured .story-hook { border-right: none; border-bottom: 1px solid var(--line); }
+    .stats-container { gap: 40px; }
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">Itego logo</div>
+    <nav>
+      <a href="#offerings">Product</a>
+      <a href="#offerings">Consulting</a>
+      <a href="#offerings">Resources</a>
+      <a href="#">Talk to us</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+  
+  <div class="intro-section">
+    <div class="intro-eyebrow">SAP Master Data Governance</div>
+    <h1 class="intro-title">Your SAP landscape relies on master data.<br>Are you governing all of it?</h1>
+    <p class="intro-sub">We secure your operational integrity across master and reference data.</p>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-item">
+      <div class="stat-number">15+</div>
+      <div class="stat-label">Years in SAP MDG</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">150+</div>
+      <div class="stat-label">Tables Governed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">Days</div>
+      <div class="stat-label">To Go Live</div>
+    </div>
+  </div>
+
+  <div id="offerings" class="offerings-grid">
+    
+    <div class="offering-card card-product featured">
+      <div class="story-hook">
+        <div class="story-eyebrow">When things get overlooked</div>
+        <p>You acquire a business in Poland. Someone adds the new Polish Zloty and VAT rules. Because configuration tables often sit outside standard governance cycles, these values are maintained manually across local systems—leading to <strong>subtle, costly discrepancies</strong> in downstream consolidation reports.</p>
+      </div>
+      <div class="solution-block">
+        <div class="solution-tag">Flagship Product Add-On</div>
+        <h3>Reference Data Governance</h3>
+        <p>An SAP-certified add-on that seamlessly extends standard SAP MDG workflows to your reference data and configuration tables. It introduces formal change-request processing and automated distribution, ensuring your foundational lookup data matches the integrity of your core master data.</p>
+        <a href="#">Explore the product &rarr;</a>
+      </div>
+    </div>
+
+    <div class="offering-card card-consulting">
+      <div class="story-hook">
+        <div class="story-eyebrow">When complexity slows the programme</div>
+        <p>An S/4HANA migration or global transformation is underway. While the infrastructure is ready, aligning <strong>complex domain data</strong> across legacy landscapes introduces architectural deadlocks.</p>
+      </div>
+      <div class="solution-block">
+        <div class="solution-tag">Consulting</div>
+        <h3>SAP MDG Implementation</h3>
+        <p>Comprehensive implementation services backed by 15+ years of experience deploying SAP MDG. We establish stable governance structures tailored to your specific business processes.</p>
+        <a href="#">Speak with a consultant &rarr;</a>
+      </div>
+    </div>
+
+    <div class="offering-card card-training">
+      <div class="story-hook">
+        <div class="story-eyebrow">When adoption doesn’t follow implementation</div>
+        <p>The technical implementation is complete, but user adoption is lagging. Data stewards bypass governance checks because the standard interfaces do not map to human workflows.</p>
+      </div>
+      <div class="solution-block">
+        <div class="solution-tag">Training & Workshops</div>
+        <h3>Build Governance Capability</h3>
+        <p>Tailored training, system reviews, and user-centric Design Thinking workshops designed to align user interfaces with human workflows, ensuring adoption.</p>
+        <a href="#">View training modules &rarr;</a>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+</body>
+</html>
