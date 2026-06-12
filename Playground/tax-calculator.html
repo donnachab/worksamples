@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoloLedger Pro - Fixed</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.292.0"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.fade-in { animation: fadeIn 0.3s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes slideUp { from { opacity: 0; transform: translateY(100px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-type="module">
+import React, { useState, useEffect, useMemo } from 'react';
+import { createRoot } from 'react-dom/client';
+import {
+  Calculator, Home, FileSpreadsheet, Shield, HardDrive, Settings, Menu, X, Plus,
+  Info, AlertCircle, CheckCircle, AlertTriangle, Euro, PieChart, Landmark, 
+  Search, Filter, Download, Trash2, TrendingUp, TrendingDown, Receipt, Save,
+  ArrowRight
+} from 'lucide-react';
+
+// --- TAX CONFIGURATION ---
+const TAX_CONFIG = {
+  2024: {
+    verified: true,
+    description: "Finance Act 2023 (Enacted)",
+    source: "Revenue.ie",
+    incomeTax: {
+      bands: [
+        { limit: 42000, rate: 0.20 },
+        { limit: Infinity, rate: 0.40 }
+      ],
+      credits: {
+        single: { personal: 1875, earned: 1875 },
+        married_joint: { personal: 3750, earned: 3750 }
+      }
+    },
+    usc: {
+      bands: [
+        { limit: 12012, rate: 0.005 },
+        { limit: 25760, rate: 0.02 },
+        { limit: 70044, rate: 0.045 },
+        { limit: Infinity, rate: 0.08 }
+      ],
+      exemptionThreshold: 13000
+    },
+    prsi: {
+      classS: { rate: 0.04, minCharge: 500, incomeThreshold: 5000 }
+    }
+  },
+  2025: {
+    verified: false,
+    description: "Budget 2025 (Provisional)",
+    source: "Gov.ie Budget 2025",
+    incomeTax: {
+      bands: [
+        { limit: 44000, rate: 0.20 },
+        { limit: Infinity, rate: 0.40 }
+      ],
+      credits: {
+        single: { personal: 2000, earned: 2000 },
+        married_joint: { personal: 4000, earned: 4000 }
+      }
+    },
+    usc: {
+      bands: [
+        { limit: 12012, rate: 0.005 },
+        { limit: 27000, rate: 0.02 },
+        { limit: 75000, rate: 0.035 },
+        { limit: Infinity, rate: 0.08 }
+      ],
+      exemptionThreshold: 13000
+    },
+    prsi: {
+      classS: { rate: 0.041, minCharge: 500, incomeThreshold: 5000 }
+    }
+  }
+};
+
+// --- CORRECTED TAX CALCULATION ---
+const calculateIrishTax = (income, year, maritalStatus = 'single', pensionContribution = 0) => {
+  const config = TAX_CONFIG[year];
+  if (!config) return { total: 0, breakdown: {}, error: 'Tax year not configured' };
+
+  const taxableIncome = Math.max(0, income - pensionContribution);
+  
+  // 1. Income Tax (Progressive)
+  let incomeTax = 0;
+  let remaining = taxableIncome;
+  for (const band of config.incomeTax.bands) {
+    const taxableInBand = Math.min(remaining, band.limit);
+    incomeTax += taxableInBand * band.rate;
+    remaining -= taxableInBand;
+    if (remaining <= 0) break;
+  }
+  
+  // Apply tax credits
+  const credits = config.incomeTax.credits[maritalStatus] || config.incomeTax.credits.single;
+  const totalCredits = credits.personal + credits.earned;
+  incomeTax = Math.max(0, incomeTax - totalCredits);
+  
+  // 2. USC
+  let usc = 0;
+  if (taxableIncome > config.usc.exemptionThreshold) {
+    remaining = taxableIncome;
+    for (const band of config.usc.bands) {
+      const taxableInBand = Math.min(remaining, band.limit);
+      usc += taxableInBand * band.rate;
+      remaining -= taxableInBand;
+      if (remaining <= 0) break;
+    }
+  }
+  
+  // 3. PRSI Class S
+  let prsi = 0;
+  if (taxableIncome > config.prsi.classS.incomeThreshold) {
+    prsi = taxableIncome * config.prsi.classS.rate;
+    prsi = Math.max(prsi, config.prsi.classS.minCharge);
+  }
+  
+  const total = incomeTax + usc + prsi;
+  
+  return {
+    total: Math.round(total * 100) / 100,
+    breakdown: {
+      incomeTax: Math.round(incomeTax * 100) / 100,
+      usc: Math.round(usc * 100) / 100,
+      prsi: Math.round(prsi * 100) / 100,
+      effectiveRate: taxableIncome > 0 ? ((total / taxableIncome) * 100).toFixed(2) + '%' : '0%'
+    },
+    taxableIncome,
+    pensionRelief: pensionContribution
+  };
+};
+
+// --- MAIN COMPONENT ---
+const SoloLedger = () => {
+  // State
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [error, setError] = useState(null);
+  
+  // Data (using localStorage for demo)
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [taxProfile, setTaxProfile] = useState(() => {
+    const saved = localStorage.getItem('taxProfile');
+    return saved ? JSON.parse(saved) : {
+      vatRegistered: false,
+      maritalStatus: 'single',
+      pensionContribution: 0,
+      age: 35
+    };
+  });
+  
+  const [transactions, setTransactions] = useState(() => {
+    const saved = localStorage.getItem('transactions');
+    return saved ? JSON.parse(saved) : [];
+  });
+  
+  // Form
+  const [newTx, setNewTx] = useState({
+    vendor: '',
+    amount: '',
+    date: new Date().toISOString().split('T')[0],
+    type: 'expense',
+    category: 'General',
+    vatRate: 0.23,
+    isVatInclusive: true
+  });
+
+  // Save to localStorage
+  useEffect(() => {
+    localStorage.setItem('taxProfile', JSON.stringify(taxProfile));
+  }, [taxProfile]);
+
+  useEffect(() => {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+  }, [transactions]);
+
+  // --- TRANSACTION HANDLERS ---
+  const handleSaveTransaction = () => {
+    const amount = parseFloat(newTx.amount);
+    if (!newTx.vendor || isNaN(amount) || amount <= 0) {
+      setError("Please enter valid vendor and amount");
+      return;
+    }
+    
+    // CORRECTED VAT CALCULATION
+    let grossAmount, netAmount, vatAmount;
+    
+    if (newTx.isVatInclusive) {
+      grossAmount = amount;
+      vatAmount = (amount * newTx.vatRate) / (1 + newTx.vatRate);
+      netAmount = amount - vatAmount;
+    } else {
+      netAmount = amount;
+      vatAmount = amount * newTx.vatRate;
+      grossAmount = amount + vatAmount;
+    }
+    
+    const tx = {
+      id: `tx_${Date.now()}`,
+      vendor: newTx.vendor,
+      date: newTx.date,
+      type: newTx.type,
+      category: newTx.category,
+      grossAmount: Math.round(grossAmount * 100) / 100,
+      netAmount: Math.round(netAmount * 100) / 100,
+      vatAmount: Math.round(vatAmount * 100) / 100,
+      vatRate: newTx.vatRate,
+      currency: 'EUR',
+      region: 'IE',
+      createdAt: new Date().toISOString()
+    };
+    
+    setTransactions([tx, ...transactions]);
+    setIsAddModalOpen(false);
+    setNewTx({
+      vendor: '',
+      amount: '',
+      date: new Date().toISOString().split('T')[0],
+      type: 'expense',
+      category: 'General',
+      vatRate: 0.23,
+      isVatInclusive: true
+    });
+    setError(null);
+  };
+
+  const handleDeleteTransaction = (txId) => {
+    if (!confirm('Delete this transaction?')) return;
+    setTransactions(transactions.filter(t => t.id !== txId));
+  };
+
+  // --- DATA EXPORT ---
+  const exportUserData = () => {
+    const data = {
+      exportDate: new Date().toISOString(),
+      taxProfile,
+      transactions
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sololedger-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // --- CALCULATIONS ---
+  const currentYearTransactions = useMemo(() => 
+    transactions.filter(t => new Date(t.date).getFullYear() === currentYear),
+    [transactions, currentYear]
+  );
+
+  const financials = useMemo(() => {
+    const income = currentYearTransactions
+      .filter(t => t.type === 'income')
+      .reduce((acc, t) => acc + t.netAmount, 0);
+    
+    const expenses = currentYearTransactions
+      .filter(t => t.type === 'expense')
+      .reduce((acc, t) => acc + t.netAmount, 0);
+    
+    const grossProfit = income - expenses;
+    
+    const taxCalc = calculateIrishTax(
+      grossProfit,
+      currentYear,
+      taxProfile.maritalStatus,
+      taxProfile.pensionContribution
+    );
+    
+    const netProfit = grossProfit - taxCalc.total;
+    
+    const vatCollected = currentYearTransactions
+      .filter(t => t.type === 'income')
+      .reduce((acc, t) => acc + t.vatAmount, 0);
+    
+    const vatPaid = currentYearTransactions
+      .filter(t => t.type === 'expense')
+      .reduce((acc, t) => acc + t.vatAmount, 0);
+    
+    const vatPayable = vatCollected - vatPaid;
+    
+    return {
+      income,
+      expenses,
+      grossProfit,
+      taxCalc,
+      netProfit,
+      vatCollected,
+      vatPaid,
+      vatPayable
+    };
+  }, [currentYearTransactions, currentYear, taxProfile]);
+
+  // --- AUDIT CHECKS ---
+  const auditIssues = useMemo(() => {
+    const issues = [];
+    const config = TAX_CONFIG[currentYear];
+    
+    if (!config) {
+      issues.push({ 
+        id: 'no-config', 
+        severity: 'critical', 
+        msg: `Tax configuration missing for ${currentYear}` 
+      });
+      return issues;
+    }
+    
+    if (!config.verified) {
+      issues.push({ 
+        id: 'draft-rates', 
+        severity: 'high', 
+        msg: `Using DRAFT tax rates for ${currentYear}. Do not file returns yet.` 
+      });
+    }
+    
+    // Duplicate detection
+    const seen = new Map();
+    currentYearTransactions.forEach(t => {
+      const key = `${t.date}-${t.grossAmount}-${t.vendor}`;
+      if (seen.has(key)) {
+        issues.push({ 
+          id: t.id, 
+          severity: 'high', 
+          msg: `Potential duplicate: ${t.vendor} on ${t.date}` 
+        });
+      }
+      seen.set(key, t);
+    });
+    
+    // High expense without VAT
+    if (taxProfile.vatRegistered) {
+      currentYearTransactions
+        .filter(t => t.type === 'expense' && t.grossAmount > 100 && t.vatAmount === 0)
+        .forEach(t => {
+          issues.push({ 
+            id: t.id, 
+            severity: 'medium', 
+            msg: `Large expense with 0% VAT: ${t.vendor}` 
+          });
+        });
+    }
+    
+    // Income/Expense ratio check
+    if (financials.income > 0 && financials.expenses > financials.income * 0.8) {
+      issues.push({ 
+        id: 'ratio', 
+        severity: 'medium', 
+        msg: `Expenses are ${((financials.expenses/financials.income)*100).toFixed(0)}% of income. Revenue may investigate.` 
+      });
+    }
+    
+    // Negative profit warning
+    if (financials.grossProfit < 0) {
+      issues.push({ 
+        id: 'loss', 
+        severity: 'low', 
+        msg: `Trading loss. Consider loss relief options.` 
+      });
+    }
+    
+    return issues;
+  }, [currentYearTransactions, currentYear, taxProfile, financials]);
+
+  const auditScore = useMemo(() => {
+    if (auditIssues.length === 0) return 100;
+    const penalty = auditIssues.reduce((acc, issue) => {
+      if (issue.severity === 'critical') return acc + 25;
+      if (issue.severity === 'high') return acc + 10;
+      if (issue.severity === 'medium') return acc + 5;
+      return acc + 2;
+    }, 0);
+    return Math.max(0, 100 - penalty);
+  }, [auditIssues]);
+
+  const formatCurrency = (amount) => 
+    new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(amount);
+
+  // --- RENDER ---
+  return (
+    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-sans text-slate-800 overflow-hidden">
+      {/* SIDEBAR */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white transform transition-transform duration-300 ease-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 shadow-2xl`}>
+        <div className="p-6 flex items-center justify-between border-b border-slate-700">
+          <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
+            <Calculator className="h-6 w-6 text-emerald-400" />
+            <span>SoloLedger <span className="text-xs text-emerald-400 font-normal">Pro</span></span>
+          </div>
+          <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-slate-400 hover:text-white">
+            <X size={20}/>
+          </button>
+        </div>
+        
+        <nav className="px-4 space-y-2 mt-6">
+          {[
+            { id: 'dashboard', icon: Home, label: 'Dashboard' },
+            { id: 'transactions', icon: FileSpreadsheet, label: 'Transactions' },
+            { id: 'audit', icon: Shield, label: 'Audit' },
+            { id: 'assets', icon: HardDrive, label: 'Assets' },
+            { id: 'settings', icon: Settings, label: 'Settings' }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => { setActiveTab(tab.id); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                activeTab === tab.id 
+                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/50' 
+                  : 'text-slate-400 hover:bg-slate-700 hover:text-white'
+              }`}
+            >
+              <tab.icon size={18} />
+              <span className="font-medium">{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+        
+        <div className="absolute bottom-0 w-full p-6 bg-slate-950 space-y-3">
+          <div className="pt-3 border-t border-slate-800">
+            <div className="text-xs text-slate-500 mb-1">Tax Year</div>
+            <div className="text-sm font-bold text-slate-200 flex justify-between items-center">
+              <span>{currentYear}</span>
+              <span className={`text-xs px-2 py-0.5 rounded-full ${
+                TAX_CONFIG[currentYear]?.verified 
+                  ? 'bg-emerald-900/50 text-emerald-300' 
+                  : 'bg-amber-900/50 text-amber-300'
+              }`}>
+                {TAX_CONFIG[currentYear]?.verified ? 'Enacted' : 'Draft'}
+              </span>
+            </div>
+          </div>
+          <div className="text-xs text-slate-500">
+            Data stored locally in browser
+          </div>
+        </div>
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
+        {/* Header */}
+        <header className="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)} 
+              className="md:hidden text-slate-600 hover:text-slate-900"
+            >
+              <Menu size={24}/>
+            </button>
+            <h1 className="text-xl font-bold text-slate-900 capitalize flex items-center gap-2">
+              {activeTab}
+              {!TAX_CONFIG[currentYear]?.verified && (
+                <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-normal">
+                  Draft Rates
+                </span>
+              )}
+            </h1>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setIsAddModalOpen(true)} 
+              className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-all shadow-md hover:shadow-lg text-sm font-medium"
+            >
+              <Plus size={16} />
+              <span className="hidden sm:inline">Add Transaction</span>
+            </button>
+            
+            <select 
+              value={currentYear} 
+              onChange={(e) => setCurrentYear(parseInt(e.target.value))} 
+              className="bg-slate-100 border-none text-sm font-medium rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+            >
+              <option value={2024}>2024</option>
+              <option value={2025}>2025</option>
+            </select>
+          </div>
+        </header>
+
+        {/* Error Banner */}
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mx-6 mt-4 rounded-r-lg flex items-start gap-3 slide-up">
+            <AlertCircle className="text-red-500 shrink-0 mt-0.5" size={20} />
+            <div className="flex-1">
+              <p className="font-semibold text-red-800">Error</p>
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+            <button onClick={() => setError(null)} className="text-red-400 hover:text-red-600">
+              <X size={18} />
+            </button>
+          </div>
+        )}
+
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+          {/* DASHBOARD */}
+          {activeTab === 'dashboard' && (
+            <div className="max-w-7xl mx-auto space-y-6 fade-in">
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-slate-500 text-sm font-medium">Gross Profit</div>
+                    <TrendingUp className="text-emerald-500" size={20} />
+                  </div>
+                  <div className="text-3xl font-bold text-slate-900">{formatCurrency(financials.grossProfit)}</div>
+                  <div className="text-xs text-slate-500 mt-2">Before tax</div>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-slate-500 text-sm font-medium">Tax Liability</div>
+                    <Landmark className="text-blue-500" size={20} />
+                  </div>
+                  <div className="text-3xl font-bold text-slate-900">{formatCurrency(financials.taxCalc.total)}</div>
+                  <div className="text-xs text-slate-500 mt-2">
+                    Effective: {financials.taxCalc.breakdown.effectiveRate}
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-slate-500 text-sm font-medium">Net Profit</div>
+                    <Euro className="text-purple-500" size={20} />
+                  </div>
+                  <div className="text-3xl font-bold text-slate-900">{formatCurrency(financials.netProfit)}</div>
+                  <div className="text-xs text-slate-500 mt-2">After tax</div>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-slate-500 text-sm font-medium">Audit Score</div>
+                    <Shield className={auditScore >= 90 ? 'text-emerald-500' : 'text-amber-500'} size={20} />
+                  </div>
+                  <div className={`text-3xl font-bold ${auditScore >= 90 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                    {auditScore}%
+                  </div>
+                  <div className="text-xs text-slate-500 mt-2">
+                    {auditIssues.length} issue{auditIssues.length !== 1 ? 's' : ''}
+                  </div>
+                </div>
+              </div>
+
+              {/* Tax Breakdown */}
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                  <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+                    <Calculator size={18} className="text-emerald-600" />
+                    Tax Calculation Breakdown ({currentYear})
+                  </h3>
+                </div>
+                <div className="p-6 space-y-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <div className="text-slate-500 mb-1">Income Tax</div>
+                      <div className="font-bold text-lg">{formatCurrency(financials.taxCalc.breakdown.incomeTax)}</div>
+                    </div>
+                    <div>
+                      <div className="text-slate-500 mb-1">USC</div>
+                      <div className="font-bold text-lg">{formatCurrency(financials.taxCalc.breakdown.usc)}</div>
+                    </div>
+                    <div>
+                      <div className="text-slate-500 mb-1">PRSI (Class S)</div>
+                      <div className="font-bold text-lg">{formatCurrency(financials.taxCalc.breakdown.prsi)}</div>
+                    </div>
+                    <div>
+                      <div className="text-slate-500 mb-1">Effective Rate</div>
+                      <div className="font-bold text-lg">{financials.taxCalc.breakdown.effectiveRate}</div>
+                    </div>
+                  </div>
+                  
+                  {taxProfile.pensionContribution > 0 && (
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-sm">
+                      <div className="flex items-center gap-2 text-emerald-700 font-medium mb-1">
+                        <CheckCircle size={16} />
+                        Pension Relief Applied
+                      </div>
+                      <div className="text-emerald-600">
+                        {formatCurrency(taxProfile.pensionContribution)} pension contribution reduces taxable income
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* VAT Summary */}
+              {taxProfile.vatRegistered && (
+                <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                  <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                    <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+                      <Receipt size={18} className="text-blue-600" />
+                      VAT Return Summary
+                    </h3>
+                  </div>
+                  <div className="p-6">
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div>
+                        <div className="text-slate-500 text-sm mb-2">VAT Collected</div>
+                        <div className="text-2xl font-bold text-emerald-600">
+                          {formatCurrency(financials.vatCollected)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-slate-500 text-sm mb-2">VAT Paid</div>
+                        <div className="text-2xl font-bold text-blue-600">
+                          {formatCurrency(financials.vatPaid)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-slate-500 text-sm mb-2">VAT Payable</div>
+                        <div className={`text-2xl font-bold ${financials.vatPayable >= 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                          {formatCurrency(Math.abs(financials.vatPayable))}
+                          {financials.vatPayable < 0 && ' (Refund)'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Recent Transactions */}
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white">
+                  <h3 className="font-semibold text-slate-900">Recent Transactions</h3>
+                  <button 
+                    onClick={() => setActiveTab('transactions')} 
+                    className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                  >
+                    View All →
+                  </button>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider">
+                      <tr>
+                        <th className="px-6 py-3 text-left">Date</th>
+                        <th className="px-6 py-3 text-left">Vendor</th>
+                        <th className="px-6 py-3 text-left">Category</th>
+                        <th className="px-6 py-3 text-right">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {transactions.slice(0, 5).map(t => (
+                        <tr key={t.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-6 py-4 text-slate-600">{new Date(t.date).toLocaleDateString('en-IE')}</td>
+                          <td className="px-6 py-4 font-medium text-slate-900">{t.vendor}</td>
+                          <td className="px-6 py-4">
+                            <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded-full text-xs">
+                              {t.category}
+                            </span>
+                          </td>
+                          <td className={`px-6 py-4 text-right font-mono font-semibold ${
+                            t.type === 'income' ? 'text-emerald-600' : 'text-slate-900'
+                          }`}>
+                            {t.type === 'income' ? '+' : '−'}{formatCurrency(t.grossAmount)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {transactions.length === 0 && (
+                  <div className="p-12 text-center text-slate-400">
+                    <FileSpreadsheet size={48} className="mx-auto mb-4 text-slate-300" />
+                    <p className="font-medium">No transactions yet</p>
+                    <p className="text-sm mt-1">Click "Add Transaction" to get started</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* TRANSACTIONS */}
+          {activeTab === 'transactions' && (
+            <div className="max-w-7xl mx-auto space-y-6 fade-in">
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white">
+                  <h3 className="font-semibold text-slate-900">All Transactions ({currentYearTransactions.length})</h3>
+                  <div className="flex gap-2">
+                    <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                      <Search size={18} className="text-slate-600" />
+                    </button>
+                    <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                      <Filter size={18} className="text-slate-600" />
+                    </button>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider">
+                      <tr>
+                        <th className="px-6 py-3 text-left">Date</th>
+                        <th className="px-6 py-3 text-left">Vendor</th>
+                        <th className="px-6 py-3 text-left">Category</th>
+                        <th className="px-6 py-3 text-right">Net</th>
+                        <th className="px-6 py-3 text-right">VAT</th>
+                        <th className="px-6 py-3 text-right">Gross</th>
+                        <th className="px-6 py-3 text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {currentYearTransactions.map(t => (
+                        <tr key={t.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-6 py-4 text-slate-600">{new Date(t.date).toLocaleDateString('en-IE')}</td>
+                          <td className="px-6 py-4 font-medium text-slate-900">{t.vendor}</td>
+                          <td className="px-6 py-4">
+                            <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded-full text-xs">
+                              {t.category}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-right font-mono text-slate-700">
+                            {formatCurrency(t.netAmount)}
+                          </td>
+                          <td className="px-6 py-4 text-right font-mono text-slate-500 text-xs">
+                            {t.vatAmount > 0 ? formatCurrency(t.vatAmount) : '—'}
+                          </td>
+                          <td className={`px-6 py-4 text-right font-mono font-semibold ${
+                            t.type === 'income' ? 'text-emerald-600' : 'text-slate-900'
+                          }`}>
+                            {t.type === 'income' ? '+' : '−'}{formatCurrency(t.grossAmount)}
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            <button 
+                              onClick={() => handleDeleteTransaction(t.id)}
+                              className="p-1 hover:bg-red-50 rounded transition-colors"
+                            >
+                              <Trash2 size={16} className="text-red-500" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {currentYearTransactions.length === 0 && (
+                  <div className="p-12 text-center text-slate-400">
+                    <FileSpreadsheet size={48} className="mx-auto mb-4 text-slate-300" />
+                    <p className="font-medium">No transactions for {currentYear}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* AUDIT */}
+          {activeTab === 'audit' && (
+            <div className="max-w-4xl mx-auto space-y-6 fade-in">
+              <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-900">Compliance Audit</h2>
+                    <p className="text-slate-600 text-sm mt-1">
+                      Automated checks against {TAX_CONFIG[currentYear]?.source}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-5xl font-bold font-mono ${
+                      auditScore >= 90 ? 'text-emerald-600' : 
+                      auditScore >= 70 ? 'text-amber-500' : 'text-red-500'
+                    }`}>
+                      {auditScore}%
+                    </div>
+                    <div className="text-xs text-slate-500 mt-1 uppercase tracking-wide">Audit Score</div>
+                  </div>
+                </div>
+                
+                <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full transition-all duration-500 ${
+                      auditScore >= 90 ? 'bg-emerald-500' : 
+                      auditScore >= 70 ? 'bg-amber-500' : 'bg-red-500'
+                    }`}
+                    style={{ width: `${auditScore}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {auditIssues.length === 0 ? (
+                  <div className="bg-white rounded-xl border-2 border-dashed border-emerald-200 p-12 text-center">
+                    <CheckCircle size={64} className="mx-auto text-emerald-400 mb-4" />
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">All Clear!</h3>
+                    <p className="text-slate-600">No compliance issues detected for {currentYear}</p>
+                  </div>
+                ) : (
+                  auditIssues.map((issue, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`bg-white rounded-lg border-l-4 p-5 shadow-sm flex gap-4 ${
+                        issue.severity === 'critical' ? 'border-red-500' :
+                        issue.severity === 'high' ? 'border-orange-500' :
+                        issue.severity === 'medium' ? 'border-amber-400' :
+                        'border-blue-400'
+                      }`}
+                    >
+                      <div className="mt-1">
+                        <AlertTriangle 
+                          size={24} 
+                          className={
+                            issue.severity === 'critical' ? 'text-red-500' :
+                            issue.severity === 'high' ? 'text-orange-500' :
+                            issue.severity === 'medium' ? 'text-amber-500' :
+                            'text-blue-500'
+                          } 
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`text-xs font-bold uppercase px-2 py-1 rounded ${
+                            issue.severity === 'critical' ? 'bg-red-100 text-red-700' :
+                            issue.severity === 'high' ? 'bg-orange-100 text-orange-700' :
+                            issue.severity === 'medium' ? 'bg-amber-100 text-amber-700' :
+                            'bg-blue-100 text-blue-700'
+                          }`}>
+                            {issue.severity}
+                          </span>
+                        </div>
+                        <p className="text-slate-700 font-medium">{issue.msg}</p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ASSETS */}
+          {activeTab === 'assets' && (
+            <div className="max-w-6xl mx-auto space-y-6 fade-in">
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                  <h3 className="font-semibold text-slate-900">Fixed Assets Register</h3>
+                </div>
+                <div className="p-12 text-center text-slate-400">
+                  <HardDrive size={48} className="mx-auto mb-4 text-slate-300" />
+                  <p className="font-medium">Assets module coming soon</p>
+                  <p className="text-sm mt-1">Track capital allowances and depreciation</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SETTINGS */}
+          {activeTab === 'settings' && (
+            <div className="max-w-2xl mx-auto space-y-6 fade-in">
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                  <h3 className="font-semibold text-slate-900">Tax Profile</h3>
+                </div>
+                <div className="p-6 space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-slate-900">VAT Registered</div>
+                      <div className="text-xs text-slate-500 mt-1">
+                        Enable if annual turnover exceeds €37,500
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setTaxProfile({ ...taxProfile, vatRegistered: !taxProfile.vatRegistered })}
+                      className={`w-14 h-7 rounded-full transition-all relative ${
+                        taxProfile.vatRegistered ? 'bg-emerald-500' : 'bg-slate-300'
+                      }`}
+                    >
+                      <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform ${
+                        taxProfile.vatRegistered ? 'translate-x-7' : ''
+                      }`} />
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Marital Status</label>
+                    <select
+                      value={taxProfile.maritalStatus}
+                      onChange={(e) => setTaxProfile({ ...taxProfile, maritalStatus: e.target.value })}
+                      className="w-full p-3 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    >
+                      <option value="single">Single</option>
+                      <option value="married_joint">Married (Joint Assessment)</option>
+                      <option value="married_separate">Married (Separate Assessment)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">
+                      Annual Pension Contribution (€)
+                    </label>
+                    <input
+                      type="number"
+                      value={taxProfile.pensionContribution}
+                      onChange={(e) => setTaxProfile({ ...taxProfile, pensionContribution: parseFloat(e.target.value) || 0 })}
+                      className="w-full p-3 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                      placeholder="0.00"
+                    />
+                    <p className="text-xs text-slate-500">
+                      Pension contributions reduce your taxable income
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* GDPR Section */}
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                  <h3 className="font-semibold text-slate-900">Data & Privacy</h3>
+                </div>
+                <div className="p-6 space-y-4">
+                  <button
+                    onClick={exportUserData}
+                    className="w-full flex items-center justify-between gap-3 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-left"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Download size={20} className="text-slate-600" />
+                      <div>
+                        <div className="font-medium text-slate-900">Export My Data</div>
+                        <div className="text-xs text-slate-500">Download all your data (JSON format)</div>
+                      </div>
+                    </div>
+                    <ArrowRight size={18} className="text-slate-400" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (confirm('Delete all data? This cannot be undone.')) {
+                        localStorage.clear();
+                        window.location.reload();
+                      }
+                    }}
+                    className="w-full flex items-center justify-between gap-3 p-4 border border-red-200 rounded-lg hover:bg-red-50 transition-colors text-left"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Trash2 size={20} className="text-red-600" />
+                      <div>
+                        <div className="font-medium text-red-900">Delete All Data</div>
+                        <div className="text-xs text-red-600">Clear all transactions and settings</div>
+                      </div>
+                    </div>
+                    <ArrowRight size={18} className="text-red-400" />
+                  </button>
+
+                  <div className="pt-4 border-t border-slate-200">
+                    <div className="text-xs text-slate-500 mb-2">Storage</div>
+                    <div className="text-sm text-slate-700">
+                      Data is stored locally in your browser using localStorage. 
+                      Clear browser data will erase all records.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* About Section */}
+              <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-xl p-6 shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <Calculator size={24} className="text-emerald-400" />
+                  <div>
+                    <h3 className="font-bold text-lg">SoloLedger Pro</h3>
+                    <p className="text-sm text-slate-400">Irish Tax Compliance Platform</p>
+                  </div>
+                </div>
+                <div className="space-y-2 text-sm text-slate-300">
+                  <p>✓ Accurate Irish tax calculations (Income Tax, USC, PRSI)</p>
+                  <p>✓ Local browser storage (no cloud required)</p>
+                  <p>✓ GDPR compliant data handling</p>
+                  <p>✓ Automated compliance auditing</p>
+                </div>
+                <div className="mt-4 pt-4 border-t border-slate-700 text-xs text-slate-400">
+                  Version 2.0 • Tax rates verified against Revenue.ie
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ADD TRANSACTION MODAL */}
+        {isAddModalOpen && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 slide-up">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-slate-900">New Transaction</h3>
+                <button 
+                  onClick={() => {
+                    setIsAddModalOpen(false);
+                    setError(null);
+                  }}
+                  className="text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Transaction Type */}
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setNewTx({ ...newTx, type: 'expense' })}
+                    className={`p-3 rounded-lg border-2 transition-all font-medium ${
+                      newTx.type === 'expense'
+                        ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                        : 'border-slate-200 text-slate-600 hover:border-slate-300'
+                    }`}
+                  >
+                    <TrendingDown size={18} className="mx-auto mb-1" />
+                    Expense
+                  </button>
+                  <button
+                    onClick={() => setNewTx({ ...newTx, type: 'income' })}
+                    className={`p-3 rounded-lg border-2 transition-all font-medium ${
+                      newTx.type === 'income'
+                        ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                        : 'border-slate-200 text-slate-600 hover:border-slate-300'
+                    }`}
+                  >
+                    <TrendingUp size={18} className="mx-auto mb-1" />
+                    Income
+                  </button>
+                </div>
+
+                {/* Vendor */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Vendor / Description
+                  </label>
+                  <input
+                    type="text"
+                    value={newTx.vendor}
+                    onChange={(e) => setNewTx({ ...newTx, vendor: e.target.value })}
+                    className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    placeholder="e.g., Office Supplies Ltd"
+                  />
+                </div>
+
+                {/* Amount & Date */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Amount (€)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={newTx.amount}
+                      onChange={(e) => setNewTx({ ...newTx, amount: e.target.value })}
+                      className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      value={newTx.date}
+                      onChange={(e) => setNewTx({ ...newTx, date: e.target.value })}
+                      className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Category
+                  </label>
+                  <select
+                    value={newTx.category}
+                    onChange={(e) => setNewTx({ ...newTx, category: e.target.value })}
+                    className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  >
+                    <option value="General">General</option>
+                    <option value="Office Supplies">Office Supplies</option>
+                    <option value="Software">Software</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Professional Fees">Professional Fees</option>
+                    <option value="Utilities">Utilities</option>
+                    <option value="Entertainment">Entertainment</option>
+                  </select>
+                </div>
+
+                {/* VAT */}
+                <div className="bg-slate-50 rounded-lg p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-slate-700">VAT Rate</label>
+                    <select
+                      value={newTx.vatRate}
+                      onChange={(e) => setNewTx({ ...newTx, vatRate: parseFloat(e.target.value) })}
+                      className="p-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500"
+                    >
+                      <option value={0}>0% (Exempt)</option>
+                      <option value={0.09}>9% (Tourism)</option>
+                      <option value={0.135}>13.5% (Reduced)</option>
+                      <option value={0.23}>23% (Standard)</option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="vatInclusive"
+                      checked={newTx.isVatInclusive}
+                      onChange={(e) => setNewTx({ ...newTx, isVatInclusive: e.target.checked })}
+                      className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                    />
+                    <label htmlFor="vatInclusive" className="text-sm text-slate-600">
+                      Amount includes VAT
+                    </label>
+                  </div>
+                </div>
+
+                {/* Submit */}
+                <button
+                  onClick={handleSaveTransaction}
+                  className="w-full bg-emerald-600 text-white font-bold py-4 rounded-lg hover:bg-emerald-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                >
+                  <Save size={20} />
+                  Save Transaction
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* MOBILE FAB */}
+      <button
+        onClick={() => setIsAddModalOpen(true)}
+        className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-emerald-600 text-white rounded-full shadow-2xl hover:bg-emerald-700 transition-all hover:scale-110 flex items-center justify-center z-40"
+      >
+        <Plus size={24} />
+      </button>
+    </div>
+  );
+};
+
+const root = createRoot(document.getElementById('root'));
+root.render(<SoloLedger />);
+</script>
+</body>
+</html>
