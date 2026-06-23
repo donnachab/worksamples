@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Case Studies – Donnacha</title>
-
 <style>
     body {
         font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -99,21 +98,21 @@
         margin-bottom: 8px;
     }
 </style>
-
 </head>
 <body>
 
-<!-- PASSWORD GATE -->
 <div id="gate">
     <h2>Access Private Case Studies</h2>
     <p style="max-width: 320px; text-align: center; font-size: 0.9rem; opacity: 0.8;">
         These case studies contain sensitive operational detail and are provided privately for evaluation purposes.
     </p>
-    <input type="password" id="pw" placeholder="Password" />
+    
+    <p id="error-msg" style="color: #ff6b6b; font-size: 0.9rem; display: none; margin: 5px 0 0 0;"></p>
+    
+    <input type="password" id="pw" placeholder="Password" onkeypress="handleKeyPress(event)" />
     <button onclick="unlock()">Enter</button>
 </div>
 
-<!-- MAIN CONTENT -->
 <div id="content">
     <h1>Case Studies</h1>
 
@@ -124,7 +123,6 @@
         <div class="tab" onclick="openTab('whh')">Warm Home Hub</div>
     </div>
 
-    <!-- ENM PANEL -->
     <div id="enm" class="panel active">
         <h2>Ericsson ENM: Reworking a Product Description with structural and content issues</h2>
         <p><strong>Role:</strong> Technical Writer</p>
@@ -217,19 +215,16 @@
         </ul>
     </div>
 
-    <!-- SAP PANEL -->
     <div id="sap" class="panel">
         <h2>SAP Case Study</h2>
         <p>Placeholder — will follow the same structure as ENM.</p>
     </div>
 
-    <!-- DT ONE PANEL -->
     <div id="dtone" class="panel">
         <h2>DT One Case Study</h2>
         <p>Placeholder — will follow the same structure as ENM.</p>
     </div>
 
-    <!-- WARM HOME HUB PANEL -->
     <div id="whh" class="panel">
         <h2>Warm Home Hub Case Study</h2>
         <p>Placeholder — will follow the same structure as ENM.</p>
@@ -238,21 +233,45 @@
 </div>
 
 <script>
-// FINAL, CORRECT SHA-256 HASH for "pick-this-guy-$£%"
-const storedHash = "ebe434a3213104b738095e6a7ae2ac832273632c9f7c922d2f2ba4a67e714d8a";
+// Replace this placeholder with the hash you generate from the console
+const storedHash = "c1148169339a20c530cb35190b508c8c2f0aeb46fc37d640c7544216e3e1454b";
+
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        unlock();
+    }
+}
 
 async function unlock() {
-    const pw = document.getElementById("pw").value;
-    const enc = new TextEncoder().encode(pw);
-    const buf = await crypto.subtle.digest("SHA-256", enc);
-    const arr = Array.from(new Uint8Array(buf));
-    const hex = arr.map(b => b.toString(16).padStart(2, "0")).join("");
+    const pwInput = document.getElementById("pw");
+    const errorMsg = document.getElementById("error-msg");
+    const pw = pwInput.value;
 
-    if (hex === storedHash) {
-        document.getElementById("gate").style.display = "none";
-        document.getElementById("content").style.display = "block";
-    } else {
-        document.getElementById("pw").value = "";
+    try {
+        if (!window.crypto || !window.crypto.subtle) {
+            throw new Error("Crypto API unavailable. This page must be served over HTTPS (like GitHub Pages).");
+        }
+
+        const enc = new TextEncoder().encode(pw);
+        const buf = await window.crypto.subtle.digest("SHA-256", enc);
+        const arr = Array.from(new Uint8Array(buf));
+        const hex = arr.map(b => b.toString(16).padStart(2, "0")).join("");
+
+        if (hex === storedHash) {
+            document.getElementById("gate").style.display = "none";
+            document.getElementById("content").style.display = "block";
+            errorMsg.style.display = "none";
+        } else {
+            pwInput.value = "";
+            errorMsg.textContent = "Incorrect password. Please try again.";
+            errorMsg.style.display = "block";
+            
+            console.log("Generated hash for input:", hex); 
+        }
+    } catch (err) {
+        console.error("Unlock error:", err);
+        errorMsg.textContent = "System error: " + err.message;
+        errorMsg.style.display = "block";
     }
 }
 
