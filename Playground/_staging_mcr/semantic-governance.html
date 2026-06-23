@@ -1,1135 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semantic Master Data Governance: SAP Fiori Master Deck</title>
-    <style>
-        :root {
-            --sapShellColor: #354a5f;
-            --sapBrandColor: #0070f2;
-            --sapBaseColor: #ffffff;
-            --sapBackgroundColor: #f4f7f9;
-            --sapTextColor: #1d2d3e;
-            --sapTextMuted: #556b82;
-            
-            --sapPositive: #107e3e;
-            --sapNegative: #bb0000;
-            --sapCritical: #e9730c;
-            --sapInformation: #0a6ed1;
-            
-            --sapBorderColor: #d9d9d9;
-            --sapCardShadow: 0 0 0 1px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.08);
-            --sapFontFamily: "72", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --sapMonoFont: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            
-            --diffAddBg: #e6ffed;
-            --diffAddText: #22863a;
-            --diffDelBg: #ffeef0;
-            --diffDelText: #cb2431;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case Studies – Donnacha</title>
 
-        body, html {
-            margin: 0; padding: 0; background-color: #cbd5e1;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; font-family: var(--sapFontFamily); overflow: hidden; color: var(--sapTextColor);
-        }
+<style>
+    body {
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        margin: 0;
+        background: #f7f7f7;
+        color: #222;
+    }
 
-        #deck {
-            width: 1360px; height: 760px; background: var(--sapBackgroundColor);
-            position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-            border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;
-        }
+    /* Password Gate */
+    #gate {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: #111;
+        color: #fff;
+    }
+    #gate input {
+        padding: 10px;
+        font-size: 1rem;
+        margin-top: 10px;
+        width: 240px;
+        border-radius: 4px;
+        border: none;
+    }
+    #gate button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        background: #4a90e2;
+        color: #fff;
+    }
 
-        .sapShellBar {
-            height: 48px; background: var(--sapShellColor);
-            display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
-            font-weight: 600; font-size: 14px; color: var(--sapBaseColor);
-            flex-shrink: 0; z-index: 100;
-        }
+    /* Main Layout */
+    #content {
+        display: none;
+        padding: 40px;
+        max-width: 900px;
+        margin: auto;
+    }
 
-        .deck-controls {
-            position: absolute; bottom: 20px; right: 24px; display: flex; gap: 12px; z-index: 9999;
-        }
-        .nav-btn {
-            background: var(--sapBaseColor); border: 1px solid var(--sapBrandColor); color: var(--sapBrandColor);
-            height: 40px; padding: 0 20px; border-radius: 20px; font-size: 0.9rem; font-weight: bold;
-            cursor: pointer; transition: all 0.2s; box-shadow: var(--sapCardShadow);
-        }
-        .nav-btn:hover:not(:disabled) { background: var(--sapBrandColor); color: var(--sapBaseColor); }
-        .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    h1 {
+        font-weight: 600;
+        margin-bottom: 30px;
+        letter-spacing: -0.5px;
+    }
 
-        .slide-area { flex: 1; position: relative; overflow: hidden; display: flex; z-index: 1; }
-        .slide { display: none; flex: 1; width: 100%; height: 100%; padding: 40px 60px; box-sizing: border-box; flex-direction: column; }
-        .slide.active { display: flex; }
+    /* Tabs */
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+    .tab {
+        padding: 12px 20px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        font-weight: 500;
+    }
+    .tab.active {
+        border-bottom: 3px solid #4a90e2;
+        color: #4a90e2;
+    }
 
-        h1 { font-size: 2.2rem; margin: 0 0 12px 0; font-weight: 300; }
-        h2 { font-size: 1.2rem; color: var(--sapTextMuted); margin: 0 0 24px 0; font-weight: 400; max-width: 900px; line-height: 1.5; }
-        .hero { font-size: 4rem; font-weight: bold; color: var(--sapBrandColor); margin-bottom: 10px; }
+    .panel {
+        display: none;
+    }
+    .panel.active {
+        display: block;
+    }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .sapCard { background: #fff; border-radius: 8px; box-shadow: var(--sapCardShadow); padding: 24px; border-top: 4px solid var(--sapBrandColor); position: relative; }
-        
-        .sapBadge { font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; background: #eee; }
-        .sapBadge.error { background: #ffe6e6; color: var(--sapNegative); border: 1px solid var(--sapNegative); }
-        .sapBadge.warning { background: #fff8e5; color: var(--sapCritical); border: 1px solid var(--sapCritical); }
-        .sapBadge.success { background: #f5fae5; color: var(--sapPositive); border: 1px solid var(--sapPositive); }
-        .sapBadge.neutral { background: #f1f5f9; color: var(--sapTextMuted); border: 1px solid var(--sapBorderColor); }
-        .sapBadge.info { background: #e0f2fe; color: var(--sapInformation); border: 1px solid var(--sapInformation); }
-        
-        .sim-click { transform: scale(0.96) !important; filter: brightness(0.85) !important; }
-        
-        .progress-track { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: var(--sapBorderColor); z-index: 10; }
-        .progress-fill { height: 100%; background: var(--sapBrandColor); width: 0%; transition: width 0.2s; }
+    h2 {
+        margin-top: 30px;
+        font-weight: 600;
+    }
 
-        /* Pure Docs-as-Code UI */
-        .readme-ui { flex: 1; display: flex; flex-direction: row; border: 1px solid var(--sapBorderColor); border-radius: 8px; overflow: hidden; box-shadow: var(--sapCardShadow); background: #fff; position: relative; }
-        .readme-nav { width: 280px; background: #f8fafc; border-right: 1px solid var(--sapBorderColor); padding: 15px; display: flex; flex-direction: column; overflow-y: auto; }
-        .readme-nav-item { font-size: 0.9rem; padding: 8px 12px; margin-bottom: 4px; border-radius: 4px; color: var(--sapTextColor); cursor: default; transition: all 0.2s; }
-        .readme-nav-item.active { background: #e0f2fe; color: var(--sapBrandColor); font-weight: bold; border-left: 3px solid var(--sapBrandColor); }
-        .readme-nav-item.nested { padding-left: 30px; font-size: 0.85rem; color: var(--sapTextMuted); letter-spacing: -0.2px; }
-        .readme-nav-item.nested.error { color: var(--sapNegative); font-weight: bold; }
-        .readme-nav-item.nested.warning { color: var(--sapCritical); font-weight: bold; }
-        .readme-nav-item.nested.active { background: #e0f2fe; color: var(--sapBrandColor); font-weight: bold; border-left: 3px solid var(--sapBrandColor); }
-        
-        .readme-md { flex: 1.2; background: #1e293b; color: #e2e8f0; font-family: var(--sapMonoFont); padding: 0; display: flex; flex-direction: column; }
-        .readme-header { background: #0f172a; font-size: 0.8rem; color: #94a3b8; display: flex; flex-direction: column; align-items: stretch; border-bottom: 1px solid #334155; }
-        
-        .editor-tab { padding: 8px 16px; font-size: 0.75rem; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; font-family: var(--sapFontFamily); text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; transition: all 0.2s; }
-        .editor-tab.active { color: #38bdf8; border-bottom: 2px solid #38bdf8; }
-        
-        .readme-content { padding: 20px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6; white-space: pre-wrap; flex: 1; }
-        
-        .md-comment { color: #64748b; font-style: italic; }
-        .md-comment.error { color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 2px 4px; border-radius: 4px; }
-        .md-comment.warning { color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 2px 4px; border-radius: 4px; }
-        
-        /* The Inspector Sidebar (Right Pane) */
-        .readme-preview { flex: 0.8; background: #fff; border-left: 1px solid var(--sapBorderColor); display: flex; flex-direction: column; }
-        .readme-preview-header { background: #f1f5f9; padding: 10px 20px; font-size: 0.8rem; font-weight: bold; color: var(--sapTextMuted); border-bottom: 1px solid var(--sapBorderColor); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
-        .readme-preview-content { padding: 20px; overflow-y: auto; font-family: var(--sapFontFamily); color: var(--sapTextColor); }
-        
-        .inspector-box { border: 1px solid var(--sapBorderColor); border-radius: 6px; padding: 15px; margin-bottom: 15px; }
-        .inspector-title { font-size: 0.75rem; font-weight: bold; color: var(--sapTextMuted); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px; }
-        .inspector-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; }
-        .inspector-val { font-family: var(--sapMonoFont); color: var(--sapBrandColor); }
-        
-        /* Arbitration Cards */
-        .prov-card { border-radius: 6px; padding: 12px; margin-bottom: 10px; font-size: 0.85rem; line-height: 1.4; border: 2px solid var(--sapBorderColor); position: relative; background: #fff; transition: all 0.2s ease-out; }
-        .prov-card.selected { border-color: var(--sapBrandColor); background: #e0f2fe; transform: scale(1.02); box-shadow: var(--sapCardShadow); }
-        .prov-card.selected::after { content: '✓'; position: absolute; top: 10px; right: 10px; color: var(--sapBrandColor); font-weight: bold; font-size: 1rem; }
-        
-        .prov-meta { font-size: 0.7rem; font-weight: bold; margin-bottom: 6px; display: flex; justify-content: space-between; color: var(--sapTextMuted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .prov-icon { font-size: 1rem; margin-right: 5px; }
+    h3 {
+        margin-top: 20px;
+        font-weight: 600;
+    }
 
-        .dropzone { border: 2px dashed #cbd5e1; border-radius: 8px; padding: 30px 20px; text-align: center; background: #f8fafc; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-        .dropzone:hover { background: #f1f5f9; border-color: var(--sapBrandColor); }
+    ul {
+        margin-top: 10px;
+        padding-left: 20px;
+    }
 
-        .typing-cursor::after { content: '|'; animation: blink 1s step-end infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-        @keyframes loadBar { 0% { width: 0%; } 100% { width: 100%; } }
+    ul li {
+        margin-bottom: 8px;
+    }
+</style>
 
-        /* Git-Style Strict Diffs */
-        .triage-ui { flex: 1; display: flex; border: 1px solid var(--sapBorderColor); border-radius: 8px; overflow: hidden; box-shadow: var(--sapCardShadow); background: #fff; }
-        .diff-container { flex: 1; overflow-y: auto; font-family: var(--sapMonoFont); font-size: 0.9rem; line-height: 1.5; }
-        .diff-header { background: #f8fafc; padding: 12px 20px; border-bottom: 1px solid var(--sapBorderColor); font-weight: bold; font-size: 0.85rem; color: var(--sapTextMuted); display: flex; justify-content: space-between; }
-        .diff-line { display: flex; padding: 2px 0; width: 100%; }
-        .diff-num { width: 40px; padding-right: 10px; text-align: right; color: #94a3b8; user-select: none; border-right: 1px solid #e2e8f0; margin-right: 10px; }
-        .diff-code { flex: 1; white-space: pre-wrap; word-break: break-all; }
-        .diff-add { background-color: var(--diffAddBg); }
-        .diff-add .diff-code { color: var(--diffAddText); }
-        .diff-add .diff-num::before { content: '+'; float: left; padding-left: 5px; color: var(--diffAddText); }
-        .diff-del { background-color: var(--diffDelBg); }
-        .diff-del .diff-code { color: var(--diffDelText); }
-        .diff-del .diff-num::before { content: '-'; float: left; padding-left: 5px; color: var(--diffDelText); }
-        .diff-context { color: #64748b; }
-        .diff-chunk-header { background: #f1f8ff; color: #0366d6; padding: 5px 10px; font-size: 0.8rem; border-top: 1px solid #c8e1ff; border-bottom: 1px solid #c8e1ff; margin: 10px 0; }
-        .diff-inspector { width: 340px; background: #f8fafc; border-left: 1px solid var(--sapBorderColor); padding: 20px; display: flex; flex-direction: column; }
-        
-        .pipe-node { background: #fff; border: 1px solid var(--sapBorderColor); padding: 10px 14px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; box-shadow: var(--sapCardShadow); position: relative; z-index: 20; text-align: center; border-left: 4px solid #ccc; margin-bottom: 5px;}
-        .pipe-engine { background: #1e293b; color: #fff; border: 2px solid var(--sapBrandColor); padding: 25px 15px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,112,242,0.3); z-index: 20; position: relative; }
-        
-        .sapBtn { border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; text-align: center; transition: all 0.2s; font-family: var(--sapFontFamily); width: 100%; position: relative; }
-        .sapBtn.primary { background: var(--sapBrandColor); color: #fff; }
-        .sapBtn.secondary { background: transparent; border: 1px solid var(--sapBrandColor); color: var(--sapBrandColor); }
-        .sapBtn.success { background: var(--sapPositive); color: #fff; }
-        .sapBtn.reject { background: transparent; border: 1px solid var(--sapNegative); color: var(--sapNegative); }
-        .sapBtn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* Forensic Archaeology Slide Specifics */
-        .forensic-ui { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: #fff; border: 1px solid var(--sapBorderColor); border-radius: 8px; padding: 30px; overflow: hidden; box-shadow: var(--sapCardShadow); }
-        .forensic-lane { display: flex; flex-direction: column; gap: 20px; }
-        .breadcrumb-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; position: relative; }
-        .breadcrumb-meta { font-size: 0.7rem; color: var(--sapTextMuted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; }
-        .breadcrumb-text { font-size: 0.85rem; color: var(--sapTextColor); line-height: 1.4; }
-        .breadcrumb-tag { position: absolute; top: 10px; right: 10px; font-size: 0.65rem; padding: 2px 6px; border-radius: 3px; background: #cbd5e1; color: #475569; }
-
-        /* Graphic Elements for Concept Map */
-        .graph-container { position: relative; height: 380px; width: 100%; background: #fff; border: 1px solid var(--sapBorderColor); border-radius: 8px; margin-top: 20px; overflow: hidden; }
-        .linear-path { position: absolute; left: 10%; top: 50%; width: 30%; height: 2px; background: #cbd5e1; display: flex; align-items: center; }
-        .linear-node { width: 12px; height: 12px; background: var(--sapTextMuted); border-radius: 50%; margin: 0 15px; }
-        .graph-spider { position: absolute; right: 5%; top: 10%; width: 50%; height: 80%; }
-        .spider-node { position: absolute; width: 10px; height: 12px; background: var(--sapBrandColor); border-radius: 20%; z-index: 5; }
-        .spider-edge { position: absolute; background: rgba(0, 112, 242, 0.2); height: 1px; transform-origin: left center; z-index: 1; }
-    </style>
 </head>
 <body>
 
-<input type="file" id="global-file-input" style="display: none;" accept=".docx,.pdf,.txt,.md">
+<!-- PASSWORD GATE -->
+<div id="gate">
+    <h2>Access Private Case Studies</h2>
+    <p style="max-width: 320px; text-align: center; font-size: 0.9rem; opacity: 0.8;">
+        These case studies contain sensitive operational detail and are provided privately for evaluation purposes.
+    </p>
+    <input type="password" id="pw" placeholder="Password" />
+    <button onclick="unlock()">Enter</button>
+</div>
 
-<div id="deck">
-    <div class="sapShellBar">
-        <span>Itego Semantic Master Data Governance | Product Strategy Pitch</span>
-        <span id="step-info">Step 1 / 26</span>
+<!-- MAIN CONTENT -->
+<div id="content">
+    <h1>Case Studies</h1>
+
+    <div class="tabs">
+        <div class="tab active" onclick="openTab('enm')">ENM</div>
+        <div class="tab" onclick="openTab('sap')">SAP</div>
+        <div class="tab" onclick="openTab('dtone')">DT One</div>
+        <div class="tab" onclick="openTab('whh')">Warm Home Hub</div>
     </div>
 
-    <div class="deck-controls">
-        <button class="nav-btn" id="btn-restart" style="margin-right: 40px;" disabled>↺ Restart</button>
-        <button class="nav-btn" id="btn-prev" disabled>Previous</button>
-        <button class="nav-btn" id="btn-next">Next Action</button>
+    <!-- ENM PANEL -->
+    <div id="enm" class="panel active">
+        <h2>Ericsson ENM: Reworking a Product Description with structural and content issues</h2>
+        <p><strong>Role:</strong> Technical Writer</p>
+        <p><strong>Context:</strong> ENM (Ericsson Network Manager) — Confluence → Ixiasoft DITA migration</p>
+
+        <h3>Situation</h3>
+        <p>
+            I was asked to migrate the ENM Product Description into DITA. The document had been built over several years by more than fifty teams, each writing in different styles and with different assumptions. The result was uneven.
+        </p>
+        <ul>
+            <li>Terminology drifted across chapters.</li>
+            <li>The order of titles did not match the UI.</li>
+            <li>Procedural content appeared in what was meant to be a descriptive document.</li>
+            <li>A hardware installation guide had been embedded as a single, oversized Confluence page with diagrams but no explanation of when or why to use each configuration.</li>
+        </ul>
+
+        <h3>Task</h3>
+        <p>
+            Produce a Product Description that was structurally coherent, technically accurate, aligned with the UI, and ready for DITA, while passing review by fifty contributing teams without blocking the release.
+        </p>
+
+        <h3>Actions</h3>
+
+        <h4>1. Reframed the assignment</h4>
+        <p>
+            I explained that a mechanical DITA conversion would not solve the underlying problems. With the Lead Architect’s support, the work was re‑scoped as a full structural rewrite.
+        </p>
+
+        <h4>2. Analysed the existing document</h4>
+        <ul>
+            <li>Reviewed the document end‑to‑end.</li>
+            <li>Mapped chapters to the UI.</li>
+            <li>Identified terminology inconsistencies.</li>
+            <li>Flagged procedural content.</li>
+            <li>Documented gaps and missing context.</li>
+        </ul>
+
+        <h4>3. Split out the hardware installation guide</h4>
+        <p>
+            The embedded hardware content was inappropriate for a Product Description and lacked essential context. I proposed creating a separate Hardware Installation Guide.
+        </p>
+        <p>
+            This required negotiation because document count was tied to headcount allocation. The manager initially resisted adding another deliverable. I requested that several other guides assigned to me be reassigned, which was accepted.
+        </p>
+
+        <h4>4. Rebuilt the Product Description in UI order</h4>
+        <ul>
+            <li>Rewrote the document to follow the UI.</li>
+            <li>Aligned terminology across teams.</li>
+            <li>Established a consistent pattern for describing features.</li>
+            <li>Removed procedural content.</li>
+            <li>Ensured each chapter reflected actual product behaviour.</li>
+        </ul>
+
+        <h4>5. Prepared the content for DITA</h4>
+        <ul>
+            <li>Broke content into DITA‑appropriate topics.</li>
+            <li>Applied correct topic types.</li>
+            <li>Separated concept, task, and reference.</li>
+            <li>Created a maintainable structure for future releases.</li>
+        </ul>
+
+        <h4>6. Ran a staggered review and publication cycle</h4>
+        <ul>
+            <li>Architect reviewed each rewritten section first.</li>
+            <li>Released content in small batches.</li>
+            <li>Each batch had its own review window.</li>
+            <li>Silence counted as approval.</li>
+            <li>Resolved objections before releasing the next batch.</li>
+            <li>Published and migrated content after all batches cleared review.</li>
+        </ul>
+
+        <h4>7. Managed incoming tickets during the rewrite</h4>
+        <ul>
+            <li>Recognised that many tickets were effectively ticket bankruptcy.</li>
+            <li>Reviewed each ticket for useful insight.</li>
+            <li>Integrated valuable findings into the rewrite.</li>
+            <li>Deferred fixes for content that was being replaced.</li>
+        </ul>
+
+        <h3>Result</h3>
+        <ul>
+            <li>A Product Description aligned with the UI and consistent in terminology.</li>
+            <li>Clear separation between descriptive and procedural content.</li>
+            <li>A standalone Hardware Installation Guide with proper context.</li>
+            <li>A staggered review model that avoided bottlenecks.</li>
+            <li>A maintainable DITA structure for future releases.</li>
+            <li>A realistic workload distribution after negotiating document ownership.</li>
+            <li>A technically accurate, coherent document produced with the Lead Architect.</li>
+        </ul>
     </div>
 
-    <div class="slide-area">
-        
-        <div class="slide active" id="s0" style="justify-content: center; align-items: center; text-align: center;">
-            <div class="hero">Semantic Master Data Governance</div>
-            <h1 style="font-size: 3rem;">Knowledge Integrity for the Agentic Era</h1>
-            <h2 style="font-size: 1.4rem;">Structuring unstructured deliverables to prevent inaccurate retrievals in SAP Joule.</h2>
-        </div>
-
-        <div class="slide" id="s1">
-            <span class="sapBadge error" style="display:inline-table; margin-bottom: 10px;">The Problem for Software Vendors</span>
-            <h1>SAP Joule Requires Structure. Legacy Documents Provide Disorganization.</h1>
-            <h2>When Software Vendors feed legacy files into Artificial Intelligence, the lack of a defined schema leads to inaccurate retrievals. The value of the product is standardizing that data into targeted, cohesive deliverables before ingestion.</h2>
-            <div class="grid-2" style="margin-top: 20px;">
-                <div class="sapCard" style="border-top-color: var(--sapTextMuted);">
-                    <strong style="display:block; margin-bottom:10px; font-size:1.2rem;">Legacy Delivery</strong>
-                    <p style="color:var(--sapTextMuted); line-height: 1.6;">Tickets in Jira, threads in Slack, and unmaintained Word documents fail against pipelines for Retrieval-Augmented Generation.</p>
-                </div>
-                <div class="sapCard" style="border-top-color: var(--sapBrandColor); background: #e5f0fa;">
-                    <strong style="display:block; margin-bottom:10px; font-size:1.2rem; color: var(--sapBrandColor);">The Itego Standard (Mandated Deliverables)</strong>
-                    <p style="color:var(--sapTextColor); line-height: 1.6;">The system extracts and maps inputs into a predefined suite of deliverables: <strong>Landscape, Configuration, Reference for Application Programming Interfaces, and Operations</strong>—plus a Registry for Uncategorized Items sorted by theme.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide" id="s2">
-            <span class="sapBadge neutral" style="display:inline-table; margin-bottom: 10px;">Phase 1: Architecture of the Pipeline</span>
-            <h1>Sorter for Targets Based on Guides</h1>
-            <h2>Semantic Master Data Governance ingests data from operational channels. The system extracts raw components and routes them into targets for deliverables.</h2>
-            <div id="pipeline-container" style="display: flex; align-items: center; justify-content: space-between; height: 420px; width: 100%; margin-top: 10px; position: relative; background: #fff; border-radius: 8px; border: 1px solid var(--sapBorderColor); padding: 20px; box-sizing: border-box; overflow: hidden;">
-                <canvas id="routing-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none;"></canvas>
-                <div style="display: flex; flex-direction: column; justify-content: space-around; height: 100%; width: 22%; z-index: 20;">
-                    <div style="font-size: 0.7rem; font-weight: bold; color: var(--sapTextMuted); text-align: center; margin-bottom: 5px;">SOURCES WITHOUT STRUCTURE</div>
-                    <div class="pipe-node source" id="node-docx" style="border-left-color: #2b579a; color: #2b579a;">Delivery via DOCX</div>
-                    <div class="pipe-node source" id="node-pptx" style="border-left-color: #d24726; color: #d24726;">Deck via PPTX</div>
-                    <div class="pipe-node source" id="node-conf" style="border-left-color: #0052cc; color: #0052cc;">Application Programming Interface for Confluence</div>
-                    <div class="pipe-node source" id="node-jira" style="border-left-color: #0052cc; color: #0052cc; background:#f4f5f7;">Ticketing in Jira</div>
-                    <div class="pipe-node source" id="node-slack" style="border-left-color: #4a154b; color: #4a154b; background:#f4ede4;">Threads in Slack</div>
-                </div>
-                <div style="width: 26%; z-index: 20; display: flex; align-items: center; justify-content: center;">
-                    <div class="pipe-engine" id="node-parser" style="width: 100%;">
-                        <div style="font-size: 2rem; margin-bottom: 5px;">⚙️</div>
-                        <div style="font-size: 1.1rem; font-weight: bold; color: #fff;">Engine for Semantic Master Data Governance</div>
-                        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px; line-height: 1.4;">Sorter for Targets Based on Guides<br>& Sequencer for Narratives</div>
-                    </div>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; width: 32%; z-index: 20; padding-left: 10px;">
-                    <div style="font-size: 0.7rem; font-weight: bold; color: var(--sapBrandColor); text-align: center; margin-bottom: 5px;">MANDATED BLUEPRINT BY ITEGO</div>
-                    <div class="pipe-node deliverable" id="node-prereq" style="border-left-color: var(--sapInformation);">📄 Landscape & Prerequisites</div>
-                    <div class="pipe-node deliverable" id="node-config" style="border-left-color: var(--sapBrandColor);">📄 Configuration & Extension</div>
-                    <div class="pipe-node deliverable" id="node-api" style="border-left-color: #8b5cf6;">📄 Reference for Application Programming Interfaces</div>
-                    <div class="pipe-node deliverable" id="node-deploy" style="border-left-color: var(--sapPositive);">📄 Deployment & Cutover</div>
-                    <div class="pipe-node deliverable" id="node-ops" style="border-left-color: var(--sapCritical);">📄 Operations & Exceptions</div>
-                    <div class="pipe-node deliverable" id="node-uncat" style="border-left-color: #64748b; background: #f8fafc;">📄 Catchment for Uncategorized Items</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide" id="s-concept">
-            <span class="sapBadge info" style="display:inline-table; margin-bottom: 10px;">Conceptual Framework</span>
-            <h1>Narrative versus Network: The Map for Documentation</h1>
-            <h2>Humans edit sequentially to maintain the flow of the narrative. Artificial Intelligence views the same data as an interconnected network of nodes linked by facts.</h2>
-            <div class="grid-2" style="margin-top: 30px;">
-                <div>
-                    <h3 style="font-size: 1.1rem; color: var(--sapBrandColor);">Sequential Narrative (Human)</h3>
-                    <p style="font-size: 0.9rem; color: var(--sapTextMuted); line-height: 1.4;">Users read and verify data as a serial stream. Context is local and dependent on the preceding sentence.</p>
-                    <div class="graph-container">
-                        <div class="linear-path">
-                            <div class="linear-node"></div><div class="linear-node"></div><div class="linear-node"></div><div class="linear-node"></div>
-                            <div style="position: absolute; right: -25px; font-size: 1.5rem; color: #94a3b8;">→</div>
-                        </div>
-                        <div style="position: absolute; left: 10%; bottom: 30%; font-size: 0.7rem; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Step-by-step Reading</div>
-                    </div>
-                </div>
-                <div>
-                    <h3 style="font-size: 1.1rem; color: var(--sapBrandColor);">Semantic Knowledge Graph (Artificial Intelligence)</h3>
-                    <p style="font-size: 0.9rem; color: var(--sapTextMuted); line-height: 1.4;">The system maps every fragment to a high-dimensional network. Connections are global. This allows instant retrieval across topics.</p>
-                    <div class="graph-container" id="spider-web-container">
-                        <canvas id="spider-canvas" style="width: 100%; height: 100%;"></canvas>
-                        <div style="position: absolute; right: 10%; bottom: 10%; font-size: 0.7rem; font-weight: bold; color: var(--sapBrandColor); text-transform: uppercase;">Interconnected Network of Truth</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide" id="s3">
-            <span class="sapBadge info" style="display:inline-table; margin-bottom: 10px;">Phase 1: Editor for Docs-as-Code</span>
-            <h1 id="s3-h1">Investigative Gateway: The Workspace for Authoring</h1>
-            <h2 id="s3-h2">The Consolidation Engine operates inside a modern ecosystem for Docs-as-Code. Authors edit the narrative sequentially, while Artificial Intelligence silently maps connections to the background document network in the Inspector pane.</h2>
-            <div class="readme-ui" id="readme-ui-container"></div>
-        </div>
-
-        <div class="slide" id="s-whys">
-            <span class="sapBadge info" style="display:inline-table; margin-bottom: 10px;">Forensic Archaeology</span>
-            <h1>Unearthing the Whys: Forensic Provenance</h1>
-            <h2>The system does not ask humans to manually rewrite 10 years of history. It uses Point-and-Crawl technology to scan legacy Jira tickets and Slack threads, generating "Intelligent Guesses" of the original governance philosophy.</h2>
-            <div class="forensic-ui" id="forensic-ui-container"></div>
-        </div>
-
-        <div class="slide" id="s-transition" style="justify-content: center; align-items: center; text-align: center; background: var(--sapShellColor); color: #fff;">
-            <div style="font-size: 5rem; opacity: 0.2; margin-bottom: -40px;">🛡️</div>
-            <h1 style="color: #fff; font-size: 3.5rem;">Phase 2: Continuous Governance</h1>
-            <h2 style="color: #94a3b8; font-size: 1.5rem;">From initial synthesis of the baseline to operational enforcement of truth.</h2>
-            <hr style="width: 100px; border: 2px solid var(--sapBrandColor); margin: 30px auto;">
-            <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; color: #e2e8f0;">
-                Once the system establishes the baseline, Semantic Master Data Governance monitors every proposed change through the pipeline for Master Change Requests.
-            </p>
-        </div>
-
-        <div class="slide" id="s5">
-             <span class="sapBadge success" style="display:inline-table; margin-bottom: 10px;">Phase 2: Governance in Steady State</span>
-            <h1>The Pipeline for Master Change Requests</h1>
-            <h2>Semantic Master Data Governance enforces governance down to the individual change level. Rejections of specific fragments do not halt the entire request.</h2>
-            <div class="triage-ui" id="triage-ui-container"></div>
-        </div>
-
-        <div class="slide" id="s6">
-            <span class="sapBadge warning" style="display:inline-table; margin-bottom: 10px;">Architectural Reality</span>
-            <h1>The Override for Maintenance</h1>
-            <h2>Architects require a release mechanism for major overhauls of the system.</h2>
-            <div class="grid-2">
-                <div class="sapCard">
-                    <strong style="color:var(--sapTextMuted); font-size: 1.1rem;">The Trap of the Strict Pipeline</strong>
-                    <p style="margin-top:15px; line-height: 1.6;">Standard setups for validation freeze documentation. During major rewrites of plugins, strict linters flag hundreds of errors, which blocks velocity for developers.</p>
-                </div>
-                <div class="sapCard" style="border-top-color: var(--sapCritical);">
-                    <strong style="color:var(--sapCritical); font-size: 1.1rem;">Mode for Bulk Override</strong>
-                    <p style="margin-top:15px; line-height: 1.6;">The Steward of Data disables operational governance. The engine for consolidation accepts bulk changes to structures and layouts across the suite of guides. The system re-engages Governance to lock down the baseline.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide" id="s8">
-            <span class="sapBadge success" style="display:inline-table; margin-bottom: 10px;">Next Steps</span>
-            <h1>Establishing Integrity for Knowledge</h1>
-            <h2>Positioning Semantic Master Data Governance as the compliance gateway for solutions using agentic Artificial Intelligence by SAP.</h2>
-            <div class="sapCard" style="margin-top: 20px; text-align: center; padding: 40px;">
-                <h3 style="font-size: 1.8rem; color: var(--sapBrandColor); margin-bottom: 20px;">Target for Proposed Pilot Deployment</h3>
-                <p style="font-size: 1.1rem; color: var(--sapTextColor); max-width: 800px; margin: 0 auto 30px auto; line-height: 1.6;">
-                    Authorize a pilot run on the next major release of software. We will route the repository for drafting through the cockpit for Semantic Master Data Governance, surface gaps in documentation, and run a test for metrics of retrieval accuracy inside SAP Joule.
-                </p>
-                <div style="display: flex; justify-content: center; gap: 15px;">
-                    <div style="padding: 10px 20px; background: #f1f5f9; border-radius: 20px; font-weight: bold; color: var(--sapTextMuted);">1. Ingest Repositories</div>
-                    <div style="padding: 10px 20px; background: #e5f0fa; border-radius: 20px; font-weight: bold; color: var(--sapInformation);">2. Resolve Flags for Doubt</div>
-                    <div style="padding: 10px 20px; background: #f5fae5; border-radius: 20px; font-weight: bold; color: var(--sapPositive);">3. Validate Retrieval by Agents</div>
-                </div>
-            </div>
-        </div>
-
+    <!-- SAP PANEL -->
+    <div id="sap" class="panel">
+        <h2>SAP Case Study</h2>
+        <p>Placeholder — will follow the same structure as ENM.</p>
     </div>
-    <div class="progress-track"><div class="progress-fill" id="p-bar"></div></div>
+
+    <!-- DT ONE PANEL -->
+    <div id="dtone" class="panel">
+        <h2>DT One Case Study</h2>
+        <p>Placeholder — will follow the same structure as ENM.</p>
+    </div>
+
+    <!-- WARM HOME HUB PANEL -->
+    <div id="whh" class="panel">
+        <h2>Warm Home Hub Case Study</h2>
+        <p>Placeholder — will follow the same structure as ENM.</p>
+    </div>
+
 </div>
 
 <script>
-    const TOTAL_STEPS = 25;
-    let currentStep = 0;
-    let isTransitioning = false; 
-    let uploadedFileName = 'Constraints.docx'; 
+/* ----------------------------------------------------------
+   PURE JS SHA-256 (NO WEB CRYPTO, WORKS ANYWHERE)
+---------------------------------------------------------- */
+function sha256(str) {
+    function rightRotate(n, x) { return (x >>> n) | (x << (32 - n)); }
 
-    const btnNext = document.getElementById('btn-next');
-    const btnPrev = document.getElementById('btn-prev');
-    const btnRestart = document.getElementById('btn-restart');
-    const stepInfo = document.getElementById('step-info');
-    const pBar = document.getElementById('p-bar');
-    const slides = document.querySelectorAll('.slide');
+    var words = [], strBitLen = str.length * 8;
+    var hash = [], k = [], primeCounter = 0;
 
-    // Canvas Engine
-    const canvas = document.getElementById('routing-canvas');
-    let ctx, animReq;
-    let particles = [];
-    let isCanvasActive = false;
-
-    function getCenters() {
-        const container = document.getElementById('pipeline-container');
-        if (!container) return null;
-        const cRect = container.getBoundingClientRect();
-        const getXY = (id) => {
-            const el = document.getElementById(id);
-            if (!el) return {x: 0, y: 0};
-            const rect = el.getBoundingClientRect();
-            return { x: rect.left - cRect.left + rect.width/2, y: rect.top - cRect.top + rect.height/2 };
-        };
-        return {
-            src1: getXY('node-docx'), src2: getXY('node-pptx'), src3: getXY('node-conf'), src4: getXY('node-jira'), src5: getXY('node-slack'),
-            parser: getXY('node-parser'),
-            tgt1: getXY('node-prereq'), tgt2: getXY('node-config'), tgt3: getXY('node-deploy'), tgt4: getXY('node-ops'), tgt5: getXY('node-uncat'), tgt6: getXY('node-api')
-        };
+    function isPrime(n) {
+        for (var i = 2, sqrt = Math.sqrt(n); i <= sqrt; i++) if (n % i === 0) return false;
+        return true;
     }
 
-    class Particle {
-        constructor(centers) {
-            if (!centers) { this.dead = true; return; }
-            const sources = [
-                {c: centers.src1, color: '#2b579a'}, {c: centers.src2, color: '#d24726'}, 
-                {c: centers.src3, color: '#0052cc'}, {c: centers.src4, color: '#0052cc'}, {c: centers.src5, color: '#4a154b'}
-            ];
-            const tags = [
-                {label: 'LANDSCAPE:RAW', tgt: centers.tgt1}, {label: 'CONFIG:LOOSE', tgt: centers.tgt2},
-                {label: 'DEPLOY:RAW', tgt: centers.tgt3}, {label: 'OPS:LOOSE', tgt: centers.tgt4},
-                {label: 'UNCAT:THEME_A', tgt: centers.tgt5}, {label: 'API:JSON_DUMP', tgt: centers.tgt6}
-            ];
-            const src = sources[Math.floor(Math.random() * sources.length)];
-            const tag = tags[Math.floor(Math.random() * tags.length)];
-            this.x = src.c.x; this.y = src.c.y; this.color = src.color; this.label = tag.label;
-            this.parserNode = centers.parser; this.targetNode = tag.tgt;
-            this.state = 0; this.life = 0; this.wobbleOffset = Math.random() * Math.PI * 2; this.dead = false;
-        }
-        update() {
-            if (this.dead) return false;
-            this.life++; let speed = 2.8;
-            if (this.state === 0) {
-                const dx = this.parserNode.x - this.x, dy = this.parserNode.y - this.y;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                if (dist < 40) { this.state = 1; this.life = 0; } 
-                else {
-                    const wobble = Math.sin(this.life * 0.15 + this.wobbleOffset) * 20;
-                    this.x += (dx/dist)*speed + (-dy/dist * wobble * 0.04);
-                    this.y += (dy/dist)*speed + (dx/dist * wobble * 0.04);
-                }
-            } else if (this.state === 1) {
-                if (this.life > 15) { this.state = 2; } 
-                else {
-                    this.x += Math.cos(this.life * 0.4 + this.wobbleOffset) * 2;
-                    this.y += Math.sin(this.life * 0.4 + this.wobbleOffset) * 2;
-                }
-            } else if (this.state === 2) {
-                speed = 4.5; 
-                const dx = this.targetNode.x - this.x, dy = this.targetNode.y - this.y;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                if (dist < 15) return false; 
-                this.x += (dx/dist)*speed; this.y += (dy/dist)*speed;
-            }
-            return true; 
-        }
-        draw(ctx) {
-            if (this.dead) return;
-            ctx.fillStyle = this.color; ctx.beginPath(); ctx.roundRect(this.x - 45, this.y - 9, 90, 18, 4); ctx.fill();
-            ctx.fillStyle = '#fff'; ctx.font = 'bold 8px var(--sapMonoFont)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(this.label, this.x, this.y + 1);
+    function fracBits(n) { return ((n % 1) * 0x100000000) | 0; }
+
+    for (var candidate = 2; primeCounter < 64; candidate++) {
+        if (isPrime(candidate)) {
+            if (primeCounter < 8) hash[primeCounter] = fracBits(Math.pow(candidate, 1/2));
+            k[primeCounter] = fracBits(Math.pow(candidate, 1/3));
+            primeCounter++;
         }
     }
 
-    function runAnimation() {
-        if (!isCanvasActive) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (Math.random() < 0.08) { const p = new Particle(getCenters()); if (!p.dead) particles.push(p); }
-        particles = particles.filter(p => { p.draw(ctx); return p.update(); });
-        animReq = requestAnimationFrame(runAnimation);
+    str += "\x80";
+    while (str.length % 64 !== 56) str += "\x00";
+
+    for (var i = 0; i < str.length; i++) {
+        words[i >> 2] |= str.charCodeAt(i) << ((3 - i) % 4) * 8;
     }
 
-    function initCanvas() {
-        if (!canvas) return; const container = document.getElementById('pipeline-container'); if (!container) return;
-        canvas.width = container.clientWidth; canvas.height = container.clientHeight; ctx = canvas.getContext('2d');
-    }
-    window.addEventListener('resize', initCanvas);
+    words.push((strBitLen / 0x100000000) | 0);
+    words.push(strBitLen | 0);
 
-    // Spider Web Canvas
-    function drawSpiderWeb() {
-        const c = document.getElementById('spider-canvas');
-        if (!c) return;
-        const rect = c.parentElement.getBoundingClientRect();
-        c.width = rect.width; c.height = rect.height;
-        const ctx2 = c.getContext('2d');
-        const nodes = [];
-        for(let i=0; i<15; i++) nodes.push({x: Math.random()*c.width, y: Math.random()*c.height});
-        
-        ctx2.clearRect(0,0,c.width,c.height);
-        ctx2.strokeStyle = 'rgba(0, 112, 242, 0.15)';
-        ctx2.lineWidth = 1;
-        nodes.forEach((n, i) => {
-            nodes.forEach((n2, j) => {
-                if (i !== j) { ctx2.beginPath(); ctx2.moveTo(n.x, n.y); ctx2.lineTo(n2.x, n2.y); ctx2.stroke(); }
-            });
-        });
-        nodes.forEach(n => {
-            ctx2.fillStyle = '#0070f2'; ctx2.beginPath(); ctx2.arc(n.x, n.y, 4, 0, Math.PI*2); ctx2.fill();
-        });
-    }
+    for (var j = 0; j < words.length; j += 16) {
+        var w = words.slice(j, j + 16), oldHash = hash.slice(0);
 
-    // Typing Logic
-    function typeWriter(mdTargetId, text, callback, speed = 8) {
-        const mdEl = document.getElementById(mdTargetId);
-        if (!mdEl) return;
-        mdEl.classList.add('typing-cursor');
-        let i = 0; let mdHtml = "";
-        function type() {
-            if (i < text.length) {
-                mdHtml += text.charAt(i);
-                mdEl.innerText = mdHtml;
-                i++; setTimeout(type, speed);
-            } else {
-                mdEl.classList.remove('typing-cursor');
-                if (callback) callback();
-            }
+        for (var i = 16; i < 64; i++) {
+            var s0 = rightRotate(7, w[i-15]) ^ rightRotate(18, w[i-15]) ^ (w[i-15] >>> 3);
+            var s1 = rightRotate(17, w[i-2]) ^ rightRotate(19, w[i-2]) ^ (w[i-2] >>> 10);
+            w[i] = (w[i-16] + s0 + w[i-7] + s1) | 0;
         }
-        type();
+
+        for (var i = 0; i < 64; i++) {
+            var s1 = rightRotate(6, hash[4]) ^ rightRotate(11, hash[4]) ^ rightRotate(25, hash[4]);
+            var ch = (hash[4] & hash[5]) ^ (~hash[4] & hash[6]);
+            var temp1 = (hash[7] + s1 + ch + k[i] + w[i]) | 0;
+            var s0 = rightRotate(2, hash[0]) ^ rightRotate(13, hash[0]) ^ rightRotate(22, hash[0]);
+            var maj = (hash[0] & hash[1]) ^ (hash[0] & hash[2]) ^ (hash[1] & hash[2]);
+            var temp2 = (s0 + maj) | 0;
+
+            hash = [(temp1 + temp2) | 0].concat(hash);
+            hash[4] = (hash[4] + temp1) | 0;
+            hash.pop();
+        }
+
+        for (var i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
     }
 
-    // State Locks
-    function simClickAndAdvance(btnId, feedbackText = null, feedbackClass = null, holdDelay = 250) {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        const btn = document.getElementById(btnId);
-        if (btn) {
-            if (feedbackText) {
-                btn.innerText = feedbackText;
-                btn.className = `sapBtn ${feedbackClass}`;
-                btn.style.transform = "scale(0.98)";
-                holdDelay = 800; 
-            } else {
-                btn.classList.add('sim-click');
-            }
-            setTimeout(() => {
-                if(!feedbackText) btn.classList.remove('sim-click');
-                currentStep++;
-                isTransitioning = false; 
-                updatePresentation();
-            }, holdDelay);
-        } else {
-            currentStep++;
-            isTransitioning = false;
-            updatePresentation();
-        }
+    return hash.map(h => ('00000000' + (h >>> 0).toString(16)).slice(-8)).join('');
+}
+
+/* ----------------------------------------------------------
+   PASSWORD CHECK (USING PURE JS SHA-256)
+---------------------------------------------------------- */
+const storedHash = "ebe434a3213104b738095e6a7ae2ac832273632c9f7c922d2f2ba4a67e714d8a";
+
+function unlock() {
+    const pw = document.getElementById("pw").value;
+    const hex = sha256(pw);
+
+    if (hex === storedHash) {
+        document.getElementById("gate").style.display = "none";
+        document.getElementById("content").style.display = "block";
+    } else {
+        document.getElementById("pw").value = "";
     }
+}
 
-    function handleNextAction() {
-        if (isTransitioning || currentStep >= TOTAL_STEPS) return;
-        
-        const actionMap = {
-            5: { id: 'btn-upload' },
-            9: { id: 'btn-synthesize' },
-            12: { id: 'btn-apply-editor' }, 
-            14: { id: 'btn-commit-topic', text: '✅ Committing...', cls: 'success' },
-            16: { id: 'btn-forensic-crawl', text: '🔍 Crawling...', cls: 'info' },
-            17: { id: 'btn-approve-guess', text: '✅ Confirmed', cls: 'success' },
-            19: { id: 'btn-approve-change-1', text: '✅ Approved', cls: 'success' },
-            20: { id: 'btn-approve-change-2', text: '✅ Approved', cls: 'success' },
-            21: { id: 'btn-reject-change-3', text: '❌ Rejected', cls: 'reject' },
-            22: { id: 'btn-split-merge', text: '🔄 Splitting MCR...', cls: 'primary' }
-        };
-
-        const action = actionMap[currentStep];
-        
-        if (action) {
-            simClickAndAdvance(action.id, action.text, action.cls); 
-        } else {
-            currentStep++;
-            updatePresentation(); 
-        }
-    }
-
-    btnNext.addEventListener('click', handleNextAction);
-    btnPrev.addEventListener('click', () => { 
-        if (isTransitioning || currentStep <= 0) return;
-        currentStep--; updatePresentation(); 
-    });
-    btnRestart.addEventListener('click', () => {
-        if (isTransitioning || currentStep === 0) return;
-        currentStep = 0;
-        updatePresentation();
-    });
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === ' ') handleNextAction();
-        if (e.key === 'ArrowLeft') { if (isTransitioning || currentStep <= 0) return; currentStep--; updatePresentation(); }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (isTransitioning) return;
-        
-        // Editor Actions
-        if (e.target.closest('#btn-upload') && currentStep === 5) handleNextAction();
-        if (e.target.id === 'mock-file-open' && currentStep === 6) handleNextAction();
-        if (e.target.id === 'btn-synthesize' && currentStep === 9) handleNextAction();
-        if (e.target.closest('#card-jira') && currentStep === 11) {
-            document.querySelectorAll('.prov-card').forEach(c => c.classList.remove('selected'));
-            e.target.closest('.prov-card').classList.add('selected');
-            document.getElementById('btn-apply-editor').disabled = false;
-        }
-        if (e.target.id === 'btn-apply-editor' && currentStep === 11) handleNextAction();
-        if (e.target.id === 'btn-commit-topic' && (currentStep === 13 || currentStep === 14)) handleNextAction();
-        
-        // Archaeology Actions
-        if (e.target.id === 'btn-forensic-crawl' && currentStep === 16) handleNextAction();
-        if (e.target.id === 'btn-approve-guess' && currentStep === 17) handleNextAction();
-
-        // Governance Actions
-        if (e.target.id === 'btn-approve-change-1' && currentStep === 19) handleNextAction();
-        if (e.target.id === 'btn-approve-change-2' && currentStep === 20) handleNextAction();
-        if (e.target.id === 'btn-reject-change-3' && currentStep === 21) handleNextAction();
-        if (e.target.id === 'btn-split-merge' && currentStep === 22) handleNextAction();
-    });
-
-    document.getElementById('global-file-input').addEventListener('change', function(e) {
-        if (this.files.length > 0 && currentStep === 5) {
-            uploadedFileName = this.files[0].name; 
-            this.value = ''; 
-            handleNextAction(); 
-        }
-    });
-
-    function getEditorHeader(title, type, statusText, statusColor) {
-        return `
-            <div class="readme-header">
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-bottom: 1px solid #1e293b;">
-                    <span>${title} <span class="sapBadge neutral" style="margin-left: 8px; font-size: 0.6rem; letter-spacing: 0.5px; border-color:#475569; background:#334155; color:#94a3b8;">TYPE: ${type}</span></span>
-                    <span style="color: ${statusColor}; font-weight: bold;">${statusText}</span>
-                </div>
-                <div style="display: flex; background: #0f172a; padding: 0 10px;">
-                    <div class="editor-tab">Visual Editor</div>
-                    <div class="editor-tab active">Markdown</div>
-                    <div class="editor-tab">Split Preview</div>
-                </div>
-            </div>
-        `;
-    }
-
-    function updatePresentation() {
-        btnPrev.disabled = currentStep === 0;
-        btnNext.disabled = currentStep === TOTAL_STEPS;
-        btnRestart.disabled = currentStep === 0;
-        btnNext.innerText = currentStep === TOTAL_STEPS ? "End" : "Next Action";
-        pBar.style.width = `${(currentStep / TOTAL_STEPS) * 100}%`;
-        stepInfo.innerText = `Step ${currentStep + 1} / ${TOTAL_STEPS + 1}`;
-
-        slides.forEach(s => s.classList.remove('active'));
-
-        const map = {
-            0: 's0', 1: 's1', 2: 's2', 3: 's-concept',
-            4: 's3', 5: 's3', 6: 's3', 7: 's3', 8: 's3', 9: 's3', 10: 's3', 11: 's3', 12: 's3', 13: 's3', 14: 's3', 15: 's3',
-            16: 's-whys', 17: 's-whys',
-            18: 's-transition',
-            19: 's5', 20: 's5', 21: 's5', 22: 's5', 23: 's5', 
-            24: 's6', 25: 's8'
-        };
-        
-        let mapStep = map[currentStep] || 's8';
-        const activeSlide = document.getElementById(mapStep);
-        if (activeSlide) activeSlide.classList.add('active');
-
-        if (mapStep === 's2') {
-            if (!isCanvasActive) { initCanvas(); isCanvasActive = true; particles = []; runAnimation(); }
-        } else {
-            isCanvasActive = false; if(animReq) cancelAnimationFrame(animReq);
-        }
-
-        if (mapStep === 's-concept') {
-            drawSpiderWeb();
-        }
-
-        // ==========================================
-        // UI INJECTION: Phase 1 Editor
-        // ==========================================
-        if (mapStep === 's3') {
-            const readmeContainer = document.getElementById('readme-ui-container');
-            if (!readmeContainer) return; 
-            
-            if (currentStep === 4) {
-                document.getElementById('s3-h1').innerText = "Investigative Gateway: The Workspace for Authoring";
-                document.getElementById('s3-h2').innerText = "The Consolidation Engine operates inside a modern ecosystem for Docs-as-Code. Authors edit the narrative sequentially, while Artificial Intelligence silently maps connections to the background document network in the Inspector pane.";
-            } else {
-                document.getElementById('s3-h1').innerText = "Investigative Gateway: Provenance and Synthesis";
-                document.getElementById('s3-h2').innerText = "The central editor remains a strict environment for Markdown. As you write linearly, the Consolidation Engine constructs true narrative prose, embedding semantic audits and weaving the background document map cleanly into the workflow.";
-            }
-
-            const baseReadmeNav = (activeId) => `
-                <div class="readme-nav">
-                    <div style="font-size: 0.7rem; font-weight: bold; color: var(--sapTextMuted); margin-bottom: 10px;">TOPIC EXPLORER</div>
-                    <div class="readme-nav-item" style="font-weight: 600;">📁 Landscape & Prerequisites</div>
-                    <div class="readme-nav-item" style="font-weight: 600; margin-top: 10px;">📂 Configuration & Extension</div>
-                    <div class="readme-nav-item nested">📄 Overview of the Extension Concept</div>
-                    <div class="readme-nav-item nested ${activeId === 'ref' ? 'active' : ''} ${currentStep > 4 && currentStep < 8 ? 'error' : ''}">📄 Constraints for Field Mapping</div>
-                    <div class="readme-nav-item nested ${activeId === 'task' ? 'active' : ''} ${currentStep >= 9 && currentStep < 15 ? 'warning' : ''}">📄 Details for Business Add-In Implementation</div>
-                </div>
-            `;
-            
-            if (currentStep === 4) {
-                readmeContainer.innerHTML = baseReadmeNav('ref') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Constraints for Field Mapping", "REFERENCE", "Draft Mode", "var(--sapTextMuted)")}
-                        <div class="readme-content"># Constraints for Field Mapping\n\n<span style="color:#475569;">// Standard environment for editing Markdown...</span></div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:var(--sapTextMuted);">IDLE</span></div>
-                        <div class="readme-preview-content" style="text-align: center; display:flex; flex-direction:column; justify-content:center; height:100%; color: var(--sapTextMuted);">
-                            <div style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;">🔍</div>
-                            <p style="font-size: 0.9rem; line-height: 1.5;">The inspector is idle.<br><br>As you edit the sequential text, the system automatically audits content for schema alignment and maps new nodes to the semantic knowledge graph.</p>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (currentStep === 5) {
-                readmeContainer.innerHTML = baseReadmeNav('ref') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Constraints for Field Mapping", "REFERENCE", "SCHEMA VOID (LOCKED)", "#f87171")}
-                        <div class="readme-content"># Constraints for Field Mapping\n\n<span class="md-comment error">&lt;!-- Consolidation Engine: Mandatory topic. The system found no source evidence in connected repositories to synthesize a draft. --&gt;</span></div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:#f87171;">SCHEMA VOID</span></div>
-                        <div class="readme-preview-content" style="padding: 20px;">
-                            <div class="inspector-box" style="border-color:#f87171; background:#fff0f0;">
-                                <div class="inspector-title" style="color:#f87171;">Audit Log for Provenance</div>
-                                <div class="inspector-row"><span>Query:</span><span class="inspector-val">[Domain_Values] AND [Entity]</span></div>
-                                <div class="inspector-row"><span>Scope:</span><span class="inspector-val" style="color:#64748b;">42 Docs, 18 Jira, 7 Slack</span></div>
-                                <div class="inspector-row" style="margin-top:10px; font-weight:bold; color:#b91c1c;"><span>Matches:</span><span>0</span></div>
-                            </div>
-                            <div class="dropzone" id="btn-upload">
-                                <div style="font-size: 2.5rem; margin-bottom: 10px; color: var(--sapBrandColor);">📄</div>
-                                <div style="font-weight: bold; color: var(--sapTextColor); margin-bottom: 5px;">Upload Missing Evidence</div>
-                            </div>
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapNegative); color: var(--sapNegative);">Override Schema</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (currentStep === 6) {
-                readmeContainer.innerHTML = baseReadmeNav('ref') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Constraints for Field Mapping", "REFERENCE", "SCHEMA VOID (LOCKED)", "#f87171")}
-                        <div class="readme-content"># Constraints for Field Mapping\n\n<span class="md-comment error">&lt;!-- Consolidation Engine: Mandatory topic. The system found no source evidence. --&gt;</span></div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:#f87171;">SCHEMA VOID</span></div>
-                        <div class="readme-preview-content">
-                            <div class="dropzone">
-                                <div style="font-size: 2.5rem; margin-bottom: 10px; color: var(--sapBrandColor);">📄</div>
-                                <div style="font-weight: bold; color: var(--sapTextColor); margin-bottom: 5px;">Upload Missing Evidence</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="position: absolute; top:0; left:0; right:0; bottom:0; background:rgba(15, 23, 42, 0.4); z-index:50; display:flex; justify-content:center; align-items:center;">
-                        <div style="background:#fff; width:400px; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
-                            <div style="padding:12px 15px; border-bottom:1px solid #e2e8f0; font-weight:bold; font-size:0.85rem; display:flex; justify-content:space-between;">File Upload <span style="color:#94a3b8;">✕</span></div>
-                            <div style="padding:10px; height:130px; background:#f8fafc; border-bottom:1px solid #e2e8f0; display:flex; flex-direction:column; gap:5px;">
-                                <div style="padding:8px; border-radius:4px; font-size:0.85rem; color:#475569; display:flex; align-items:center; gap:8px;">📄 Q3_Architecture.pdf</div>
-                                <div id="mock-file-target" style="padding:8px; border-radius:4px; font-size:0.85rem; color:#475569; display:flex; align-items:center; gap:8px; transition:all 0.2s;">📄 Constraints.docx</div>
-                                <div style="padding:8px; border-radius:4px; font-size:0.85rem; color:#475569; display:flex; align-items:center; gap:8px;">📊 Server_Logs.csv</div>
-                            </div>
-                            <div style="padding:10px 15px; display:flex; justify-content:flex-end; gap:10px; background:#fff; border-radius:0 0 8px 8px;">
-                                <button style="border:1px solid #cbd5e1; background:#fff; padding:5px 15px; border-radius:4px; font-weight:bold; color:#475569;">Cancel</button>
-                                <button id="mock-file-open" style="border:none; background:var(--sapBrandColor); padding:5px 15px; border-radius:4px; font-weight:bold; color:#fff; transition:transform 0.1s;">Open</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                isTransitioning = true;
-                setTimeout(() => { const t = document.getElementById('mock-file-target'); if (t) { t.style.background = '#e0f2fe'; t.style.color = 'var(--sapBrandColor)'; t.style.fontWeight = 'bold'; } }, 600);
-                setTimeout(() => { const btn = document.getElementById('mock-file-open'); if (btn) { btn.style.transform = 'scale(0.92)'; btn.style.filter = 'brightness(0.85)'; } }, 1400);
-                setTimeout(() => { isTransitioning = false; handleNextAction(); }, 1700);
-            }
-
-            if (currentStep === 7) { 
-                readmeContainer.innerHTML = baseReadmeNav('ref') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Constraints for Field Mapping", "REFERENCE", "SCHEMA VOID (LOCKED)", "#f87171")}
-                        <div class="readme-content"># Constraints for Field Mapping\n\n<span class="md-comment" style="color:var(--sapInformation);">&lt;!-- Consolidation Engine: Scanning new document payload... --&gt;</span></div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:var(--sapInformation);">INGESTING</span></div>
-                        <div class="readme-preview-content">
-                            <div class="inspector-box" style="border-color:var(--sapInformation); background:#e5f0fa;">
-                                <div class="inspector-title" style="color:var(--sapInformation);">Ingesting Target File</div>
-                                <div style="font-size:0.85rem; margin-bottom:10px; font-weight:bold; color:var(--sapTextColor);">${uploadedFileName}</div>
-                                <div style="height:6px; background:#fff; border-radius:3px; overflow:hidden;">
-                                    <div style="height:100%; width:100%; background:var(--sapInformation); animation: loadBar 1.2s ease-out forwards;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                if (window.parseTimeout) clearTimeout(window.parseTimeout);
-                window.parseTimeout = setTimeout(() => { if (currentStep === 7 && !isTransitioning) handleNextAction(); }, 1300);
-            }
-
-            if (currentStep === 8) { 
-                readmeContainer.innerHTML = baseReadmeNav('ref') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Constraints for Field Mapping", "REFERENCE", "Topic Verified", "#4ade80")}
-                        <div class="readme-content"># Constraints for Field Mapping\n\nUse the following domain values to restrict data fields:\n* **G**: Master rules apply.\n* **L**: Local bypass allowed.</div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:var(--sapPositive);">VERIFIED</span></div>
-                        <div class="readme-preview-content">
-                            <div class="inspector-box" style="border-color:var(--sapPositive); background:#f0fdf4;">
-                                <div class="inspector-title" style="color:var(--sapPositive);">Data Resolved</div>
-                                <div style="font-size:0.85rem; color:#166534;"><strong>${uploadedFileName}</strong> indexed successfully.</div>
-                            </div>
-                        </div>
-                    </div>
-                `; 
-            }
-
-            if (currentStep === 9) { 
-                readmeContainer.innerHTML = baseReadmeNav('task') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Details for Business Add-In Implementation", "TASK", "SYNTHESIS PENDING", "#fbbf24")}
-                        <div class="readme-content"># Details for Business Add-In Implementation\n\n<span class="md-comment warning">&lt;!-- Consolidation Engine: System awaits the command to synthesize sequentially. --&gt;</span></div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:#fbbf24;">SOURCES FOUND</span></div>
-                        <div class="readme-preview-content">
-                            <div class="inspector-box" style="border-color:#fbbf24; background:#fffbeb;">
-                                <div class="inspector-title" style="color:#b45309;">Audit Log</div>
-                                <div class="inspector-row"><span>Matches:</span><span>2</span></div>
-                            </div>
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                <button id="btn-synthesize" class="sapBtn primary" style="flex: 2; margin: 0;">Synthesize Narrative Draft</button>
-                                <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapTextMuted); color: var(--sapTextMuted);">Dismiss</button>
-                            </div>
-                        </div>
-                    </div>
-                `; 
-            }
-
-            if (currentStep === 10) { 
-                readmeContainer.innerHTML = baseReadmeNav('task') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Details for Business Add-In Implementation", "TASK", "SYNTHESIZING...", "var(--sapBrandColor)")}
-                        <div class="readme-content"><span id="md-type-target"></span></div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:var(--sapInformation);">SYNTHESIZING</span></div>
-                        <div class="readme-preview-content">
-                            <div style="color:var(--sapTextMuted); font-style:italic;">Constructing narrative prose...</div>
-                        </div>
-                    </div>
-                `;
-                isTransitioning = true; 
-                typeWriter('md-type-target', "# Details for Business Add-In Implementation\n\nTrigger a Business Add-In to apply custom data transformations during material replication.\n\n**Strategy:**\n<span class=\"md-comment warning\">[Conflict detected. Resolve requirement framework.]</span>\n\n\`\`\`abap\nDATA: lo_badi TYPE REF TO zif_mdg_mapping.\nGET BADI lo_badi.\nCALL BADI lo_badi->execute_mapping.\n\`\`\`", () => { isTransitioning = false; handleNextAction(); }, 6);
-            }
-
-            if (currentStep === 11) { 
-                readmeContainer.innerHTML = baseReadmeNav('task') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Details for Business Add-In Implementation", "TASK", "ARBITRATION REQUIRED", "#fbbf24")}
-                        <div class="readme-content"># Details for Business Add-In Implementation\n\n**Strategy:**\n<span class="md-comment warning" style="border-left:3px solid #fbbf24; padding:10px;">[Conflict detected. Resolve mapping execution framework.]</span></div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>CONFLICT RESOLUTION</span><span class="sapBadge warning">2 Sources</span></div>
-                        <div class="readme-preview-content">
-                            <div class="prov-card" id="card-wiki"><div class="prov-meta">📘 Wiki</div>"Execute via zif_standard_mapping."</div>
-                            <div class="prov-card" id="card-jira"><div class="prov-meta">🎫 Jira DEV-402</div>"Bypass standard routing due to timeout risk. Use direct execution."</div>
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                <button id="btn-apply-editor" class="sapBtn primary" style="flex: 2; margin: 0;" disabled>Apply Evidence</button>
-                                <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapNegative); color: var(--sapNegative);">Discard All</button>
-                            </div>
-                        </div>
-                    </div>
-                `; 
-            }
-
-            if (currentStep === 12) { 
-                readmeContainer.innerHTML = baseReadmeNav('task') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Details for Business Add-In Implementation", "TASK", "ARBITRATION REQUIRED", "#fbbf24")}
-                        <div class="readme-content"># Details for Business Add-In Implementation\n\n**Strategy:**\n<span class="md-comment warning" style="border-left:3px solid #fbbf24; padding:10px;">[Conflict detected. Resolve mapping execution framework.]</span></div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>CONFLICT RESOLUTION</span><span class="sapBadge warning">2 Sources</span></div>
-                        <div class="readme-preview-content">
-                            <div class="prov-card" id="card-wiki"><div class="prov-meta">📘 Wiki</div>"Execute via zif_standard_mapping."</div>
-                            <div class="prov-card selected" id="card-jira"><div class="prov-meta">🎫 Jira DEV-402</div>"Bypass standard routing due to timeout risk. Use direct execution."</div>
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                <button id="btn-apply-editor" class="sapBtn primary" style="flex: 2; margin: 0;">Apply Evidence</button>
-                                <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapNegative); color: var(--sapNegative);">Discard All</button>
-                            </div>
-                        </div>
-                    </div>
-                `; 
-                isTransitioning = true; 
-                setTimeout(() => { document.getElementById('card-jira').classList.add('selected'); document.getElementById('btn-apply-editor').disabled = false; }, 600); 
-                setTimeout(() => { const btn = document.getElementById('btn-apply-editor'); btn.classList.add('sim-click', 'success'); btn.innerText = "Applying..."; }, 1400); 
-                setTimeout(() => { isTransitioning = false; handleNextAction(); }, 2000); 
-            }
-
-            if (currentStep === 13) { 
-                readmeContainer.innerHTML = baseReadmeNav('task') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Details for Business Add-In Implementation", "TASK", "DRAFT READY", "var(--sapBrandColor)")}
-                        <div class="readme-content"># Details for Business Add-In Implementation\n\n**Strategy:**\nTo mitigate timeout risks, bypass standard routing. Execute mapping directly.<span id="md-human-type"></span>\n\n\`\`\`abap\nCALL BADI lo_badi->execute_mapping.\n\`\`\`</div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:var(--sapBrandColor);">EDITING</span></div>
-                        <div class="readme-preview-content">
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                <button id="btn-commit-topic" class="sapBtn primary" style="flex: 2; margin: 0;">Commit Topic</button>
-                                <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapTextMuted); color: var(--sapTextMuted);">Discard</button>
-                            </div>
-                        </div>
-                    </div>
-                `; 
-            }
-
-            if (currentStep === 14) { 
-                readmeContainer.innerHTML = baseReadmeNav('task') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Details for Business Add-In Implementation", "TASK", "DRAFT READY", "var(--sapBrandColor)")}
-                        <div class="readme-content"># Details for Business Add-In Implementation\n\n**Strategy:**\nTo mitigate timeout risks, bypass standard routing. Execute mapping directly.<span id="md-human-type"></span>\n\n\`\`\`abap\nCALL BADI lo_badi->execute_mapping.\n\`\`\`</div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:var(--sapBrandColor);">EDITING</span></div>
-                        <div class="readme-preview-content">
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                <button id="btn-commit-topic" class="sapBtn primary" style="flex: 2; margin: 0;">Commit Topic</button>
-                                <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapTextMuted); color: var(--sapTextMuted);">Discard</button>
-                            </div>
-                        </div>
-                    </div>
-                `; 
-                isTransitioning = true; 
-                typeWriter('md-human-type', " Obtain VP approval before deployment.", () => { isTransitioning = false; }, 35); 
-            }
-
-            if (currentStep === 15) { 
-                readmeContainer.innerHTML = baseReadmeNav('task') + `
-                    <div class="readme-md">
-                        ${getEditorHeader("Details for Business Add-In Implementation", "TASK", "Topic Verified", "#4ade80")}
-                        <div class="readme-content"># Details for Business Add-In Implementation\n\n**Strategy:**\nTo mitigate timeout risks, bypass standard routing. Execute mapping directly. Obtain VP approval before deployment.</div>
-                    </div>
-                    <div class="readme-preview">
-                        <div class="readme-preview-header"><span>AI INSPECTOR</span><span style="color:var(--sapPositive);">LOCKED</span></div>
-                        <div class="readme-preview-content">
-                            <div class="inspector-box" style="border-color:var(--sapPositive); background:#f0fdf4;">
-                                <div class="inspector-title" style="color:var(--sapPositive);">Arbitration Complete</div>
-                                The system locked the baseline and mapped to the graph.
-                            </div>
-                        </div>
-                    </div>
-                `; 
-            }
-        }
-
-        // ==========================================
-        // UI INJECTION: Unearthing the Whys (Forensic)
-        // ==========================================
-        if (mapStep === 's-whys') {
-            const forensicContainer = document.getElementById('forensic-ui-container');
-            if (currentStep === 16) {
-                forensicContainer.innerHTML = `
-                    <div class="forensic-lane">
-                        <div class="sapBadge neutral" style="align-self: flex-start;">Rule Metadata: MATERIAL_EXP_01</div>
-                        <div style="background: #1e293b; padding: 20px; border-radius: 8px; font-family: var(--sapMonoFont); color: #94a3b8; font-size: 0.8rem;">
-                            <span style="color: #38bdf8;">OBJECT:</span> BRF_DECISION_TABLE<br>
-                            <span style="color: #38bdf8;">AUTHOR:</span> M_MUELLER_EXT<br>
-                            <span style="color: #38bdf8;">DATE:</span> 12.04.2021<br>
-                            <span style="color: #38bdf8;">DESCR:</span> "Fixed urgent tax bug"<br>
-                            <hr style="border-color: #334155; margin: 10px 0;">
-                            <span style="color: #fbbf24;">STATUS:</span> NO PHILOSOPHY FOUND
-                        </div>
-                        <p style="font-size: 0.85rem; color: var(--sapTextMuted);">The BRF+ description is cryptic. The system finds no linked documentation.</p>
-                        <div style="display: flex; gap: 10px;">
-                            <button id="btn-forensic-crawl" class="sapBtn primary" style="flex: 2; margin: 0;">Trawl Jira & Discovery breadcrumbs</button>
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapTextMuted); color: var(--sapTextMuted);">Skip Entity</button>
-                        </div>
-                    </div>
-                    <div class="forensic-lane" style="border-left: 1px dashed #cbd5e1; padding-left: 30px; justify-content: center; align-items: center;">
-                        <div style="font-size: 4rem; opacity: 0.1;">🕵️‍♂️</div>
-                        <p style="color: var(--sapTextMuted); font-style: italic; text-align: center;">Archaeology engine idle...</p>
-                    </div>
-                `;
-            }
-            if (currentStep === 17) {
-                forensicContainer.innerHTML = `
-                    <div class="forensic-lane">
-                        <div class="breadcrumb-card">
-                            <div class="breadcrumb-tag">88% MATCH</div>
-                            <div class="breadcrumb-meta">Jira COCA-992 • Fixed by Mueller</div>
-                            <div class="breadcrumb-text">"Legal mandate regarding lithium export restrictions to secondary markets. Rules must apply at Material Group level."</div>
-                        </div>
-                        <div class="breadcrumb-card">
-                            <div class="breadcrumb-tag">72% MATCH</div>
-                            <div class="breadcrumb-meta">Confluence Page • EU Supply Audit</div>
-                            <div class="breadcrumb-text">"Export-Control: Rule MATERIAL_EXP_01 handles the regional bypass for licensed vendors."</div>
-                        </div>
-                    </div>
-                    <div class="forensic-lane" style="border-left: 1px dashed #cbd5e1; padding-left: 30px;">
-                        <div class="sapBadge info" style="align-self: flex-start;">AI Intelligent Guess</div>
-                        <div style="background: #f0f9ff; border: 1px solid #bae6fd; padding: 20px; border-radius: 8px;">
-                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">Governance Philosophy</h4>
-                            <p style="font-size: 0.85rem; line-height: 1.5; color: #0369a1;">
-                                <strong>Context:</strong> This rule was implemented to satisfy EU Legal Mandate (2021) regarding export restrictions on lithium components. It enables regional bypass for vendors holding a Class-B License.<br><br>
-                                <strong>Provenance:</strong> Synthesized from Jira COCA-992 and EU Audit Docs.
-                            </p>
-                        </div>
-                        <div style="display: flex; gap: 10px; margin-top: 15px;">
-                            <button id="btn-approve-guess" class="sapBtn success" style="flex: 1; margin: 0;">Confirm & Bind</button>
-                            <button class="sapBtn reject" style="flex: 1; margin: 0; background: transparent;">Discard</button>
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapTextMuted); color: var(--sapTextMuted);">Manual Edit</button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        // ==========================================
-        // UI INJECTION: Phase 2 Governance (MCR)
-        // ==========================================
-        if (mapStep === 's5') {
-            const triageContainer = document.getElementById('triage-ui-container');
-            if (!triageContainer) return;
-
-            if (currentStep === 19) {
-                triageContainer.innerHTML = `
-                    <div class="diff-container">
-                        <div class="diff-header">
-                            <span>MCR-104: Component Upgrade Documentation</span>
-                            <span>Change 1 of 3: Reference for Application Programming Interfaces</span>
-                        </div>
-                        <div class="diff-chunk-header">@@ -41,6 +41,6 @@</div>
-                        <div class="diff-line diff-context"><div class="diff-num">41</div><div class="diff-code">### Synchronization Endpoints</div></div>
-                        <div class="diff-line diff-context"><div class="diff-num">42</div><div class="diff-code">The system provides endpoints to synchronize local states with the master SAP database.</div></div>
-                        <div class="diff-line diff-del"><div class="diff-num">43</div><div class="diff-code">Use the \`/v1/sync\` endpoint for legacy data streams.</div></div>
-                        <div class="diff-line diff-add"><div class="diff-num">44</div><div class="diff-code">Use the \`/v2/sync\` endpoint. Note: The v1 architecture is fully deprecated as of Q3.</div></div>
-                        <div class="diff-line diff-context"><div class="diff-num">45</div><div class="diff-code">Ensure authentication tokens are refreshed before calling the sync routing.</div></div>
-                    </div>
-                    <div class="diff-inspector">
-                        <div class="sapBadge info" style="margin-bottom: 15px;">Audit Active</div>
-                        <h3 style="margin-top: 0; font-size: 1rem;">Architectural Update</h3>
-                        <p style="font-size: 0.85rem; color: var(--sapTextMuted); line-height: 1.5; margin-bottom: 20px;">
-                            Evaluating endpoint deprecation change. The narrative intent aligns with the codebase execution for the /v2/ routing protocol. No semantic contradictions detected.
-                        </p>
-                        <div style="display: flex; gap: 10px; margin-top: auto;">
-                            <button id="btn-approve-change-1" class="sapBtn success" style="flex: 1; margin: 0;">Approve</button>
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapNegative); color: var(--sapNegative);">Reject</button>
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapTextMuted); color: var(--sapTextMuted);">Comment</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (currentStep === 20) {
-                triageContainer.innerHTML = `
-                    <div class="diff-container">
-                        <div class="diff-header">
-                            <span>MCR-104: Component Upgrade Documentation</span>
-                            <span>Change 2 of 3: Deployment & Cutover</span>
-                        </div>
-                        <div class="diff-chunk-header">@@ -88,4 +88,5 @@</div>
-                        <div class="diff-line diff-context"><div class="diff-num">88</div><div class="diff-code">Ensure permissions are synchronized across parallel routes.</div></div>
-                        <div class="diff-line diff-context"><div class="diff-num">89</div><div class="diff-code">Assign the standard administrator role to the deployment user.</div></div>
-                        <div class="diff-line diff-add"><div class="diff-num">90</div><div class="diff-code">You must also map the \`SAP_JOULE_ADMIN\` security role to enable vector generation.</div></div>
-                        <div class="diff-line diff-context"><div class="diff-num">91</div><div class="diff-code">Execute the validation report immediately after you import the target transport.</div></div>
-                    </div>
-                    <div class="diff-inspector">
-                        <div class="sapBadge info" style="margin-bottom: 15px;">Audit Active</div>
-                        <h3 style="margin-top: 0; font-size: 1rem;">Security Prerequisite</h3>
-                        <p style="font-size: 0.85rem; color: var(--sapTextMuted); line-height: 1.5; margin-bottom: 20px;">
-                            Verifying mandatory security role addition. The documentation correctly mandates the SAP_JOULE_ADMIN role, reflecting the new deployment constraints.
-                        </p>
-                        <div style="display: flex; gap: 10px; margin-top: auto;">
-                            <button id="btn-approve-change-2" class="sapBtn success" style="flex: 1; margin: 0;">Approve</button>
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapNegative); color: var(--sapNegative);">Reject</button>
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapTextMuted); color: var(--sapTextMuted);">Comment</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (currentStep === 21) {
-                triageContainer.innerHTML = `
-                    <div class="diff-container">
-                        <div class="diff-header" style="background: #fff8e5;">
-                            <span>MCR-104: Component Upgrade Documentation</span>
-                            <span style="color: var(--sapCritical);">Change 3 of 3: Configuration & Extension</span>
-                        </div>
-                        <div class="diff-chunk-header">@@ -24,4 +24,4 @@</div>
-                        <div class="diff-line diff-context"><div class="diff-num">24</div><div class="diff-code">The system relies on a handshake for high availability. As defined in the conceptual architecture, the default threshold for timeouts is strictly 30 seconds.</div></div>
-                        <div class="diff-line diff-context"><div class="diff-num">25</div><div class="diff-code">\`\`\`json</div></div>
-                        <div class="diff-line diff-del"><div class="diff-num">26</div><div class="diff-code">  "connection_timeout": 30</div></div>
-                        <div class="diff-line diff-add"><div class="diff-num">27</div><div class="diff-code">  "connection_timeout": 60</div></div>
-                        <div class="diff-line diff-context"><div class="diff-num">28</div><div class="diff-code">\`\`\`</div></div>
-                    </div>
-                    <div class="diff-inspector">
-                        <div class="sapBadge error" style="margin-bottom: 15px;">Truth Conflict Detected</div>
-                        <h3 style="margin-top: 0; font-size: 1rem;">Logic Contradiction</h3>
-                        <p style="font-size: 0.85rem; color: var(--sapTextMuted); line-height: 1.5; margin-bottom: 20px;">
-                            The contributor modified the parameter for JavaScript Object Notation to 60 seconds but failed to update the preceding narrative text. Allowing this fragment creates a risk of inaccurate retrieval by Artificial Intelligence.
-                        </p>
-                        <div style="display: flex; gap: 10px; margin-top: auto;">
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapPositive); color: var(--sapPositive);">Approve</button>
-                            <button id="btn-reject-change-3" class="sapBtn reject" style="flex: 1; margin: 0;">Reject</button>
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapTextMuted); color: var(--sapTextMuted);">Comment</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (currentStep === 22) {
-                triageContainer.innerHTML = `
-                    <div class="diff-container" style="background: #f8fafc; padding: 40px; display: flex; flex-direction: column;">
-                        <h2 style="color: var(--sapTextColor); margin-bottom: 10px;">MCR-104 Resolution</h2>
-                        <p style="font-size: 0.9rem; color: var(--sapTextMuted); margin-bottom: 30px;">The system has processed all changes in the current Master Change Request.</p>
-                        
-                        <div style="background: #fff; border: 1px solid var(--sapBorderColor); border-radius: 6px; padding: 20px; box-shadow: var(--sapCardShadow);">
-                            <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid #eee; margin-bottom: 10px;">
-                                <span style="font-weight: bold; font-size: 0.85rem;">Change 1: Reference API</span>
-                                <span style="color: var(--sapPositive); font-weight: bold; font-size: 0.85rem;">Approved</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid #eee; margin-bottom: 10px;">
-                                <span style="font-weight: bold; font-size: 0.85rem;">Change 2: Deployment Cutover</span>
-                                <span style="color: var(--sapPositive); font-weight: bold; font-size: 0.85rem;">Approved</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="font-weight: bold; font-size: 0.85rem;">Change 3: Configuration JSON</span>
-                                <span style="color: var(--sapNegative); font-weight: bold; font-size: 0.85rem;">Rejected</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="diff-inspector">
-                        <div class="sapBadge warning" style="margin-bottom: 15px;">Mixed Evaluations</div>
-                        <h3 style="margin-top: 0; font-size: 1rem;">Remediation Required</h3>
-                        <p style="font-size: 0.85rem; color: var(--sapTextMuted); line-height: 1.5; margin-bottom: 20px;">
-                            The Master Change Request contains a blocked fragment. Splitting the MCR will immediately merge the 2 approved changes to the baseline and automatically bounce the 1 rejected fragment to the author as a targeted Jira sub-task.
-                        </p>
-                        <div style="display: flex; gap: 10px; margin-top: auto;">
-                            <button id="btn-split-merge" class="sapBtn primary" style="flex: 2; margin: 0;">Split & Merge Approved</button>
-                            <button class="sapBtn" style="flex: 1; margin: 0; background: transparent; border: 1px solid var(--sapNegative); color: var(--sapNegative);">Reject MCR</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (currentStep === 23) {
-                triageContainer.innerHTML = `
-                    <div class="diff-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--sapTextMuted); background: #f8fafc;">
-                        <div style="font-size: 2.5rem; margin-bottom: 10px;">✅</div>
-                        <h2>Queue Synchronized</h2>
-                        <p style="font-size:0.9rem;">No pending Pull Requests or active Master Change Requests.</p>
-                    </div>
-                    <div class="diff-inspector" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                        <div class="sapBadge success" style="font-size: 1.1rem; padding: 8px 16px;">Baseline Locked</div>
-                        <p style="margin-top: 15px; color: var(--sapTextMuted); font-size: 0.85rem; line-height:1.4;">The approved changes from MCR-104 were successfully merged into the systemic knowledge base. The rejected fragment was assigned for remediation.</p>
-                    </div>
-                `;
-            }
-        }
-    }
-
-    // Initialize state
-    updatePresentation(); 
+function openTab(id) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    document.querySelector(`.tab[onclick="openTab('${id}')"]`).classList.add("active");
+    document.getElementById(id).classList.add("active");
+}
 </script>
+
 </body>
 </html>
