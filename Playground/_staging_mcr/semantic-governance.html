@@ -239,7 +239,7 @@
 
 <script>
 /* ----------------------------------------------------------
-   PURE JS SHA-256 (NO WEB CRYPTO, WORKS ANYWHERE)
+   PURE JS SHA-256 (FIXED, WORKS ANYWHERE)
 ---------------------------------------------------------- */
 function sha256(str) {
     function rightRotate(n, x) { return (x >>> n) | (x << (32 - n)); }
@@ -266,7 +266,9 @@ function sha256(str) {
     while (str.length % 64 !== 56) str += "\x00";
 
     for (var i = 0; i < str.length; i++) {
-        words[i >> 2] |= str.charCodeAt(i) << ((3 - i) % 4) * 8;
+        var idx = i >> 2;
+        var shift = ((3 - i) % 4) * 8;
+        words[idx] = (words[idx] || 0) | (str.charCodeAt(i) << shift);
     }
 
     words.push((strBitLen / 0x100000000) | 0);
