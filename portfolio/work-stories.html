@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case Studies – Donnacha</title>
+
+<style>
+    body {
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        margin: 0;
+        background: #f7f7f7;
+        color: #222;
+    }
+
+    /* Password Gate */
+    #gate {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: #111;
+        color: #fff;
+    }
+    #gate input {
+        padding: 10px;
+        font-size: 1rem;
+        margin-top: 10px;
+        width: 240px;
+        border-radius: 4px;
+        border: none;
+    }
+    #gate button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        background: #4a90e2;
+        color: #fff;
+    }
+
+    /* Main Layout */
+    #content {
+        display: none;
+        padding: 40px;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    h1 {
+        font-weight: 600;
+        margin-bottom: 30px;
+        letter-spacing: -0.5px;
+    }
+
+    /* Tabs */
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+    .tab {
+        padding: 12px 20px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        font-weight: 500;
+    }
+    .tab.active {
+        border-bottom: 3px solid #4a90e2;
+        color: #4a90e2;
+    }
+
+    .panel {
+        display: none;
+    }
+    .panel.active {
+        display: block;
+    }
+
+    h2 {
+        margin-top: 30px;
+        font-weight: 600;
+    }
+
+    h3 {
+        margin-top: 20px;
+        font-weight: 600;
+    }
+
+    ul {
+        margin-top: 10px;
+        padding-left: 20px;
+    }
+
+    ul li {
+        margin-bottom: 8px;
+    }
+</style>
+
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+    <h2>Access Private Case Studies</h2>
+    <p style="max-width: 320px; text-align: center; font-size: 0.9rem; opacity: 0.8;">
+        These case studies contain sensitive operational detail and are provided privately for evaluation purposes.
+    </p>
+    <input type="password" id="pw" placeholder="Password" />
+    <button onclick="unlock()">Enter</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+    <h1>Case Studies</h1>
+
+    <div class="tabs">
+        <div class="tab active" onclick="openTab('enm')">ENM</div>
+        <div class="tab" onclick="openTab('sap')">SAP</div>
+        <div class="tab" onclick="openTab('dtone')">DT One</div>
+        <div class="tab" onclick="openTab('whh')">Warm Home Hub</div>
+    </div>
+
+    <!-- ENM PANEL -->
+    <div id="enm" class="panel active">
+        <h2>Ericsson ENM: Reworking a Product Description with structural and content issues</h2>
+        <p><strong>Role:</strong> Technical Writer</p>
+        <p><strong>Context:</strong> ENM (Ericsson Network Manager) — Confluence → Ixiasoft DITA migration</p>
+
+        <h3>Situation</h3>
+        <p>
+            I was asked to migrate the ENM Product Description into DITA. The document had been built over several years by more than fifty teams, each writing in different styles and with different assumptions. The result was uneven.
+        </p>
+        <ul>
+            <li>Terminology drifted across chapters.</li>
+            <li>The order of titles did not match the UI.</li>
+            <li>Procedural content appeared in what was meant to be a descriptive document.</li>
+            <li>A hardware installation guide had been embedded as a single, oversized Confluence page with diagrams but no explanation of when or why to use each configuration.</li>
+        </ul>
+
+        <h3>Task</h3>
+        <p>
+            Produce a Product Description that was structurally coherent, technically accurate, aligned with the UI, and ready for DITA, while passing review by fifty contributing teams without blocking the release.
+        </p>
+
+        <h3>Actions</h3>
+
+        <h4>1. Reframed the assignment</h4>
+        <p>
+            I explained that a mechanical DITA conversion would not solve the underlying problems. With the Lead Architect’s support, the work was re‑scoped as a full structural rewrite.
+        </p>
+
+        <h4>2. Analysed the existing document</h4>
+        <ul>
+            <li>Reviewed the document end‑to‑end.</li>
+            <li>Mapped chapters to the UI.</li>
+            <li>Identified terminology inconsistencies.</li>
+            <li>Flagged procedural content.</li>
+            <li>Documented gaps and missing context.</li>
+        </ul>
+
+        <h4>3. Split out the hardware installation guide</h4>
+        <p>
+            The embedded hardware content was inappropriate for a Product Description and lacked essential context. I proposed creating a separate Hardware Installation Guide.
+        </p>
+        <p>
+            This required negotiation because document count was tied to headcount allocation. The manager initially resisted adding another deliverable. I requested that several other guides assigned to me be reassigned, which was accepted.
+        </p>
+
+        <h4>4. Rebuilt the Product Description in UI order</h4>
+        <ul>
+            <li>Rewrote the document to follow the UI.</li>
+            <li>Aligned terminology across teams.</li>
+            <li>Established a consistent pattern for describing features.</li>
+            <li>Removed procedural content.</li>
+            <li>Ensured each chapter reflected actual product behaviour.</li>
+        </ul>
+
+        <h4>5. Prepared the content for DITA</h4>
+        <ul>
+            <li>Broke content into DITA‑appropriate topics.</li>
+            <li>Applied correct topic types.</li>
+            <li>Separated concept, task, and reference.</li>
+            <li>Created a maintainable structure for future releases.</li>
+        </ul>
+
+        <h4>6. Ran a staggered review and publication cycle</h4>
+        <ul>
+            <li>Architect reviewed each rewritten section first.</li>
+            <li>Released content in small batches.</li>
+            <li>Each batch had its own review window.</li>
+            <li>Silence counted as approval.</li>
+            <li>Resolved objections before releasing the next batch.</li>
+            <li>Published and migrated content after all batches cleared review.</li>
+        </ul>
+
+        <h4>7. Managed incoming tickets during the rewrite</h4>
+        <ul>
+            <li>Recognised that many tickets were effectively ticket bankruptcy.</li>
+            <li>Reviewed each ticket for useful insight.</li>
+            <li>Integrated valuable findings into the rewrite.</li>
+            <li>Deferred fixes for content that was being replaced.</li>
+        </ul>
+
+        <h3>Result</h3>
+        <ul>
+            <li>A Product Description aligned with the UI and consistent in terminology.</li>
+            <li>Clear separation between descriptive and procedural content.</li>
+            <li>A standalone Hardware Installation Guide with proper context.</li>
+            <li>A staggered review model that avoided bottlenecks.</li>
+            <li>A maintainable DITA structure for future releases.</li>
+            <li>A realistic workload distribution after negotiating document ownership.</li>
+            <li>A technically accurate, coherent document produced with the Lead Architect.</li>
+        </ul>
+    </div>
+
+    <!-- SAP PANEL -->
+    <div id="sap" class="panel">
+        <h2>SAP Case Study</h2>
+        <p>Placeholder — will follow the same structure as ENM.</p>
+    </div>
+
+    <!-- DT ONE PANEL -->
+    <div id="dtone" class="panel">
+        <h2>DT One Case Study</h2>
+        <p>Placeholder — will follow the same structure as ENM.</p>
+    </div>
+
+    <!-- WARM HOME HUB PANEL -->
+    <div id="whh" class="panel">
+        <h2>Warm Home Hub Case Study</h2>
+        <p>Placeholder — will follow the same structure as ENM.</p>
+    </div>
+
+</div>
+
+<script>
+// FINAL, CORRECT SHA-256 HASH for "pick-this-guy-$£%"
+const storedHash = "ebe434a3213104b738095e6a7ae2ac832273632c9f7c922d2f2ba4a67e714d8a";
+
+async function unlock() {
+    const pw = document.getElementById("pw").value;
+    const enc = new TextEncoder().encode(pw);
+    const buf = await crypto.subtle.digest("SHA-256", enc);
+    const arr = Array.from(new Uint8Array(buf));
+    const hex = arr.map(b => b.toString(16).padStart(2, "0")).join("");
+
+    if (hex === storedHash) {
+        document.getElementById("gate").style.display = "none";
+        document.getElementById("content").style.display = "block";
+    } else {
+        document.getElementById("pw").value = "";
+    }
+}
+
+function openTab(id) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    document.querySelector(`.tab[onclick="openTab('${id}')"]`).classList.add("active");
+    document.getElementById(id).classList.add("active");
+}
+</script>
+
+</body>
+</html>
