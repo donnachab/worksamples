@@ -3,13 +3,28 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Case Studies – Donnacha</title>
+<title>Autodesk Application – Donnacha Bushe</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Poppins', 'sans-serif'] },
+                colors: { 'cv-bg-base': '#f0fdf4', 'cv-text-dark': '#14532d', 'cv-text-med': '#166534', 'cv-accent': '#22c55e', 'cv-border': '#86efac' }
+            }
+        }
+    }
+</script>
 <style>
     body {
-        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: "Inter", sans-serif;
         margin: 0;
         background: #f7f7f7;
         color: #222;
+        -webkit-font-smoothing: antialiased;
     }
 
     /* Password Gate */
@@ -29,6 +44,7 @@
         width: 240px;
         border-radius: 4px;
         border: none;
+        color: #000;
     }
     #gate button {
         margin-top: 10px;
@@ -37,39 +53,49 @@
         cursor: pointer;
         border: none;
         border-radius: 4px;
-        background: #4a90e2;
+        background: #22c55e;
         color: #fff;
+        font-weight: 600;
     }
 
     /* Main Layout */
     #content {
         display: none;
         padding: 40px;
-        max-width: 900px;
+        max-width: 950px;
         margin: auto;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     }
 
-    h1 {
-        font-weight: 600;
-        margin-bottom: 30px;
-        letter-spacing: -0.5px;
+    /* Print-Only Elements (Hidden on Screen) */
+    .print-only {
+        display: none;
     }
 
     /* Tabs */
     .tabs {
         display: flex;
         border-bottom: 2px solid #ddd;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
     }
     .tab {
         padding: 12px 20px;
         cursor: pointer;
         border-bottom: 3px solid transparent;
-        font-weight: 500;
+        font-weight: 600;
+        color: #555;
     }
     .tab.active {
-        border-bottom: 3px solid #4a90e2;
-        color: #4a90e2;
+        border-bottom: 3px solid #22c55e;
+        color: #14532d;
+    }
+    .tab.external-tab {
+        color: #2563eb;
+    }
+    .tab.external-tab.active {
+        border-bottom-color: #2563eb;
     }
 
     .panel {
@@ -79,161 +105,651 @@
         display: block;
     }
 
-    h2 {
-        margin-top: 30px;
-        font-weight: 600;
+    /* Typography for Case Studies */
+    .cs-content h2 { font-size: 1.5rem; font-weight: 700; color: #14532d; margin-bottom: 1rem; border-bottom: 2px solid #86efac; padding-bottom: 0.5rem; }
+    .cs-content h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; color: #166534; }
+    .cs-content h4 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #14532d; }
+    .cs-content p { margin-bottom: 1rem; line-height: 1.6; color: #374151; }
+    .cs-content ul, .cs-content ol { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+    .cs-content ul { list-style-type: disc; }
+    .cs-content ol { list-style-type: decimal; }
+    .cs-content li { margin-bottom: 0.5rem; line-height: 1.5; color: #374151; }
+
+    /* Global CV Tooltips (Dogfooding UX) */
+    .cv-tooltip-trigger { 
+        cursor: help; 
+        color: #166534; 
+        font-weight: 600; 
+        text-decoration: underline dotted #86efac; 
+        text-underline-offset: 3px;
+        position: relative; 
+        display: inline-block; 
+    }
+    .cv-tooltip-text {
+        visibility: hidden; 
+        width: 280px; 
+        background-color: #1f2937; 
+        color: #f9fafb; 
+        text-align: left;
+        font-family: 'Inter', sans-serif; 
+        font-weight: 400; 
+        font-size: 0.85rem; 
+        line-height: 1.5; 
+        border-radius: 6px;
+        padding: 10px 12px; 
+        position: absolute; 
+        z-index: 50; 
+        bottom: 125%; 
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0; 
+        transition: opacity 0.3s, visibility 0.3s;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+    }
+    .cv-tooltip-trigger:hover .cv-tooltip-text, 
+    .cv-tooltip-trigger:focus .cv-tooltip-text { 
+        visibility: visible; 
+        opacity: 1; 
+    }
+    .cv-tooltip-text::after { 
+        content: ""; 
+        position: absolute; 
+        top: 100%; 
+        left: 50%; 
+        margin-left: -5px; 
+        border-width: 5px; 
+        border-style: solid; 
+        border-color: #1f2937 transparent transparent transparent; 
     }
 
-    h3 {
-        margin-top: 20px;
-        font-weight: 600;
-    }
+    /* Print Formatting */
+    @media print {
+        @page { size: A4; margin: 15mm 20mm; }
+        body { background: white !important; color: #000 !important; }
+        
+        #gate, .tabs, .print-btn, #work-samples, .screen-only { display: none !important; }
+        
+        #content { box-shadow: none !important; padding: 0 !important; max-width: 100% !important; display: block !important; }
+        
+        .print-only { display: block !important; }
+        
+        .panel:not(#work-samples) { 
+            display: block !important; 
+            opacity: 1 !important; 
+            visibility: visible !important; 
+            page-break-before: always; 
+            padding-top: 20px;
+        }
+        
+        #cover-letter.panel { page-break-before: always; padding-top: 20px; }
 
-    ul {
-        margin-top: 10px;
-        padding-left: 20px;
-    }
-
-    ul li {
-        margin-bottom: 8px;
+        h1, h2, h3, h4 { page-break-after: avoid; }
+        p, li { page-break-inside: avoid; }
+        
+        .grid-lg { display: block !important; }
+        .grid-lg > aside { border-top: 2px solid #86efac; margin-top: 30px; padding-top: 20px; }
+        .portfolio-note { display: none !important; }
+        
+        /* Disable tooltips for print so the PDF reads like a normal document */
+        .cv-tooltip-text { display: none !important; }
+        .cv-tooltip-trigger { text-decoration: none; color: inherit; font-weight: inherit; pointer-events: none; }
     }
 </style>
 </head>
 <body>
 
 <div id="gate">
-    <h2>Access Private Case Studies</h2>
+    <h2 style="font-size: 1.5rem; margin-bottom: 10px;">Autodesk Private Portfolio</h2>
     <p style="max-width: 320px; text-align: center; font-size: 0.9rem; opacity: 0.8;">
-        These case studies contain sensitive operational detail and are provided privately for evaluation purposes.
+        This document contains tailored materials and operational details provided privately for evaluation purposes.
     </p>
-    
     <p id="error-msg" style="color: #ff6b6b; font-size: 0.9rem; display: none; margin: 5px 0 0 0;"></p>
-    
     <input type="password" id="pw" placeholder="Password" onkeypress="handleKeyPress(event)" />
     <button onclick="unlock()">Enter</button>
 </div>
 
 <div id="content">
-    <h1>Case Studies</h1>
-
-    <div class="tabs">
-        <div class="tab active" onclick="openTab('enm')">ENM</div>
-        <div class="tab" onclick="openTab('sap')">SAP</div>
-        <div class="tab" onclick="openTab('dtone')">DT One</div>
-        <div class="tab" onclick="openTab('whh')">Warm Home Hub</div>
+    
+    <div class="flex justify-between items-center mb-6 border-b pb-4 screen-only">
+        <h1 class="text-2xl font-bold text-cv-text-dark uppercase tracking-tight">Autodesk Application Dossier</h1>
+        <button class="print-btn px-5 py-2.5 bg-cv-accent hover:bg-green-600 text-white font-bold rounded shadow transition text-sm" onclick="window.print()">Save Full Dossier as PDF</button>
     </div>
 
-    <div id="enm" class="panel active">
-        <h2>Ericsson ENM: Reworking a Product Description with structural and content issues</h2>
-        <p><strong>Role:</strong> Technical Writer</p>
-        <p><strong>Context:</strong> ENM (Ericsson Network Manager) — Confluence → Ixiasoft DITA migration</p>
+    <div class="print-only" style="page-break-after: always; padding-top: 35vh; text-align: center;">
+        <h1 style="font-size: 3.5rem; font-weight: 700; color: #14532d; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 2px;">Autodesk Application Dossier</h1>
+        <h2 style="font-size: 2.25rem; color: #166534; margin-bottom: 2rem;">Donnacha Bushe</h2>
+        <div style="width: 60px; border-top: 4px solid #22c55e; margin: 0 auto 2rem auto;"></div>
+        <p style="font-size: 1.35rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Role: Principal Content Designer, Forma Design</p>
+        <p style="font-size: 1rem; color: #6b7280;">Galway, Ireland &nbsp;|&nbsp; donnachab@gmail.com &nbsp;|&nbsp; +353 85 7071293</p>
+    </div>
+
+    <div class="print-only" style="page-break-after: always; padding-top: 10vh;">
+        <h2 style="font-size: 2rem; font-weight: 700; color: #14532d; margin-bottom: 2rem; border-bottom: 2px solid #86efac; padding-bottom: 1rem;">Table of Contents</h2>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: 1.25rem; font-size: 1.15rem;"><a href="#cover-letter" style="color: #166534; text-decoration: underline; font-weight: 600;">1. Cover Letter</a></li>
+            <li style="margin-bottom: 1.25rem; font-size: 1.15rem;"><a href="#resume" style="color: #166534; text-decoration: underline; font-weight: 600;">2. Resume</a></li>
+            <li style="margin-bottom: 1.25rem; font-size: 1.15rem;"><a href="#ai-design" style="color: #166534; text-decoration: underline; font-weight: 600;">3. AI Content Design (Skeptical Authoring)</a></li>
+            <li style="margin-bottom: 1.25rem; font-size: 1.15rem;"><a href="#microcopy" style="color: #166534; text-decoration: underline; font-weight: 600;">4. UX Writing & Microcopy Sampler</a></li>
+            <li style="margin-bottom: 1.25rem; font-size: 1.15rem;"><a href="#seai" style="color: #166534; text-decoration: underline; font-weight: 600;">5. Content Design: Self-Service Eligibility Tool (SEAI)</a></li>
+            <li style="margin-bottom: 1.25rem; font-size: 1.15rem;"><a href="#dtone" style="color: #166534; text-decoration: underline; font-weight: 600;">6. Product UI: Interface-Level Content Architecture (DT One)</a></li>
+            <li style="margin-bottom: 1.25rem; font-size: 1.15rem;"><a href="#enm" style="color: #166534; text-decoration: underline; font-weight: 600;">7. Governance: Product Description Migration (ENM)</a></li>
+            <li style="margin-bottom: 1.25rem; font-size: 1.15rem;"><a href="#sap-strings" style="color: #166534; text-decoration: underline; font-weight: 600;">8. Linguistics: UI Strings and Product Influence (SAP)</a></li>
+        </ul>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="openTab('cover-letter')">Cover Letter</div>
+        <div class="tab" onclick="openTab('resume')">Resume</div>
+        <div class="tab" onclick="openTab('ai-design')">AI Content Design</div>
+        <div class="tab" onclick="openTab('microcopy')">UX Writing</div>
+        <div class="tab" onclick="openTab('seai')">Content Design (SEAI)</div>
+        <div class="tab" onclick="openTab('dtone')">Product UI (DT One)</div>
+        <div class="tab" onclick="openTab('enm')">Governance (ENM)</div>
+        <div class="tab" onclick="openTab('sap-strings')">Linguistics (SAP)</div>
+        <div class="tab external-tab" onclick="openTab('work-samples')">Work Samples ↗</div>
+    </div>
+
+    <div id="cover-letter" class="panel active cs-content">
+        <a name="cover-letter" class="print-only"></a>
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold uppercase text-cv-text-dark tracking-wide mb-1">Donnacha Bushe</h1>
+            <p class="text-lg text-cv-accent font-semibold mb-3">Senior / Lead Technical Writer</p>
+            <p class="text-sm text-gray-600">Galway, Ireland &nbsp;·&nbsp; donnachab@gmail.com &nbsp;·&nbsp; +353 85 7071293</p>
+        </div>
+
+        <p>Dear Hiring Team,</p>
+
+        <p>I am applying for the Principal Content Designer role for <span class="cv-tooltip-trigger" tabindex="0">Forma Design<span class="cv-tooltip-text">Autodesk's cloud-based industry environment for Architecture, Engineering, and Construction (AEC).</span></span>. I specialize in mapping documentation to user workflows, defining UI terminology, and managing structured content across distributed enterprise environments.</p>
+
+        <p>The job description mentions managing "content governance and distributed content creation." At Ericsson, I managed the Product Description for the ENM node during a major <span class="cv-tooltip-trigger" tabindex="0">DITA migration<span class="cv-tooltip-text">Darwin Information Typing Architecture: An XML-based standard used by enterprise teams to structure and reuse content as modular components.</span></span>. Because the guide was built by 50 different contributing teams, the structure had drifted. I partnered with a Lead Architect to enforce a strict, time-boxed review model. This gave me the authority to extract misplaced hardware procedures and rewrite the document to match the product UI, keeping 50 teams aligned without delaying the software release.</p>
+
+        <p>The role also emphasizes partnering with Product teams to influence UI labels and product direction. At SAP, I resolved a deadlock over a complex UI label in Master Data Governance. A developer had written a five-word database string ("Entity Attribute Change Relevance Indicator"). By focusing the Product Owner entirely on the user's business intent, I drove the simplification of the label down to a single word: "Governed." Regarding our ability to debate and improve the product design together, that Product Owner recently noted:</p>
+        
+        <blockquote style="border-left: 4px solid #22c55e; padding-left: 15px; margin-left: 0; font-style: italic; color: #14532d; background: #f0fdf4; padding: 10px;">
+            "Our conversations made the product better as he always had suggestions how to frame the problem better, how to 'name' the components, how the UI should work... He brought the logic and the language integrity into the SAP documentation."
+        </blockquote>
+
+        <p>Autodesk also needs strategies to scale content delivery and automate manual workflows. At Ericsson, I resolved stale API data issues by leading the transition to a <span class="cv-tooltip-trigger" tabindex="0">docs-as-code<span class="cv-tooltip-text">Treating documentation like software: using Git, CI/CD pipelines, and pull requests to manage, review, and publish content.</span></span> model. I piloted a Git-based copyediting workflow with an engineering team in Italy, which gave writers direct repository access and completely bypassed the CMS bottleneck. Separately, as Autodesk looks toward AI-native user experiences, I am actively prototyping how structured authoring can safely integrate with <span class="cv-tooltip-trigger" tabindex="0">LLMs<span class="cv-tooltip-text">Large Language Models: AI systems trained on vast amounts of text to generate human-like responses.</span></span>. I recently built a schema-first prototype (DocBuilder) that uses a templified topic tree and optional DITA-like structures. Rather than allowing an AI to maintain documentation autonomously, the system keeps the human in the loop: the AI proposes bounded content, and the writer accepts or rejects the suggestions. This approach strikes a balance between enforced consistency and structural flexibility, ensuring the author retains complete control.</p>
+
+        <p>I am based in Galway, Ireland, and am available for occasional travel to Oslo. I designed this secure portfolio specifically for this application; it combines my resume and targeted case studies into a single, printable dossier. I would welcome the opportunity to discuss how I can help scale the content design practice for Forma.</p>
+
+        <p>Sincerely,</p>
+        <p>Donnacha Bushe</p>
+    </div>
+
+    <div id="resume" class="panel">
+        <a name="resume" class="print-only"></a>
+        <div class="max-w-6xl mx-auto flex flex-col grid-lg md:grid md:grid-cols-[1fr_300px] gap-8">
+            <main class="w-full">
+                <header class="mb-8 border-b border-cv-border pb-6 flex justify-between items-start bg-[#dcfce7] p-6 rounded-lg border border-[#86efac] border-b-4 border-b-[#22c55e]">
+                    <div class="text-left">
+                        <h1 class="text-3xl font-bold font-heading text-cv-text-dark uppercase tracking-tight">Donnacha Bushe</h1>
+                        <p class="text-sm font-semibold text-cv-accent mt-1 uppercase">Senior Technical Writer | Developer Documentation | Docs-as-Code</p>
+                    </div>
+                </header>
+                
+                <section class="mb-10 text-sm text-gray-800 leading-relaxed">
+                    <p class="mb-4">Senior technical writer with deep experience in <span class="cv-tooltip-trigger" tabindex="0">structured authoring<span class="cv-tooltip-text">Writing content in defined blocks (like XML) so it can be automatically formatted, reused, and managed at scale.</span></span>, DITA, <span class="cv-tooltip-trigger" tabindex="0">docs-as-code<span class="cv-tooltip-text">Treating documentation like software: using Git, CI/CD pipelines, and pull requests to manage, review, and publish content.</span></span> workflows, and content governance. Skilled in designing schema-first, human-in-the-loop authoring environments that keep content consistent, maintainable, and machine-readable without sacrificing author flexibility.</p>
+                </section>
+                
+                <section class="mb-10">
+                    <h2 class="text-xs font-bold text-cv-text-dark uppercase tracking-widest border-b border-cv-accent pb-1 mb-6">Professional Experience</h2>
+                    
+                    <div class="mb-8">
+                        <div class="flex justify-between items-baseline mb-1"><h3 class="text-md font-bold text-cv-text-dark">intive</h3><span class="text-[10px] font-bold text-[#15803d] uppercase tracking-wider">July 3, 2017 - Dec 2025</span></div>
+                        <p class="text-xs font-bold text-cv-accent mb-4 uppercase tracking-wide italic underline underline-offset-4 decoration-cv-border">Senior Technical Writer and Writing Consultant</p>
+                        <ul class="list-disc space-y-2 pl-5 text-sm text-gray-800">
+                            <li><strong>Client: DT One Developer Portal:</strong> Rebuilt the developer portal in three months, replacing unsearchable PowerPoints and raw <span class="cv-tooltip-trigger" tabindex="0">Swagger files<span class="cv-tooltip-text">Also known as OpenAPI specifications. Machine-readable files that describe how a REST API works.</span></span> with a coherent, developer-oriented site. Designed a consistent integration structure that gave developers the context, flows, and examples needed for self-service onboarding.</li>
+                            <li><strong>Client: Ericsson ENM Product Description Governance:</strong> Contributed to the rework of the ENM Product Description during the Confluence-to-Ixiasoft migration, working within a governed review process involving approximately 50 contributing teams. Supported DITA architecture decisions, chapter-depth cleanup, reuse patterns, reviewer alignment, and content-quality improvements while separating misplaced hardware-configuration material from the core software-focused product description.</li>
+                            <li><strong>Client: Ericsson Technical Diagrams and SME Negotiation:</strong> Worked through a difficult visual simplification effort involving complex cluster-of-servers diagrams that were unreadable for the target audience. Negotiated with hardware stakeholders and subject matter experts over an extended review process to produce clearer documentation without losing technical credibility.</li>
+                            <li><strong>Client: Ericsson Pipeline Orchestration Service:</strong> Restructured documentation by role and audience, separating guidance for pipeline developers, internal tool developers, and supply teams. Introduced Markdown templates and writing guidelines to replace unmanaged free-form content and keep documentation structured, reviewable, and maintainable through <span class="cv-tooltip-trigger" tabindex="0">Gerrit<span class="cv-tooltip-text">A web-based code review tool used by developers to approve changes before they are merged.</span></span> reviews.</li>
+                            <li><strong>Client: Ericsson Docs-as-Code Workflow:</strong> Led the transition toward a docs-as-code model to resolve stale API data issues caused by manual CMS transfers. Overcame project management skepticism by piloting a Git-based copyediting workflow with an engineering team in Italy, securing direct repository access for writers and permanently bypassing the CMS bottleneck.</li>
+                            <li><strong>Client: Ericsson Developer Experience:</strong> Embedded directly with development teams to build documentation blueprints and standard README templates for the <span class="cv-tooltip-trigger" tabindex="0">Internal Development Platform (IDP)<span class="cv-tooltip-text">A self-service internal ecosystem that standardizes tools and workflows so developers can build and deploy faster.</span></span>, ensuring new service repositories were searchable, structured, and documented by default.</li>
+                            <li><strong>Client: Ericsson Mentorship and Quality Assurance:</strong> Led rotating quality-review circles to mentor writers and raise editorial consistency, terminology discipline, and documentation standards across distributed teams.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex justify-between items-baseline mb-1"><h3 class="text-md font-bold text-cv-text-dark">SAP</h3><span class="text-[10px] font-bold text-[#15803d] uppercase tracking-wider">Mar 2005 - Jul 2015</span></div>
+                        <p class="text-xs font-bold text-cv-accent mb-4 uppercase tracking-wide italic underline underline-offset-4 decoration-cv-border">Senior Information Developer</p>
+                        <ul class="list-disc space-y-2 pl-5 text-sm text-gray-800">
+                            <li>Promoted twice in four years: Information Developer - Specialist - Senior.</li>
+                            <li><strong>Help Portal Strategy and User Research:</strong> Conducted <span class="cv-tooltip-trigger" tabindex="0">UX research<span class="cv-tooltip-text">User Experience research: Studying user behaviors and needs to inform product design and documentation architecture.</span></span> and influenced prototype design for the SAP Help Portal through on-site user research in Kentucky and international collaboration. Advocated for context-aware, role-based navigation grounded in direct customer feedback.</li>
+                            <li><strong>System Stability Initiative:</strong> Assigned to document a new <span class="cv-tooltip-trigger" tabindex="0">CMS<span class="cv-tooltip-text">Content Management System: A software application used to create, manage, and publish digital content.</span></span>; identified reliability issues blocking effective authoring. Created a shared triage resource for workarounds, authored a repeatable release test plan, and coordinated regression cycles until the platform stabilized.</li>
+                            <li><strong>Linguistic Standardization (<span class="cv-tooltip-trigger" tabindex="0">Master Data Governance (MDG)<span class="cv-tooltip-text">An SAP enterprise application used to centrally create, modify, and distribute critical business data.</span></span>):</strong> Resolved terminology deadlocks in MDG by standardizing governance vocabulary and replacing complex UI labels—including shortening "Entity Attribute Change Relevance Indicator" to "Governed."</li>
+                            <li><strong>ITSAM Incident Content Standards:</strong> Wrote standards for Information Technology System and Application Management incident content: structured, UX-adjacent troubleshooting text presented inside service-management application screens rather than standalone help pages. Defined a practical Symptom/Cause/Solution pattern for incident flows used by global support centres.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex justify-between items-baseline mb-1"><h3 class="text-md font-bold text-cv-text-dark">Skillsoft</h3><span class="text-[10px] font-bold text-[#15803d] uppercase tracking-wider">Mar 2001 - Feb 2005</span></div>
+                        <p class="text-xs font-bold text-cv-accent mb-4 uppercase tracking-wide italic underline underline-offset-4 decoration-cv-border">Technical Writer</p>
+                        <ul class="list-disc space-y-2 pl-5 text-sm text-gray-800">
+                            <li>Trained by a dedicated editorial team to transform raw technical data into audience-focused content.</li>
+                            <li>Applied instructional design principles to design, develop, and deliver structured learning content comprising articles, interactive demonstrations, simulations, and assessments.</li>
+                            <li>Led planning meetings with graphic designers and subject matter experts.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex justify-between items-baseline mb-1"><h3 class="text-md font-bold text-cv-text-dark">Aviva</h3><span class="text-[10px] font-bold text-[#15803d] uppercase tracking-wider">Aug 1997 - Jan 2001</span></div>
+                        <p class="text-xs font-bold text-cv-accent mb-4 uppercase tracking-wide italic underline underline-offset-4 decoration-cv-border">Programmer</p>
+                        <ul class="list-disc space-y-2 pl-5 text-sm text-gray-800">
+                            <li>Wrote COBOL code, provided telephone support to users, and completed daily system maintenance tasks.</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+            
+            <aside class="w-full bg-[#f0fdf4] p-6 rounded-lg border border-[#86efac]">
+                <section class="mb-8">
+                    <h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Contact</h2>
+                    <div class="text-xs space-y-2 text-cv-text-dark">
+                        <p>Galway, Ireland</p>
+                        <p class="font-bold">+353 85 7071293</p>
+                        <p>donnachab@gmail.com</p>
+                    </div>
+                </section>
+                <section class="mb-8">
+                    <h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Work Samples</h2>
+                    <div class="text-xs space-y-3 text-cv-text-dark font-medium">
+                        <a href="https://donnachab.github.io/worksamples/worksamples.html#client/samples" target="_blank" class="block hover:text-blue-600 transition underline underline-offset-2 decoration-blue-300">DT One Developer Portal ↗</a>
+                        <a href="https://donnachab.github.io/worksamples/worksamples.html#personal/doc-builder" target="_blank" class="block hover:text-blue-600 transition underline underline-offset-2 decoration-blue-300">DocBuilder Prototype ↗</a>
+                        <a href="https://donnachab.github.io/worksamples/worksamples.html#personal/dita-tool" target="_blank" class="block hover:text-blue-600 transition underline underline-offset-2 decoration-blue-300">DITA XML Explorer ↗</a>
+                    </div>
+                </section>
+                <section class="mb-8">
+                    <h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Core Skills</h2>
+                    <ul class="text-xs space-y-1 text-cv-text-dark">
+                        <li>• Developer Documentation</li>
+                        <li>• API Documentation</li>
+                        <li>• Content Architecture</li>
+                        <li>• Docs-as-Code Methodology</li>
+                        <li>• DITA XML & Structured Authoring</li>
+                        <li>• Content Governance</li>
+                        <li>• Cross-functional Leadership</li>
+                        <li>• Tooling Integration</li>
+                    </ul>
+                </section>
+                <section class="mb-8">
+                    <h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Toolbox</h2>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">DITA XML</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">IXIASOFT</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">GIT</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">GERRIT</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">MARKDOWN</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">SWAGGER</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">BACKSTAGE</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">JIRA</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">CONFLUENCE</span>
+                        <span class="px-2 py-1 bg-white border border-[#86efac] rounded text-cv-text-dark font-bold">FIGMA</span>
+                    </div>
+                </section>
+                <section class="mb-8">
+                    <h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Certifications</h2>
+                    <div class="text-xs space-y-1 text-cv-text-dark">
+                        <p class="font-bold">Professional Scrum Master I (PSM I)</p>
+                        <p class="italic">Scrum.org</p>
+                    </div>
+                </section>
+                <section class="mb-8">
+                    <h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Education</h2>
+                    <div class="text-xs space-y-3 text-cv-text-dark">
+                        <div>
+                            <p class="font-bold">NUI Maynooth</p>
+                            <p class="italic">HDip Information Technology (Hons)</p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Trinity College Dublin</p>
+                            <p class="italic">BA French & History (Hons)</p>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2 class="text-xs font-bold text-cv-text-dark uppercase border-b border-cv-border pb-1 mb-4">Interests</h2>
+                    <ul class="text-xs space-y-1 text-cv-text-dark">
+                        <li>• Playwright (produced at Town Hall Theatre, Galway)</li>
+                        <li>• Camino de Santiago (French Way)</li>
+                        <li>• Singer with the Galway Jam Circle</li>
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <div id="ai-design" class="panel cs-content">
+        <a name="ai-design" class="print-only"></a>
+        <h2>Skeptical Authoring: An AI-Native Design Pattern</h2>
+        <p><strong>Context:</strong> Prototyping structured authoring workflows (<span class="cv-tooltip-trigger" tabindex="0">DocBuilder<span class="cv-tooltip-text">A schema-driven writing environment prototype that structures documents as a knowledge graph.</span></span>) and scaling them to end-user AI interfaces (e.g., Autodesk Forma).</p>
+
+        <h3>The Concept</h3>
+        <p>Whether designing an internal IDE for technical writers or a generative AI interface for end-users, the core challenge remains the same: <strong>How do you design the interface between human judgment and machine suggestion so that the human retains control, the output is coherent, and the system earns trust?</strong></p>
+        <p>My approach centers on a philosophy I call "Skeptical Authoring." It treats AI not as an autonomous creator, but as a bounded proposition engine. It operates within light, schema-first scaffolding, with the human in the loop for validation and decision-making. The structure is intentionally flexible: authors can override defaults, and ambiguous material can be routed into a controlled fallback area rather than forced into premature categorization. The system's job is to surface contextually constrained suggestions; the user's job is to validate and orchestrate.</p>
+
+        <h3>Core Principles</h3>
+        <h4>1. Bounded Proposal, Not Autonomous Generation</h4>
+        <p>The system never writes freely. It proposes content within explicit structural constraints—a topic type, a required field set, or a defined relationship to other nodes. This is the opposite of "let the AI write it." It is: <em>"The AI surfaces a candidate; the schema validates it; the author decides."</em></p>
+
+        <h4>2. Ordered Outputs from Unordered Inputs</h4>
+        <p>Real-world information arrives chaotically: Jira tickets, Slack threads, meeting notes, partial drafts, or ambiguous user prompts. The system's job is to:</p>
+        <ul>
+            <li>Ingest without requiring structure upfront.</li>
+            <li>Classify by inferring intent, audience, and relationships.</li>
+            <li>Sequence into a usable order based on the user journey, not the ingestion order.</li>
+        </ul>
+        <p>This produces machine-readable, document-map-ready output that both humans and AI systems can navigate reliably.</p>
+
+        <h4>3. Skeptical Guidance Built Into the Workflow</h4>
+        <p>Once content is consolidated into this structured environment, the interface can provide skeptical UI assistance, flagging inconsistencies, missing definitions, or misclassified topics while preserving author control. The system assumes the input (human or AI-generated) may be incomplete or misclassified. It guides the user toward coherence rather than silently accepting drift. Examples include:</p>
+        <ul>
+            <li><em>"This looks like a procedure, but it's tagged as a concept. Reclassify?"</em></li>
+            <li><em>"This topic references a term not defined in the project glossary. Add definition?"</em></li>
+        </ul>
+
+        <h3>Application: From Authoring to User-Facing AI</h3>
+        <p>These exact structural principles apply directly when designing content for AI-powered features that end users interact with:</p>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem; text-align: left; border: 1px solid #e5e7eb;">
+                <thead>
+                    <tr style="background-color: #f0fdf4; border-bottom: 2px solid #86efac;">
+                        <th style="padding: 12px 16px; width: 50%; color: #14532d;">Internal Environment (e.g., DocBuilder)</th>
+                        <th style="padding: 12px 16px; width: 50%; color: #14532d;">User-Facing AI Feature (e.g., Forma)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px 16px;">AI proposes a document topic; author accepts/rejects.</td>
+                        <td style="padding: 12px 16px;">AI proposes a structural design option; user accepts/rejects.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px 16px;">The DITA schema enforces valid document structure.</td>
+                        <td style="padding: 12px 16px;">The application UI enforces valid geometric/data parameters.</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px 16px;">Skeptical prompts surface content inconsistencies.</td>
+                        <td style="padding: 12px 16px;">Transparency cues explain the AI's reasoning to the user.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 16px;">Chaotic inputs → Ordered documentation deliverables.</td>
+                        <td style="padding: 12px 16px;">Ambiguous user intent → Structured, viable project suggestions.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <blockquote style="border-left: 4px solid #22c55e; padding-left: 15px; margin-top: 10px; font-style: italic; color: #14532d; background: #f0fdf4; padding: 10px;">
+            <strong>The Design Philosophy:</strong> When an AI suggests a design option or automates a workflow step, surface the suggestion transparently, explain the reasoning, and let the user decide. Skeptical guidance ensures coherence without forcing the user to surrender control.
+        </blockquote>
+    </div>
+
+    <div id="microcopy" class="panel cs-content">
+        <a name="microcopy" class="print-only"></a>
+        <h2>UX Writing & Microcopy Sampler</h2>
+        <p>Because enterprise confidentiality protects full product screens, the matrix below highlights how I apply UX writing principles to reduce cognitive load, resolve friction, and guide users through complex workflows. Designed microcopy that supports in-product learning, helping users understand concepts in-flow without leaving the interface.</p>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem; text-align: left; border: 1px solid #e5e7eb;">
+                <thead>
+                    <tr style="background-color: #f0fdf4; border-bottom: 2px solid #86efac;">
+                        <th style="padding: 12px 16px; width: 35%; color: #14532d;">Scenario & User Goal</th>
+                        <th style="padding: 12px 16px; width: 35%; color: #14532d;">Constraint / Context</th>
+                        <th style="padding: 12px 16px; width: 30%; color: #14532d;">In-Product Content</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <strong>Translate Database Logic to Intent</strong><br>
+                            <span style="font-size: 0.9em; color: #4b5563;">Users needed to set the change request scope in SAP Master Data Governance without understanding the underlying tables.</span>
+                        </td>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <span style="font-size: 0.9em; color: #4b5563;">The UI was deadlocked because design rejected the developer's 5-word, jargon-heavy proposed string ("Entity Attribute Change Relevance Indicator").</span>
+                        </td>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <span style="font-size: 0.85em; text-transform: uppercase; color: #15803d; font-weight: 700;">Checkbox Label</span><br>
+                            Governed
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <strong>Route Users Across Funding Streams (<span class="cv-tooltip-trigger" tabindex="0">SEAI<span class="cv-tooltip-text">Sustainable Energy Authority of Ireland: The national body responsible for government-funded energy upgrades.</span></span>)</strong><br>
+                            <span style="font-size: 0.9em; color: #4b5563;">Users must select the correct eligibility checker but do not understand the difference between national SEAI schemes and Local Authority grants.</span>
+                        </td>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <span style="font-size: 0.9em; color: #4b5563;">Navigation must separate two distinct legal processes using plain English, allowing users to self-route based on their demographic rather than bureaucratic titles.</span><br><br>
+                            <a href="https://donnachab.github.io/worksamples/find-out-if-you-qualify.html" target="_blank" style="font-size: 0.85em; font-weight: 600; color: #2563eb; text-decoration: underline;">View Live Tool ↗</a>
+                        </td>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <span style="font-size: 0.85em; text-transform: uppercase; color: #15803d; font-weight: 700;">Primary Tab Navigation</span><br>
+                            <div style="margin-top: 4px; padding: 6px 10px; background-color: #ff8310; color: white; border-radius: 4px; display: inline-block; width: 100%; box-sizing: border-box; text-align: center; line-height: 1.2;">
+                                <strong>Warmer Homes Scheme</strong><br>
+                                <span style="font-size: 0.85em; opacity: 0.9;">Energy Upgrades (All Ages)</span>
+                            </div>
+                            <div style="margin-top: 6px; padding: 6px 10px; background-color: #F0F3F5; color: #ff8310; border-radius: 4px; display: inline-block; width: 100%; box-sizing: border-box; text-align: center; line-height: 1.2;">
+                                <strong>Housing Aid Grant</strong><br>
+                                <span style="font-size: 0.85em; color: #5f5f5f;">Essential Repairs (Age 66+)</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <strong>Define Bureaucratic Terms In-Flow (SEAI)</strong><br>
+                            <span style="font-size: 0.9em; color: #4b5563;">Users encounter government terminology (like "means-tested") but shouldn't be forced to break momentum by leaving the form to read a separate glossary page.</span>
+                        </td>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <span style="font-size: 0.9em; color: #4b5563;">Requires extreme brevity. The definition must fit within a floating tooltip overlay that functions reliably on both desktop hover and mobile tap.</span>
+                        </td>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <span style="font-size: 0.85em; text-transform: uppercase; color: #15803d; font-weight: 700;">Hover Tooltip Text</span><br>
+                            <strong>Means-tested:</strong> Your eligibility and grant amount depend on an assessment of your household's financial income.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <strong>Reduce Navigation Friction</strong><br>
+                            <span style="font-size: 0.9em; color: #4b5563;">Developers reading the DT One portal need an immediate understanding of what a specific integration supports.</span>
+                        </td>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <span style="font-size: 0.9em; color: #4b5563;">Titles must act as navigational signposts that differentiate overlapping product types.</span>
+                        </td>
+                        <td style="padding: 12px 16px; vertical-align: top;">
+                            <span style="font-size: 0.85em; text-transform: uppercase; color: #15803d; font-weight: 700;">Card / Pill Labels</span><br>
+                            📱 Mobile: FIXED_VALUE<br>
+                            📶 Mobile: RANGED_VALUE
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="seai" class="panel cs-content">
+        <a name="seai" class="print-only"></a>
+        <h2>Content Design: Self-Service Eligibility Tool</h2>
+        <p><strong>Role:</strong> Content Designer | <strong>Context:</strong> SEAI Retrofit Grant Application</p>
 
         <h3>Situation</h3>
-        <p>
-            I was asked to migrate the ENM Product Description into DITA. The document had been built over several years by more than fifty teams, each writing in different styles and with different assumptions. The result was uneven.
-        </p>
-        <ul>
-            <li>Terminology drifted across chapters.</li>
-            <li>The order of titles did not match the UI.</li>
-            <li>Procedural content appeared in what was meant to be a descriptive document.</li>
-            <li>A hardware installation guide had been embedded as a single, oversized Confluence page with diagrams but no explanation of when or why to use each configuration.</li>
-        </ul>
+        <p>This project was created for a community organization that needed a fast, reliable way to check retrofit grant eligibility for walk‑in visitors. The official <span class="cv-tooltip-trigger" tabindex="0">Sustainable Energy Authority of Ireland (SEAI)<span class="cv-tooltip-text">The national government body responsible for delivering home energy retrofit grants.</span></span> process was spread across a 12-page document written for policy experts, making it difficult for staff to give clear answers quickly.</p>
 
         <h3>Task</h3>
-        <p>
-            Produce a Product Description that was structurally coherent, technically accurate, aligned with the UI, and ready for DITA, while passing review by fifty contributing teams without blocking the release.
-        </p>
+        <p>Reduce cognitive load by translating a complex government policy into a self-service, digital flow. The interface needed to make external documentation optional rather than required.</p>
 
         <h3>Actions</h3>
-
-        <h4>1. Reframed the assignment</h4>
-        <p>
-            I explained that a mechanical DITA conversion would not solve the underlying problems. With the Lead Architect’s support, the work was re‑scoped as a full structural rewrite.
-        </p>
-
-        <h4>2. Analysed the existing document</h4>
+        <h4>1. Mapped the User Mental Model</h4>
+        <p>I worked directly with a subject‑matter expert who walked me through the underlying rules, exceptions, and the real‑world questions people asked. Each rule and exception was validated directly with the SME, keeping the human in the loop throughout. Together we iterated on a simplified flow that ignored the bureaucracy and focused on the only two things visitors actually needed to know:</p>
         <ul>
-            <li>Reviewed the document end‑to‑end.</li>
-            <li>Mapped chapters to the UI.</li>
-            <li>Identified terminology inconsistencies.</li>
-            <li>Flagged procedural content.</li>
-            <li>Documented gaps and missing context.</li>
+            <li>Am I eligible for a grant?</li>
+            <li>If so, which grant(s)?</li>
         </ul>
 
-        <h4>3. Split out the hardware installation guide</h4>
-        <p>
-            The embedded hardware content was inappropriate for a Product Description and lacked essential context. I proposed creating a separate Hardware Installation Guide.
-        </p>
-        <p>
-            This required negotiation because document count was tied to headcount allocation. The manager initially resisted adding another deliverable. I requested that several other guides assigned to me be reassigned, which was accepted.
-        </p>
+        <h4>2. Designed the Decision-Tree UX</h4>
+        <p>I collapsed the multi-page policy into a branching questionnaire. By writing contextual microcopy and defining distinct, unambiguous outcome states, I hid the complexity of the SEAI decision tree entirely. This acted as a guided onboarding flow, helping users learn the rules step-by-step.</p>
 
-        <h4>4. Rebuilt the Product Description in UI order</h4>
-        <ul>
-            <li>Rewrote the document to follow the UI.</li>
-            <li>Aligned terminology across teams.</li>
-            <li>Established a consistent pattern for describing features.</li>
-            <li>Removed procedural content.</li>
-            <li>Ensured each chapter reflected actual product behaviour.</li>
-        </ul>
-
-        <h4>5. Prepared the content for DITA</h4>
-        <ul>
-            <li>Broke content into DITA‑appropriate topics.</li>
-            <li>Applied correct topic types.</li>
-            <li>Separated concept, task, and reference.</li>
-            <li>Created a maintainable structure for future releases.</li>
-        </ul>
-
-        <h4>6. Ran a staggered review and publication cycle</h4>
-        <ul>
-            <li>Architect reviewed each rewritten section first.</li>
-            <li>Released content in small batches.</li>
-            <li>Each batch had its own review window.</li>
-            <li>Silence counted as approval.</li>
-            <li>Resolved objections before releasing the next batch.</li>
-            <li>Published and migrated content after all batches cleared review.</li>
-        </ul>
-
-        <h4>7. Managed incoming tickets during the rewrite</h4>
-        <ul>
-            <li>Recognised that many tickets were effectively ticket bankruptcy.</li>
-            <li>Reviewed each ticket for useful insight.</li>
-            <li>Integrated valuable findings into the rewrite.</li>
-            <li>Deferred fixes for content that was being replaced.</li>
-        </ul>
+        <h4>3. Applied Progressive Disclosure</h4>
+        <p>I structured the diverse grant information into easily navigable interfaces, employing tooltips to define necessary jargon in-flow without overwhelming the user or forcing them to leave the screen.</p>
 
         <h3>Result</h3>
         <ul>
-            <li>A Product Description aligned with the UI and consistent in terminology.</li>
-            <li>Clear separation between descriptive and procedural content.</li>
-            <li>A standalone Hardware Installation Guide with proper context.</li>
-            <li>A staggered review model that avoided bottlenecks.</li>
-            <li>A maintainable DITA structure for future releases.</li>
-            <li>A realistic workload distribution after negotiating document ownership.</li>
-            <li>A technically accurate, coherent document produced with the Lead Architect.</li>
+            <li>Reduced a 12-page government policy to a 3-question eligibility flow.</li>
+            <li>Produced clear, unambiguous outcomes that removed the need for staff to interpret policy language.</li>
+            <li>Eliminated the reliance on printed guides; the flow itself became the documentation.</li>
         </ul>
     </div>
 
-    <div id="sap" class="panel">
-        <h2>SAP Case Study</h2>
-        <p>Placeholder — will follow the same structure as ENM.</p>
+    <div id="dtone" class="panel cs-content">
+        <a name="dtone" class="print-only"></a>
+        <h2>Product UI: Interface-Level Content Architecture</h2>
+        <p><strong>Role:</strong> Senior Technical Writer | <strong>Context:</strong> DT One API Integration Portal</p>
+
+        <h3>Situation</h3>
+        <p>DT One provided B2B <span class="cv-tooltip-trigger" tabindex="0">API integrations<span class="cv-tooltip-text">Application Programming Interface: A set of rules that lets different software systems communicate with each other.</span></span> for global airtime and data top-ups. However, external developers trying to integrate with the platform were struggling. The API reference documentation was provided as raw, unformatted Swagger files, and the conceptual integration guides were distributed as static offline PowerPoint presentations. The lack of a centralized, searchable portal made developer onboarding unnecessarily difficult.</p>
+
+        <h3>Task</h3>
+        <p>Design, build, and populate a modern, centralized Developer Portal to replace the fragmented offline assets, establishing a self-service developer experience.</p>
+
+        <h3>Actions</h3>
+        <h4>1. Discovered Real User Needs via Support Staff</h4>
+        <p>Rather than guessing what external developers needed, I went directly to the internal support staff who were fielding the daily integration tickets. They understood exactly where the raw Swagger files failed to explain the underlying business logic, highlighting the real customer pain points.</p>
+
+        <h4>2. Established a Consistent Design Pattern</h4>
+        <p>Working with Support, Product, and Engineering ensured content was integrated early and aligned with real integration workflows. I extracted the core business logic from the legacy files. Rather than just rewriting the text, I designed an interface-level content architecture. I built a consistent four-tab template to guide developers through the core workflow: discover products, post transactions, and retrieve status. This treated the documentation like a software interface, not a static reference. The resulting structure made the documentation both human-navigable and machine-readable, enabling clearer mapping between workflow steps and API reference material.</p>
+        
+        <h4>3. Executed Progressive Disclosure</h4>
+        <p>As the sole technical writer for the project, I rewrote the integration guides, structured the API reference materials, and deployed the new architecture in three months. By linking the task guides directly to an enriched API reference, I used <span class="cv-tooltip-trigger" tabindex="0">progressive disclosure<span class="cv-tooltip-text">An interaction design technique that sequences information and actions across several screens to reduce user overwhelm.</span></span> to separate high-level workflow context from raw reference data, bridging the gap between "how do I integrate airtime?" and "which endpoint do I call?".</p>
+
+        <h3>Result</h3>
+        <ul>
+            <li>Launched the developer portal in a three-month timeframe using a repeatable, scalable design pattern.</li>
+            <li>Eliminated reliance on offline PDFs and PowerPoints.</li>
+            <li>Reduced friction for external teams integrating with the DT One platform by replacing static endpoint lists with task-oriented workflows.</li>
+        </ul>
+        <a href="https://donnachab.github.io/worksamples/worksamples.html#client/samples" target="_blank" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition mt-4 shadow-sm">
+            View DT One Work Samples ↗
+        </a>
     </div>
 
-    <div id="dtone" class="panel">
-        <h2>DT One Case Study</h2>
-        <p>Placeholder — will follow the same structure as ENM.</p>
+    <div id="enm" class="panel cs-content">
+        <a name="enm" class="print-only"></a>
+        <h2>ENM Case Study — Product Description Governance</h2>
+        <p><strong>Role:</strong> Technical Writer | <strong>Context:</strong> <span class="cv-tooltip-trigger" tabindex="0">Ericsson Network Manager (ENM)<span class="cv-tooltip-text">A centralized management system used by telecom operators to configure and monitor radio networks.</span></span> DITA migration</p>
+
+        <h3>Situation</h3>
+        <p>The ENM Product Description had been expanded by more than fifty teams over several years. It no longer reflected the product or its <span class="cv-tooltip-trigger" tabindex="0">information architecture<span class="cv-tooltip-text">The structural design of shared information environments, helping users find exactly what they're looking for.</span></span>. Terminology drifted, procedural content was mixed into descriptive chapters, and the document structure did not match what users saw on the screen.</p>
+        <p>A specific problem was the hardware installation content. It existed as a single, screenshot‑heavy Confluence page embedded within the Product Description. The fundamental issue was structural: a user looking for step-by-step hardware instructions is unlikely to search inside a descriptive guide. Furthermore, the format was brittle to edit and unsuitable for a direct <span class="cv-tooltip-trigger" tabindex="0">DITA conversion<span class="cv-tooltip-text">Translating flat, unstructured documents into the DITA XML standard for modular reuse.</span></span>.</p>
+
+        <h3>Task</h3>
+        <p>My assignment was to execute the DITA conversion for this specific guide. I quickly identified that a literal conversion would preserve all the structural flaws.</p>
+        <p>I needed to rewrite the Product Description into a coherent, UI‑aligned structure. This required extracting the hardware content into a standalone book, relocating misplaced procedures, and managing reviews from fifty contributing teams without delaying the main software release.</p>
+
+        <h3>Actions</h3>
+        
+        <h4>1. Built an alliance to validate the rewrite</h4>
+        <p>As a new hire, I did not have the authority to halt a scheduled conversion to force an architectural rewrite. I raised the issue with my Scrum Master, who recognized the scale of the problem and connected me with the Lead Architect. The architect had the seniority to confirm that a deeper structural overhaul was necessary.</p>
+
+        <h4>2. Secured resources for an architectural split</h4>
+        <p>I proposed extracting the unmaintainable hardware monolith into a standalone DITA guide. Management initially resisted because document counts were tied to departmental headcount budgets; assigning me to write a completely new guide meant removing me from other tasks and creating a resourcing gap.</p>
+        <p>I demonstrated that hiding hardware configuration inside a descriptive document guaranteed users would miss it, while creating severe maintenance overhead for the writing team. Management conceded, reassigning my other deliverables so I could dedicate the necessary time to split the guides.</p>
+
+        <h4>3. Rebuilt the information architecture</h4>
+        <p>I remapped the entire Product Description to mirror the product UI, reordering legacy content so that each section matched how users navigated the software.</p>
+        <p>To prevent drift during ENM’s rapid release cadence, I applied a strict triage model to procedural content: if a procedure existed elsewhere, I removed the duplicate. If it was valid but orphaned, I coordinated with the owning team to integrate it into their guide.</p>
+        <p>This created a scalable structure that reduced drift and supported consistent updates across 50+ contributing teams.</p>
+
+        <h4>4. Ran an architect‑validated review workflow</h4>
+        <p>I could not enforce deadlines across fifty teams alone. With the Lead Architect as my co‑sponsor, we established a predictable review workflow. I drafted each section, he reviewed and approved it, and only then was it sent to the contributing teams.</p>
+        <p>Teams were given clear deadlines. We established a firm rule: if we received no feedback by the deadline, the architect‑approved content was published. Silence was treated as approval.</p>
+
+        <h3>Result</h3>
+        <ul>
+            <li>Delivered a rewritten Product Description that matched the UI in a single launch, causing zero delays to ENM’s release train.</li>
+            <li>Successfully justified resource reallocation by proving the usability and maintenance risks of the legacy structure to management.</li>
+            <li>Replaced an embedded monolith with a standalone Hardware Installation Guide organized by server layout.</li>
+            <li>Secured compliance from fifty stakeholder teams using a strict, architect‑validated review workflow.</li>
+        </ul>
     </div>
 
-    <div id="whh" class="panel">
-        <h2>Warm Home Hub Case Study</h2>
-        <p>Placeholder — will follow the same structure as ENM.</p>
+    <div id="sap-strings" class="panel cs-content">
+        <a name="sap-strings" class="print-only"></a>
+        <h2>SAP Case Study — UI Strings and Product Influence</h2>
+        <p><strong>Role:</strong> Senior Information Developer | <strong>Context:</strong> <span class="cv-tooltip-trigger" tabindex="0">SAP Master Data Governance (MDG)<span class="cv-tooltip-text">An enterprise data management application used to centrally govern critical business records.</span></span> Foundation</p>
+
+        <h3>Situation</h3>
+        <p>During the development of SAP MDG, the delivery of a <span class="cv-tooltip-trigger" tabindex="0">UI screen<span class="cv-tooltip-text">User Interface: The visual elements (buttons, menus, screens) a user interacts with in a software application.</span></span> stalled due to a terminology deadlock. A developer had created a UI checkbox label containing five words of technical jargon: <em>"Entity Attribute Change Relevance Indicator."</em></p>
+        <p>The UI Designer blocked it for being unreadable. However, the Product Owner defended the label by explaining the underlying <span class="cv-tooltip-trigger" tabindex="0">database schemas<span class="cv-tooltip-text">The skeleton structure that represents the logical view of the entire database.</span></span> it mapped to. The team was engaged in a circular argument, resulting in a blocked feature and an impossible concept to document for end-users.</p>
+
+        <h3>Task</h3>
+        <p>Stop the debate between design and engineering, and facilitate a terminology decision based on business intent rather than database architecture.</p>
+
+        <h3>Actions</h3>
+        <h4>1. Halted the Technical Debate</h4>
+        <p>I intervened to stop the technical debate about database schemas. I asked the Product Owner a direct question focused entirely on the user journey: <em>"Forget the database. If a business user checks this box, what actually happens to the process?"</em></p>
+
+        <h4>2. Translated Database Logic into Business Intent</h4>
+        <p>The Product Owner paused, shifted away from the technical specifications, and admitted: <em>"Basically... you decide if the field is governed by the Change Request or not."</em> This was a human-in-the-loop clarification process, grounded in direct questioning and collaborative reasoning.</p>
+
+        <h4>3. Executed the Simplification</h4>
+        <p>Using his own explanation, I proposed stripping away the technical jargon entirely. I changed the checkbox label simply to <strong>"Governed"</strong> and defined the overarching user task as <strong>"Define Governance Scope."</strong></p>
+
+        <h4>4. Codified the Standard</h4>
+        <p>To ensure this wasn't just a one-off fix, I immediately entered "Governance Scope" into SAPTerm, formally codifying it as the standard taxonomy for the entire product suite.</p>
+
+        <h3>Result</h3>
+        <ul>
+            <li>Unblocked the UI design phase by replacing a five-word database string with a single, user-focused word.</li>
+            <li>Simplified the corresponding end-user documentation before it was even drafted.</li>
+            <li>Established a strong partnership with the Product Owner, proving that Technical Writers serve as strategic design partners who actively shape the software. The Product Owner later endorsed this exact interaction:
+                <blockquote style="border-left: 4px solid #22c55e; padding-left: 15px; margin-top: 10px; font-style: italic; color: #14532d; background: #f0fdf4; padding: 10px;">
+                    "Our conversations made the product better as he always had suggestions how to frame the problem better, how to 'name' the components, how the UI should work etc. He brought the logic and the language integrity into the SAP documentation."
+                </blockquote>
+            </li>
+        </ul>
+    </div>
+
+    <div id="work-samples" class="panel cs-content">
+        <h2>Work Samples & Prototypes</h2>
+        
+        <div class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-600 text-blue-900 rounded shadow-sm">
+            <h4 class="mt-0 text-blue-800 flex items-center mb-1"><svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Exiting Private Dossier</h4>
+            <p class="mb-0 text-sm">The links below will open my public-facing work samples portfolio in a new tab. Because those pages are public, they do not contain the sensitive operational or stakeholder details outlined in this private dossier.</p>
+        </div>
+
+        <h3>API & Developer Documentation</h3>
+        <p><strong>DT One Developer Portal:</strong> A complete rebuild of an API integration portal, replacing static PowerPoints and raw Swagger files with an interactive, task-based workflow. Demonstrates Stripe-influenced, developer-centric documentation design.</p>
+        <a href="https://donnachab.github.io/worksamples/worksamples.html#client/samples" target="_blank" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition mt-2 mb-8 shadow-sm">
+            View DT One Documentation ↗
+        </a>
+
+        <h3>Structured Content & AI Prototypes</h3>
+        <p><strong>DocBuilder (<span class="cv-tooltip-trigger" tabindex="0">Knowledge Graph<span class="cv-tooltip-text">A network of real-world entities and their relationships, allowing machines to understand the context of data.</span></span>):</strong> DocBuilder is a personal prototype exploring schema-first authoring. It uses a light topic template to organize content into machine-readable, document-map-ready structures while preserving flexibility—authors can override the template or place uncategorizable material into a fallback area. Once content is structured, the prototype illustrates how skeptical checks could surface inconsistencies or missing relationships.</p>
+        <p style="margin-top: -5px; font-size: 0.85em; font-style: italic; color: #64748b;">DocBuilder is a conceptual prototype only — not a production tool.</p>
+        <a href="https://donnachab.github.io/worksamples/worksamples.html#personal/doc-builder" target="_blank" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition mt-2 mb-8 shadow-sm">
+            Launch DocBuilder Prototype ↗
+        </a>
+
+        <p><strong>DITA XML Explorer:</strong> An interactive structured-authoring sample demonstrating DITA concepts, topic-based architecture, and reuse principles (<span class="cv-tooltip-trigger" tabindex="0">Conref/Keyref<span class="cv-tooltip-text">DITA XML mechanisms that allow authors to dynamically pull content or variables from a single source of truth, updating it everywhere automatically.</span></span>). Built to explain complex CMS architecture in plain English.</p>
+        <a href="https://donnachab.github.io/worksamples/worksamples.html#personal/dita-tool" target="_blank" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition mt-2 mb-8 shadow-sm">
+            View DITA XML Explorer ↗
+        </a>
+
+        <div class="mt-8 pt-8 border-t border-gray-200">
+            <h3 class="mt-0">Explore Full Public Portfolio</h3>
+            <p>Access all of the above, along with additional presentations on AI context windows, prompt engineering, and UI content simplification.</p>
+            <a href="https://donnachab.github.io/worksamples/worksamples.html" target="_blank" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-bold rounded shadow-md hover:bg-blue-700 transition mt-2">
+                Open Full Work Samples Portfolio ↗
+            </a>
+        </div>
+    </div>
+    
+    <div class="portfolio-note" style="margin-top: 50px; padding-top: 20px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; color: #64748b;">
+        <strong>A Note on Portfolio Architecture:</strong> The design of this dossier is an intentional content design choice. Features like tabbed navigation, progressive disclosure (hiding secondary details until requested), distinct visual affordances for external links, and the use of <strong>in-flow tooltips</strong> to define jargon without breaking reading momentum were implemented to respect your time and demonstrate progressive disclosure in practice.
     </div>
 
 </div>
 
 <script>
-// Replace this placeholder with the hash you generate from the console
+// SHA-256 Hash for password protection
 const storedHash = "c1148169339a20c530cb35190b508c8c2f0aeb46fc37d640c7544216e3e1454b";
 
 function handleKeyPress(event) {
@@ -249,7 +765,7 @@ async function unlock() {
 
     try {
         if (!window.crypto || !window.crypto.subtle) {
-            throw new Error("Crypto API unavailable. This page must be served over HTTPS (like GitHub Pages).");
+            throw new Error("Crypto API unavailable. This page must be served over HTTPS.");
         }
 
         const enc = new TextEncoder().encode(pw);
@@ -265,8 +781,6 @@ async function unlock() {
             pwInput.value = "";
             errorMsg.textContent = "Incorrect password. Please try again.";
             errorMsg.style.display = "block";
-            
-            console.log("Generated hash for input:", hex); 
         }
     } catch (err) {
         console.error("Unlock error:", err);
@@ -278,7 +792,13 @@ async function unlock() {
 function openTab(id) {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-    document.querySelector(`.tab[onclick="openTab('${id}')"]`).classList.add("active");
+    
+    // Target the correct tab button, handling the 'Work Samples' tab specifically due to the arrow
+    const targetTab = Array.from(document.querySelectorAll(".tab")).find(t => t.getAttribute('onclick').includes(`'${id}'`));
+    if (targetTab) {
+        targetTab.classList.add("active");
+    }
+    
     document.getElementById(id).classList.add("active");
 }
 </script>
